@@ -1,0 +1,11 @@
+Name:         kubeadm:kubelet-config
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  Role
+  Name:  kubeadm:kubelet-config
+Subjects:
+  Kind   Name                                             Namespace
+  ----   ----                                             ---------
+  Group  system:nodes                                     
+  Group  system:bootstrappers:kubeadm:default-node-token  

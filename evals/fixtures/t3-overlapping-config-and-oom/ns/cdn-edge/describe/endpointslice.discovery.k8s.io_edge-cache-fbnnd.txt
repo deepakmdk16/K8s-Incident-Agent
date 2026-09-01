@@ -1,0 +1,19 @@
+Name:         edge-cache-fbnnd
+Namespace:    cdn-edge
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=edge-cache
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T01:33:56Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.54
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/edge-cache-778d9548d7-z5cnx
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

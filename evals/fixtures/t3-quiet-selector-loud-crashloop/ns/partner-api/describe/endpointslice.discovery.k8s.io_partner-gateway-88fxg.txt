@@ -1,0 +1,19 @@
+Name:         partner-gateway-88fxg
+Namespace:    partner-api
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=partner-gateway
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:08Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.146
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/partner-gateway-cbdcb8f65-g9fbj
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

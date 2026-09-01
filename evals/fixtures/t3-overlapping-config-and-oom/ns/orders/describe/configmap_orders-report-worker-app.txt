@@ -1,0 +1,26 @@
+Name:         orders-report-worker-app
+Namespace:    orders
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+# orders-report-worker: builds the nightly order export.
+set -eu
+echo "report-worker: loading order history into in-memory export buffer (~150MiB)"
+EXPORT_BUFFER="$(dd if=/dev/zero bs=1M count=150 2>/dev/null | tr '\000' 'x')"
+echo "report-worker: export buffer ready (${#EXPORT_BUFFER} bytes); nightly export served from memory"
+while :; do
+  echo "report-worker: idle; next export window 00:30 UTC"
+  sleep 60
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

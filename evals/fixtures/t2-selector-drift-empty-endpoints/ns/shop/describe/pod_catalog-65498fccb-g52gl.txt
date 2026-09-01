@@ -1,0 +1,62 @@
+Name:             catalog-65498fccb-g52gl
+Namespace:        shop
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:39:37 +0530
+Labels:           app=catalog
+                  pod-template-hash=65498fccb
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.120
+IPs:
+  IP:           10.244.0.120
+Controlled By:  ReplicaSet/catalog-65498fccb
+Containers:
+  api:
+    Container ID:  containerd://0f95d1fbd04ea865bb8f170859e252b688c08236c5dd12f6ffa54eeb8cffa201
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          8080/TCP (http)
+    Host Port:     0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Sat, 29 Aug 2026 07:39:37 +0530
+    Ready:          True
+    Restart Count:  0
+    Readiness:      http-get http://:8080/ delay=0s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-7cw7h (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      catalog-scripts
+    Optional:  false
+  kube-api-access-7cw7h:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  16s   default-scheduler  Successfully assigned shop/catalog-65498fccb-g52gl to incident-lab-control-plane
+  Normal  Pulled     16s   kubelet            spec.containers{api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    16s   kubelet            spec.containers{api}: Container created
+  Normal  Started    16s   kubelet            spec.containers{api}: Container started

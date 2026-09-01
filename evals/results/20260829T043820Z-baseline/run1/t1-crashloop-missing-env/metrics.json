@@ -1,0 +1,12 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "arm": "baseline",
+  "run_id": "29ccb946bd35",
+  "model": "claude-opus-5",
+  "input_tokens": 5429,
+  "output_tokens": 3580,
+  "cost_usd": 0.116645,
+  "duration_s": 45.54,
+  "prompt_chars": 11635,
+  "prompt_sections": 5
+}

@@ -1,0 +1,58 @@
+Name:           kindnet
+Namespace:      kube-system
+Selector:       app=kindnet
+Node-Selector:  kubernetes.io/os=linux
+Labels:         app=kindnet
+                k8s-app=kindnet
+                tier=node
+Annotations:    deprecated.daemonset.template.generation: 1
+Desired Number of Nodes Scheduled: 1
+Current Number of Nodes Scheduled: 1
+Number of Nodes Scheduled with Up-to-date Pods: 1
+Number of Nodes Scheduled with Available Pods: 1
+Number of Nodes Misscheduled: 0
+Pods Status:  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=kindnet
+                    k8s-app=kindnet
+                    tier=node
+  Service Account:  kindnet
+  Containers:
+   kindnet-cni:
+    Image:      docker.io/kindest/kindnetd:v20260820-69b56db7
+    Port:       <none>
+    Host Port:  <none>
+    Requests:
+      cpu:     100m
+      memory:  50Mi
+    Environment:
+      HOST_IP:                  (v1:status.hostIP)
+      POD_IP:                   (v1:status.podIP)
+      POD_SUBNET:              10.244.0.0/16
+      CONTROL_PLANE_ENDPOINT:  incident-lab-control-plane:6443
+    Mounts:
+      /etc/cni/net.d from cni-cfg (rw)
+      /lib/modules from lib-modules (ro)
+      /run/xtables.lock from xtables-lock (rw)
+      /var/run/nri from nri-plugin (rw)
+  Volumes:
+   cni-cfg:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/cni/net.d
+    HostPathType:  
+   xtables-lock:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/xtables.lock
+    HostPathType:  FileOrCreate
+   lib-modules:
+    Type:          HostPath (bare host directory volume)
+    Path:          /lib/modules
+    HostPathType:  
+   nri-plugin:
+    Type:               HostPath (bare host directory volume)
+    Path:               /var/run/nri
+    HostPathType:       
+  Priority Class Name:  system-node-critical
+  Node-Selectors:       kubernetes.io/os=linux
+  Tolerations:          op=Exists
+Events:                 <none>

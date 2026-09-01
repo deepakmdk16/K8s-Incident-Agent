@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "Deployment orders/orders-api sets .spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key to \"db_url\" instead of the existing key \"database_url\"; the required (non-optional) key lookup fails, so kubelet rejects the container configuration and every replica the Deployment creates is stuck Pending with CreateContainerConfigError, leaving the Deployment at 0/2 Ready.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

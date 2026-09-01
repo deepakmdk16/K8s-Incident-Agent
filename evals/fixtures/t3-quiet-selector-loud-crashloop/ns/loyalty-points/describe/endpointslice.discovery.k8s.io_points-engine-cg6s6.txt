@@ -1,0 +1,19 @@
+Name:         points-engine-cg6s6
+Namespace:    loyalty-points
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=points-engine
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:08Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.143
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/points-engine-84666f6c5f-dzmst
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

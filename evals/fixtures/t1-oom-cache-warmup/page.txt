@@ -1,0 +1,6 @@
+[PAGE] SEV3 RecommendationsPanelDown — recs
+The "You may also like" panel is absent from product pages storewide;
+shoppers see an empty recommendations section. Deployment
+recs/recommendations has reported 0/1 Ready for over 15 minutes. Alert
+source: workload health monitor. Find the root cause and propose a
+remediation.

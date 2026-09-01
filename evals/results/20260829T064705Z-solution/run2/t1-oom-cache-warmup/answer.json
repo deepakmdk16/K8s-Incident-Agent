@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "recs",
+    "name": "recommendations"
+  },
+  "mechanism": "Deployment recs/recommendations sets .spec.template.spec.containers[server].resources.limits.memory to 64Mi, but the same container's startup command allocates a ~200 MiB cache buffer (\"dd if=/dev/zero bs=1M count=200 | tr '\\0' x\"); the container exceeds its memory cgroup during cache warm-up and is OOMKilled with exit code 137 before the warm-up completes. The limit must be at least the working-set of the warm-up (~256Mi).",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

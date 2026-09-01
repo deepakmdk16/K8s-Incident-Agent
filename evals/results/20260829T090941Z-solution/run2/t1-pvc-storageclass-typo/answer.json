@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "failing_resource": {
+    "kind": "StatefulSet",
+    "namespace": "analytics",
+    "name": "metrics-db"
+  },
+  "mechanism": "StatefulSet analytics/metrics-db sets .spec.volumeClaimTemplates[0].spec.storageClassName to \"fast-ssd\", a StorageClass that does not exist in the cluster; the only one present is \"standard\". The PersistentVolumeClaim it generates, analytics/data-metrics-db-0, is refused provisioning with 'storageclass.storage.k8s.io \"fast-ssd\" not found' and stays Status: Pending, so the scheduler rejects the StatefulSet's replica with \"0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims\" and it is never placed on a node.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

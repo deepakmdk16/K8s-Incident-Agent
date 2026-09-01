@@ -1,0 +1,7 @@
+Name:         metrics-db
+Namespace:    analytics
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+              service.kubernetes.io/headless=
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:09:03Z
+Subsets:
+Events:  <none>

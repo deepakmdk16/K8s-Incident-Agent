@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {"kind": "Deployment", "namespace": "orders", "name": "orders-api"},
+  "mechanism": "The orders-api Deployment's readiness probe does an HTTP GET on port 8081, but the container listens only on 8080, so every probe returns 'connection refused' and both replicas stay Ready:False. Unready pods are excluded from the orders-api Service endpoints, leaving the ClusterIP with no backends, so calls to the orders backend never complete and surface as 5xx at checkout.",
+  "verdict": "confirmed"
+}

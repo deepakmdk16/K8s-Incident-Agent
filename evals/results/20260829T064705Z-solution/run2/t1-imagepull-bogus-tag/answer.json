@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "web",
+    "name": "storefront"
+  },
+  "mechanism": "Deployment web/storefront sets .spec.template.spec.containers[0].image to \"registry.k8s.io/retail/storefront:2.4.1\", a reference the registry does not have; the kubelet's pull fails with \"failed to resolve reference ... not found\" and the container is held in ImagePullBackOff, so neither replica's container is ever created.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

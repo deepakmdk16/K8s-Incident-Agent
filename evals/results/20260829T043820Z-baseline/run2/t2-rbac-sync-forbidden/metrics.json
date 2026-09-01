@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "arm": "baseline",
+  "run_id": "07cde148b02e",
+  "model": "claude-opus-5",
+  "input_tokens": 2622,
+  "output_tokens": 4068,
+  "cost_usd": 0.11481,
+  "duration_s": 56.62,
+  "prompt_chars": 5122,
+  "prompt_sections": 0
+}

@@ -1,0 +1,57 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "data": {
+        "refresh_seconds": "30",
+        "warehouse_feed_url": "http://warehouse-feed.internal:8080/stock"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:11:44Z",
+        "name": "inventory-sources",
+        "namespace": "inventory",
+        "resourceVersion": "57994",
+        "uid": "e5f99510-a45a-4967-b6bb-870de47e8dc8"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\nset -u\nTOKEN=\"$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\"\nAPI=\"https://kubernetes.default.svc\"\necho \"inventory-sync: starting; serviceaccount=${SYNC_SA}\"\nwhile true; do\n  if wget -T 5 -q -O /dev/null --no-check-certificate \\\n      --header \"Authorization: Bearer $TOKEN\" \"$API/api\" 2>/dev/null; then\n    echo \"identity=${SYNC_SA} discovery=ok\"\n  else\n    echo \"identity=${SYNC_SA} discovery=FAILED (token or apiserver unreachable)\"\n  fi\n  if MSG=\"$(wget -T 5 -O /dev/null --no-check-certificate \\\n      --header \"Authorization: Bearer $TOKEN\" \\\n      \"$API/api/v1/namespaces/inventory/configmaps/inventory-sources\" 2>&1)\"; then\n    echo \"sync ok: fetched inventory-sources\"\n  else\n    echo \"sync fetch error: $(echo \"$MSG\" | grep -i 'error\\|forbidden' | head -n 1)\"\n  fi\n  echo \"serving stale inventory snapshot\"\n  sleep 10\ndone\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:11:44Z",
+        "name": "inventory-sync-scripts",
+        "namespace": "inventory",
+        "resourceVersion": "57997",
+        "uid": "81c2cf0f-a033-461a-8de7-43903373f363"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIDBTCCAe2gAwIBAgIIZglNhE9YKuQwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczAeFw0yNjA4MjgxNTQ2MDRaFw0zNjA4MjUxNTUxMDRaMBUx\nEzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQDTKbiwgWILDI03NB6Sv91w05ClvZ/WNM8eFxxYnz8c/kyXH/g3IsLuRffh\nMMxoh/KJhK15Xfx949VHfH77IS3l/uvdrCX+CD9bkaAoBffv0ZRZllQbuyjREoik\nmEi8TycP2JAkVLvI50Oz+FAzAJz3a/1vueRawjtDbgsbP20edMn4NYqP0MfS4lZj\noKdfKuu268a1Sb+hqD6m/E0yffjEpUusz7LLpyv2Nt8etNC8lKCYtpClZTZ3xMQy\nniGP8peR7ba/hDPC+t7RzqtZYVQowj80RDuassQ/9+bQ1nHh+HMu1qhjDoj2xkMu\ngp+gWyONIZ2eqhvZtiZzHkmcTyCfAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP\nBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSWYhiRuYwCnV4p67so4gs02kE6YTAV\nBgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQChFRKv+8lV\nAW0XcoC10pm9rFj0V7AUq71ZdPYewRJuCoQWKxJGynbOjHXeXR9HJqumebv8sheK\nv0GCd/Xp9fc/d5fyc0hP9PzEV49urr7ULn6CRe7uQjGCjFkbRGuO3wnppq6Gy305\njkyv7X9lKHogXiSv2rG9fP09U2GJBpo7JKiZThw33UhKty1LZwYBlCE1zqxL7LTy\n5f4oIsUFHPKYtz6oQVtrTRX9kyW/ldn0uCAuM5vlXZzawbAkla3y42TEVQSAqTLO\nx9WW3SCwynebDowzyMHi4kGtLqPUTi7kdc4c8a4N0yj99dsrnOEH+G9XGlN5V5fj\n840VM+JB1nv3\n-----END CERTIFICATE-----\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {
+          "kubernetes.io/description": "Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters."
+        },
+        "creationTimestamp": "2026-08-29T02:11:44Z",
+        "name": "kube-root-ca.crt",
+        "namespace": "inventory",
+        "resourceVersion": "57991",
+        "uid": "4e128270-45b2-4cc8-add6-12d0f2633e0c"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

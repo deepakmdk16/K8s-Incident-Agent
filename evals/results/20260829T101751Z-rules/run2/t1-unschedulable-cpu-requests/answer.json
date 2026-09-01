@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

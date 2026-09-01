@@ -1,0 +1,16 @@
+Name:                     queue-server
+Namespace:                message-broker
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=queue-server
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.242.236
+IPs:                      10.96.242.236
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.131:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

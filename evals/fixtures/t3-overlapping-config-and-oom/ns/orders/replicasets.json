@@ -1,0 +1,318 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "2",
+          "deployment.kubernetes.io/max-replicas": "3",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "generation": 1,
+        "labels": {
+          "app": "orders-api",
+          "pod-template-hash": "6c64874687"
+        },
+        "name": "orders-api-6c64874687",
+        "namespace": "orders",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "orders-api",
+            "uid": "0bd72095-616f-4b07-b77f-d585be014e2f"
+          }
+        ],
+        "resourceVersion": "51101",
+        "uid": "17915558-523a-4b6f-8a88-230e1d93b212"
+      },
+      "spec": {
+        "replicas": 2,
+        "selector": {
+          "matchLabels": {
+            "app": "orders-api",
+            "pod-template-hash": "6c64874687"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "orders-api",
+              "pod-template-hash": "6c64874687"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "/app/run.sh"
+                ],
+                "env": [
+                  {
+                    "name": "DATABASE_URL",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "key": "db_url",
+                        "name": "orders-config"
+                      }
+                    }
+                  }
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "api",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "name": "http",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/app",
+                    "name": "app"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "orders-api-app"
+                },
+                "name": "app"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "fullyLabeledReplicas": 2,
+        "observedGeneration": 1,
+        "replicas": 2,
+        "terminatingReplicas": 0
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "1",
+          "deployment.kubernetes.io/max-replicas": "2",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "generation": 1,
+        "labels": {
+          "app": "orders-audit",
+          "pod-template-hash": "ff8669574"
+        },
+        "name": "orders-audit-ff8669574",
+        "namespace": "orders",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "orders-audit",
+            "uid": "9f62c98f-af4a-48d1-bcc9-8c73894625f3"
+          }
+        ],
+        "resourceVersion": "51130",
+        "uid": "315e6f95-84bf-4600-9e8e-38a8f00fa6e1"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "orders-audit",
+            "pod-template-hash": "ff8669574"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "orders-audit",
+              "pod-template-hash": "ff8669574"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "/app/run.sh"
+                ],
+                "env": [
+                  {
+                    "name": "DATABASE_URL",
+                    "valueFrom": {
+                      "configMapKeyRef": {
+                        "key": "database_url",
+                        "name": "orders-config"
+                      }
+                    }
+                  }
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "audit",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/app",
+                    "name": "app"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "orders-audit-app"
+                },
+                "name": "app"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "fullyLabeledReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "1",
+          "deployment.kubernetes.io/max-replicas": "2",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "generation": 1,
+        "labels": {
+          "app": "orders-report-worker",
+          "pod-template-hash": "5645b7fccf"
+        },
+        "name": "orders-report-worker-5645b7fccf",
+        "namespace": "orders",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "orders-report-worker",
+            "uid": "fa9bc251-5610-44d3-9f27-82edbb07c0b1"
+          }
+        ],
+        "resourceVersion": "51258",
+        "uid": "57d6e3fd-8193-480c-b5ab-4d0538466a0c"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "orders-report-worker",
+            "pod-template-hash": "5645b7fccf"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "orders-report-worker",
+              "pod-template-hash": "5645b7fccf"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "/app/run.sh"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "worker",
+                "resources": {
+                  "limits": {
+                    "memory": "48Mi"
+                  },
+                  "requests": {
+                    "cpu": "25m",
+                    "memory": "48Mi"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/app",
+                    "name": "app"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "orders-report-worker-app"
+                },
+                "name": "app"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "fullyLabeledReplicas": 1,
+        "observedGeneration": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

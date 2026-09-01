@@ -1,0 +1,71 @@
+# Scenario t2-quota-blocks-scale — fault-as-code.
+# Atom: resource-quota-exceeded (deterministic fault roster, decision doc req 3).
+# Mechanism: ResourceQuota checkout/checkout-quota hard-caps pods at 2 while
+# the checkout-api deployment asks for 6 replicas; quota admission rejects the
+# ReplicaSet's pod creates beyond the cap, so the deployment can never reach
+# its replica count. Document order is load-bearing (authoring rule 3): the
+# quota precedes the Deployment so it is armed before pod creates begin, and
+# the 2-vs-6 margin guarantees rejected creates even if the admission arming
+# window admits an extra pod or two (admitted count varies; asserted nowhere).
+# The container script is healthy by construction (rule 1): every admitted pod
+# runs its serve loop indefinitely — the fault lives only in the quota object.
+# Wait condition: a ReplicaSet FailedCreate event in namespace checkout whose
+# message contains 'exceeded quota: checkout-quota' (wait.sh).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: checkout
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: checkout-quota
+  namespace: checkout
+spec:
+  hard:
+    pods: "2"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: checkout-api-scripts
+  namespace: checkout
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "checkout-api: serving on :8080"
+    while true; do
+      printf 'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\nok\n' | nc -l -p 8080 >/dev/null 2>&1
+      echo "checkout-api: request served"
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-api
+  namespace: checkout
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: checkout-api
+  template:
+    metadata:
+      labels:
+        app: checkout-api
+    spec:
+      containers:
+        - name: api
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: checkout-api-scripts

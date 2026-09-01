@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "In deployment/orders-api the container \"api\" listens on 8080 (containerPort http = 8080, log \"serving on :8080\") but .spec.template.spec.containers[api].readinessProbe.httpGet.port is set to 8081 instead of 8080; the kubelet's readiness GET to that port is answered with \"connection refused\", so the probe fails continuously and both pods are held Ready=False.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

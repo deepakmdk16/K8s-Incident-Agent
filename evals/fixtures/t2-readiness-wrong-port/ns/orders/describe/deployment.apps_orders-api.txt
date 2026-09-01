@@ -1,0 +1,42 @@
+Name:                   orders-api
+Namespace:              orders
+CreationTimestamp:      Sat, 29 Aug 2026 07:40:38 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=orders-api
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=orders-api
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Readiness:    http-get http://:8081/ delay=0s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-api-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   orders-api-7cc5bcf4c7 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  15s   deployment-controller  Scaled up replica set orders-api-7cc5bcf4c7 from 0 to 2

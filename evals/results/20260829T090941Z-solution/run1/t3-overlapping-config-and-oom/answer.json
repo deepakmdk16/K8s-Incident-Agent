@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "Deployment orders/orders-api sets .spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key to \"db_url\", but ConfigMap orders/orders-config holds only the key \"database_url\". kubelet fails to populate the environment and rejects container creation with \"Error: couldn't find key db_url in ConfigMap orders/orders-config\", so every replica sits in Pending with waiting=CreateContainerConfigError and the kubelet retries the pull-and-create cycle indefinitely (x6 over 51s), leaving the Deployment at 0/2 Ready.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,33 @@
+Name:           storefront-68b686c56f
+Namespace:      web
+Selector:       app=storefront,pod-template-hash=68b686c56f
+Labels:         app=storefront
+                pod-template-hash=68b686c56f
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/storefront
+Replicas:       2 current / 2 desired
+Pods Status:    0 Running / 2 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=storefront
+           pod-template-hash=68b686c56f
+  Containers:
+   storefront:
+    Image:      registry.k8s.io/retail/storefront:2.4.1
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  16s   replicaset-controller  Created pod: storefront-68b686c56f-d4pp7
+  Normal  SuccessfulCreate  16s   replicaset-controller  Created pod: storefront-68b686c56f-c7tvt

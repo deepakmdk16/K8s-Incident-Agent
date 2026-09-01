@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "web",
+    "name": "storefront"
+  },
+  "mechanism": "The image tag referenced by the container could not be pulled from the registry.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

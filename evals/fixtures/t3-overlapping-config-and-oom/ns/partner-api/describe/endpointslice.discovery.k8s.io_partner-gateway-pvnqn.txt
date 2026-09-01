@@ -1,0 +1,19 @@
+Name:         partner-gateway-pvnqn
+Namespace:    partner-api
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=partner-gateway
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T01:33:58Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.68
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/partner-gateway-cbdcb8f65-zvqv9
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

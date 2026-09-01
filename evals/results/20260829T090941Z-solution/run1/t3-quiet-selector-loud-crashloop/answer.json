@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "search",
+    "name": "search"
+  },
+  "mechanism": "Service search/search has .spec.selector set to {app: search-api} while the pods created by Deployment search/search carry the label app=search, so no pod matches and Endpoints search/search is written with no addresses subset at all; every connection to the Service's ClusterIP 10.96.24.225:8080 has no backend to be routed to and is refused or hangs.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

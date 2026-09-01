@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "Deployment billing/billing-api sets .spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value to \"db-primary\", but the only database Service in the namespace is Service billing/postgres-primary, so that hostname does not resolve. The wait-for-db init container's TCP poll of db-primary:5432 never succeeds \u2014 it logs \"waiting for db-primary:5432\" every five seconds and never exits 0 \u2014 leaving both pods with condition \"Initialized  False\" and the api container \"Reason:       PodInitializing\", so the deployment stays at ready=0/2.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

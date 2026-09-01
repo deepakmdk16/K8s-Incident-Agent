@@ -1,0 +1,41 @@
+Name:                   report-generator
+Namespace:              analytics-batch
+CreationTimestamp:      Sat, 29 Aug 2026 07:44:11 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=report-generator
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=report-generator
+  Containers:
+   generator:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          report-generator-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      False   MinimumReplicasUnavailable
+OldReplicaSets:  <none>
+NewReplicaSet:   report-generator-646bc6f94f (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  4m11s  deployment-controller  Scaled up replica set report-generator-646bc6f94f from 0 to 1

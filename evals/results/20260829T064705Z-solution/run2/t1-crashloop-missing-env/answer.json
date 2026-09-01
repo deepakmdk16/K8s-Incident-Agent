@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "payments",
+    "name": "checkout-worker"
+  },
+  "mechanism": "Deployment payments/checkout-worker declares no .spec.template.spec.containers[worker].env, so AMQP_URL is unset in the container; the command's guard on ${AMQP_URL:-} prints \"FATAL: AMQP_URL not set\" and exits 1 at every start, so the worker container terminates with Exit Code 1 and is held in CrashLoopBackOff instead of having an env entry named AMQP_URL carrying the broker URL.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

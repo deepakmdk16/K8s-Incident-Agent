@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The recommendations Deployment's pod template caps the 'server' container at memory 64Mi, but its startup command builds a ~200 MiB in-memory catalog cache via 'dd if=/dev/zero bs=1M count=200 | tr'. The allocation blows past the cgroup limit within a second, so the kernel OOM-kills the container (exit 137) during warm-up, before it can serve; the kubelet restart loop keeps every replacement pod non-Ready, leaving the Deployment at 0/1 available and the recommendations panel empty.",
+  "verdict": "confirmed"
+}

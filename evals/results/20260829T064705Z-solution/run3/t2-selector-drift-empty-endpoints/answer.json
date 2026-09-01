@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "shop",
+    "name": "catalog"
+  },
+  "mechanism": "Service shop/catalog has .spec.selector set to {app: catalog-api} while the pods produced by deployment/catalog carry the label app=catalog, so no pod matches the selector and the endpoint controller writes an Endpoints object with no addresses; traffic sent to the catalog ClusterIP has zero backends and the connection fails.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,5 @@
+Name:       checkout-quota
+Namespace:  checkout
+Resource    Used  Hard
+--------    ----  ----
+pods        2     2

@@ -1,0 +1,30 @@
+NAMESPACE            NAME                                                        READY   STATUS              RESTARTS   AGE   IP           NODE                            NOMINATED NODE   READINESS GATES
+checkout             pod/checkout-api-5f66bf789c-gqzzb                           0/1     ContainerCreating   0          0s    <none>       incident-lab-control-plane   <none>           <none>
+checkout             pod/checkout-api-5f66bf789c-v28xx                           0/1     ContainerCreating   0          0s    <none>       incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-9sqc8                                1/1     Running             0          9h    10.244.0.3   incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-t9nfq                                1/1     Running             0          9h    10.244.0.4   incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running             0          9h    172.18.0.2   incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-88ckx                                           1/1     Running             0          9h    172.18.0.2   incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running             0          9h    172.18.0.2   incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running             0          9h    172.18.0.2   incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-6ndq6                                        1/1     Running             0          9h    172.18.0.2   incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running             0          9h    172.18.0.2   incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-q6tkt                 1/1     Running             0          9h    10.244.0.2   incident-lab-control-plane   <none>           <none>
+
+NAMESPACE     NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+default       service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP                  9h    <none>
+kube-system   service/kube-dns     ClusterIP   10.96.0.10   <none>        53/UDP,53/TCP,9153/TCP   9h    k8s-app=kube-dns
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   9h    kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   9h    kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+checkout             deployment.apps/checkout-api             0/6     2            0           0s    api                      busybox:1.36                                                  app=checkout-api
+kube-system          deployment.apps/coredns                  2/2     2            2           9h    coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           9h    local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+checkout             replicaset.apps/checkout-api-5f66bf789c             6         2         0       0s    api                      busybox:1.36                                                  app=checkout-api,pod-template-hash=5f66bf789c
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       9h    coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       9h    local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5

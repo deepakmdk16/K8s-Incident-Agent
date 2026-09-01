@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:56Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "flag-server",
+        "namespace": "feature-flags",
+        "resourceVersion": "50834",
+        "uid": "7323be70-f75a-469b-b53f-c6a570cd886b"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.59",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "flag-server-546bfb8f8-6dmqf",
+                "namespace": "feature-flags",
+                "uid": "87d14cbf-feae-41aa-97d8-4609fa83b7a8"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

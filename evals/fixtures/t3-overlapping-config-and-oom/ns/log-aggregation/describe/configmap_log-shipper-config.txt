@@ -1,0 +1,24 @@
+Name:         log-shipper-config
+Namespace:    log-aggregation
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+buffer_size_mb:
+----
+8
+
+flush_interval_seconds:
+----
+30
+
+log_level:
+----
+info
+
+
+BinaryData
+====
+
+Events:  <none>

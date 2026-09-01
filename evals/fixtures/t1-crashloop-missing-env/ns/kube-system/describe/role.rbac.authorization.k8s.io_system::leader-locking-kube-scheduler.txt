@@ -1,0 +1,8 @@
+Name:         system::leader-locking-kube-scheduler
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+PolicyRule:
+  Resources                            Non-Resource URLs  Resource Names  Verbs
+  ---------                            -----------------  --------------  -----
+  leasecandidates.coordination.k8s.io  []                 []              [create get list update watch]
+  leases.coordination.k8s.io           []                 []              [create get list update watch]

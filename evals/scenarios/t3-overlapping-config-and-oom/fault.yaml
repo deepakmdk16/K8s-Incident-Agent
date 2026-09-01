@@ -1,0 +1,201 @@
+# Scenario t3-overlapping-config-and-oom — fault-as-code.
+# Atom: bad ConfigMap key reference (deterministic fault roster, decision doc req 3).
+# Mechanism: the shared ConfigMap key was renamed db_url -> database_url.
+# orders-audit's env ref was updated and runs healthy on the new key, but
+# orders-api's env ref still names db_url, so kubelet fails container create
+# on both replicas with CreateContainerConfigError "couldn't find key db_url".
+# Overlapping genuine decoy (verifiably off the order-submission path):
+# orders-report-worker builds its nightly export in memory (~150MiB) under a
+# 48Mi limit and is OOMKilled each start — real fault, not the paged one.
+# Wait condition (wait.sh gates on all three): both orders-api pods waiting
+# CreateContainerConfigError with message containing "couldn't find key
+# db_url"; orders-audit Ready=True and its log shows database_url resolved;
+# orders-report-worker restartCount>=2 with lastState OOMKilled.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: orders
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-config
+  namespace: orders
+data:
+  # Key renamed from db_url in the config cleanup; consumers reference the
+  # new name. (YAML comments do not survive apply — the agent sees only the
+  # key; the rename is evidenced by the orders-audit consumer.)
+  database_url: postgres://orders@orders-db.internal:5432/orders?sslmode=disable
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-api-app
+  namespace: orders
+data:
+  run.sh: |
+    #!/bin/sh
+    # orders-api: order submission HTTP API.
+    set -eu
+    : "${DATABASE_URL:?DATABASE_URL is required}"
+    DB_HOST="${DATABASE_URL#*@}"; DB_HOST="${DB_HOST%%:*}"
+    echo "orders-api: starting; order store at ${DB_HOST}"
+    echo "orders-api: listening on :8080"
+    exec httpd -f -p 8080 -h /tmp
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-audit-app
+  namespace: orders
+data:
+  run.sh: |
+    #!/bin/sh
+    # orders-audit: writes the order audit trail.
+    set -eu
+    : "${DATABASE_URL:?DATABASE_URL is required}"
+    DB_HOST="${DATABASE_URL#*@}"; DB_HOST="${DB_HOST%%:*}"
+    echo "audit: config ok - database_url resolved from orders-config (host=${DB_HOST})"
+    while :; do
+      echo "audit: trail writer heartbeat"
+      sleep 60
+    done
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-report-worker-app
+  namespace: orders
+data:
+  run.sh: |
+    #!/bin/sh
+    # orders-report-worker: builds the nightly order export.
+    set -eu
+    echo "report-worker: loading order history into in-memory export buffer (~150MiB)"
+    EXPORT_BUFFER="$(dd if=/dev/zero bs=1M count=150 2>/dev/null | tr '\000' 'x')"
+    echo "report-worker: export buffer ready (${#EXPORT_BUFFER} bytes); nightly export served from memory"
+    while :; do
+      echo "report-worker: idle; next export window 00:30 UTC"
+      sleep 60
+    done
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-api
+  namespace: orders
+spec:
+  selector:
+    app: orders-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-api
+  namespace: orders
+  labels:
+    app: orders-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: orders-api
+  template:
+    metadata:
+      labels:
+        app: orders-api
+    spec:
+      containers:
+        - name: api
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-config
+                  key: db_url
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: app
+              mountPath: /app
+      volumes:
+        - name: app
+          configMap:
+            name: orders-api-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-audit
+  namespace: orders
+  labels:
+    app: orders-audit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-audit
+  template:
+    metadata:
+      labels:
+        app: orders-audit
+    spec:
+      containers:
+        - name: audit
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-config
+                  key: database_url
+          volumeMounts:
+            - name: app
+              mountPath: /app
+      volumes:
+        - name: app
+          configMap:
+            name: orders-audit-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-report-worker
+  namespace: orders
+  labels:
+    app: orders-report-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-report-worker
+  template:
+    metadata:
+      labels:
+        app: orders-report-worker
+    spec:
+      containers:
+        - name: worker
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          resources:
+            requests:
+              cpu: 25m
+              memory: 48Mi
+            limits:
+              memory: 48Mi
+          volumeMounts:
+            - name: app
+              mountPath: /app
+      volumes:
+        - name: app
+          configMap:
+            name: orders-report-worker-app

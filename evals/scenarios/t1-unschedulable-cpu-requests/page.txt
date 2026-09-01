@@ -1,0 +1,6 @@
+[PAGE] SEV2 FraudScoringNoScores — fraud
+The new fraud-scoring service (deployment fraud/fraud-scoring) has shown 0/1
+running since it was deployed over 20 minutes ago. The risk team is receiving
+no fraud scores; card transactions are flowing through without risk checks.
+Alert source: workload availability monitor. Find the root cause and propose
+a remediation.

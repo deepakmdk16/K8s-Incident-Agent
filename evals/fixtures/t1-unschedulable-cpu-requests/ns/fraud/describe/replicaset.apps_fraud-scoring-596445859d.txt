@@ -1,0 +1,39 @@
+Name:           fraud-scoring-596445859d
+Namespace:      fraud
+Selector:       app=fraud-scoring,pod-template-hash=596445859d
+Labels:         app=fraud-scoring
+                pod-template-hash=596445859d
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/fraud-scoring
+Replicas:       1 current / 1 desired
+Pods Status:    0 Running / 1 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=fraud-scoring
+           pod-template-hash=596445859d
+  Containers:
+   scorer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "fraud-scoring: score server starting"
+      while true; do
+        echo "fraud-scoring: scored transaction batch"
+        sleep 10
+      done
+      
+    Requests:
+      cpu:         512
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  2s    replicaset-controller  Created pod: fraud-scoring-596445859d-thcdh

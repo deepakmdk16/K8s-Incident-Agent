@@ -1,0 +1,808 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:33:55Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Endpoints",
+        "name": "metrics-collector"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:33:55Z",
+      "message": "Failed to create endpoint for service platform-metrics/metrics-collector: endpoints \"metrics-collector\" already exists",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "name": "metrics-collector.18d022ba472764cf",
+        "namespace": "default",
+        "resourceVersion": "50503",
+        "uid": "899a298b-6bd7-4a12-9439-4771d7a635fa"
+      },
+      "reason": "FailedToCreateEndpoint",
+      "reportingComponent": "endpoint-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "endpoint-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:53:55Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Endpoints",
+        "name": "orders-api"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:53:55Z",
+      "message": "Failed to create endpoint for service orders/orders-api: endpoints \"orders-api\" already exists",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:53:55Z",
+        "name": "orders-api.18d023d1b491787e",
+        "namespace": "default",
+        "resourceVersion": "54003",
+        "uid": "bb59988f-e22e-4af7-91b9-bce53bae6e51"
+      },
+      "reason": "FailedToCreateEndpoint",
+      "reportingComponent": "endpoint-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "endpoint-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:51:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{helper-pod}",
+        "kind": "Pod",
+        "name": "helper-pod-create-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53565",
+        "uid": "0db5730a-df49-4d5d-aec3-d03ce6eac16d"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:51:28Z",
+      "message": "Container image \"docker.io/kindest/local-path-helper:v20260131-7181c60a\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:51:28Z",
+        "name": "helper-pod-create-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663.18d023af7e08e627",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53567",
+        "uid": "514cc628-23c6-4594-afdf-bbae68c5a087"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:51:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{helper-pod}",
+        "kind": "Pod",
+        "name": "helper-pod-create-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53565",
+        "uid": "0db5730a-df49-4d5d-aec3-d03ce6eac16d"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:51:28Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:51:28Z",
+        "name": "helper-pod-create-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663.18d023af80a42282",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53569",
+        "uid": "36c04deb-274c-4f51-bf02-0c58921eedb1"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:51:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{helper-pod}",
+        "kind": "Pod",
+        "name": "helper-pod-create-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53565",
+        "uid": "0db5730a-df49-4d5d-aec3-d03ce6eac16d"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:51:28Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:51:28Z",
+        "name": "helper-pod-create-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663.18d023af824d9687",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53570",
+        "uid": "162af80f-a666-46d6-9b75-45b8b7b0d967"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:52:27Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{helper-pod}",
+        "kind": "Pod",
+        "name": "helper-pod-delete-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53712",
+        "uid": "fb8ffb83-44a6-4883-8944-481fa63b57b8"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:52:27Z",
+      "message": "Container image \"docker.io/kindest/local-path-helper:v20260131-7181c60a\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:52:27Z",
+        "name": "helper-pod-delete-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663.18d023bd2bc71708",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53715",
+        "uid": "c12a6939-f29b-47a6-b99e-68f4a5e06fc2"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:52:27Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{helper-pod}",
+        "kind": "Pod",
+        "name": "helper-pod-delete-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53712",
+        "uid": "fb8ffb83-44a6-4883-8944-481fa63b57b8"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:52:27Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:52:27Z",
+        "name": "helper-pod-delete-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663.18d023bd2c19f76a",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53717",
+        "uid": "dac4f7b7-bdb4-42ab-890d-0e956a7107a5"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:52:27Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{helper-pod}",
+        "kind": "Pod",
+        "name": "helper-pod-delete-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53712",
+        "uid": "fb8ffb83-44a6-4883-8944-481fa63b57b8"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:52:27Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:52:27Z",
+        "name": "helper-pod-delete-pvc-8bdddcfc-5ea3-48ed-a46a-01d970add663.18d023bd2e1b8f2a",
+        "namespace": "local-path-storage",
+        "resourceVersion": "53718",
+        "uid": "055f1046-294c-4460-99ba-f3fb99a5169f"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-g52gl",
+        "namespace": "shop",
+        "resourceVersion": "57546",
+        "uid": "b8798d86-1cc4-4d5f-90fe-0b39e9f45d8a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Successfully assigned shop/catalog-65498fccb-g52gl to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-g52gl.18d024ad039d06f2",
+        "namespace": "shop",
+        "resourceVersion": "57557",
+        "uid": "f2b5dac0-a2f6-496b-b161-9539b6c3ebb7"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{api}",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-g52gl",
+        "namespace": "shop",
+        "resourceVersion": "57550",
+        "uid": "b8798d86-1cc4-4d5f-90fe-0b39e9f45d8a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-g52gl.18d024ad1981af96",
+        "namespace": "shop",
+        "resourceVersion": "57577",
+        "uid": "fe54b4df-4297-44d0-adc0-fca266606aea"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{api}",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-g52gl",
+        "namespace": "shop",
+        "resourceVersion": "57550",
+        "uid": "b8798d86-1cc4-4d5f-90fe-0b39e9f45d8a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-g52gl.18d024ad1a200d48",
+        "namespace": "shop",
+        "resourceVersion": "57583",
+        "uid": "0927c690-b420-44cc-b9b0-7c3e2ce66b25"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{api}",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-g52gl",
+        "namespace": "shop",
+        "resourceVersion": "57550",
+        "uid": "b8798d86-1cc4-4d5f-90fe-0b39e9f45d8a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-g52gl.18d024ad1c99763c",
+        "namespace": "shop",
+        "resourceVersion": "57586",
+        "uid": "3a27c190-8dcf-495b-8c13-fe3d5ba584ad"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-lbrwn",
+        "namespace": "shop",
+        "resourceVersion": "57548",
+        "uid": "70f0daeb-3a48-4571-bd18-327dddc59035"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Successfully assigned shop/catalog-65498fccb-lbrwn to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-lbrwn.18d024ad03ad4cfb",
+        "namespace": "shop",
+        "resourceVersion": "57558",
+        "uid": "c84a0df6-76d2-4a21-be9c-2c5daf399e43"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{api}",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-lbrwn",
+        "namespace": "shop",
+        "resourceVersion": "57554",
+        "uid": "70f0daeb-3a48-4571-bd18-327dddc59035"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-lbrwn.18d024ad19dbdb5b",
+        "namespace": "shop",
+        "resourceVersion": "57580",
+        "uid": "ccca6353-1cd0-4614-a088-ba9813c2c567"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{api}",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-lbrwn",
+        "namespace": "shop",
+        "resourceVersion": "57554",
+        "uid": "70f0daeb-3a48-4571-bd18-327dddc59035"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb-lbrwn.18d024ad1a5f638d",
+        "namespace": "shop",
+        "resourceVersion": "57584",
+        "uid": "1d3209c0-7bf1-4723-bfb5-1389959831a0"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{api}",
+        "kind": "Pod",
+        "name": "catalog-65498fccb-lbrwn",
+        "namespace": "shop",
+        "resourceVersion": "57554",
+        "uid": "70f0daeb-3a48-4571-bd18-327dddc59035"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:38Z",
+        "name": "catalog-65498fccb-lbrwn.18d024ad1cd116dd",
+        "namespace": "shop",
+        "resourceVersion": "57589",
+        "uid": "56115a8d-d990-4e82-ab7e-1679e156ccbc"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "catalog-65498fccb",
+        "namespace": "shop",
+        "resourceVersion": "57542",
+        "uid": "903701d3-8fdf-4231-bfe6-8ec942f1729a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Created pod: catalog-65498fccb-g52gl",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb.18d024ad035acee1",
+        "namespace": "shop",
+        "resourceVersion": "57549",
+        "uid": "27082ced-66e6-4ae6-b8c2-80e9d433c4e4"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "catalog-65498fccb",
+        "namespace": "shop",
+        "resourceVersion": "57542",
+        "uid": "903701d3-8fdf-4231-bfe6-8ec942f1729a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Created pod: catalog-65498fccb-lbrwn",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog-65498fccb.18d024ad0383566b",
+        "namespace": "shop",
+        "resourceVersion": "57555",
+        "uid": "79f00253-e39b-4d58-a5e9-d53725ba36f2"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "catalog",
+        "namespace": "shop",
+        "resourceVersion": "57541",
+        "uid": "82d644e7-7933-4244-9a00-06dedbce86e9"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Scaled up replica set catalog-65498fccb from 0 to 2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "catalog.18d024ad033d249b",
+        "namespace": "shop",
+        "resourceVersion": "57544",
+        "uid": "6269404a-410f-4633-86c6-0ce91c675877"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt",
+        "namespace": "shop",
+        "resourceVersion": "57568",
+        "uid": "8a51f444-6616-4425-b6bf-2265bf581365"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Successfully assigned shop/storefront-gateway-6785fd7b5d-cq9bt to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt.18d024ad048e8916",
+        "namespace": "shop",
+        "resourceVersion": "57573",
+        "uid": "33267d4d-aa27-4fb6-a626-9c22d4103347"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{gateway}",
+        "kind": "Pod",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt",
+        "namespace": "shop",
+        "resourceVersion": "57569",
+        "uid": "8a51f444-6616-4425-b6bf-2265bf581365"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt.18d024ad19be29c1",
+        "namespace": "shop",
+        "resourceVersion": "57579",
+        "uid": "8bd2a774-7789-4d4f-82ae-2d7ab3b1a7af"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{gateway}",
+        "kind": "Pod",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt",
+        "namespace": "shop",
+        "resourceVersion": "57569",
+        "uid": "8a51f444-6616-4425-b6bf-2265bf581365"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt.18d024ad1a609daf",
+        "namespace": "shop",
+        "resourceVersion": "57585",
+        "uid": "ea079cf4-45c1-4ac3-8762-eb2bd4feb745"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{gateway}",
+        "kind": "Pod",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt",
+        "namespace": "shop",
+        "resourceVersion": "57569",
+        "uid": "8a51f444-6616-4425-b6bf-2265bf581365"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "storefront-gateway-6785fd7b5d-cq9bt.18d024ad1caf710e",
+        "namespace": "shop",
+        "resourceVersion": "57587",
+        "uid": "dc21e9a7-e10b-4aad-b949-58b5902e7ae3"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "storefront-gateway-6785fd7b5d",
+        "namespace": "shop",
+        "resourceVersion": "57565",
+        "uid": "aa5a723a-587a-4de1-96d0-72229783b00e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Created pod: storefront-gateway-6785fd7b5d-cq9bt",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "storefront-gateway-6785fd7b5d.18d024ad04768c1b",
+        "namespace": "shop",
+        "resourceVersion": "57571",
+        "uid": "f10e6a89-66a1-4182-a83b-bcbaa923389e"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T02:09:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "storefront-gateway",
+        "namespace": "shop",
+        "resourceVersion": "57564",
+        "uid": "f1187b3e-b4fc-460a-b763-c98c514dd062"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T02:09:37Z",
+      "message": "Scaled up replica set storefront-gateway-6785fd7b5d from 0 to 1",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "name": "storefront-gateway.18d024ad04573a54",
+        "namespace": "shop",
+        "resourceVersion": "57567",
+        "uid": "249ef0de-74b1-47f6-a962-9e43049ef380"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

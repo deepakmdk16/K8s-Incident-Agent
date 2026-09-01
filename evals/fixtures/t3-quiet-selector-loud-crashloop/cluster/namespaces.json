@@ -1,0 +1,599 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "ab-testing"
+        },
+        "name": "ab-testing",
+        "resourceVersion": "58440",
+        "uid": "e83c56e9-8c3b-47b5-b318-459e2e8b0e4c"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:11Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "analytics-batch"
+        },
+        "name": "analytics-batch",
+        "resourceVersion": "58979",
+        "uid": "d0d3db19-0b11-4d81-932e-16a6bdfffc61"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "asset-pipeline"
+        },
+        "name": "asset-pipeline",
+        "resourceVersion": "58534",
+        "uid": "8e2699d3-f2a6-4d25-85c2-b9f66e6f0312"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "cdn-edge"
+        },
+        "name": "cdn-edge",
+        "resourceVersion": "58427",
+        "uid": "2cdba602-d540-47a8-8078-444eabf20d30"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "currency-rates"
+        },
+        "name": "currency-rates",
+        "resourceVersion": "58621",
+        "uid": "e85eb1b9-7f6b-4ced-9817-cb86cb43851d"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "default"
+        },
+        "name": "default",
+        "resourceVersion": "25",
+        "uid": "b07bce0d-a7c6-4c6e-8f8d-77c80e41f2f5"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "distributed-tracing"
+        },
+        "name": "distributed-tracing",
+        "resourceVersion": "58543",
+        "uid": "b4f8b301-7608-4985-819a-efb08e3fbd90"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "email-delivery"
+        },
+        "name": "email-delivery",
+        "resourceVersion": "58452",
+        "uid": "c01a619d-a9fb-473f-a113-b1a0a92a754e"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "feature-flags"
+        },
+        "name": "feature-flags",
+        "resourceVersion": "58479",
+        "uid": "2d158379-81c3-44ee-8f4a-55f3f11c0703"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "geo-routing"
+        },
+        "name": "geo-routing",
+        "resourceVersion": "58515",
+        "uid": "1dc6e8ca-806a-4d96-9342-2745891ec8b7"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "internal-dns"
+        },
+        "name": "internal-dns",
+        "resourceVersion": "58552",
+        "uid": "d0c5f8c5-2f46-4646-999e-1e6245be80ba"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "kube-node-lease"
+        },
+        "name": "kube-node-lease",
+        "resourceVersion": "32",
+        "uid": "77030b15-a9ba-4928-8a8c-b4104143cf2f"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "kube-public"
+        },
+        "name": "kube-public",
+        "resourceVersion": "15",
+        "uid": "49c65725-ad9b-4dfa-a93b-1b6fce37e718"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "kube-system"
+        },
+        "name": "kube-system",
+        "resourceVersion": "7",
+        "uid": "e89af6b5-6910-45e6-8ddb-7354b9d10c86"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-28T15:51:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "local-path-storage"
+        },
+        "name": "local-path-storage",
+        "resourceVersion": "307",
+        "uid": "b7e6e599-134a-4bf3-9be8-7ffe31bb1a72"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "log-aggregation"
+        },
+        "name": "log-aggregation",
+        "resourceVersion": "58385",
+        "uid": "84cc18f3-f610-4ba5-b7b7-42fcf9ffb309"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "loyalty-points"
+        },
+        "name": "loyalty-points",
+        "resourceVersion": "58561",
+        "uid": "82d5e1b6-85f1-44ec-95cf-a6b112fac06a"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "media-transcode"
+        },
+        "name": "media-transcode",
+        "resourceVersion": "58593",
+        "uid": "dbead858-62f2-4cd9-8dbf-a0117eeb9983"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "message-broker"
+        },
+        "name": "message-broker",
+        "resourceVersion": "58401",
+        "uid": "11fedb8c-4096-4361-b5ac-015256871298"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "partner-api"
+        },
+        "name": "partner-api",
+        "resourceVersion": "58603",
+        "uid": "51f884ec-8602-4239-b690-634b9c015f14"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "platform-metrics"
+        },
+        "name": "platform-metrics",
+        "resourceVersion": "58367",
+        "uid": "babbe8d7-8515-4fb4-a49d-1153d60e829a"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "pricing-sync"
+        },
+        "name": "pricing-sync",
+        "resourceVersion": "58570",
+        "uid": "3c0c2b37-e0ed-405f-91b3-23e560578260"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "push-notifications"
+        },
+        "name": "push-notifications",
+        "resourceVersion": "58524",
+        "uid": "3e581e8a-a3b4-48bf-94c7-9370d26962b0"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:11Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "search"
+        },
+        "name": "search",
+        "resourceVersion": "58948",
+        "uid": "3b663bef-87fa-40d0-a699-b1d136b49250"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "session-store"
+        },
+        "name": "session-store",
+        "resourceVersion": "58461",
+        "uid": "d0c29e89-1cb7-4958-bb2f-fd4fb1838846"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "user-profiles"
+        },
+        "name": "user-profiles",
+        "resourceVersion": "58413",
+        "uid": "88bff563-a283-48db-9900-a81120b12b75"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "webhooks"
+        },
+        "name": "webhooks",
+        "resourceVersion": "58612",
+        "uid": "675f28ec-c15d-4ede-baaf-3c54faf9e831"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

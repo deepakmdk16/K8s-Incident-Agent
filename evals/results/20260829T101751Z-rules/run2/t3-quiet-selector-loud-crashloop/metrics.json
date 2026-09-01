@@ -1,0 +1,22 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "arm": "rules",
+  "run_id": "39cf0f1e77df",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0014,
+  "paged_namespace": "search",
+  "findings": [
+    {
+      "analyzer": "endpoints",
+      "kind": "service",
+      "namespace": "search",
+      "name": "search",
+      "mechanism": "The Service selector does not match the pod labels, so its Endpoints object has no addresses.",
+      "evidence": "service search selects {'app': 'search-api'} and its Endpoints object has no subsets"
+    }
+  ],
+  "analyzers_fired": 1
+}

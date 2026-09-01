@@ -1,0 +1,20 @@
+Name:         postgres-primary-scripts
+Namespace:    billing
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "postgres-primary: accepting connections on :5432"
+while true; do echo ready | nc -l -p 5432; done
+
+
+
+BinaryData
+====
+
+Events:  <none>

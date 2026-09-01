@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "search",
+    "name": "search"
+  },
+  "mechanism": "Service search/search has .spec.selector set to {\"app\": \"search-api\"}, while the pod template of Deployment search/search labels its pods {\"app\": \"search\"}, so the selector matches no pod and the endpoint controller writes an Endpoints search/search object with zero addresses (endpointAddresses=0, no subsets). With no backend address programmed, every TCP connection to the search Service ClusterIP 10.96.24.225:8080 is dropped or refused rather than served, and each reconcile of the empty selector result re-publishes the same empty Endpoints.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,36 @@
+Name:           postgres-primary-65b8877bbf
+Namespace:      billing
+Selector:       app=postgres-primary,pod-template-hash=65b8877bbf
+Labels:         app=postgres-primary
+                pod-template-hash=65b8877bbf
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/postgres-primary
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=postgres-primary
+           pod-template-hash=65b8877bbf
+  Containers:
+   db:
+    Image:      busybox:1.36
+    Port:       5432/TCP (sql)
+    Host Port:  0/TCP (sql)
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          postgres-primary-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  21s   replicaset-controller  Created pod: postgres-primary-65b8877bbf-9z42x

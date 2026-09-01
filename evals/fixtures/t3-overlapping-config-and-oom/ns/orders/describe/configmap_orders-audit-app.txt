@@ -1,0 +1,26 @@
+Name:         orders-audit-app
+Namespace:    orders
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+# orders-audit: writes the order audit trail.
+set -eu
+: "${DATABASE_URL:?DATABASE_URL is required}"
+DB_HOST="${DATABASE_URL#*@}"; DB_HOST="${DB_HOST%%:*}"
+echo "audit: config ok - database_url resolved from orders-config (host=${DB_HOST})"
+while :; do
+  echo "audit: trail writer heartbeat"
+  sleep 60
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

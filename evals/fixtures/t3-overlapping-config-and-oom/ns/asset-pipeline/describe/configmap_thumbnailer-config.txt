@@ -1,0 +1,24 @@
+Name:         thumbnailer-config
+Namespace:    asset-pipeline
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+output_format:
+----
+webp
+
+quality:
+----
+82
+
+worker_threads:
+----
+2
+
+
+BinaryData
+====
+
+Events:  <none>

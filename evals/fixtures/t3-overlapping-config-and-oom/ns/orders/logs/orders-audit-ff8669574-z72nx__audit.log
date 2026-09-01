@@ -1,0 +1,2 @@
+2026-08-29T01:34:01.508707491Z audit: config ok - database_url resolved from orders-config (host=orders-db.internal)
+2026-08-29T01:34:01.508817331Z audit: trail writer heartbeat

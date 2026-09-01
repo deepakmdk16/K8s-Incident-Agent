@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {"kind": "Deployment", "namespace": "orders", "name": "orders-api"},
+  "mechanism": "The orders-api Deployment defines its readiness probe as http-get on port 8081 while the container serves only on port 8080, so every probe is refused and both replicas remain not-Ready. Kubernetes therefore keeps them out of the orders-api Service endpoints, leaving the ClusterIP with no backends. Calls from the checkout gateway to the orders backend never complete, producing the 5xx at order submission.",
+  "verdict": "confirmed"
+}

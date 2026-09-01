@@ -1,0 +1,12 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "arm": "baseline",
+  "run_id": "00be19f9e4ef",
+  "model": "claude-opus-5",
+  "input_tokens": 4622,
+  "output_tokens": 2672,
+  "cost_usd": 0.08991,
+  "duration_s": 34.79,
+  "prompt_chars": 9970,
+  "prompt_sections": 5
+}

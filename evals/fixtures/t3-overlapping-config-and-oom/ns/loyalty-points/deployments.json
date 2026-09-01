@@ -1,0 +1,104 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "generation": 1,
+        "labels": {
+          "app": "points-engine"
+        },
+        "name": "points-engine",
+        "namespace": "loyalty-points",
+        "resourceVersion": "51053",
+        "uid": "2cc41523-5320-4425-97fd-bdedae78abed"
+      },
+      "spec": {
+        "progressDeadlineSeconds": 600,
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app": "points-engine"
+          }
+        },
+        "strategy": {
+          "rollingUpdate": {
+            "maxSurge": "25%",
+            "maxUnavailable": "25%"
+          },
+          "type": "RollingUpdate"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "points-engine"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "-c",
+                  "echo 'points-engine started'; exec sleep 2147483647"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "engine",
+                "resources": {
+                  "requests": {
+                    "cpu": "10m",
+                    "memory": "16Mi"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File"
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-08-29T01:33:58Z",
+            "lastUpdateTime": "2026-08-29T01:33:58Z",
+            "message": "Deployment has minimum availability.",
+            "reason": "MinimumReplicasAvailable",
+            "status": "True",
+            "type": "Available"
+          },
+          {
+            "lastTransitionTime": "2026-08-29T01:33:57Z",
+            "lastUpdateTime": "2026-08-29T01:33:58Z",
+            "message": "ReplicaSet \"points-engine-84666f6c5f\" has successfully progressed.",
+            "reason": "NewReplicaSetAvailable",
+            "status": "True",
+            "type": "Progressing"
+          }
+        ],
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0,
+        "updatedReplicas": 1
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

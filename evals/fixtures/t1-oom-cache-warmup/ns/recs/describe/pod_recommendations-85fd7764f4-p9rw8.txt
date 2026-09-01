@@ -1,0 +1,70 @@
+Name:             recommendations-85fd7764f4-p9rw8
+Namespace:        recs
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 06:55:28 +0530
+Labels:           app=recommendations
+                  pod-template-hash=85fd7764f4
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.15
+IPs:
+  IP:           10.244.0.15
+Controlled By:  ReplicaSet/recommendations-85fd7764f4
+Containers:
+  server:
+    Container ID:  containerd://35435170deba6e0fb73e72d9021f4855c3cabbbb3c8394eb93c9f903dd2fbeb8
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo "warming catalog cache"; CACHE="$(dd if=/dev/zero bs=1M count=200 2>/dev/null | tr '\0' x)"; echo "catalog cache ready"; while :; do echo "serving recommendations"; sleep 30; done
+    State:          Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Sat, 29 Aug 2026 06:55:42 +0530
+      Finished:     Sat, 29 Aug 2026 06:55:42 +0530
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Sat, 29 Aug 2026 06:55:28 +0530
+      Finished:     Sat, 29 Aug 2026 06:55:29 +0530
+    Ready:          False
+    Restart Count:  2
+    Limits:
+      memory:  64Mi
+    Requests:
+      memory:     32Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-v784x (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-v784x:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  25s                default-scheduler  Successfully assigned recs/recommendations-85fd7764f4-p9rw8 to incident-lab-control-plane
+  Normal   Pulled     11s (x3 over 25s)  kubelet            spec.containers{server}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    11s (x3 over 25s)  kubelet            spec.containers{server}: Container created
+  Normal   Started    11s (x3 over 25s)  kubelet            spec.containers{server}: Container started
+  Warning  BackOff    11s (x2 over 24s)  kubelet            spec.containers{server}: Back-off restarting failed container server in pod recommendations-85fd7764f4-p9rw8_recs(98cf8363-8570-4e63-afe1-677b9f20ab3e)

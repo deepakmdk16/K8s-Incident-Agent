@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {"kind": "Deployment", "namespace": "fraud", "name": "fraud-scoring"},
+  "mechanism": "The Deployment's pod template requests 'cpu: 512' with no unit suffix, which Kubernetes parses as 512 whole CPU cores rather than 512 millicores. The single node in this cluster has nowhere near that allocatable CPU, so the scheduler rejects the pod with 'Insufficient cpu' and notes preemption cannot help; the pod stays Pending with no node assigned, the Deployment reports 0/1 available, and no fraud scores are produced.",
+  "verdict": "confirmed"
+}

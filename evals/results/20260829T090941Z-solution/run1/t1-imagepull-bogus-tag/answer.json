@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "web",
+    "name": "storefront"
+  },
+  "mechanism": "Deployment web/storefront sets .spec.template.spec.containers[storefront].image to \"registry.k8s.io/retail/storefront:2.4.1\", a tag that does not exist in the registry, so the kubelet's pull fails with \"failed to resolve reference \\\"registry.k8s.io/retail/storefront:2.4.1\\\": registry.k8s.io/retail/storefront:2.4.1: not found\" and the container is never created. The kubelet keeps retrying and holds each replica in Waiting with Reason ImagePullBackOff / ErrImagePull, leaving the Deployment at ready=0/2.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

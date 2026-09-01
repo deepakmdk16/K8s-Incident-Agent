@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The Deployment's container command allocates a ~200 MiB in-memory catalog cache (dd bs=1M count=200 piped into a shell variable) while its pod template sets a hard memory limit of 64Mi. The container exceeds its cgroup limit during warm-up and is OOM-killed (exit 137) before reaching its serving loop, so the kubelet restarts it into a CrashLoopBackOff and the Deployment never reports a Ready replica, leaving the recommendations panel with no backend.",
+  "verdict": "confirmed"
+}

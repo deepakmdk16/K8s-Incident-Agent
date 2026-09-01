@@ -1,0 +1,558 @@
+You are an on-call Kubernetes engineer. You just got paged:
+
+[PAGE] SEV1 OrderSubmit5xx — orders
+Storefront checkout is unable to place orders: POST /api/orders returns
+502/503 for most customers and checkout conversion is dropping sharply.
+Deployment orders/orders-api has reported 0/2 Ready for over 20 minutes,
+and the gateway shows no healthy upstream for the order-submission service.
+Find the root cause and propose a remediation.
+
+You grabbed the following output from the cluster. Diagnose the root
+cause of the paged symptom from this output alone.
+
+$ kubectl get all -A
+NAMESPACE             NAME                                                        READY   STATUS                       RESTARTS      AGE   IP            NODE                            NOMINATED NODE   READINESS GATES
+ab-testing            pod/experiment-api-787dddcc77-ph6gx                         1/1     Running                      0             27s   10.244.0.52   incident-lab-control-plane   <none>           <none>
+asset-pipeline        pod/thumbnailer-85d4959957-l9dhx                            1/1     Running                      0             26s   10.244.0.62   incident-lab-control-plane   <none>           <none>
+cdn-edge              pod/edge-cache-778d9548d7-z5cnx                             1/1     Running                      0             27s   10.244.0.54   incident-lab-control-plane   <none>           <none>
+currency-rates        pod/rates-fetcher-64c66dfb56-g5ctf                          1/1     Running                      0             24s   10.244.0.70   incident-lab-control-plane   <none>           <none>
+distributed-tracing   pod/span-collector-98dd7779b-xjk2q                          1/1     Running                      0             26s   10.244.0.64   incident-lab-control-plane   <none>           <none>
+email-delivery        pod/smtp-relay-558df49878-jvrxs                             1/1     Running                      0             27s   10.244.0.58   incident-lab-control-plane   <none>           <none>
+feature-flags         pod/flag-server-546bfb8f8-6dmqf                             1/1     Running                      0             27s   10.244.0.59   incident-lab-control-plane   <none>           <none>
+geo-routing           pod/geoip-api-779d7f574c-2mblk                              1/1     Running                      0             26s   10.244.0.60   incident-lab-control-plane   <none>           <none>
+internal-dns          pod/dns-forwarder-66fc5c9dd9-7t7ps                          1/1     Running                      0             26s   10.244.0.63   incident-lab-control-plane   <none>           <none>
+kube-system           pod/coredns-559f6c778d-9sqc8                                1/1     Running                      0             9h    10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/coredns-559f6c778d-t9nfq                                1/1     Running                      0             9h    10.244.0.4    incident-lab-control-plane   <none>           <none>
+kube-system           pod/etcd-incident-lab-control-plane                      1/1     Running                      0             9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kindnet-88ckx                                           1/1     Running                      0             9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-apiserver-incident-lab-control-plane            1/1     Running                      0             9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-controller-manager-incident-lab-control-plane   1/1     Running                      0             9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-proxy-6ndq6                                        1/1     Running                      0             9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-scheduler-incident-lab-control-plane            1/1     Running                      0             9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+local-path-storage    pod/local-path-provisioner-75f7fc7dc5-q6tkt                 1/1     Running                      0             9h    10.244.0.2    incident-lab-control-plane   <none>           <none>
+log-aggregation       pod/log-shipper-598b9c9858-5s4xs                            1/1     Running                      0             27s   10.244.0.53   incident-lab-control-plane   <none>           <none>
+loyalty-points        pod/points-engine-84666f6c5f-vmjww                          1/1     Running                      0             25s   10.244.0.65   incident-lab-control-plane   <none>           <none>
+media-transcode       pod/transcode-worker-d7bbb9c-rmqmc                          1/1     Running                      0             25s   10.244.0.67   incident-lab-control-plane   <none>           <none>
+message-broker        pod/queue-server-5c879fdf4-c2sxn                            1/1     Running                      0             27s   10.244.0.55   incident-lab-control-plane   <none>           <none>
+orders                pod/orders-api-6c64874687-8c47z                             0/1     CreateContainerConfigError   0             21s   10.244.0.72   incident-lab-control-plane   <none>           <none>
+orders                pod/orders-api-6c64874687-t6d22                             0/1     CreateContainerConfigError   0             21s   10.244.0.71   incident-lab-control-plane   <none>           <none>
+orders                pod/orders-audit-ff8669574-z72nx                            1/1     Running                      0             21s   10.244.0.73   incident-lab-control-plane   <none>           <none>
+orders                pod/orders-report-worker-5645b7fccf-zhjzb                   0/1     OOMKilled                    2 (18s ago)   21s   10.244.0.74   incident-lab-control-plane   <none>           <none>
+partner-api           pod/partner-gateway-cbdcb8f65-zvqv9                         1/1     Running                      0             25s   10.244.0.68   incident-lab-control-plane   <none>           <none>
+platform-metrics      pod/metrics-collector-5d66786b84-z8csb                      1/1     Running                      0             27s   10.244.0.51   incident-lab-control-plane   <none>           <none>
+pricing-sync          pod/price-worker-55864d8565-xwvgw                           1/1     Running                      0             25s   10.244.0.66   incident-lab-control-plane   <none>           <none>
+push-notifications    pod/push-dispatcher-657b86bd4d-nqzvt                        1/1     Running                      0             26s   10.244.0.61   incident-lab-control-plane   <none>           <none>
+session-store         pod/session-cache-5f875fd7c7-lnwbv                          1/1     Running                      0             27s   10.244.0.57   incident-lab-control-plane   <none>           <none>
+user-profiles         pod/profile-api-78bcbb5655-mxcn7                            1/1     Running                      0             27s   10.244.0.56   incident-lab-control-plane   <none>           <none>
+webhooks              pod/webhook-relay-5449d69858-8lg7t                          1/1     Running                      0             25s   10.244.0.69   incident-lab-control-plane   <none>           <none>
+
+NAMESPACE             NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+ab-testing            service/experiment-api      ClusterIP   10.96.189.132   <none>        8080/TCP                 27s   app=experiment-api
+asset-pipeline        service/thumbnailer         ClusterIP   10.96.128.198   <none>        8080/TCP                 27s   app=thumbnailer
+cdn-edge              service/edge-cache          ClusterIP   10.96.129.217   <none>        8080/TCP                 27s   app=edge-cache
+currency-rates        service/rates-fetcher       ClusterIP   10.96.205.204   <none>        8080/TCP                 27s   app=rates-fetcher
+default               service/kubernetes          ClusterIP   10.96.0.1       <none>        443/TCP                  9h    <none>
+distributed-tracing   service/span-collector      ClusterIP   10.96.56.199    <none>        8080/TCP                 27s   app=span-collector
+email-delivery        service/smtp-relay          ClusterIP   10.96.123.223   <none>        8080/TCP                 27s   app=smtp-relay
+feature-flags         service/flag-server         ClusterIP   10.96.34.192    <none>        8080/TCP                 27s   app=flag-server
+geo-routing           service/geoip-api           ClusterIP   10.96.161.237   <none>        8080/TCP                 27s   app=geoip-api
+internal-dns          service/dns-forwarder       ClusterIP   10.96.6.54      <none>        8080/TCP                 27s   app=dns-forwarder
+kube-system           service/kube-dns            ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP   9h    k8s-app=kube-dns
+log-aggregation       service/log-shipper         ClusterIP   10.96.13.139    <none>        8080/TCP                 27s   app=log-shipper
+loyalty-points        service/points-engine       ClusterIP   10.96.181.219   <none>        8080/TCP                 27s   app=points-engine
+media-transcode       service/transcode-worker    ClusterIP   10.96.62.8      <none>        8080/TCP                 27s   app=transcode-worker
+message-broker        service/queue-server        ClusterIP   10.96.17.34     <none>        8080/TCP                 27s   app=queue-server
+orders                service/orders-api          ClusterIP   10.96.40.243    <none>        80/TCP                   21s   app=orders-api
+partner-api           service/partner-gateway     ClusterIP   10.96.127.142   <none>        8080/TCP                 27s   app=partner-gateway
+platform-metrics      service/metrics-collector   ClusterIP   10.96.212.102   <none>        8080/TCP                 27s   app=metrics-collector
+pricing-sync          service/price-worker        ClusterIP   10.96.64.189    <none>        8080/TCP                 27s   app=price-worker
+push-notifications    service/push-dispatcher     ClusterIP   10.96.182.158   <none>        8080/TCP                 27s   app=push-dispatcher
+session-store         service/session-cache       ClusterIP   10.96.145.183   <none>        8080/TCP                 27s   app=session-cache
+user-profiles         service/profile-api         ClusterIP   10.96.97.139    <none>        8080/TCP                 27s   app=profile-api
+webhooks              service/webhook-relay       ClusterIP   10.96.15.86     <none>        8080/TCP                 27s   app=webhook-relay
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   9h    kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   9h    kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE             NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+ab-testing            deployment.apps/experiment-api           1/1     1            1           27s   api                      busybox:1.36                                                  app=experiment-api
+asset-pipeline        deployment.apps/thumbnailer              1/1     1            1           27s   worker                   busybox:1.36                                                  app=thumbnailer
+cdn-edge              deployment.apps/edge-cache               1/1     1            1           27s   cache                    busybox:1.36                                                  app=edge-cache
+currency-rates        deployment.apps/rates-fetcher            1/1     1            1           27s   fetcher                  busybox:1.36                                                  app=rates-fetcher
+distributed-tracing   deployment.apps/span-collector           1/1     1            1           27s   collector                busybox:1.36                                                  app=span-collector
+email-delivery        deployment.apps/smtp-relay               1/1     1            1           27s   relay                    busybox:1.36                                                  app=smtp-relay
+feature-flags         deployment.apps/flag-server              1/1     1            1           27s   server                   busybox:1.36                                                  app=flag-server
+geo-routing           deployment.apps/geoip-api                1/1     1            1           27s   api                      busybox:1.36                                                  app=geoip-api
+internal-dns          deployment.apps/dns-forwarder            1/1     1            1           27s   forwarder                busybox:1.36                                                  app=dns-forwarder
+kube-system           deployment.apps/coredns                  2/2     2            2           9h    coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage    deployment.apps/local-path-provisioner   1/1     1            1           9h    local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+log-aggregation       deployment.apps/log-shipper              1/1     1            1           27s   shipper                  busybox:1.36                                                  app=log-shipper
+loyalty-points        deployment.apps/points-engine            1/1     1            1           27s   engine                   busybox:1.36                                                  app=points-engine
+media-transcode       deployment.apps/transcode-worker         1/1     1            1           27s   worker                   busybox:1.36                                                  app=transcode-worker
+message-broker        deployment.apps/queue-server             1/1     1            1           27s   server                   busybox:1.36                                                  app=queue-server
+orders                deployment.apps/orders-api               0/2     2            0           21s   api                      busybox:1.36                                                  app=orders-api
+orders                deployment.apps/orders-audit             1/1     1            1           21s   audit                    busybox:1.36                                                  app=orders-audit
+orders                deployment.apps/orders-report-worker     0/1     1            0           21s   worker                   busybox:1.36                                                  app=orders-report-worker
+partner-api           deployment.apps/partner-gateway          1/1     1            1           27s   gateway                  busybox:1.36                                                  app=partner-gateway
+platform-metrics      deployment.apps/metrics-collector        1/1     1            1           27s   collector                busybox:1.36                                                  app=metrics-collector
+pricing-sync          deployment.apps/price-worker             1/1     1            1           27s   worker                   busybox:1.36                                                  app=price-worker
+push-notifications    deployment.apps/push-dispatcher          1/1     1            1           27s   dispatcher               busybox:1.36                                                  app=push-dispatcher
+session-store         deployment.apps/session-cache            1/1     1            1           27s   cache                    busybox:1.36                                                  app=session-cache
+user-profiles         deployment.apps/profile-api              1/1     1            1           27s   api                      busybox:1.36                                                  app=profile-api
+webhooks              deployment.apps/webhook-relay            1/1     1            1           27s   relay                    busybox:1.36                                                  app=webhook-relay
+
+NAMESPACE             NAME                                                DESIRED   CURRENT   READY   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+ab-testing            replicaset.apps/experiment-api-787dddcc77           1         1         1       27s   api                      busybox:1.36                                                  app=experiment-api,pod-template-hash=787dddcc77
+asset-pipeline        replicaset.apps/thumbnailer-85d4959957              1         1         1       26s   worker                   busybox:1.36                                                  app=thumbnailer,pod-template-hash=85d4959957
+cdn-edge              replicaset.apps/edge-cache-778d9548d7               1         1         1       27s   cache                    busybox:1.36                                                  app=edge-cache,pod-template-hash=778d9548d7
+currency-rates        replicaset.apps/rates-fetcher-64c66dfb56            1         1         1       24s   fetcher                  busybox:1.36                                                  app=rates-fetcher,pod-template-hash=64c66dfb56
+distributed-tracing   replicaset.apps/span-collector-98dd7779b            1         1         1       26s   collector                busybox:1.36                                                  app=span-collector,pod-template-hash=98dd7779b
+email-delivery        replicaset.apps/smtp-relay-558df49878               1         1         1       27s   relay                    busybox:1.36                                                  app=smtp-relay,pod-template-hash=558df49878
+feature-flags         replicaset.apps/flag-server-546bfb8f8               1         1         1       27s   server                   busybox:1.36                                                  app=flag-server,pod-template-hash=546bfb8f8
+geo-routing           replicaset.apps/geoip-api-779d7f574c                1         1         1       26s   api                      busybox:1.36                                                  app=geoip-api,pod-template-hash=779d7f574c
+internal-dns          replicaset.apps/dns-forwarder-66fc5c9dd9            1         1         1       26s   forwarder                busybox:1.36                                                  app=dns-forwarder,pod-template-hash=66fc5c9dd9
+kube-system           replicaset.apps/coredns-559f6c778d                  2         2         2       9h    coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage    replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       9h    local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+log-aggregation       replicaset.apps/log-shipper-598b9c9858              1         1         1       27s   shipper                  busybox:1.36                                                  app=log-shipper,pod-template-hash=598b9c9858
+loyalty-points        replicaset.apps/points-engine-84666f6c5f            1         1         1       25s   engine                   busybox:1.36                                                  app=points-engine,pod-template-hash=84666f6c5f
+media-transcode       replicaset.apps/transcode-worker-d7bbb9c            1         1         1       25s   worker                   busybox:1.36                                                  app=transcode-worker,pod-template-hash=d7bbb9c
+message-broker        replicaset.apps/queue-server-5c879fdf4              1         1         1       27s   server                   busybox:1.36                                                  app=queue-server,pod-template-hash=5c879fdf4
+orders                replicaset.apps/orders-api-6c64874687               2         2         0       21s   api                      busybox:1.36                                                  app=orders-api,pod-template-hash=6c64874687
+orders                replicaset.apps/orders-audit-ff8669574              1         1         1       21s   audit                    busybox:1.36                                                  app=orders-audit,pod-template-hash=ff8669574
+orders                replicaset.apps/orders-report-worker-5645b7fccf     1         1         0       21s   worker                   busybox:1.36                                                  app=orders-report-worker,pod-template-hash=5645b7fccf
+partner-api           replicaset.apps/partner-gateway-cbdcb8f65           1         1         1       25s   gateway                  busybox:1.36                                                  app=partner-gateway,pod-template-hash=cbdcb8f65
+platform-metrics      replicaset.apps/metrics-collector-5d66786b84        1         1         1       27s   collector                busybox:1.36                                                  app=metrics-collector,pod-template-hash=5d66786b84
+pricing-sync          replicaset.apps/price-worker-55864d8565             1         1         1       25s   worker                   busybox:1.36                                                  app=price-worker,pod-template-hash=55864d8565
+push-notifications    replicaset.apps/push-dispatcher-657b86bd4d          1         1         1       26s   dispatcher               busybox:1.36                                                  app=push-dispatcher,pod-template-hash=657b86bd4d
+session-store         replicaset.apps/session-cache-5f875fd7c7            1         1         1       27s   cache                    busybox:1.36                                                  app=session-cache,pod-template-hash=5f875fd7c7
+user-profiles         replicaset.apps/profile-api-78bcbb5655              1         1         1       27s   api                      busybox:1.36                                                  app=profile-api,pod-template-hash=78bcbb5655
+webhooks              replicaset.apps/webhook-relay-5449d69858            1         1         1       25s   relay                    busybox:1.36                                                  app=webhook-relay,pod-template-hash=5449d69858
+
+$ kubectl describe pod/orders-api-6c64874687-8c47z -n orders
+Name:             orders-api-6c64874687-8c47z
+Namespace:        orders
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:04:01 +0530
+Labels:           app=orders-api
+                  pod-template-hash=6c64874687
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.72
+IPs:
+  IP:           10.244.0.72
+Controlled By:  ReplicaSet/orders-api-6c64874687
+Containers:
+  api:
+    Container ID:  
+    Image:         busybox:1.36
+    Image ID:      
+    Port:          8080/TCP (http)
+    Host Port:     0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    State:          Waiting
+      Reason:       CreateContainerConfigError
+    Ready:          False
+    Restart Count:  0
+    Environment:
+      DATABASE_URL:  <set to the key 'db_url' of config map 'orders-config'>  Optional: false
+    Mounts:
+      /app from app (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6bxs8 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  app:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      orders-api-app
+    Optional:  false
+  kube-api-access-6bxs8:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  51s               default-scheduler  Successfully assigned orders/orders-api-6c64874687-8c47z to incident-lab-control-plane
+  Normal   Pulled     3s (x6 over 51s)  kubelet            spec.containers{api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Warning  Failed     3s (x6 over 51s)  kubelet            spec.containers{api}: Error: couldn't find key db_url in ConfigMap orders/orders-config
+
+$ kubectl describe pod/orders-api-6c64874687-t6d22 -n orders
+Name:             orders-api-6c64874687-t6d22
+Namespace:        orders
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:04:01 +0530
+Labels:           app=orders-api
+                  pod-template-hash=6c64874687
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.71
+IPs:
+  IP:           10.244.0.71
+Controlled By:  ReplicaSet/orders-api-6c64874687
+Containers:
+  api:
+    Container ID:  
+    Image:         busybox:1.36
+    Image ID:      
+    Port:          8080/TCP (http)
+    Host Port:     0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    State:          Waiting
+      Reason:       CreateContainerConfigError
+    Ready:          False
+    Restart Count:  0
+    Environment:
+      DATABASE_URL:  <set to the key 'db_url' of config map 'orders-config'>  Optional: false
+    Mounts:
+      /app from app (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-mrn4j (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  app:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      orders-api-app
+    Optional:  false
+  kube-api-access-mrn4j:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  51s                default-scheduler  Successfully assigned orders/orders-api-6c64874687-t6d22 to incident-lab-control-plane
+  Normal   Pulled     10s (x5 over 51s)  kubelet            spec.containers{api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Warning  Failed     10s (x5 over 51s)  kubelet            spec.containers{api}: Error: couldn't find key db_url in ConfigMap orders/orders-config
+
+$ kubectl describe pod/orders-report-worker-5645b7fccf-zhjzb -n orders
+Name:             orders-report-worker-5645b7fccf-zhjzb
+Namespace:        orders
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:04:01 +0530
+Labels:           app=orders-report-worker
+                  pod-template-hash=5645b7fccf
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.74
+IPs:
+  IP:           10.244.0.74
+Controlled By:  ReplicaSet/orders-report-worker-5645b7fccf
+Containers:
+  worker:
+    Container ID:  containerd://9a7461550f7fd9e6ce8b2a6b2ee145cc5fb686cab0328cc8c4fa47fc00fe1431
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Sat, 29 Aug 2026 07:04:45 +0530
+      Finished:     Sat, 29 Aug 2026 07:04:46 +0530
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Sat, 29 Aug 2026 07:04:18 +0530
+      Finished:     Sat, 29 Aug 2026 07:04:19 +0530
+    Ready:          False
+    Restart Count:  3
+    Limits:
+      memory:  48Mi
+    Requests:
+      cpu:        25m
+      memory:     48Mi
+    Environment:  <none>
+    Mounts:
+      /app from app (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-j9psw (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  app:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      orders-report-worker-app
+    Optional:  false
+  kube-api-access-j9psw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age               From               Message
+  ----     ------       ----              ----               -------
+  Normal   Scheduled    51s               default-scheduler  Successfully assigned orders/orders-report-worker-5645b7fccf-zhjzb to incident-lab-control-plane
+  Warning  FailedMount  50s               kubelet            MountVolume.SetUp failed for volume "app" : failed to sync configmap cache: timed out waiting for the condition
+  Normal   Pulled       7s (x4 over 50s)  kubelet            spec.containers{worker}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created      7s (x4 over 49s)  kubelet            spec.containers{worker}: Container created
+  Normal   Started      7s (x4 over 49s)  kubelet            spec.containers{worker}: Container started
+  Warning  BackOff      6s (x3 over 47s)  kubelet            spec.containers{worker}: Back-off restarting failed container worker in pod orders-report-worker-5645b7fccf-zhjzb_orders(d3624658-b3ba-43b1-a678-6d465ee8bd5e)
+
+$ kubectl logs orders-report-worker-5645b7fccf-zhjzb -c worker -n orders --tail=50
+2026-08-29T01:34:45.963402591Z report-worker: loading order history into in-memory export buffer (~150MiB)
+
+$ kubectl logs orders-report-worker-5645b7fccf-zhjzb -c worker -n orders --previous --tail=50
+unable to retrieve container logs for containerd://45702b17b2399cd0663f2595560358aacc7322fadd9ba4a24e20cacecba82c89
+
+$ kubectl describe deployment.apps/orders-api -n orders
+Name:                   orders-api
+Namespace:              orders
+CreationTimestamp:      Sat, 29 Aug 2026 07:04:01 +0530
+Labels:                 app=orders-api
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=orders-api
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=orders-api
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Environment:
+      DATABASE_URL:  <set to the key 'db_url' of config map 'orders-config'>  Optional: false
+    Mounts:
+      /app from app (rw)
+  Volumes:
+   app:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-api-app
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   orders-api-6c64874687 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  51s   deployment-controller  Scaled up replica set orders-api-6c64874687 from 0 to 2
+
+$ kubectl describe deployment.apps/orders-report-worker -n orders
+Name:                   orders-report-worker
+Namespace:              orders
+CreationTimestamp:      Sat, 29 Aug 2026 07:04:01 +0530
+Labels:                 app=orders-report-worker
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=orders-report-worker
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=orders-report-worker
+  Containers:
+   worker:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Limits:
+      memory:  48Mi
+    Requests:
+      cpu:        25m
+      memory:     48Mi
+    Environment:  <none>
+    Mounts:
+      /app from app (rw)
+  Volumes:
+   app:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-report-worker-app
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      False   MinimumReplicasUnavailable
+OldReplicaSets:  <none>
+NewReplicaSet:   orders-report-worker-5645b7fccf (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  51s   deployment-controller  Scaled up replica set orders-report-worker-5645b7fccf from 0 to 1
+
+$ kubectl describe replicaset.apps/orders-api-6c64874687 -n orders
+Name:           orders-api-6c64874687
+Namespace:      orders
+Selector:       app=orders-api,pod-template-hash=6c64874687
+Labels:         app=orders-api
+                pod-template-hash=6c64874687
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/orders-api
+Replicas:       2 current / 2 desired
+Pods Status:    0 Running / 2 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=orders-api
+           pod-template-hash=6c64874687
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Environment:
+      DATABASE_URL:  <set to the key 'db_url' of config map 'orders-config'>  Optional: false
+    Mounts:
+      /app from app (rw)
+  Volumes:
+   app:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-api-app
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  51s   replicaset-controller  Created pod: orders-api-6c64874687-t6d22
+  Normal  SuccessfulCreate  51s   replicaset-controller  Created pod: orders-api-6c64874687-8c47z
+
+$ kubectl describe replicaset.apps/orders-report-worker-5645b7fccf -n orders
+Name:           orders-report-worker-5645b7fccf
+Namespace:      orders
+Selector:       app=orders-report-worker,pod-template-hash=5645b7fccf
+Labels:         app=orders-report-worker
+                pod-template-hash=5645b7fccf
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/orders-report-worker
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=orders-report-worker
+           pod-template-hash=5645b7fccf
+  Containers:
+   worker:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Limits:
+      memory:  48Mi
+    Requests:
+      cpu:        25m
+      memory:     48Mi
+    Environment:  <none>
+    Mounts:
+      /app from app (rw)
+  Volumes:
+   app:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-report-worker-app
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  51s   replicaset-controller  Created pod: orders-report-worker-5645b7fccf-zhjzb
+
+The case id for your answer is "t3-overlapping-config-and-oom".
+
+Write your findings as a markdown report with EXACTLY these four sections:
+
+## Root cause
+The failing resource and the causal mechanism, stated plainly.
+
+## Evidence chain
+Every claim cites the exact piece of the provided output it came from (name the
+source, e.g. "describe of pod X", "log line: ...", quote the relevant line).
+
+## Investigation ledger
+Each alternative explanation you considered and ruled out, with the evidence
+that ruled it out. If you considered only one explanation, say so.
+
+## Verification recipe
+The 2-3 exact commands a human runs to independently confirm the root cause in
+under 2 minutes.
+
+Verdict rules (use the word, never a number — numeric self-confidence such as
+"90% sure" is forbidden anywhere in the report):
+- "confirmed": you have direct causal evidence linking mechanism to symptom.
+- "probable": evidence is consistent but indirect.
+- "inconclusive": name the additional evidence that would settle it.
+
+After the report, output the machine-read answer as the LAST fenced code block,
+exactly this shape:
+
+```json
+{
+  "case_id": "<case id, echoed verbatim>",
+  "failing_resource": {"kind": "...", "namespace": "...", "name": "..."},
+  "mechanism": "1-3 sentences: the causal mechanism of the paged symptom only.",
+  "verdict": "confirmed | probable | inconclusive",
+  "missing_evidence": "required iff verdict is inconclusive: what would settle it"
+}
+```
+
+`failing_resource` is the resource whose spec must CHANGE to fix the incident
+(e.g. the owning workload, not the crashing pod it produced). In `mechanism`,
+never mention any workload or mechanism other than the failing one — even to
+rule it out; ruled-out alternatives belong in the Investigation ledger.

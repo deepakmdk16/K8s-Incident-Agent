@@ -1,0 +1,20 @@
+Name:         transcode-worker-config
+Namespace:    media-transcode
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+preset:
+----
+h264-720p
+
+segment_seconds:
+----
+6
+
+
+BinaryData
+====
+
+Events:  <none>

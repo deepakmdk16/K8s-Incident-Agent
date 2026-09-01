@@ -1,0 +1,13 @@
+Name:         orders-api
+Namespace:    orders
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  <none>
+Subsets:
+  Addresses:          <none>
+  NotReadyAddresses:  10.244.0.71,10.244.0.72
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

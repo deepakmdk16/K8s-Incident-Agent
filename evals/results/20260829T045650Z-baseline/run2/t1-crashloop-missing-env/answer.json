@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {"kind": "Deployment", "namespace": "payments", "name": "checkout-worker"},
+  "mechanism": "The checkout-worker Deployment's pod template declares no environment variables (Environment: <none>, no env or envFrom), so the required AMQP_URL is never injected into the worker container. The container's startup guard '[ -n \"${AMQP_URL:-}\" ] || { echo \"FATAL: AMQP_URL not set\"; exit 1; }' therefore fails instantly and exits 1, driving CrashLoopBackOff. The pod never reaches Ready, leaving the Deployment at 0/1 available so no checkout jobs are consumed from the queue.",
+  "verdict": "confirmed"
+}

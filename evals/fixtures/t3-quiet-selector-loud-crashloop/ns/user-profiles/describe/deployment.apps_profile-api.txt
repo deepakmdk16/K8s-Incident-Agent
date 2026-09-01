@@ -1,0 +1,40 @@
+Name:                   profile-api
+Namespace:              user-profiles
+CreationTimestamp:      Sat, 29 Aug 2026 07:44:06 +0530
+Labels:                 app=profile-api
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=profile-api
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=profile-api
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'profile-api started'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   profile-api-78bcbb5655 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  4m55s  deployment-controller  Scaled up replica set profile-api-78bcbb5655 from 0 to 1

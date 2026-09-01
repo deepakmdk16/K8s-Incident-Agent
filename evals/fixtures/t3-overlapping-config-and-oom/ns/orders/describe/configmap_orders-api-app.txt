@@ -1,0 +1,24 @@
+Name:         orders-api-app
+Namespace:    orders
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+# orders-api: order submission HTTP API.
+set -eu
+: "${DATABASE_URL:?DATABASE_URL is required}"
+DB_HOST="${DATABASE_URL#*@}"; DB_HOST="${DB_HOST%%:*}"
+echo "orders-api: starting; order store at ${DB_HOST}"
+echo "orders-api: listening on :8080"
+exec httpd -f -p 8080 -h /tmp
+
+
+
+BinaryData
+====
+
+Events:  <none>

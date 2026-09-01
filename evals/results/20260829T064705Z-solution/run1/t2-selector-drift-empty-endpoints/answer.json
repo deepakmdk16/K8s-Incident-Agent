@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "shop",
+    "name": "catalog"
+  },
+  "mechanism": "Service shop/catalog has .spec.selector.app = \"catalog-api\" while the pods produced by deployment/catalog are labelled app=catalog, so the selector matches no pod and the endpoint controller writes an Endpoints object with zero addresses; every connection to the catalog ClusterIP on port 8080 therefore has no backend and is rejected with connection refused / timeout.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

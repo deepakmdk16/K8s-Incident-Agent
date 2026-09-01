@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "The ResourceQuota checkout-quota in namespace checkout has .spec.hard.pods = \"2\" while 2 pods are already used, so the quota admission controller forbids every further pod creation in the namespace with \"exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2\". The hard pod limit should be at least 6, the desired replica count, so the scale-up is admitted instead of being rejected on every retry.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

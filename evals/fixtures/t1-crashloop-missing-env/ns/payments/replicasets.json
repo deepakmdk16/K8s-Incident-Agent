@@ -1,0 +1,85 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "1",
+          "deployment.kubernetes.io/max-replicas": "2",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T02:19:51Z",
+        "generation": 1,
+        "labels": {
+          "app": "checkout-worker",
+          "pod-template-hash": "66bfcdfc47"
+        },
+        "name": "checkout-worker-66bfcdfc47",
+        "namespace": "payments",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "checkout-worker",
+            "uid": "f491ae26-849f-44dd-859f-47644c5d8bd7"
+          }
+        ],
+        "resourceVersion": "60607",
+        "uid": "8b182ba4-339d-449a-935d-9cc9e553957b"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "checkout-worker",
+            "pod-template-hash": "66bfcdfc47"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "checkout-worker",
+              "pod-template-hash": "66bfcdfc47"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "-c",
+                  "[ -n \"${AMQP_URL:-}\" ] || { echo \"FATAL: AMQP_URL not set\"; exit 1; }; echo \"connected to queue at ${AMQP_URL}\"; while :; do echo \"consuming checkout jobs\"; sleep 10; done"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "worker",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File"
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      },
+      "status": {
+        "fullyLabeledReplicas": 1,
+        "observedGeneration": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

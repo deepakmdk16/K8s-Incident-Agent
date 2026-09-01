@@ -1,0 +1,6 @@
+[PAGE] SEV2 StorefrontReleaseDegraded — web
+Deployment web/storefront has reported 0/2 Ready for over 15 minutes,
+beginning right after the new storefront release went out. Product pages
+are still being served, but degraded from the edge cache: stale prices and
+inventory, and no personalization. Alert source: workload availability
+monitor. Find the root cause and propose a remediation.

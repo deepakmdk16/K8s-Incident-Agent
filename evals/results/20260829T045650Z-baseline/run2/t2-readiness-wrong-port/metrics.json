@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "arm": "baseline",
+  "run_id": "7b364ed9463b",
+  "model": "claude-opus-5",
+  "input_tokens": 6958,
+  "output_tokens": 3175,
+  "cost_usd": 0.114165,
+  "duration_s": 39.48,
+  "prompt_chars": 15543,
+  "prompt_sections": 6
+}

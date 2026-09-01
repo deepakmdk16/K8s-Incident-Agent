@@ -1,0 +1,60 @@
+Name:             experiment-api-787dddcc77-rczkh
+Namespace:        ab-testing
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:44:06 +0530
+Labels:           app=experiment-api
+                  pod-template-hash=787dddcc77
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.134
+IPs:
+  IP:           10.244.0.134
+Controlled By:  ReplicaSet/experiment-api-787dddcc77
+Containers:
+  api:
+    Container ID:  containerd://ba1f0ea6db75aebd3f5398c133ec165c8d76562a18ab56eec76ee5151aaa0577
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'experiment-api started'; exec sleep 2147483647
+    State:          Running
+      Started:      Sat, 29 Aug 2026 07:44:06 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-vvdvn (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-vvdvn:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  4m14s  default-scheduler  Successfully assigned ab-testing/experiment-api-787dddcc77-rczkh to incident-lab-control-plane
+  Normal  Pulled     4m14s  kubelet            spec.containers{api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    4m14s  kubelet            spec.containers{api}: Container created
+  Normal  Started    4m14s  kubelet            spec.containers{api}: Container started

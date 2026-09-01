@@ -1,0 +1,300 @@
+2026-08-29T01:09:39.155986558Z I0829 01:09:39.155654       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:09:39.156064106Z I0829 01:09:39.155721       1 main.go:324] handling current node
+2026-08-29T01:09:51.140459936Z I0829 01:09:51.140109       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:09:51.140550054Z I0829 01:09:51.140218       1 main.go:324] handling current node
+2026-08-29T01:10:01.140344190Z I0829 01:10:01.139972       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:10:01.140437221Z I0829 01:10:01.140080       1 main.go:324] handling current node
+2026-08-29T01:10:11.141186719Z I0829 01:10:11.140807       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:10:11.141255704Z I0829 01:10:11.140982       1 main.go:324] handling current node
+2026-08-29T01:10:21.139863674Z I0829 01:10:21.139513       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:10:21.139962983Z I0829 01:10:21.139646       1 main.go:324] handling current node
+2026-08-29T01:10:31.140698940Z I0829 01:10:31.140389       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:10:31.140771281Z I0829 01:10:31.140459       1 main.go:324] handling current node
+2026-08-29T01:10:43.588517674Z I0829 01:10:43.588130       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:10:43.588605432Z I0829 01:10:43.588245       1 main.go:324] handling current node
+2026-08-29T01:10:53.599858672Z I0829 01:10:53.599479       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:10:53.599946096Z I0829 01:10:53.599560       1 main.go:324] handling current node
+2026-08-29T01:11:03.589720239Z I0829 01:11:03.589280       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:11:03.589801454Z I0829 01:11:03.589362       1 main.go:324] handling current node
+2026-08-29T01:11:15.592750327Z I0829 01:11:15.592448       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:11:15.592808083Z I0829 01:11:15.592506       1 main.go:324] handling current node
+2026-08-29T01:11:25.585860390Z I0829 01:11:25.585637       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:11:25.585931577Z I0829 01:11:25.585710       1 main.go:324] handling current node
+2026-08-29T01:11:39.546581360Z I0829 01:11:39.546208       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:11:39.546664989Z I0829 01:11:39.546303       1 main.go:324] handling current node
+2026-08-29T01:11:49.404454080Z I0829 01:11:49.404212       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:11:49.404518414Z I0829 01:11:49.404272       1 main.go:324] handling current node
+2026-08-29T01:11:59.397235595Z I0829 01:11:59.397012       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:11:59.397293511Z I0829 01:11:59.397074       1 main.go:324] handling current node
+2026-08-29T01:12:09.396969740Z I0829 01:12:09.396647       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:12:09.397036986Z I0829 01:12:09.396728       1 main.go:324] handling current node
+2026-08-29T01:12:19.405980629Z I0829 01:12:19.405784       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:12:19.406076089Z I0829 01:12:19.405844       1 main.go:324] handling current node
+2026-08-29T01:12:31.865046740Z I0829 01:12:31.864786       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:12:31.865115821Z I0829 01:12:31.864908       1 main.go:324] handling current node
+2026-08-29T01:12:41.862359058Z I0829 01:12:41.862048       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:12:41.862443436Z I0829 01:12:41.862169       1 main.go:324] handling current node
+2026-08-29T01:12:51.862919613Z I0829 01:12:51.862651       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:12:51.862987273Z I0829 01:12:51.862713       1 main.go:324] handling current node
+2026-08-29T01:13:01.863792345Z I0829 01:13:01.863471       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:13:01.863917751Z I0829 01:13:01.863555       1 main.go:324] handling current node
+2026-08-29T01:13:11.862507659Z I0829 01:13:11.862129       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:13:11.862588542Z I0829 01:13:11.862223       1 main.go:324] handling current node
+2026-08-29T01:13:24.357085536Z I0829 01:13:24.356909       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:13:24.357120756Z I0829 01:13:24.356946       1 main.go:324] handling current node
+2026-08-29T01:13:36.341754703Z I0829 01:13:36.341392       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:13:36.341882383Z I0829 01:13:36.341531       1 main.go:324] handling current node
+2026-08-29T01:13:46.340548040Z I0829 01:13:46.340169       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:13:46.340636086Z I0829 01:13:46.340308       1 main.go:324] handling current node
+2026-08-29T01:13:56.340729086Z I0829 01:13:56.340489       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:13:56.340813848Z I0829 01:13:56.340555       1 main.go:324] handling current node
+2026-08-29T01:13:56.941499647Z I0829 01:13:56.941368       1 controller.go:462] "Syncing nftables rules" logger="nftables-sync"
+2026-08-29T01:13:56.951461970Z I0829 01:13:56.951374       1 controller.go:465] "Syncing nftables rules" logger="nftables-sync" elapsed="9.966909ms"
+2026-08-29T01:14:06.343848475Z I0829 01:14:06.343466       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:14:06.343933977Z I0829 01:14:06.343557       1 main.go:324] handling current node
+2026-08-29T01:14:16.340565821Z I0829 01:14:16.340267       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:14:16.340640689Z I0829 01:14:16.340388       1 main.go:324] handling current node
+2026-08-29T01:14:28.820505112Z I0829 01:14:28.820161       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:14:28.820593441Z I0829 01:14:28.820270       1 main.go:324] handling current node
+2026-08-29T01:14:38.822544821Z I0829 01:14:38.822197       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:14:38.822626835Z I0829 01:14:38.822278       1 main.go:324] handling current node
+2026-08-29T01:14:48.817968027Z I0829 01:14:48.817614       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:14:48.818060637Z I0829 01:14:48.817741       1 main.go:324] handling current node
+2026-08-29T01:14:58.817446884Z I0829 01:14:58.817155       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:14:58.817502086Z I0829 01:14:58.817219       1 main.go:324] handling current node
+2026-08-29T01:15:08.817314602Z I0829 01:15:08.817098       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:15:08.817398250Z I0829 01:15:08.817157       1 main.go:324] handling current node
+2026-08-29T01:15:18.817087219Z I0829 01:15:18.816772       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:15:18.817148413Z I0829 01:15:18.816830       1 main.go:324] handling current node
+2026-08-29T01:15:28.825721659Z I0829 01:15:28.825474       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:15:28.825782176Z I0829 01:15:28.825530       1 main.go:324] handling current node
+2026-08-29T01:15:38.817479137Z I0829 01:15:38.817188       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:15:38.817545900Z I0829 01:15:38.817284       1 main.go:324] handling current node
+2026-08-29T01:15:48.820485776Z I0829 01:15:48.820252       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:15:48.820543660Z I0829 01:15:48.820305       1 main.go:324] handling current node
+2026-08-29T01:15:58.817725832Z I0829 01:15:58.817503       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:15:58.817794132Z I0829 01:15:58.817558       1 main.go:324] handling current node
+2026-08-29T01:16:08.817200686Z I0829 01:16:08.816962       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:16:08.817265931Z I0829 01:16:08.817046       1 main.go:324] handling current node
+2026-08-29T01:16:18.826634334Z I0829 01:16:18.826404       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:16:18.826696248Z I0829 01:16:18.826470       1 main.go:324] handling current node
+2026-08-29T01:16:28.820154197Z I0829 01:16:28.819801       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:16:28.820235738Z I0829 01:16:28.819880       1 main.go:324] handling current node
+2026-08-29T01:16:38.817068511Z I0829 01:16:38.816682       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:16:38.817149428Z I0829 01:16:38.816783       1 main.go:324] handling current node
+2026-08-29T01:16:48.816545041Z I0829 01:16:48.816174       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:16:48.816638044Z I0829 01:16:48.816288       1 main.go:324] handling current node
+2026-08-29T01:16:58.818109922Z I0829 01:16:58.817739       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:16:58.818166758Z I0829 01:16:58.817829       1 main.go:324] handling current node
+2026-08-29T01:17:08.817555769Z I0829 01:17:08.817218       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:17:08.817599313Z I0829 01:17:08.817340       1 main.go:324] handling current node
+2026-08-29T01:17:18.817250106Z I0829 01:17:18.817005       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:17:18.817311651Z I0829 01:17:18.817073       1 main.go:324] handling current node
+2026-08-29T01:17:28.817406779Z I0829 01:17:28.817266       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:17:28.817425613Z I0829 01:17:28.817296       1 main.go:324] handling current node
+2026-08-29T01:17:38.823040133Z I0829 01:17:38.822714       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:17:38.823093928Z I0829 01:17:38.822825       1 main.go:324] handling current node
+2026-08-29T01:17:48.817045554Z I0829 01:17:48.816863       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:17:48.817076639Z I0829 01:17:48.816895       1 main.go:324] handling current node
+2026-08-29T01:17:58.819337846Z I0829 01:17:58.819041       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:17:58.819392975Z I0829 01:17:58.819093       1 main.go:324] handling current node
+2026-08-29T01:18:08.816585499Z I0829 01:18:08.816296       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:18:08.816675965Z I0829 01:18:08.816418       1 main.go:324] handling current node
+2026-08-29T01:18:18.817012820Z I0829 01:18:18.816901       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:18:18.817036771Z I0829 01:18:18.816924       1 main.go:324] handling current node
+2026-08-29T01:18:28.817282414Z I0829 01:18:28.817041       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:18:28.817346605Z I0829 01:18:28.817116       1 main.go:324] handling current node
+2026-08-29T01:18:38.817094674Z I0829 01:18:38.816868       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:18:38.817151370Z I0829 01:18:38.816923       1 main.go:324] handling current node
+2026-08-29T01:18:48.817701692Z I0829 01:18:48.817434       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:18:48.817759306Z I0829 01:18:48.817530       1 main.go:324] handling current node
+2026-08-29T01:18:58.816545319Z I0829 01:18:58.816280       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:18:58.816599936Z I0829 01:18:58.816340       1 main.go:324] handling current node
+2026-08-29T01:19:08.827307467Z I0829 01:19:08.827107       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:19:08.827365376Z I0829 01:19:08.827156       1 main.go:324] handling current node
+2026-08-29T01:19:18.819646222Z I0829 01:19:18.819393       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:19:18.819701924Z I0829 01:19:18.819449       1 main.go:324] handling current node
+2026-08-29T01:19:28.820805152Z I0829 01:19:28.820683       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:19:28.820831733Z I0829 01:19:28.820706       1 main.go:324] handling current node
+2026-08-29T01:19:38.817547256Z I0829 01:19:38.817108       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:19:38.817574963Z I0829 01:19:38.817172       1 main.go:324] handling current node
+2026-08-29T01:19:48.818912737Z I0829 01:19:48.818793       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:19:48.818946319Z I0829 01:19:48.818817       1 main.go:324] handling current node
+2026-08-29T01:19:58.817059562Z I0829 01:19:58.816879       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:19:58.817104893Z I0829 01:19:58.816919       1 main.go:324] handling current node
+2026-08-29T01:20:08.817401597Z I0829 01:20:08.817100       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:20:08.817457761Z I0829 01:20:08.817195       1 main.go:324] handling current node
+2026-08-29T01:20:18.818113188Z I0829 01:20:18.817840       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:20:18.818220019Z I0829 01:20:18.817979       1 main.go:324] handling current node
+2026-08-29T01:20:28.821286433Z I0829 01:20:28.821137       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:20:28.821320557Z I0829 01:20:28.821181       1 main.go:324] handling current node
+2026-08-29T01:20:38.816386319Z I0829 01:20:38.816195       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:20:38.816436985Z I0829 01:20:38.816245       1 main.go:324] handling current node
+2026-08-29T01:20:48.821006976Z I0829 01:20:48.820867       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:20:48.821043642Z I0829 01:20:48.820903       1 main.go:324] handling current node
+2026-08-29T01:20:58.820623879Z I0829 01:20:58.820437       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:20:58.820669754Z I0829 01:20:58.820476       1 main.go:324] handling current node
+2026-08-29T01:21:08.817344832Z I0829 01:21:08.817099       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:21:08.817437498Z I0829 01:21:08.817154       1 main.go:324] handling current node
+2026-08-29T01:21:18.816931753Z I0829 01:21:18.816679       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:21:18.817014670Z I0829 01:21:18.816725       1 main.go:324] handling current node
+2026-08-29T01:21:28.816822783Z I0829 01:21:28.816520       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:21:28.816904908Z I0829 01:21:28.816583       1 main.go:324] handling current node
+2026-08-29T01:21:38.821543938Z I0829 01:21:38.821281       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:21:38.821585064Z I0829 01:21:38.821323       1 main.go:324] handling current node
+2026-08-29T01:21:48.824874576Z I0829 01:21:48.824657       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:21:48.824919076Z I0829 01:21:48.824770       1 main.go:324] handling current node
+2026-08-29T01:21:58.820178017Z I0829 01:21:58.819919       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:21:58.820224643Z I0829 01:21:58.819994       1 main.go:324] handling current node
+2026-08-29T01:22:08.816899485Z I0829 01:22:08.816615       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:22:08.817000486Z I0829 01:22:08.816706       1 main.go:324] handling current node
+2026-08-29T01:22:18.827345383Z I0829 01:22:18.827129       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:22:18.827404259Z I0829 01:22:18.827179       1 main.go:324] handling current node
+2026-08-29T01:22:28.818864326Z I0829 01:22:28.818631       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:22:28.818916041Z I0829 01:22:28.818684       1 main.go:324] handling current node
+2026-08-29T01:22:38.816717690Z I0829 01:22:38.816597       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:22:38.816742026Z I0829 01:22:38.816621       1 main.go:324] handling current node
+2026-08-29T01:22:48.817932001Z I0829 01:22:48.817646       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:22:48.818012176Z I0829 01:22:48.817753       1 main.go:324] handling current node
+2026-08-29T01:22:58.817142409Z I0829 01:22:58.816866       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:22:58.817199456Z I0829 01:22:58.816919       1 main.go:324] handling current node
+2026-08-29T01:23:08.823594527Z I0829 01:23:08.823408       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:23:08.823645448Z I0829 01:23:08.823455       1 main.go:324] handling current node
+2026-08-29T01:23:18.825204062Z I0829 01:23:18.824905       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:23:18.825255275Z I0829 01:23:18.824986       1 main.go:324] handling current node
+2026-08-29T01:23:28.817309229Z I0829 01:23:28.817024       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:23:28.817376776Z I0829 01:23:28.817082       1 main.go:324] handling current node
+2026-08-29T01:23:38.820658322Z I0829 01:23:38.820426       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:23:38.820711576Z I0829 01:23:38.820470       1 main.go:324] handling current node
+2026-08-29T01:23:48.817033098Z I0829 01:23:48.816550       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:23:48.817126606Z I0829 01:23:48.816654       1 main.go:324] handling current node
+2026-08-29T01:23:58.819562472Z I0829 01:23:58.819225       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:23:58.819642477Z I0829 01:23:58.819292       1 main.go:324] handling current node
+2026-08-29T01:24:08.819461685Z I0829 01:24:08.819264       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:24:08.819503771Z I0829 01:24:08.819343       1 main.go:324] handling current node
+2026-08-29T01:24:18.817766393Z I0829 01:24:18.817500       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:24:18.817832022Z I0829 01:24:18.817587       1 main.go:324] handling current node
+2026-08-29T01:24:28.816184928Z I0829 01:24:28.816076       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:24:28.816209430Z I0829 01:24:28.816101       1 main.go:324] handling current node
+2026-08-29T01:24:38.821440169Z I0829 01:24:38.821262       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:24:38.821482630Z I0829 01:24:38.821303       1 main.go:324] handling current node
+2026-08-29T01:24:48.816882377Z I0829 01:24:48.816606       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:24:48.816958007Z I0829 01:24:48.816662       1 main.go:324] handling current node
+2026-08-29T01:24:58.816468172Z I0829 01:24:58.816227       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:24:58.816543968Z I0829 01:24:58.816280       1 main.go:324] handling current node
+2026-08-29T01:25:08.816681988Z I0829 01:25:08.816444       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:25:08.816729199Z I0829 01:25:08.816493       1 main.go:324] handling current node
+2026-08-29T01:25:18.816975079Z I0829 01:25:18.816659       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:25:18.817063583Z I0829 01:25:18.816759       1 main.go:324] handling current node
+2026-08-29T01:25:28.816172678Z I0829 01:25:28.816112       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:25:28.816186137Z I0829 01:25:28.816131       1 main.go:324] handling current node
+2026-08-29T01:25:38.818735965Z I0829 01:25:38.818315       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:25:38.818810219Z I0829 01:25:38.818426       1 main.go:324] handling current node
+2026-08-29T01:25:48.817533292Z I0829 01:25:48.817420       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:25:48.817561960Z I0829 01:25:48.817443       1 main.go:324] handling current node
+2026-08-29T01:25:58.825960291Z I0829 01:25:58.825767       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:25:58.826000918Z I0829 01:25:58.825807       1 main.go:324] handling current node
+2026-08-29T01:26:08.823034736Z I0829 01:26:08.822792       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:26:08.823092655Z I0829 01:26:08.822877       1 main.go:324] handling current node
+2026-08-29T01:26:21.273857609Z I0829 01:26:21.273532       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:26:21.273978157Z I0829 01:26:21.273629       1 main.go:324] handling current node
+2026-08-29T01:26:31.266692909Z I0829 01:26:31.266413       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:26:31.266748398Z I0829 01:26:31.266466       1 main.go:324] handling current node
+2026-08-29T01:26:41.267950944Z I0829 01:26:41.267721       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:26:41.268001146Z I0829 01:26:41.267770       1 main.go:324] handling current node
+2026-08-29T01:26:51.267529403Z I0829 01:26:51.267231       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:26:51.267614211Z I0829 01:26:51.267345       1 main.go:324] handling current node
+2026-08-29T01:27:01.277294472Z I0829 01:27:01.276961       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:27:01.277430486Z I0829 01:27:01.277057       1 main.go:324] handling current node
+2026-08-29T01:27:11.268735401Z I0829 01:27:11.268486       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:27:11.268792121Z I0829 01:27:11.268552       1 main.go:324] handling current node
+2026-08-29T01:27:21.278131191Z I0829 01:27:21.277716       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:27:21.278206884Z I0829 01:27:21.277793       1 main.go:324] handling current node
+2026-08-29T01:27:31.276175572Z I0829 01:27:31.275896       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:27:31.276226820Z I0829 01:27:31.275944       1 main.go:324] handling current node
+2026-08-29T01:27:41.267640602Z I0829 01:27:41.267364       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:27:41.267711397Z I0829 01:27:41.267433       1 main.go:324] handling current node
+2026-08-29T01:27:51.266982846Z I0829 01:27:51.266551       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:27:51.267107773Z I0829 01:27:51.266644       1 main.go:324] handling current node
+2026-08-29T01:28:01.266743786Z I0829 01:28:01.266486       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:28:01.266787911Z I0829 01:28:01.266535       1 main.go:324] handling current node
+2026-08-29T01:28:11.269233585Z I0829 01:28:11.268968       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:28:11.269271962Z I0829 01:28:11.269041       1 main.go:324] handling current node
+2026-08-29T01:28:21.266676172Z I0829 01:28:21.266349       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:28:21.266755427Z I0829 01:28:21.266421       1 main.go:324] handling current node
+2026-08-29T01:28:31.267427056Z I0829 01:28:31.266951       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:28:31.267479393Z I0829 01:28:31.267186       1 main.go:324] handling current node
+2026-08-29T01:28:41.271154112Z I0829 01:28:41.271049       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:28:41.271179364Z I0829 01:28:41.271070       1 main.go:324] handling current node
+2026-08-29T01:28:51.266565293Z I0829 01:28:51.266206       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:28:51.266664885Z I0829 01:28:51.266300       1 main.go:324] handling current node
+2026-08-29T01:29:01.266815501Z I0829 01:29:01.266483       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:29:01.266964432Z I0829 01:29:01.266543       1 main.go:324] handling current node
+2026-08-29T01:29:11.266862359Z I0829 01:29:11.266590       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:29:11.266929241Z I0829 01:29:11.266663       1 main.go:324] handling current node
+2026-08-29T01:29:21.269198360Z I0829 01:29:21.268928       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:29:21.269264659Z I0829 01:29:21.268982       1 main.go:324] handling current node
+2026-08-29T01:29:31.273213644Z I0829 01:29:31.272943       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:29:31.273287527Z I0829 01:29:31.273042       1 main.go:324] handling current node
+2026-08-29T01:29:41.266761697Z I0829 01:29:41.266516       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:29:41.266839330Z I0829 01:29:41.266585       1 main.go:324] handling current node
+2026-08-29T01:29:51.266619428Z I0829 01:29:51.266136       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:29:51.266685727Z I0829 01:29:51.266203       1 main.go:324] handling current node
+2026-08-29T01:30:01.267902178Z I0829 01:30:01.267561       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:30:01.267963159Z I0829 01:30:01.267669       1 main.go:324] handling current node
+2026-08-29T01:30:11.267125854Z I0829 01:30:11.266811       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:30:11.267212458Z I0829 01:30:11.266887       1 main.go:324] handling current node
+2026-08-29T01:30:21.275225012Z I0829 01:30:21.274907       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:30:21.275306287Z I0829 01:30:21.275001       1 main.go:324] handling current node
+2026-08-29T01:30:31.277586270Z I0829 01:30:31.277332       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:30:31.277655842Z I0829 01:30:31.277395       1 main.go:324] handling current node
+2026-08-29T01:30:41.274049885Z I0829 01:30:41.273815       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:30:41.274108877Z I0829 01:30:41.273867       1 main.go:324] handling current node
+2026-08-29T01:30:51.267143518Z I0829 01:30:51.266623       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:30:51.267241425Z I0829 01:30:51.266705       1 main.go:324] handling current node
+2026-08-29T01:31:01.278240043Z I0829 01:31:01.277988       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:31:01.278296330Z I0829 01:31:01.278063       1 main.go:324] handling current node
+2026-08-29T01:31:11.267481700Z I0829 01:31:11.267236       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:31:11.267539489Z I0829 01:31:11.267320       1 main.go:324] handling current node
+2026-08-29T01:31:21.266665403Z I0829 01:31:21.266279       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:31:21.266738817Z I0829 01:31:21.266388       1 main.go:324] handling current node
+2026-08-29T01:31:31.266831922Z I0829 01:31:31.266663       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:31:31.266851547Z I0829 01:31:31.266696       1 main.go:324] handling current node
+2026-08-29T01:31:41.267099343Z I0829 01:31:41.266842       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:31:41.267212259Z I0829 01:31:41.266898       1 main.go:324] handling current node
+2026-08-29T01:31:51.267278185Z I0829 01:31:51.266855       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:31:51.267421810Z I0829 01:31:51.266962       1 main.go:324] handling current node
+2026-08-29T01:32:01.266833553Z I0829 01:32:01.266629       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:32:01.266882512Z I0829 01:32:01.266672       1 main.go:324] handling current node
+2026-08-29T01:32:11.267982390Z I0829 01:32:11.267750       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:32:11.268059475Z I0829 01:32:11.267832       1 main.go:324] handling current node
+2026-08-29T01:32:21.273947046Z I0829 01:32:21.273749       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:32:21.273989422Z I0829 01:32:21.273817       1 main.go:324] handling current node
+2026-08-29T01:32:31.267070401Z I0829 01:32:31.266716       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:32:31.267162029Z I0829 01:32:31.266813       1 main.go:324] handling current node
+2026-08-29T01:32:41.267636879Z I0829 01:32:41.267272       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:32:41.267722590Z I0829 01:32:41.267354       1 main.go:324] handling current node
+2026-08-29T01:32:51.266631091Z I0829 01:32:51.266239       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:32:51.266729720Z I0829 01:32:51.266319       1 main.go:324] handling current node
+2026-08-29T01:33:01.267137478Z I0829 01:33:01.266660       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:33:01.267274901Z I0829 01:33:01.266748       1 main.go:324] handling current node
+2026-08-29T01:33:11.266898394Z I0829 01:33:11.266691       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:33:11.266948480Z I0829 01:33:11.266732       1 main.go:324] handling current node
+2026-08-29T01:33:21.267426642Z I0829 01:33:21.267283       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:33:21.267446310Z I0829 01:33:21.267320       1 main.go:324] handling current node
+2026-08-29T01:33:31.266989344Z I0829 01:33:31.266825       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:33:31.267047848Z I0829 01:33:31.266861       1 main.go:324] handling current node
+2026-08-29T01:33:41.272682350Z I0829 01:33:41.272441       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:33:41.272753729Z I0829 01:33:41.272506       1 main.go:324] handling current node
+2026-08-29T01:33:51.266349233Z I0829 01:33:51.266250       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:33:51.266369318Z I0829 01:33:51.266273       1 main.go:324] handling current node
+2026-08-29T01:34:01.266830779Z I0829 01:34:01.266712       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:34:01.266848613Z I0829 01:34:01.266744       1 main.go:324] handling current node
+2026-08-29T01:34:11.268717911Z I0829 01:34:11.268446       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:34:11.268792916Z I0829 01:34:11.268554       1 main.go:324] handling current node
+2026-08-29T01:34:21.267209289Z I0829 01:34:21.266938       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:34:21.267279937Z I0829 01:34:21.266996       1 main.go:324] handling current node
+2026-08-29T01:34:31.274962734Z I0829 01:34:31.274844       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:34:31.274990061Z I0829 01:34:31.274868       1 main.go:324] handling current node
+2026-08-29T01:34:41.268211322Z I0829 01:34:41.268125       1 main.go:320] Handling node with IPs: map[172.18.0.2:{}]
+2026-08-29T01:34:41.268236400Z I0829 01:34:41.268146       1 main.go:324] handling current node

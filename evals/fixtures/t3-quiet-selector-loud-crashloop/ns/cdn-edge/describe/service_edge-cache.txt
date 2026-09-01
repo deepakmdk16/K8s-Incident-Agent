@@ -1,0 +1,16 @@
+Name:                     edge-cache
+Namespace:                cdn-edge
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=edge-cache
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.24.209
+IPs:                      10.96.24.209
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.133:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

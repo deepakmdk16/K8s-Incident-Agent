@@ -1,0 +1,42 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": null,
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:09:37Z"
+        },
+        "creationTimestamp": "2026-08-29T02:09:37Z",
+        "generateName": "catalog-",
+        "generation": 1,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "catalog"
+        },
+        "name": "catalog-26fsd",
+        "namespace": "shop",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "catalog",
+            "uid": "47e95dac-ea65-4ecc-9b85-92e77ddde826"
+          }
+        ],
+        "resourceVersion": "57552",
+        "uid": "1f24d2f3-2a23-4700-984a-d090a92674be"
+      },
+      "ports": null
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

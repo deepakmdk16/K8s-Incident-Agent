@@ -1,0 +1,42 @@
+# Scenario t1-imagepull-bogus-tag — fault-as-code.
+# Atom: image-pull-backoff (deterministic fault roster, decision doc req 3).
+# Mechanism: the pod template references registry.k8s.io/retail/storefront:2.4.1,
+# a repo/tag that does not exist. registry.k8s.io is chosen deliberately over
+# Docker Hub: it has no anonymous pull rate limits, so the pull failure can
+# only ever be containerd's 'not found', never 'toomanyrequests' (a throttling
+# event would contradict gold and freeze an invalid fixture). Every pull fails,
+# kubelet backs off (ErrImagePull -> ImagePullBackOff), the containers never
+# start. The inline serve-loop command is sound and busybox-sh compatible: it
+# runs as-is once the image reference is corrected (README rule 1 — rehearsed
+# with the node-cached busybox:1.36 as the stand-in valid image).
+# Wait condition: a pod event in ns web whose message names the exact image
+# reference AND contains containerd's 'not found' — never merely the
+# ErrImagePull/ImagePullBackOff reason, which auth or network failures also
+# reach; fail-fast on any 'toomanyrequests'/'rate limit' event text.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storefront
+  namespace: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: storefront
+  template:
+    metadata:
+      labels:
+        app: storefront
+    spec:
+      containers:
+        - name: storefront
+          image: registry.k8s.io/retail/storefront:2.4.1
+          command:
+            - sh
+            - -c
+            - 'echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done'

@@ -1,0 +1,19 @@
+Name:         dns-forwarder-w6mwd
+Namespace:    internal-dns
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=dns-forwarder
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:08Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.142
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/dns-forwarder-66fc5c9dd9-tp7zv
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

@@ -1,0 +1,67 @@
+Name:             report-generator-646bc6f94f-sgdm2
+Namespace:        analytics-batch
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:44:11 +0530
+Labels:           app=report-generator
+                  pod-template-hash=646bc6f94f
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.152
+IPs:
+  IP:           10.244.0.152
+Controlled By:  ReplicaSet/report-generator-646bc6f94f
+Containers:
+  generator:
+    Container ID:  containerd://0c0ee2abd31bc351e8cba70dac9f8e1753547ca860e323c958baf3178aa46628
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sat, 29 Aug 2026 07:47:00 +0530
+      Finished:     Sat, 29 Aug 2026 07:47:00 +0530
+    Ready:          False
+    Restart Count:  5
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qhw7c (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      report-generator-scripts
+    Optional:  false
+  kube-api-access-qhw7c:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  4m10s               default-scheduler  Successfully assigned analytics-batch/report-generator-646bc6f94f-sgdm2 to incident-lab-control-plane
+  Normal   Pulled     81s (x6 over 4m9s)  kubelet            spec.containers{generator}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    81s (x6 over 4m9s)  kubelet            spec.containers{generator}: Container created
+  Normal   Started    81s (x6 over 4m9s)  kubelet            spec.containers{generator}: Container started
+  Warning  BackOff    4s (x6 over 4m8s)   kubelet            spec.containers{generator}: Back-off restarting failed container generator in pod report-generator-646bc6f94f-sgdm2_analytics-batch(271b6fa6-de7e-4c0a-a3d2-094a64e3993e)

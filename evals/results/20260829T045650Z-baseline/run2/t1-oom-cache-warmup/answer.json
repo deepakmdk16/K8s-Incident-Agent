@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The Deployment's pod template caps container memory at 64Mi while its startup command allocates a ~200MiB in-memory catalog cache via 'dd if=/dev/zero bs=1M count=200 | tr'. The container exceeds its cgroup limit within a second of starting and is OOM-killed (exit 137) before printing 'catalog cache ready', so the kubelet restarts it into the same deterministic failure and the Deployment never reaches 1/1 Ready.",
+  "verdict": "confirmed"
+}

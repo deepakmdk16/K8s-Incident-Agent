@@ -1,0 +1,32 @@
+Name:           checkout-worker-66bfcdfc47
+Namespace:      payments
+Selector:       app=checkout-worker,pod-template-hash=66bfcdfc47
+Labels:         app=checkout-worker
+                pod-template-hash=66bfcdfc47
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/checkout-worker
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=checkout-worker
+           pod-template-hash=66bfcdfc47
+  Containers:
+   worker:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      [ -n "${AMQP_URL:-}" ] || { echo "FATAL: AMQP_URL not set"; exit 1; }; echo "connected to queue at ${AMQP_URL}"; while :; do echo "consuming checkout jobs"; sleep 10; done
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  4m27s  replicaset-controller  Created pod: checkout-worker-66bfcdfc47-d9gdj

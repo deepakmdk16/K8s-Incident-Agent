@@ -1,0 +1,36 @@
+Name:           web-gateway-557b9db57b
+Namespace:      search
+Selector:       app=web-gateway,pod-template-hash=557b9db57b
+Labels:         app=web-gateway
+                pod-template-hash=557b9db57b
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/web-gateway
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=web-gateway
+           pod-template-hash=557b9db57b
+  Containers:
+   gateway:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          web-gateway-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  4m47s  replicaset-controller  Created pod: web-gateway-557b9db57b-65gxl

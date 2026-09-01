@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash scripts/preflight.sh)",
+      "Bash(bash scripts/checkpoints.sh*)",
+      "Bash(bash scripts/package.sh)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)"
+    ],
+    "deny": [
+      "Read(./.env)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/postedit_gate.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

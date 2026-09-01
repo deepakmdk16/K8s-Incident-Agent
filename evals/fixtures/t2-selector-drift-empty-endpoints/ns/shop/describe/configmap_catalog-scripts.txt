@@ -1,0 +1,22 @@
+Name:         catalog-scripts
+Namespace:    shop
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+mkdir -p /www
+echo "catalog ok" > /www/index.html
+echo "catalog: serving on :8080"
+exec httpd -f -p 8080 -h /www
+
+
+
+BinaryData
+====
+
+Events:  <none>

@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "RoleBinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "mechanism": "RoleBinding inventory/inventory-reader-binding has .subjects[0].name set to \"inventory-synk\" instead of \"inventory-sync\", the ServiceAccount that actually exists and that the paged worker runs as, so Role inventory/inventory-reader (get and list on configmaps) is bound to no existing identity. The worker's read of its feed configuration is therefore rejected \u2014 \"sync fetch error: wget: server returned error: HTTP/1.1 403 Forbidden\" \u2014 and it falls back to \"serving stale inventory snapshot\" instead of fetching fresh counts.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

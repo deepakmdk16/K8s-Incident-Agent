@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "payments",
+    "name": "checkout-worker"
+  },
+  "mechanism": "The Deployment payments/checkout-worker has an empty environment in its pod template \u2014 spec.template.spec.containers[worker].env is absent \u2014 while the container's command requires AMQP_URL to be non-empty, so the worker container prints \"FATAL: AMQP_URL not set\" and exits with code 1 on every start; the kubelet restarts it repeatedly (5 restarts, waiting=CrashLoopBackOff) and the Deployment reports 0/1 Ready.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

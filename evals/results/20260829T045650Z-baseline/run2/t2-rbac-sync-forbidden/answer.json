@@ -1,0 +1,7 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {"kind": "Deployment", "namespace": "inventory", "name": "inventory-sync"},
+  "mechanism": "The inventory-sync Deployment runs under a ServiceAccount that holds no RBAC grant for the API resources its sync loop reads and updates, so every iteration's API request is rejected with 403 Forbidden. The busybox-based loop ignores the error and keeps retrying, so the container stays 1/1 Running with 0 restarts while inventory counts never advance, leaving only the external data-freshness monitor to fire.",
+  "verdict": "probable",
+  "missing_evidence": "Worker container logs showing 'Forbidden'/403 API responses, plus the output of 'kubectl -n inventory auth can-i --list --as=system:serviceaccount:inventory:<sa>' and the absence of a matching Role/RoleBinding, would make this confirmed."
+}

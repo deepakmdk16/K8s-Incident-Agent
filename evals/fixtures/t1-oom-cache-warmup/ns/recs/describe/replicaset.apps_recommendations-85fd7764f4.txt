@@ -1,0 +1,36 @@
+Name:           recommendations-85fd7764f4
+Namespace:      recs
+Selector:       app=recommendations,pod-template-hash=85fd7764f4
+Labels:         app=recommendations
+                pod-template-hash=85fd7764f4
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/recommendations
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=recommendations
+           pod-template-hash=85fd7764f4
+  Containers:
+   server:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "warming catalog cache"; CACHE="$(dd if=/dev/zero bs=1M count=200 2>/dev/null | tr '\0' x)"; echo "catalog cache ready"; while :; do echo "serving recommendations"; sleep 30; done
+    Limits:
+      memory:  64Mi
+    Requests:
+      memory:      32Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  26s   replicaset-controller  Created pod: recommendations-85fd7764f4-p9rw8

@@ -1,0 +1,117 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "6",
+          "deployment.kubernetes.io/max-replicas": "8",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "generation": 1,
+        "labels": {
+          "app": "checkout-api",
+          "pod-template-hash": "5f66bf789c"
+        },
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "checkout-api",
+            "uid": "63187da0-444a-4a46-88a1-9978359e8413"
+          }
+        ],
+        "resourceVersion": "48440",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "spec": {
+        "replicas": 6,
+        "selector": {
+          "matchLabels": {
+            "app": "checkout-api",
+            "pod-template-hash": "5f66bf789c"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "checkout-api",
+              "pod-template-hash": "5f66bf789c"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "/app/run.sh"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "api",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "name": "http",
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/app",
+                    "name": "scripts"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "checkout-api-scripts"
+                },
+                "name": "scripts"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 2,
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-08-29T01:28:33Z",
+            "message": "pods \"checkout-api-5f66bf789c-wj8l8\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+            "reason": "FailedCreate",
+            "status": "True",
+            "type": "ReplicaFailure"
+          }
+        ],
+        "fullyLabeledReplicas": 2,
+        "observedGeneration": 1,
+        "readyReplicas": 2,
+        "replicas": 2,
+        "terminatingReplicas": 0
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

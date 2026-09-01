@@ -1,0 +1,29 @@
+# secrets & machine-local config (personal paths stay out of the shipped bytes)
+.env
+*.pem
+*.key
+.claude/settings.local.json
+
+# scratch & outputs
+.work/
+dist/
+*.zip
+*.sha256
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage/
+.coverage
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# operator-local process files — stay on disk for the workflow, never ship
+STATUS.md

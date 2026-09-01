@@ -1,0 +1,23 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "arm": "solution",
+  "run_id": "87a6be8a926a",
+  "model": "claude-opus-5",
+  "input_tokens": 29864,
+  "output_tokens": 3076,
+  "cost_usd": 0.144486,
+  "uncached_input_tokens": 8,
+  "cache_read_tokens": 20705,
+  "cache_write_tokens": 9151,
+  "duration_s": 35.33,
+  "turns": 4,
+  "tool_calls": 5,
+  "submit_attempts": 1,
+  "verdict_proposed": "confirmed",
+  "verdict_final": "confirmed",
+  "salvaged": false,
+  "evidence_items": 8,
+  "ruled_out_items": 3,
+  "verification_present": 3,
+  "verification_total": 3
+}

@@ -1,0 +1,9 @@
+Name:         search-srrt5
+Namespace:    search
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=search
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:11Z
+AddressType:  IPv4
+Ports: <unset>
+Endpoints: <none>
+Events:  <none>

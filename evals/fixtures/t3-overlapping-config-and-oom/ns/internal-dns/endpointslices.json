@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.63"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "dns-forwarder-66fc5c9dd9-7t7ps",
+            "namespace": "internal-dns",
+            "uid": "f74314e5-cd7d-456b-8809-f21bf5411aee"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:57Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "generateName": "dns-forwarder-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "dns-forwarder"
+        },
+        "name": "dns-forwarder-7zq6k",
+        "namespace": "internal-dns",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "dns-forwarder",
+            "uid": "dd2f513c-84d7-44c8-9116-4bb5971774cd"
+          }
+        ],
+        "resourceVersion": "50918",
+        "uid": "11b12729-3794-449d-831f-1fba47a927ab"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

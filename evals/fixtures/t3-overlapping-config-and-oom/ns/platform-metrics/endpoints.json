@@ -1,0 +1,46 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "metrics-collector",
+        "namespace": "platform-metrics",
+        "resourceVersion": "50762",
+        "uid": "e5446ffb-6dad-4ee2-9991-99c42b9fd9f8"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.51",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "metrics-collector-5d66786b84-z8csb",
+                "namespace": "platform-metrics",
+                "uid": "e89bf3ca-76fa-441d-b3de-76246694be9d"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

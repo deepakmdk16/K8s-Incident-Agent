@@ -1,0 +1,30 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "arm": "rules",
+  "run_id": "1b2514de52be",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0012,
+  "paged_namespace": "billing",
+  "findings": [
+    {
+      "analyzer": "init-container",
+      "kind": "deployment",
+      "namespace": "billing",
+      "name": "billing-api",
+      "mechanism": "The init container does not complete, so the pod is blocked before the application container starts.",
+      "evidence": "pod billing-api-ccb44c44c-89dn7 init container wait-for-db is not ready"
+    },
+    {
+      "analyzer": "init-container",
+      "kind": "deployment",
+      "namespace": "billing",
+      "name": "billing-api",
+      "mechanism": "The init container does not complete, so the pod is blocked before the application container starts.",
+      "evidence": "pod billing-api-ccb44c44c-m756m init container wait-for-db is not ready"
+    }
+  ],
+  "analyzers_fired": 2
+}

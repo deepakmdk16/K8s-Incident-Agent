@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t3-overlapping-config-and-oom",
+  "tier": "T3",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "fault_class": "bad-config-ref",
+  "mechanism_summary": "The orders-api deployment's container env DATABASE_URL still references ConfigMap orders-config key db_url, but that key was renamed to database_url, so the kubelet reports CreateContainerConfigError (couldn't find key db_url) and neither replica's container can be created.",
+  "decisive_evidence": "Both orders-api pods show waiting reason CreateContainerConfigError with message \"couldn't find key db_url in ConfigMap orders/orders-config\" (containerStatuses and pod events), while ConfigMap orders-config carries the key database_url. The asymmetry that picks the gold side of the rename: deployment orders/orders-audit consumes the NEW key database_url from the same ConfigMap via env valueFrom, is Ready, and logs the resolved value at startup - evidencing the rename as intentional, so the consumer (orders-api's configMapKeyRef), not the ConfigMap, must change.",
+  "remediation_summary": "Edit deployment orders/orders-api (kubectl -n orders edit deployment orders-api): in the DATABASE_URL env var, change valueFrom.configMapKeyRef.key from db_url to database_url and let the rollout replace both pods. Do not rename the ConfigMap key back - orders-audit already consumes database_url."
+}

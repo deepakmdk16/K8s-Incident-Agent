@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "mechanism": "Deployment fraud/fraud-scoring sets .spec.template.spec.containers[scorer].resources.requests.cpu to \"512\", which Kubernetes interprets as 512 whole cores rather than the intended \"512m\"; the cluster's single node has cpu=6 allocatable, so the scheduler rejects the pod with FailedScheduling \"0/1 nodes are available: 1 Insufficient cpu\" and it stays Pending, unscheduled.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

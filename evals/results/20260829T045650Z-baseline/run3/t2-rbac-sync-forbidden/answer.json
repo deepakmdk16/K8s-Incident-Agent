@@ -1,0 +1,7 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {"kind": "Deployment", "namespace": "inventory", "name": "inventory-sync"},
+  "mechanism": "The inventory-sync Deployment runs under a ServiceAccount that has no RBAC grant for the API resources its sync loop reads, so every read returns 403 Forbidden. The worker treats the denial as a retryable error and keeps looping instead of exiting, so the container stays Running and Ready (1/1, 0 restarts) while it never publishes a new inventory snapshot, leaving storefront counts frozen and sold-out items showing as in stock.",
+  "verdict": "probable",
+  "missing_evidence": "Container logs from deploy/inventory-sync showing an explicit 'is forbidden: User \"system:serviceaccount:inventory:<sa>\" cannot list/watch ...' error, plus a 'kubectl auth can-i --as' check returning 'no' for that ServiceAccount; these are not present in the captured 'kubectl get all -A' output."
+}

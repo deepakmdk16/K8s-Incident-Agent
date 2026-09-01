@@ -1,0 +1,6 @@
+Name:         search
+Namespace:    search
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:11Z
+Subsets:
+Events:  <none>

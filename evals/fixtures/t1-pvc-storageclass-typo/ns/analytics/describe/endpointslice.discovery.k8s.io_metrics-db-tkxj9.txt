@@ -1,0 +1,10 @@
+Name:         metrics-db-tkxj9
+Namespace:    analytics
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=metrics-db
+              service.kubernetes.io/headless=
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:09:03Z
+AddressType:  IPv4
+Ports: <unset>
+Endpoints: <none>
+Events:  <none>

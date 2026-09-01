@@ -1,0 +1,12 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "arm": "baseline",
+  "run_id": "3da019c9d1c4",
+  "model": "claude-opus-5",
+  "input_tokens": 4101,
+  "output_tokens": 2756,
+  "cost_usd": 0.089405,
+  "duration_s": 35.33,
+  "prompt_chars": 8534,
+  "prompt_sections": 4
+}

@@ -1,0 +1,30 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "arm": "rules",
+  "run_id": "f67091626e4a",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.001,
+  "paged_namespace": "web",
+  "findings": [
+    {
+      "analyzer": "image-pull",
+      "kind": "deployment",
+      "namespace": "web",
+      "name": "storefront",
+      "mechanism": "The image tag referenced by the container could not be pulled from the registry.",
+      "evidence": "pod storefront-68b686c56f-c7tvt container storefront is waiting with reason ImagePullBackOff"
+    },
+    {
+      "analyzer": "image-pull",
+      "kind": "deployment",
+      "namespace": "web",
+      "name": "storefront",
+      "mechanism": "The image tag referenced by the container could not be pulled from the registry.",
+      "evidence": "pod storefront-68b686c56f-d4pp7 container storefront is waiting with reason ErrImagePull"
+    }
+  ],
+  "analyzers_fired": 2
+}

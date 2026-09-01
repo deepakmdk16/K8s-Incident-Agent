@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "service",
+    "namespace": "shop",
+    "name": "catalog"
+  },
+  "fault_class": "service-selector-mismatch",
+  "mechanism_summary": "The catalog Service's selector selects app=catalog-api while the catalog pods carry the label app=catalog, so the Service's Endpoints object stays empty and the gateway's connections to the service are refused even though the pods themselves are healthy.",
+  "decisive_evidence": "Endpoints shop/catalog has no addresses while both catalog pods are Running and Ready; the Service spec shows selector app=catalog-api against pod labels app=catalog; the storefront-gateway logs show 'catalog fetch FAILED' against the service DNS name.",
+  "remediation_summary": "Fix the catalog Service's selector to match the pod labels — kubectl -n shop patch service catalog -p '{\"spec\":{\"selector\":{\"app\":\"catalog\"}}}' — Endpoints then populates with both pod IPs and the gateway's fetches succeed with no workload change."
+}

@@ -1,0 +1,44 @@
+Name:                   fraud-scoring
+Namespace:              fraud
+CreationTimestamp:      Sat, 29 Aug 2026 06:52:33 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=fraud-scoring
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=fraud-scoring
+  Containers:
+   scorer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "fraud-scoring: score server starting"
+      while true; do
+        echo "fraud-scoring: scored transaction batch"
+        sleep 10
+      done
+      
+    Requests:
+      cpu:         512
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   fraud-scoring-596445859d (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  1s    deployment-controller  Scaled up replica set fraud-scoring-596445859d from 0 to 1

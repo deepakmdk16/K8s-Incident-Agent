@@ -1,0 +1,19 @@
+Name:         rates-fetcher-bjl8k
+Namespace:    currency-rates
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=rates-fetcher
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:09Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.148
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/rates-fetcher-64c66dfb56-zr42r
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

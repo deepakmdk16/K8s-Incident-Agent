@@ -1,0 +1,12 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "arm": "baseline",
+  "run_id": "e46b09c683a9",
+  "model": "claude-opus-5",
+  "input_tokens": 5494,
+  "output_tokens": 3168,
+  "cost_usd": 0.10667,
+  "duration_s": 41.57,
+  "prompt_chars": 11888,
+  "prompt_sections": 5
+}

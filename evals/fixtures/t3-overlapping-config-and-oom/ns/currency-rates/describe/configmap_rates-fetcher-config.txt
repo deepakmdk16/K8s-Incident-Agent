@@ -1,0 +1,20 @@
+Name:         rates-fetcher-config
+Namespace:    currency-rates
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+base_currency:
+----
+USD
+
+refresh_minutes:
+----
+30
+
+
+BinaryData
+====
+
+Events:  <none>

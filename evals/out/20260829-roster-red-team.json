@@ -1,0 +1,317 @@
+{
+  "summary": "Adversarial review of the 12-case scenario roster against binding eval design",
+  "agentCount": 3,
+  "logs": [
+    "3/3 lenses returned; 30 findings"
+  ],
+  "result": {
+    "lenses": [
+      {
+        "lens": "determinism",
+        "result": {
+          "findings": [
+            {
+              "case_id": "t1-imagepull-bogus-tag",
+              "severity": "major",
+              "claim": "A Docker Hub bogus tag does not deterministically produce a 'not found' pull error, and the roster's promised 'manifest unknown' phrasing is not what containerd on kind emits.",
+              "evidence": "Docker Hub throttles unauthenticated pulls per IP (tightened in 2025); repeated inject/capture cycles plus noise-pack pulls from the same host IP can return 'toomanyrequests: You have reached your pull rate limit' instead of NotFound. The pod still lands in ErrImagePull/ImagePullBackOff, so wait.sh passes, and capture.sh happily freezes a fixture whose Events say rate-limit — an honest agent then diagnoses registry throttling, and gold's bogus-tag mechanism/remediation is no longer evidence-supported. Separately, containerd (kind's runtime) reports '...docker.io/library/<img>:<tag>: not found', not the dockershim-era 'manifest unknown' the roster row and any notes.md derived from it would cite as decisive evidence.",
+              "fix": "Point the bogus tag at an unthrottled registry (e.g. registry.k8s.io/pause:99.9 or ghcr.io) or a kind-preloaded repo with a fabricated tag; write decisive_evidence with the actual containerd 'not found' phrasing; have wait.sh assert the event message contains 'not found' (not just the ImagePullBackOff reason) so a rate-limited run fails loudly instead of freezing a poisoned fixture. Pin noise-pack images to one non-Hub image."
+            },
+            {
+              "case_id": "t1-oom-cache-warmup",
+              "severity": "major",
+              "claim": "The busybox allocation script has two determinism/contract traps: the OOM kill must hit the container's foreground pipeline for exit 137 + OOMKilled to surface, and an allocate-then-exit entrypoint violates the counterfactual rule after the limit is corrected.",
+              "evidence": "(1) If the ~200MiB allocation (e.g. 'head -c 200m /dev/zero | tail') is followed by further script steps, the kernel kills the allocating child, sh continues, and the container can exit 0 — pod flips between OOMKilled and Completed across runs, breaking 'manifests identically on every inject.sh run'. On kind v1.3x (cgroup v2, kubelet group-oom-kill) it is deterministic only when the allocation is the terminal command. (2) Hard rule 1: correcting the misconfiguration (raising the 64Mi limit) must make the command succeed — a pure warmup script then exits 0, and restartPolicy Always turns Completed into CrashLoopBackOff anyway, so gold's remediation would demonstrably not fix the pod.",
+              "fix": "Entrypoint = warmup allocation held in memory as the foreground step, then exec a long-running serve loop (e.g. hold the buffer and sleep-loop). Verify both directions live before freezing: with 64Mi → restartCount>=2 with lastState.terminated.reason=OOMKilled/exitCode 137 (the wait.sh condition); with a corrected limit → pod Ready and stays Running."
+            },
+            {
+              "case_id": "t2-rbac-sync-forbidden",
+              "severity": "major",
+              "claim": "The wget-based 403 is reproducible, but a mis-built Authorization header makes the 403 anonymous — an undetectable counterfactual violation — and busybox wget never logs the API server's identity-naming error body.",
+              "evidence": "busybox:1.36 wget does TLS (needs --no-check-certificate; no CA option) and supports --header, so 'wget --header \"Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\" https://kubernetes.default/...' deterministically yields HTTP 403 when the RoleBinding subject names the wrong ServiceAccount. But if the header is dropped or mis-quoted, the request authenticates as system:anonymous — which ALSO returns 403, the logs look identical ('wget: server returned error: HTTP/1.1 403 Forbidden'), wait.sh passes, and fixing the RoleBinding (gold remediation) would not clear the error: hard rule 1 broken with no capture-side signal. Additionally busybox wget discards the response body on non-2xx, so the 'User system:serviceaccount:... cannot list ...' message never reaches the logs — the evidence chain must run through the captured rolebindings/serviceaccounts JSON, and wait.sh must key on the log line only.",
+              "fix": "Before freezing, verify the counterfactual live: kubectl patch the RoleBinding subject to the correct SA and confirm the loop logs a 200/success line, then revert and capture. Have the sync loop log the SA identity it read from the token mount (realistic and disambiguating). Keep the sync period <=15s so wait.sh sees a 403 line well inside 300s."
+            },
+            {
+              "case_id": "t2-init-wait-for-migrations",
+              "severity": "major",
+              "claim": "The counterfactual entrypoint rule fails unless the scenario also ships a healthy DB Service under the correct (non-typo) name; and the init-container design must pick loop-forever vs probe-and-exit, because they manifest differently.",
+              "evidence": "Hard rule 1 requires that correcting the typo'd service name makes the init command succeed — if no real Service/workload exists at the correct name, the corrected init still fails (NXDOMAIN or connection refused) and gold's remediation is false. The correct-name Service in the fixture is also the evidence the agent diffs against. Separately, a 'until <check>; sleep' loop never exits: pod sits Init:0/1 with the init container Running, restartCount 0, no failure events; a check-then-exit-1 design instead produces Init:Error → Init:CrashLoopBackOff with restarts. Both are deterministic but wait.sh and gold's decisive_evidence must match the one chosen — a wait.sh written for restarts against a loop-forever init times out at 300s.",
+              "fix": "Ship the real DB (Service + trivially healthy backend pod) under the correct name in fault.yaml; use a TCP probe (busybox wget/nc), not busybox nslookup (historically unreliable against CoreDNS); pick one init design and write wait.sh for exactly its observable (Init:0/1 with initContainerStatuses[0].state.running plus pod age, or restartCount>=2 on the init container). Verify the corrected name unblocks the rollout before capture."
+            },
+            {
+              "case_id": "t3-overlapping-config-and-oom",
+              "severity": "major",
+              "claim": "The gold 'spec must change' target for a renamed ConfigMap key is undecidable from captured cluster state, so exact-match resource scoring turns this case into a coin flip.",
+              "evidence": "The fixture shows a ConfigMap holding key B and a Deployment configMapKeyRef expecting key A (CreateContainerConfigError: 'couldn't find key'). Nothing in captured state says which side regressed — creationTimestamp does not change on ConfigMap update, ConfigMaps have no generation, resourceVersion is opaque, and there is no deploy history. 'Restore the key in the ConfigMap' (gold: configmap) and 're-point the env ref' (deployment) are equally valid diagnoses; scoring.py matches (kind, namespace, name) exactly with no partial credit, so a correct-mechanism answer naming the deployment scores wrong. That measures luck, not the T3 capability the tier exists to measure.",
+              "fix": "Engineer an observable asymmetry and pin gold to it: e.g. a second healthy consumer that still references the OLD key name successfully via a mounted volume of an unrenamed sibling ConfigMap won't work — instead give the ConfigMap a recent kubectl.kubernetes.io/last-applied vs... simplest robust options: (a) page wording that a config change shipped shortly before the page (history, not mechanism — allowed by the page contract), or (b) make the Deployment reference the key in TWO places where one other consumer of the same ConfigMap still works with the old key, making the rename the odd one out. Whichever asymmetry is chosen, document it in notes.md as the reason gold picks that resource."
+            },
+            {
+              "case_id": "t1-crashloop-missing-env",
+              "severity": "major",
+              "claim": "The frozen exemplar violates the roster's own hard rule 1 (unconditional 'exit 1' — setting AMQP_URL fixes nothing), telegraphs the mechanism in the agent-visible pod spec, and cannot be re-captured because wait.sh does not exist.",
+              "evidence": "fault.yaml line 32: command is 'echo ...; sleep 2; echo FATAL: AMQP_URL not set; exit 1' — it fails even with AMQP_URL set, so gold's remediation ('set AMQP_URL and roll out') is demonstrably wrong against this cluster, and the literal FATAL string + exit 1 sit in pods.json/describe that the agent reads, leaking the mechanism the same way a name like 'oom-worker' would. CHANGELOG [2] discloses the lesson but the case stays frozen in violation while being the template every new case copies. Also the authoring contract requires five files and inject.sh dies at '[ -x $SCEN/wait.sh ]' — the directory has four files and no wait.sh, so the sanctioned re-capture path (--force) is currently impossible for this scenario.",
+              "fix": "Before the freeze tag, do one disclosed --force re-capture with a conditional entrypoint ('[ -n \"$AMQP_URL\" ] || { echo FATAL: AMQP_URL not set; exit 1; }; exec <serve loop>') and add the missing wait.sh (restartCount>=3 + CrashLoopBackOff, already specified in notes.md). CHANGELOG the re-capture; the fixture diff is small and the flagship T1 case becomes consistent with the rule it created."
+            },
+            {
+              "case_id": "t2-quota-blocks-scale",
+              "severity": "minor",
+              "claim": "Quota enforcement on a just-created ResourceQuota lags a few seconds behind apply, so the number of admitted pods varies run to run and, with a thin margin, the fault could fail to manifest at all.",
+              "evidence": "inject.sh applies fault.yaml as one kubectl apply; the apiserver's quota admission works from an informer cache and a freshly created quota is enforced only after propagation/usage sync, during which the ReplicaSet controller (sub-second) can create pods past the cap. Pods admitted in that window are never evicted, so ready-replica counts differ between captures; with e.g. quota pods:5 vs replicas:6 a lucky run admits all 6 and no FailedCreate ever fires — wait.sh times out (best case) or a faultless fixture freezes (worst case, if wait.sh only checks pod counts). The FailedCreate event itself ('forbidden: exceeded quota') is reliably and repeatedly emitted on the ReplicaSet once enforcement is active.",
+              "fix": "Order the ResourceQuota document before the Deployment in fault.yaml, keep a wide margin (e.g. quota pods:2, replicas:6) so the race can never absorb all replicas, gate wait.sh on the ReplicaSet FailedCreate event containing 'exceeded quota', and keep exact ready-pod counts out of gold/notes."
+            },
+            {
+              "case_id": "t1-unschedulable-cpu-requests",
+              "severity": "minor",
+              "claim": "A 32-CPU request is only unschedulable relative to this Mac's Docker VM; the margin is one hardware change away from silently scheduling.",
+              "evidence": "kind node allocatable equals the Docker VM's CPUs. 32 clears today's Mac, but a capture attempted from a >=32-core Linux box (or a future machine) schedules the pod, wait.sh times out, and the case dies for an environmental reason that looks like a determinism failure. Determinism-by-construction should not depend on host sizing.",
+              "fix": "Request an unattainable amount (cpu: \"1000\" or memory: 10Ti) so FailedScheduling ('Insufficient cpu') is host-independent; wait.sh gates on PodScheduled=False reason Unschedulable."
+            },
+            {
+              "case_id": "t1-pvc-storageclass-typo",
+              "severity": "minor",
+              "claim": "StatefulSet volumeClaimTemplates are immutable, so gold's remediation cannot be 'edit the storageClassName on the StatefulSet' as written.",
+              "evidence": "The apiserver rejects updates to spec.volumeClaimTemplates; the real remediation is delete-and-recreate the StatefulSet with the corrected class (orphaning/rebinding PVCs) or create a storageClass named fast-ssd. A remediation_summary saying 'fix the storageClass name and roll out' fails the report contract's own bar (a human acting on it hits an apply error). The fault itself is deterministic — PVC Pending with the persistentvolume-controller's 'storageclass.storage.k8s.io \"fast-ssd\" not found' ProvisioningFailed event and the pod's 'unbound immediate PersistentVolumeClaims' FailedScheduling are both stable wait.sh observables.",
+              "fix": "Keep failing_resource = the StatefulSet (its spec is what must change) but write remediation_summary honestly: recreate the StatefulSet with storageClassName standard (or add the missing class); wait.sh gates on PVC phase Pending + the ProvisioningFailed event."
+            }
+          ],
+          "overall": "The roster is viable on this cluster: all 11 golded atoms are deterministically manifestable in single-node kind, every implied wait condition maps to a concrete kubectl observable (waiting reasons, events, endpoints emptiness, log lines), the wipe-then-reapply flow in inject.sh actually waits for full namespace deletion so there is no recreate race, ~20 noise namespaces at 1-2 replicas sit comfortably under the 110-pod cap with T3 captures costing minutes, and capture.sh plus the checkpoints fixture gate correctly handle pods that never start containers (both log channels recorded 'unavailable'). The bites are concentrated in authoring details, not architecture: the image-pull case must move off Docker Hub or rate-limiting will freeze a poisoned fixture; three cases (OOM, RBAC 403, init-wait) each have a specific way to violate the counterfactual-entrypoint rule that no capture-side check detects, so each needs a live fix-it-and-verify pass before freezing; the t3 ConfigMap-rename case needs an engineered asymmetry or its exact-match gold is a coin flip; and the frozen exemplar itself still carries the unconditional exit 1 (plus a missing wait.sh that blocks its own sanctioned re-capture path) and should be re-captured once, disclosed, before the freeze tag. All fixes are cheap relative to the capture timeboxes; none threatens kill condition 2."
+        }
+      },
+      {
+        "lens": "scoring",
+        "result": {
+          "findings": [
+            {
+              "case_id": "t3-quiet-selector-loud-crashloop",
+              "severity": "major",
+              "claim": "Honest correct answers on this case are at high risk of scoring wrong, because any mention of the designed-in decoy — even a negation — makes the mechanism multi-match and fail.",
+              "evidence": "Verified by running evals.scoring.classify_mechanism: 'selector doesn't match... Endpoints empty; the crashlooping batch job is unrelated' -> {app-crashloop, service-selector-mismatch}; even the pure-mechanism negation 'search pods are Ready with no restarts and no crashes' -> the same multi-match (group1 \\brestart on 'restarts', group2 \\bcrash on 'crashes'; the single token 'crashloop' alone satisfies BOTH app-crashloop groups via 'crash ?-?loop' + '\\bcrash'). app-crashloop is not dominated by service-selector-mismatch, so the multi-match survives and scores wrong. The case is engineered to make the model talk about a loud crashloop, and T3 has only 2 cases, so one misfire moves the headline T3 rate by 50%.",
+              "fix": "Pre-freeze, CHANGELOG'd: remove '\\bcrash' from app-crashloop group 2 (keep exit/fatal/panic/abort/'at startup') so bare 'crashloop(ing)' no longer full-matches, AND tighten the arm-facing mechanism instruction from 'no differentials' to 'describe only the causal chain of the paged symptom; do not name any other workload, even to rule it out'. Do NOT fix by adding service-selector-mismatch as a dominator of app-crashloop — that would let shotgun answers score correct."
+            },
+            {
+              "case_id": "t3-overlapping-config-and-oom",
+              "severity": "major",
+              "claim": "The same mention-blindness applies with a single token — 'OOM' anywhere in the mechanism sinks the case — and, separately, the natural paraphrases of a RENAMED ConfigMap key zero-match the bad-config-ref signature.",
+              "evidence": "Verified: 'CreateContainerConfigError because the deployment references a renamed ConfigMap key; the orders-worker OOM restarts are unrelated' -> {bad-config-ref, oom-killed} (one word 'oom' satisfies both oom-killed groups; not dominated by bad-config-ref) -> wrong. Also verified: 'references a ConfigMap key that was renamed, so the key is missing and container creation fails' -> [] (zero match: group 2 deliberately excludes bare 'missing' and has no 'renamed'/'no longer exists'/\"couldn't find\" — the actual kubelet message is \"couldn't find key X\", which matches nothing). Scoring this case currently depends on the agent echoing the literal CreateContainerConfigError state or saying 'not found'/'nonexistent'.",
+              "fix": "Pre-freeze: add to bad-config-ref group 2 the phrasings this scenario invites — 'renamed', \"couldn'?t find\", 'no longer exists', and a key-anchored missing form like 'key [^.]{0,30}missing|missing [^.]{0,10}key' (narrow enough not to reintroduce the case-1 'env var is missing' false-dominance the comment guards against). Apply the same no-other-workload mechanism instruction as the case-11 fix."
+            },
+            {
+              "case_id": "t3-overlapping-config-and-oom",
+              "severity": "major",
+              "claim": "The gold failing_resource is genuinely two-sided — a renamed ConfigMap key can be fixed in the ConfigMap (restore key) or in the Deployment (update the env valueFrom key) — and neither the roster row nor the arm-facing contract disambiguates, so exact-match no-partial-credit coin-flips defensible expert answers.",
+              "evidence": "report_contract.py's only guidance is 'the resource whose spec must CHANGE (the owning workload, not the crashing pod)', which does not resolve producer-vs-consumer mismatches; the roster row names no gold resource. An agent naming configmap/orders-config and one naming deployment/orders-api are both giving correct root-cause statements, but exactly one scores.",
+              "fix": "Pick the gold side before capture and force it with fixture evidence: e.g. make the rename obviously accidental (old key name matches the deployment env convention and any other consumer) so gold = the ConfigMap, or make the new name the clear convention so gold = the Deployment ref; record the intended side and its evidencing in notes.md and gold.json before the fixture is captured."
+            },
+            {
+              "case_id": "t2-init-wait-for-migrations",
+              "severity": "major",
+              "claim": "Scorer-T1 wearing a T2 label: a pure symptom restatement scores full root-cause credit, so the baseline's own curation rule aces it without ever finding the typo, diluting the measured-improvement narrative the T2 tier exists to carry.",
+              "evidence": "Verified: 'The init container is stuck waiting for the database service, so pods are held at Init:0/1' -> exactly {init-container-failure}, and the gold resource (payments deployment) is the very workload the page points at. Init:0/1 pods are not-Ready, so the baseline's documented dump (describes of not-Ready resources + last-N logs, which include the init wait line) contains everything needed; the class taxonomy cannot distinguish 'init container stuck' (symptom) from 'waits on a typo'd service name' (cause). 2-of-5 T2 freebies (see also t2-readiness-wrong-port) undercuts design req 6 headroom and feeds kill condition 3.",
+              "fix": "Either re-tier expectations honestly (state in the roster that #10 is evidence-adjacent and the T2 gap rests on #6/#8/#9), or redesign so credit requires the extra hop — e.g. gold stays the deployment but the init command references the hostname via an env whose value is only diagnosable by cross-checking the namespace service list, and accept that class-level credit is still symptom-level; if the T2 gap matters, swap in the reserve or a genuinely distant case."
+            },
+            {
+              "case_id": "t2-readiness-wrong-port",
+              "severity": "minor",
+              "claim": "Also baseline-gettable from its own dump: pods are not-Ready, so the curation rule auto-includes the describe whose kubelet event literally says 'Readiness probe failed' with the bad port.",
+              "evidence": "Verified: 'The readiness probe targets port 8081 but the container listens on 8080, so probes fail, pods never become Ready and Endpoints stays empty' -> exactly {readiness-probe-failing}; the event text alone supplies every signature term and the page names the Orders API workload. Distance to the gateway 5xx is narrative, not evidential.",
+              "fix": "Keep the case (the atom must gold somewhere) but predict the baseline pass in the roster/notes so the per-tier table reads as designed, not as a surprise; lean the T2 degradation claim on #6/#8/#9."
+            },
+            {
+              "case_id": "t2-rbac-sync-forbidden",
+              "severity": "minor",
+              "claim": "Signature gap plus a disambiguation requirement: '\\brole\\b' does not match 'rolebinding', so a mechanism centered on the RoleBinding without saying serviceaccount/permission/rbac zero-matches; and if the typo'd binding subject happens to name an existing ServiceAccount, the deployment-side fix becomes equally defensible against the exact-match gold.",
+              "evidence": "Verified: 'The rolebinding subject is misspelled, so the sync worker's API calls return 403 and it keeps serving stale data' -> [] (word-boundary failure on 'rolebinding'; '403' is not in group 2). The alias table itself is fine — rolebinding/rolebindings both normalize — the gap is in the mechanism signature for the one case whose gold resource is literally a RoleBinding.",
+              "fix": "Pre-freeze, add 'role ?-?binding' to rbac-denial group 1 (optionally '\\b403\\b' to group 2); author the fault so the binding subject names a NONEXISTENT ServiceAccount, making the binding the only defensible spec-must-change object."
+            },
+            {
+              "case_id": "t1-pvc-storageclass-typo",
+              "severity": "minor",
+              "claim": "StatefulSet volumeClaimTemplates are immutable, so the remediation cannot be 'edit the template', and an agent may defensibly name the Pending PVC instead of the StatefulSet.",
+              "evidence": "Kubernetes rejects updates to spec.volumeClaimTemplates (and PVC spec.storageClassName is likewise immutable); the real fix is delete/recreate the StatefulSet (or create the missing StorageClass). gold.json's remediation_summary claiming a rolling template edit would fail the remediation-correctness secondary metric, and the pod's/PVC's Pending state makes 'persistentvolumeclaim analytics-db-data-...-0' a plausible wrong-scoring answer.",
+              "fix": "Gold resource stays the StatefulSet (contract analogy: owning workload, not the controller-created PVC) but write remediation_summary as recreate-with-corrected-class (or create the class) and preempt the PVC answer in notes.md; the arm contract's 'owning workload, not the crashing pod it produced' example already covers this if notes cite it."
+            },
+            {
+              "case_id": "t1-imagepull-bogus-tag",
+              "severity": "minor",
+              "claim": "Waiting only for the ErrImagePull/ImagePullBackOff reason can freeze a fixture whose evidence contradicts the gold mechanism: anonymous Docker Hub pulls that hit the rate limit produce the same waiting reason with a 'toomanyrequests' message instead of 'manifest unknown'.",
+              "evidence": "Docker Hub anonymous pull limits are per-IP; a capture during a limited window passes a reason-only wait.sh and the checkpoints fixture gate, but the captured events then say rate-limit — diverging silently from gold's decisive_evidence ('manifest unknown') and inviting a correct-per-fixture agent answer that no longer matches the injected fault story.",
+              "fix": "Make wait.sh assert the event MESSAGE (grep 'manifest unknown|not found' in describe/events), not just the waiting reason, and/or host the bogus tag on a rate-limit-free registry (registry.k8s.io or ghcr.io)."
+            },
+            {
+              "case_id": "roster-wide",
+              "severity": "minor",
+              "claim": "The page contract's 'never the faulty object' rule is already violated by the captured exemplar and is unsatisfiable for T1, so it will rot or be misapplied; and the reserve case's gold class is uniquely fragile under the same negation-blind signatures.",
+              "evidence": "t1-crashloop-missing-env/page.txt line 1 names 'Deployment payments/checkout-worker' — exactly the gold failing_resource — because for T1 the paged workload IS the faulty object. Separately, rollout-stuck is dominated by nine classes, and the signatures are negation-blind: verified that a paused-rollout answer adding 'images pull fine' would full-match image-pull-backoff ('image'+'pull') and collapse rollout-stuck away, scoring wrong on a correct answer.",
+              "fix": "Reword rule: the page never names an object whose spec must change when it DIFFERS from the paged workload, and never mechanism/fault-class vocabulary. If the reserve swaps in, apply the same no-other-mechanism-vocabulary prompt hardening from the T3 fix and keep its gold mechanism free of dominator vocabulary."
+            }
+          ],
+          "overall": "The roster is structurally viable: all 12 atoms are deterministic in the stated kind environment (no NetworkPolicy/HPA/metrics dependence anywhere), atom coverage matches the 11/12 claim, every gold kind (deployment, statefulset, service, resourcequota, rolebinding, configmap) survives _KIND_ALIASES normalization including plurals and shortforms, and clean natural-language mechanisms for 10 of 12 cases were verified by execution to classify to exactly their gold class with dominance collapse behaving as designed (oom-vs-crashloop, quota-vs-rollout, pvc-vs-unschedulable all collapse correctly). The defects cluster in three places. First and most consequential: the signatures are mention- and negation-blind while both T3 cases are engineered around decoys whose single-token vocabulary ('crashloop', 'oom') full-matches a class by itself — verified that honest, correct answers which so much as negate the decoy multi-match and score wrong, precisely on the two cases carrying the hard-case requirement and half the T3 denominator; this needs a pre-freeze signature tightening plus arm-prompt hardening, both CHANGELOG'd. Second: two-sided-mismatch cases (renamed ConfigMap key especially, RoleBinding subject, and the immutable volumeClaimTemplate) leave the exact-match failing_resource genuinely ambiguous unless the fault authoring forces one side; pin the gold side with in-fixture evidence before capture, not after. Third, tier honesty: t2-init-wait-for-migrations and t2-readiness-wrong-port are scorer-adjacent freebies for the baseline's own documented curation rule, so the real T2 measured-improvement gap rests on only #6/#8/#9 — predict that in the roster now rather than discover it in the frozen table. All fixes are legitimate pre-freeze tightenings under the disclosed change policy; none require changing the problem, metric, or atom set."
+        }
+      },
+      {
+        "lens": "realism",
+        "result": {
+          "findings": [
+            {
+              "case_id": "t1-crashloop-missing-env",
+              "severity": "major",
+              "claim": "The captured exemplar violates its own hard rule 1 (unconditional exit) and is missing wait.sh, so the sanctioned re-capture path is broken.",
+              "evidence": "fault.yaml line 32 is `sh -c \"echo ...; sleep 2; echo 'FATAL: AMQP_URL not set'; exit 1\"` — setting AMQP_URL does not make it succeed, which is exactly the CHANGELOG [2] failure mode rule 1 bans; gold.json's remediation ('set AMQP_URL and roll out') would not actually fix the captured cluster, so the remediation-correctness secondary metric is dishonest for this case. The directory also ships only 4 of the contract's 5 files (no wait.sh), and inject.sh line 38 (`[ -x $SCEN/wait.sh ] || die`) means `inject.sh --id t1-crashloop-missing-env --force` dies immediately — the disclosed re-capture route the freeze rule depends on cannot run.",
+              "fix": "Before the case-set freeze: add wait.sh (restartCount>=3 + CrashLoopBackOff, already spec'd in notes.md), change the command to a conditional entrypoint (`[ -n \"$AMQP_URL\" ] || { echo 'FATAL: AMQP_URL not set'; exit 1; }; while :; do echo consuming; sleep 5; done`), re-capture via inject.sh --force, CHANGELOG the disclosed re-capture."
+            },
+            {
+              "case_id": "t3-overlapping-config-and-oom",
+              "severity": "major",
+              "claim": "Gold failing_resource is ambiguous by construction: a renamed ConfigMap key has two equally valid fixes (restore the key in the ConfigMap vs update the deployment's configMapKeyRef), and exact-match scoring gives no partial credit.",
+              "evidence": "scoring.md: 'failing_resource names the resource whose spec must change... No partial credit.' For a rename, both the ConfigMap and the Deployment are defensible 'the spec that must change' answers; the README contract's disambiguation examples (Service for selector, Quota for quota) do not cover rename cases, so a fully correct mechanism answer naming the other object scores wrong on resource_correct.",
+              "fix": "Engineer an asymmetry into the fixture that makes exactly one object canonically wrong — e.g. a second, healthy consumer already reading the NEW key name (proving the rename intentional, gold = orders-api deployment ref), or make the old key a plain typo with no other consumers (gold = ConfigMap) — and record the tie-break rationale in notes.md."
+            },
+            {
+              "case_id": "t3-overlapping-config-and-oom",
+              "severity": "major",
+              "claim": "The decoy is too plausible: page 'orders processing halted' plus a genuinely OOM-crashlooping orders-worker means two real faults both defensibly explain the paged symptom, so a careful agent can answer the OOM and be scored wrong.",
+              "evidence": "The worker that processes orders crashing IS a valid causal story for 'orders processing halted'; the roster's '(off the paged path)' claim is asserted, not evidenced — nothing described in the fixture lets the agent discriminate which fault halts the paged flow, making the case contestable rather than hard-but-fair.",
+              "fix": "Bind the page to the api path only (e.g. 'order submission API returns 5xx / CreateContainerConfigError-backed pods 0/N Ready for the order-intake service') and move the decoy demonstrably off-path — rename it to a clearly ancillary function (e.g. orders-report-worker exporting nightly analytics) so its unrelatedness is verifiable in the fixture, not just intended."
+            },
+            {
+              "case_id": "roster-wide",
+              "severity": "major",
+              "claim": "The readiness-probe-failing signature collides with service-selector-mismatch: natural, correct mechanism prose for cases 6 and 11 (and the mirror phrasing in case 7) produces an ambiguous multi-match that scores wrong.",
+              "evidence": "scoring.py _SIGNATURES: readiness group1 is bare r\"readiness\" and group2 is satisfied by \\bprobe or \\bendpoints? alone. The natural selector-mismatch answer 'pods are Ready and readiness probes pass, yet Endpoints is empty because the Service selector does not match the pod labels' fully matches BOTH service-selector-mismatch and readiness-probe-failing; the pair is not in _DOMINATED_BY, so the surviving set is {SSM, RPF} → class_correct false on a perfect diagnosis. Symmetrically, a case-7 answer that mentions 'the service selector is correct' co-matches SSM. The schema's 'no differentials' note does not save this — probes-passing is part of the causal mechanism statement for selector mismatch.",
+              "fix": "Pre-freeze, CHANGELOG'd tightening (scoring.md change policy allows it): restrict readiness group2 to failure evidence only (\\bfail, not ready, \\bunready\\b, connection refused, wrong port — drop bare \\bprobe, endpoints, 503), re-run gold self-classification for case 7, and add regression tests using the natural phrasings above for cases 6/7/11."
+            },
+            {
+              "case_id": "t1-imagepull-bogus-tag",
+              "severity": "minor",
+              "claim": "Docker Hub anonymous pull rate limits (10/hr since 2025) can make the captured error 'toomanyrequests' instead of 'manifest unknown', and the T3 noise pack plus healthy workloads can burn the pull budget mid-capture.",
+              "evidence": "kubelet surfaces whatever registry error occurs at capture time; under rate limiting the event text and mechanism ('rate limited', not 'tag does not exist') diverge from gold's decisive_evidence, and rule 2 requires identical manifestation on every inject run. ~20 noise namespaces pulling hub images at T3 capture time makes hitting the limit realistic.",
+              "fix": "Standardize all healthy/noise workloads on one or two pinned non-latest images with imagePullPolicy IfNotPresent, preloaded via `kind load docker-image`; point the bogus tag at registry.k8s.io or ghcr.io (no aggressive anonymous limits) so the failure is deterministically 'manifest unknown/not found', and include 'not found' alongside 'manifest unknown' in gold mechanism_summary."
+            },
+            {
+              "case_id": "t2-rbac-sync-forbidden",
+              "severity": "minor",
+              "claim": "Dual-fix ambiguity: if the RoleBinding names another real ServiceAccount, changing the pod's serviceAccountName is as valid as fixing the binding, so gold = RoleBinding is contestable under exact-match scoring.",
+              "evidence": "Same 'spec that must change' ambiguity as case 12 — the roster line 'RoleBinding subject names the wrong ServiceAccount' does not pin which side is canonically wrong.",
+              "fix": "Make the binding's subject a typo'd/nonexistent SA name (e.g. subject `config-synk` vs actual SA `config-sync`) so the binding is the only sane fix; state the asymmetry in notes.md."
+            },
+            {
+              "case_id": "t2-quota-blocks-scale",
+              "severity": "minor",
+              "claim": "Single-shot `kubectl apply -f fault.yaml` races ResourceQuota enforcement: a freshly created quota can admit extra pods before its status is initialized, so the admitted-pod count can vary across inject runs.",
+              "evidence": "inject.sh applies fault.yaml once (line 87); quota admission is only reliable after the quota controller populates usage, and apply order within the file determines whether the 10-replica Deployment hits an armed quota — violating rule 2's 'manifests identically on every run'.",
+              "fix": "Put the ResourceQuota first in fault.yaml, and make wait.sh assert BOTH the FailedCreate quota-exceeded event on the ReplicaSet and the exact expected admitted-pod count before capture."
+            },
+            {
+              "case_id": "t3-quiet-selector-loud-crashloop",
+              "severity": "minor",
+              "claim": "The loud crashloop red herring cannot live in the noise pack and must itself have a realistic conditional failure, or the case either fails injection or reads as a plant.",
+              "evidence": "inject.sh lines 76-81 `kubectl wait --for=condition=Available` on ALL noise deployments and dies on timeout — a crashlooping decoy in _noise/noise.yaml aborts every T3 capture. And authoring-contract rule 1's letter ('never in a script that fails unconditionally') applies to every container in the scenario; an `exit 1` decoy is both a contract violation and an obvious tell to a strong agent that it is synthetic. The red-herring design is otherwise sound: baseline's own curation (describes of not-Ready pods) mechanically steers the shallow arm at the decoy while search pods stay Ready and quiet.",
+              "fix": "Ship the crashloop job inside the scenario's own fault.yaml (not _noise/) with its own believable conditional failure (e.g. the case-1 pattern: required env unset → conditional exit) in a namespace with a function verifiably unrelated to the search path."
+            },
+            {
+              "case_id": "t1-oom-cache-warmup",
+              "severity": "minor",
+              "claim": "The planned page symptom 'restart-looping' is fault-class signature vocabulary and violates the page contract's letter.",
+              "evidence": "README rule: page never contains fault-class vocabulary; scoring.py app-crashloop group1 matches \\brestart — 'restart-looping' is literally signature text. The captured exemplar shows the compliant pattern ('0/1 Ready ... workload readiness monitor').",
+              "fix": "Write the actual page.txt as readiness/user-visible phrasing ('recommendations deployment 0/1 Ready; recommendations missing from product pages'), never 'restarting/looping'."
+            },
+            {
+              "case_id": "t1-unschedulable-cpu-requests",
+              "severity": "minor",
+              "claim": "A 32-CPU request is not unschedulable on every machine, making the fault's manifestation host-dependent.",
+              "evidence": "kind node allocatable equals the Docker VM's CPU count; on a >=32-core host the pod schedules and the fault never manifests — rule 2 requires identical manifestation on every inject run, including a re-capture on different hardware.",
+              "fix": "Request an unsatisfiable-anywhere value (e.g. cpu: \"512\") so FailedScheduling 'Insufficient cpu' is machine-independent."
+            },
+            {
+              "case_id": "t2-rollout-paused",
+              "severity": "minor",
+              "claim": "The reserve case is not producible by the current single-apply inject flow, so the roster's determinism safety net is illusory as designed.",
+              "evidence": "'Deployment updated then left paused' needs two phases: v1 rolled out and Available, THEN v2 template + spec.paused. inject.sh applies fault.yaml once; a Deployment created paused-from-birth never creates any ReplicaSet (no old version serving), and two docs for the same Deployment in one apply race — neither yields the described end state deterministically.",
+              "fix": "Add an optional per-scenario setup phase to inject.sh (apply setup.yaml, wait for Available, then apply fault.yaml) — which also cleanly backs the 'after replicas raised' and 'renamed key' narratives in cases 8 and 12 — or redesign the reserve around a state reachable in one apply."
+            },
+            {
+              "case_id": "roster-wide",
+              "severity": "minor",
+              "claim": "inject.sh's wipe spares the `default` namespace, so stray objects from smoke tests on the shared kind-incident-lab cluster silently enter every fixture.",
+              "evidence": "KEEP_NS (inject.sh line 16) includes `default`; capture.sh snapshots all non-system namespaces, so anything left in default appears in every fixture's get-all/events as uncontrolled, non-owned noise — violating rule 3's namespace-ownership model.",
+              "fix": "Have inject.sh delete all namespaced objects in `default` during the wipe, or die if `default` is non-empty."
+            }
+          ],
+          "overall": "The roster is viable and well-architected: tier composition matches the binding decision doc (5/5/2, 11/12 atoms as gold, dominated rollout-stuck only via the reserve), every T1 is genuinely solvable by the one-prompt baseline from describes/events alone, no T2/T3 case hides its decisive evidence outside what capture.sh records (initContainer logs, endpoints, RBAC objects, and resourcequotas are all captured), workload/namespace names encode function rather than mechanism, and counterfactual entrypoints are constructible for 11 of 12 cases. Four things need fixing before capture/freeze: (1) the frozen exemplar itself embodies the banned unconditional-exit pattern and lacks wait.sh, breaking the sanctioned re-capture path and the remediation-honesty story; (2) case 12 is double-broken as summarized — ambiguous gold identity (ConfigMap vs Deployment ref) and a decoy so plausible it makes the case contestable rather than hard; (3) the readiness-probe signature collides with selector-mismatch prose, so the two selector-gold cases (and case 7's mirror) can score a perfect diagnosis as wrong — tighten the signature pre-freeze under the disclosed change policy; (4) a handful of determinism details (Docker Hub rate limits, quota admission race, host-dependent CPU request, the unproducible reserve case) are each cheap to fix at authoring time. Case 11's red-herring construction is sound — the baseline's own curation policy steers the shallow arm at the decoy while the paged-path discipline ignores it — provided the decoy lives in fault.yaml with a realistic conditional failure. Nothing here is a roster-killer; all findings are addressable before the case-set freeze tag."
+        }
+      }
+    ]
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Review"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "lens:determinism",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "aff9498d9e9acf71f",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1787944791578,
+      "queuedAt": 1787944788700,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The roster is viable on this cluster: all 11 golded atoms a…",
+      "promptPreview": "You are red-teaming a Kubernetes fault-injection scenario roster for an eval.\nRepo root: /REDACTED-HOME/Documents/K8s-Incident-Agent\nRead IN THIS ORDER before judging:\n1. evals/scenarios/README.md  (the roster + authoring contract under review)\n2. docs/decisions/problem-selection.md  (binding case design, design reqs, kill conditions)\n3. evals/scoring.md and evals/scoring.py  (gold …",
+      "lastProgressAt": 1787945239595,
+      "tokens": 64386,
+      "toolCalls": 22,
+      "durationMs": 446497,
+      "resultPreview": "{\"findings\":[{\"case_id\":\"t1-imagepull-bogus-tag\",\"severity\":\"major\",\"claim\":\"A Docker Hub bogus tag does not deterministically produce a 'not found' pull error, and the roster's promised 'manifest unknown' phrasing is not what containerd on kind emits.\",\"evidence\":\"Docker Hub throttles unauthenticated pulls per IP (tightened in 2025); repeated inject/capture cycles plus noise-pack pulls from the s…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "lens:scoring",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "aca948f25095345e8",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1787944791002,
+      "queuedAt": 1787944788700,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The roster is structurally viable: all 12 atoms are determi…",
+      "promptPreview": "You are red-teaming a Kubernetes fault-injection scenario roster for an eval.\nRepo root: /REDACTED-HOME/Documents/K8s-Incident-Agent\nRead IN THIS ORDER before judging:\n1. evals/scenarios/README.md  (the roster + authoring contract under review)\n2. docs/decisions/problem-selection.md  (binding case design, design reqs, kill conditions)\n3. evals/scoring.md and evals/scoring.py  (gold …",
+      "lastProgressAt": 1787945307347,
+      "tokens": 83528,
+      "toolCalls": 21,
+      "durationMs": 514250,
+      "resultPreview": "{\"findings\":[{\"case_id\":\"t3-quiet-selector-loud-crashloop\",\"severity\":\"major\",\"claim\":\"Honest correct answers on this case are at high risk of scoring wrong, because any mention of the designed-in decoy — even a negation — makes the mechanism multi-match and fail.\",\"evidence\":\"Verified by running evals.scoring.classify_mechanism: 'selector doesn't match... Endpoints empty; the crashlooping batch j…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "lens:realism",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "aeaf20e1a23745efd",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1787944790692,
+      "queuedAt": 1787944788700,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The roster is viable and well-architected: tier composition…",
+      "promptPreview": "You are red-teaming a Kubernetes fault-injection scenario roster for an eval.\nRepo root: /REDACTED-HOME/Documents/K8s-Incident-Agent\nRead IN THIS ORDER before judging:\n1. evals/scenarios/README.md  (the roster + authoring contract under review)\n2. docs/decisions/problem-selection.md  (binding case design, design reqs, kill conditions)\n3. evals/scoring.md and evals/scoring.py  (gold …",
+      "lastProgressAt": 1787945338081,
+      "tokens": 72820,
+      "toolCalls": 22,
+      "durationMs": 547388,
+      "resultPreview": "{\"findings\":[{\"case_id\":\"t1-crashloop-missing-env\",\"severity\":\"major\",\"claim\":\"The captured exemplar violates its own hard rule 1 (unconditional exit) and is missing wait.sh, so the sanctioned re-capture path is broken.\",\"evidence\":\"fault.yaml line 32 is `sh -c \\\"echo ...; sleep 2; echo 'FATAL: AMQP_URL not set'; exit 1\\\"` — setting AMQP_URL does not make it succeed, which is exactly the CHANGELOG…"
+    }
+  ],
+  "totalTokens": 220734,
+  "totalToolCalls": 65
+}

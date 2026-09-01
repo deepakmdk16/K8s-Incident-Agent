@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "RoleBinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "mechanism": "The RoleBinding inventory-reader-binding in namespace inventory lists .subjects[0].name = \"inventory-synk\" instead of \"inventory-sync\", so it binds Role/inventory-reader to a ServiceAccount that does not exist and grants nothing to the identity the worker actually presents; the worker's read of the inventory source data is therefore rejected by the API server with \"HTTP/1.1 403 Forbidden\" and it falls back to serving a stale inventory snapshot.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

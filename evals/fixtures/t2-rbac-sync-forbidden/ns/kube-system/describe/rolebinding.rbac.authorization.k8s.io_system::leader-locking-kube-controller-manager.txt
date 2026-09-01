@@ -1,0 +1,12 @@
+Name:         system::leader-locking-kube-controller-manager
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+Role:
+  Kind:  Role
+  Name:  system::leader-locking-kube-controller-manager
+Subjects:
+  Kind            Name                            Namespace
+  ----            ----                            ---------
+  User            system:kube-controller-manager  
+  ServiceAccount  kube-controller-manager         kube-system
+  ServiceAccount  leader-election-controller      kube-system

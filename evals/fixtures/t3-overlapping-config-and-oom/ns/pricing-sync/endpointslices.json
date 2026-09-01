@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.66"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "price-worker-55864d8565-xwvgw",
+            "namespace": "pricing-sync",
+            "uid": "0f1e0fa8-b87a-4133-ade5-b00f9aa15830"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:58Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "generateName": "price-worker-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "price-worker"
+        },
+        "name": "price-worker-ptcgj",
+        "namespace": "pricing-sync",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "price-worker",
+            "uid": "2cfd5022-07d8-4faf-adbc-083e1e1d634d"
+          }
+        ],
+        "resourceVersion": "50988",
+        "uid": "71b899a3-d6b8-4f67-9bb3-0a156895afdc"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

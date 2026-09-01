@@ -1,0 +1,6 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {"kind": "Service", "namespace": "search", "name": "search"},
+  "mechanism": "The search Service's selector is app=search-api while the pods created by the search Deployment are labeled app=search, so no pod matches and the Service's endpoint list is empty. Requests from web-gateway to the search ClusterIP have no backend to be forwarded to and hang until the caller times out, producing storewide 'search is unavailable' fallbacks even though all search replicas are Running and Ready.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,38 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "arm": "rules",
+  "run_id": "813202b2178b",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0021,
+  "paged_namespace": "orders",
+  "findings": [
+    {
+      "analyzer": "config-ref",
+      "kind": "deployment",
+      "namespace": "orders",
+      "name": "orders-api",
+      "mechanism": "The container cannot start because the ConfigMap it references was not found.",
+      "evidence": "pod orders-api-6c64874687-8c47z container api is waiting with reason CreateContainerConfigError"
+    },
+    {
+      "analyzer": "config-ref",
+      "kind": "deployment",
+      "namespace": "orders",
+      "name": "orders-api",
+      "mechanism": "The container cannot start because the ConfigMap it references was not found.",
+      "evidence": "pod orders-api-6c64874687-t6d22 container api is waiting with reason CreateContainerConfigError"
+    },
+    {
+      "analyzer": "oom",
+      "kind": "deployment",
+      "namespace": "orders",
+      "name": "orders-report-worker",
+      "mechanism": "The container was killed after exceeding its memory limit.",
+      "evidence": "pod orders-report-worker-5645b7fccf-zhjzb container worker last terminated with reason OOMKilled after 3 restarts"
+    }
+  ],
+  "analyzers_fired": 3
+}

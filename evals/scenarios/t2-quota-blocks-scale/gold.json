@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-quota-blocks-scale",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "resourcequota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "fault_class": "resource-quota-exceeded",
+  "mechanism_summary": "The ResourceQuota checkout-quota in the checkout namespace caps pods at 2, so quota admission rejects every pod create beyond that cap with 'exceeded quota'; the checkout-api ReplicaSet therefore cannot create its remaining pods and the deployment stays well below its intended 6 replicas.",
+  "decisive_evidence": "ReplicaSet FailedCreate events in namespace checkout with message 'Error creating: pods ... is forbidden: exceeded quota: checkout-quota' (kubectl get events -n checkout / describe rs), corroborated by resourcequota/checkout-quota showing hard pods: 2 against the deployment's spec.replicas: 6.",
+  "remediation_summary": "Raise the pods cap on the checkout/checkout-quota ResourceQuota to cover the intended scale — kubectl patch resourcequota checkout-quota -n checkout --type=merge -p '{\"spec\":{\"hard\":{\"pods\":\"8\"}}}' — or delete the quota (kubectl delete resourcequota checkout-quota -n checkout); the ReplicaSet controller then creates the remaining pods with no deployment change."
+}

@@ -1,0 +1,6 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {"kind": "Service", "namespace": "search", "name": "search"},
+  "mechanism": "The search Service's selector is app=search-api, but the pods backing it are labeled app=search, so the selector matches nothing and the Service's EndpointSlice is empty. Requests from the web gateway resolve the Service DNS name and connect to the ClusterIP, but kube-proxy has no backend to forward them to, so the connections are black-holed and hang until the client times out. The pods stay Ready throughout, which is why the deployment looks healthy while all search traffic fails.",
+  "verdict": "confirmed"
+}

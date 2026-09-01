@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "search",
+    "name": "search"
+  },
+  "mechanism": "The investigation of Service search/search did not close: the evidence gathered could not be verified against the snapshot.",
+  "verdict": "inconclusive",
+  "missing_evidence": "V1 QUOTE: ruled_out[1]'s quote is not present in the output of namespace_overview. Copy the text literally from what the tool returned"
+}

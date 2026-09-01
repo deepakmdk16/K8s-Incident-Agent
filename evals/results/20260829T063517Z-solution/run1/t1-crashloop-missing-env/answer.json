@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "payments",
+    "name": "checkout-worker"
+  },
+  "mechanism": "Deployment checkout-worker has no .spec.template.spec.containers[worker].env, so AMQP_URL is unset in the worker container; its command guard `[ -n \"${AMQP_URL:-}\" ] || { echo \"FATAL: AMQP_URL not set\"; exit 1; }` fires and the process exits with code 1 on every start, driving CrashLoopBackOff and holding the Deployment at 0/1 Ready. The template needs an env entry named AMQP_URL carrying the queue connection string instead of no env at all.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

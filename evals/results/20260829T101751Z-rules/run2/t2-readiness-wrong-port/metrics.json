@@ -1,0 +1,30 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "arm": "rules",
+  "run_id": "51deb9af0286",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0012,
+  "paged_namespace": "orders",
+  "findings": [
+    {
+      "analyzer": "readiness",
+      "kind": "deployment",
+      "namespace": "orders",
+      "name": "orders-api",
+      "mechanism": "The readiness probe fails, so the pod never becomes ready.",
+      "evidence": "pod orders-api-7cc5bcf4c7-lst42 has Readiness probe failed events"
+    },
+    {
+      "analyzer": "readiness",
+      "kind": "deployment",
+      "namespace": "orders",
+      "name": "orders-api",
+      "mechanism": "The readiness probe fails, so the pod never becomes ready.",
+      "evidence": "pod orders-api-7cc5bcf4c7-pcspl has Readiness probe failed events"
+    }
+  ],
+  "analyzers_fired": 2
+}

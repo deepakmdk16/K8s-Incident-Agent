@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t1-oom-cache-warmup",
+  "tier": "T1",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "recs",
+    "name": "recommendations"
+  },
+  "fault_class": "oom-killed",
+  "mechanism_summary": "The container's cache-warmup step builds an in-memory catalog cache of roughly 200MiB, which exceeds its 64Mi memory limit; the kernel OOM-killer terminates the container (OOMKilled, exit code 137) before serving ever begins.",
+  "decisive_evidence": "containerStatuses for the recs/recommendations pod show lastState.terminated.reason OOMKilled with exit code 137 and a climbing restartCount; the container spec carries resources.limits.memory 64Mi, and logs show 'warming catalog cache' but never 'catalog cache ready'.",
+  "remediation_summary": "Raise the memory limit on the recommendations deployment's container so the ~200MiB warmup cache fits with headroom: kubectl -n recs set resources deployment/recommendations --limits=memory=1Gi --requests=memory=256Mi, then wait for the rollout to complete; warmup finishes and the serve loop keeps the pod Ready."
+}

@@ -1,0 +1,7029 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "aggregationRule": {
+        "clusterRoleSelectors": [
+          {
+            "matchLabels": {
+              "rbac.authorization.k8s.io/aggregate-to-admin": "true"
+            }
+          }
+        ]
+      },
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "admin",
+        "resourceVersion": "401",
+        "uid": "7f5a515e-6e54-43da-ba29-ce3965359420"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/attach",
+            "pods/exec",
+            "pods/portforward",
+            "pods/proxy",
+            "secrets",
+            "services/proxy"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "impersonate"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods",
+            "pods/attach",
+            "pods/exec",
+            "pods/portforward",
+            "pods/proxy"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/eviction"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "persistentvolumeclaims",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "secrets",
+            "serviceaccounts",
+            "services",
+            "services/proxy"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts/token"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "daemonsets",
+            "deployments",
+            "deployments/rollback",
+            "deployments/scale",
+            "replicasets",
+            "replicasets/scale",
+            "statefulsets",
+            "statefulsets/scale"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "jobs"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "deployments",
+            "deployments/rollback",
+            "deployments/scale",
+            "ingresses",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "endpoints",
+            "persistentvolumeclaims",
+            "persistentvolumeclaims/status",
+            "pods",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "serviceaccounts",
+            "services",
+            "services/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "bindings",
+            "limitranges",
+            "namespaces/status",
+            "pods/log",
+            "pods/status",
+            "replicationcontrollers/status",
+            "resourcequotas",
+            "resourcequotas/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "controllerrevisions",
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "statefulsets",
+            "statefulsets/scale",
+            "statefulsets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers",
+            "horizontalpodautoscalers/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "cronjobs/status",
+            "jobs",
+            "jobs/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets",
+            "poddisruptionbudgets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaims/status",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "localsubjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "rbac.authorization.k8s.io"
+          ],
+          "resources": [
+            "rolebindings",
+            "roles"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "cluster-admin",
+        "resourceVersion": "71",
+        "uid": "4fd1bb46-89cb-4eda-bc50-5df84200c3fe"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "*"
+          ]
+        },
+        {
+          "nonResourceURLs": [
+            "*"
+          ],
+          "verbs": [
+            "*"
+          ]
+        }
+      ]
+    },
+    {
+      "aggregationRule": {
+        "clusterRoleSelectors": [
+          {
+            "matchLabels": {
+              "rbac.authorization.k8s.io/aggregate-to-edit": "true"
+            }
+          }
+        ]
+      },
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults",
+          "rbac.authorization.k8s.io/aggregate-to-admin": "true"
+        },
+        "name": "edit",
+        "resourceVersion": "400",
+        "uid": "0ddc0c6f-bb9a-4fac-bc0c-5bab54dd3652"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/attach",
+            "pods/exec",
+            "pods/portforward",
+            "pods/proxy",
+            "secrets",
+            "services/proxy"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "impersonate"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods",
+            "pods/attach",
+            "pods/exec",
+            "pods/portforward",
+            "pods/proxy"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/eviction"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "persistentvolumeclaims",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "secrets",
+            "serviceaccounts",
+            "services",
+            "services/proxy"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts/token"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "daemonsets",
+            "deployments",
+            "deployments/rollback",
+            "deployments/scale",
+            "replicasets",
+            "replicasets/scale",
+            "statefulsets",
+            "statefulsets/scale"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "jobs"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "deployments",
+            "deployments/rollback",
+            "deployments/scale",
+            "ingresses",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "endpoints",
+            "persistentvolumeclaims",
+            "persistentvolumeclaims/status",
+            "pods",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "serviceaccounts",
+            "services",
+            "services/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "bindings",
+            "limitranges",
+            "namespaces/status",
+            "pods/log",
+            "pods/status",
+            "replicationcontrollers/status",
+            "resourcequotas",
+            "resourcequotas/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "controllerrevisions",
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "statefulsets",
+            "statefulsets/scale",
+            "statefulsets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers",
+            "horizontalpodautoscalers/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "cronjobs/status",
+            "jobs",
+            "jobs/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets",
+            "poddisruptionbudgets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaims/status",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:10Z",
+        "name": "kindnet",
+        "resourceVersion": "300",
+        "uid": "600132eb-c264-449d-aadd-3d393a2d1687"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resourceNames": [
+            "kindnet"
+          ],
+          "resources": [
+            "podsecuritypolicies"
+          ],
+          "verbs": [
+            "use"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes",
+            "pods",
+            "namespaces"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "networkpolicies"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "name": "kubeadm:get-nodes",
+        "resourceVersion": "263",
+        "uid": "af2f3021-4cbf-47e1-8db9-b0b3b0fbfa21"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-28T15:51:10Z",
+        "name": "local-path-provisioner-role",
+        "resourceVersion": "310",
+        "uid": "e4248242-87cf-45e6-b7c8-8065562d24f6"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes",
+            "persistentvolumeclaims",
+            "configmaps",
+            "pods",
+            "pods/log"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "patch",
+            "update",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "storageclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults",
+          "rbac.authorization.k8s.io/aggregate-to-admin": "true"
+        },
+        "name": "system:aggregate-to-admin",
+        "resourceVersion": "79",
+        "uid": "254f4a1c-92ec-43bc-aa19-336c2e184a63"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "localsubjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "rbac.authorization.k8s.io"
+          ],
+          "resources": [
+            "rolebindings",
+            "roles"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults",
+          "rbac.authorization.k8s.io/aggregate-to-edit": "true"
+        },
+        "name": "system:aggregate-to-edit",
+        "resourceVersion": "80",
+        "uid": "6498b4ea-1e13-4993-a7a9-79c6b8635a2a"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/attach",
+            "pods/exec",
+            "pods/portforward",
+            "pods/proxy",
+            "secrets",
+            "services/proxy"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "impersonate"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods",
+            "pods/attach",
+            "pods/exec",
+            "pods/portforward",
+            "pods/proxy"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/eviction"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "persistentvolumeclaims",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "secrets",
+            "serviceaccounts",
+            "services",
+            "services/proxy"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts/token"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "daemonsets",
+            "deployments",
+            "deployments/rollback",
+            "deployments/scale",
+            "replicasets",
+            "replicasets/scale",
+            "statefulsets",
+            "statefulsets/scale"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "jobs"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "deployments",
+            "deployments/rollback",
+            "deployments/scale",
+            "ingresses",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults",
+          "rbac.authorization.k8s.io/aggregate-to-view": "true"
+        },
+        "name": "system:aggregate-to-view",
+        "resourceVersion": "81",
+        "uid": "ffb5d4ec-6de3-4c00-9c5f-ebb1e9e3f3dc"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "endpoints",
+            "persistentvolumeclaims",
+            "persistentvolumeclaims/status",
+            "pods",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "serviceaccounts",
+            "services",
+            "services/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "bindings",
+            "limitranges",
+            "namespaces/status",
+            "pods/log",
+            "pods/status",
+            "replicationcontrollers/status",
+            "resourcequotas",
+            "resourcequotas/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "controllerrevisions",
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "statefulsets",
+            "statefulsets/scale",
+            "statefulsets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers",
+            "horizontalpodautoscalers/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "cronjobs/status",
+            "jobs",
+            "jobs/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets",
+            "poddisruptionbudgets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaims/status",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:auth-delegator",
+        "resourceVersion": "86",
+        "uid": "df2b4de3-a3d9-4f0f-a942-1afa07f86c09"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "authentication.k8s.io"
+          ],
+          "resources": [
+            "tokenreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "subjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:basic-user",
+        "resourceVersion": "74",
+        "uid": "10352a6b-8583-44ab-a879-abc08d73672c"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "selfsubjectaccessreviews",
+            "selfsubjectrulesreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authentication.k8s.io"
+          ],
+          "resources": [
+            "selfsubjectreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:certificates.k8s.io:certificatesigningrequests:nodeclient",
+        "resourceVersion": "91",
+        "uid": "f144791c-0fb2-4ff6-bdb6-0555176c4bf6"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "certificatesigningrequests/nodeclient"
+          ],
+          "verbs": [
+            "create"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:certificates.k8s.io:certificatesigningrequests:selfnodeclient",
+        "resourceVersion": "92",
+        "uid": "6c76837c-14cd-4b63-8421-0da26117d5dd"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "certificatesigningrequests/selfnodeclient"
+          ],
+          "verbs": [
+            "create"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:certificates.k8s.io:kube-apiserver-client-approver",
+        "resourceVersion": "96",
+        "uid": "2120a08d-3d3f-4829-87fd-ef2df34a6865"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/kube-apiserver-client"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "approve"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:certificates.k8s.io:kube-apiserver-client-kubelet-approver",
+        "resourceVersion": "97",
+        "uid": "e9471600-80e3-423f-86c5-7e29aad5dd0c"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/kube-apiserver-client-kubelet"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "approve"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:certificates.k8s.io:kubelet-serving-approver",
+        "resourceVersion": "95",
+        "uid": "316cd861-da74-4525-8f84-1a4759f1d107"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/kubelet-serving"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "approve"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:certificates.k8s.io:legacy-unknown-approver",
+        "resourceVersion": "94",
+        "uid": "940cdd49-4a58-47f3-be25-9f6f13d30219"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/legacy-unknown"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "approve"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:cluster-trust-bundle-discovery",
+        "resourceVersion": "102",
+        "uid": "dce02968-710e-4b94-b92c-11a872bfe273"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "clustertrustbundles"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:attachdetach-controller",
+        "resourceVersion": "103",
+        "uid": "6a4f9844-c9f2-405d-aa09-3878eb3b4ce1"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims",
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "volumeattachments"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csidrivers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csinodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:certificate-controller",
+        "resourceVersion": "132",
+        "uid": "ca3336b7-e2fa-4df4-a422-9f8189253abe"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "certificatesigningrequests"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "certificatesigningrequests/approval",
+            "certificatesigningrequests/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/kube-apiserver-client-kubelet"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "approve"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/kube-apiserver-client",
+            "kubernetes.io/kube-apiserver-client-kubelet",
+            "kubernetes.io/kubelet-serving",
+            "kubernetes.io/legacy-unknown"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "sign"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "subjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:clusterrole-aggregation-controller",
+        "resourceVersion": "104",
+        "uid": "a2de7ebb-b1dc-45f6-bee3-3d61731d036b"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "rbac.authorization.k8s.io"
+          ],
+          "resources": [
+            "clusterroles"
+          ],
+          "verbs": [
+            "escalate",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:cronjob-controller",
+        "resourceVersion": "105",
+        "uid": "7a60c37e-b946-447d-bb6d-d78aa4b62b4a"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "jobs"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "delete",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:daemon-set-controller",
+        "resourceVersion": "106",
+        "uid": "631e3238-722c-4937-a714-f5483c75a8da"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "list",
+            "patch",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/binding"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "controllerrevisions"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:deployment-controller",
+        "resourceVersion": "107",
+        "uid": "a24ea527-e42b-41b3-89dd-b328a2996ef6"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "deployments"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "deployments/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "deployments/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "replicasets"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:device-taint-eviction-controller",
+        "resourceVersion": "115",
+        "uid": "36cf1b42-d263-4b8b-87b7-200f03135341"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "deviceclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "devicetaintrules/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "devicetaintrules"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:disruption-controller",
+        "resourceVersion": "108",
+        "uid": "019f38cb-dcf3-40b8-882e-c513b2956693"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "deployments"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "replicasets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "replicationcontrollers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "statefulsets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*/scale"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:endpoint-controller",
+        "resourceVersion": "109",
+        "uid": "fdc9cc0c-0874-4da6-9ce1-722f343c7271"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods",
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints/restricted"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:endpointslice-controller",
+        "resourceVersion": "110",
+        "uid": "27fb9480-70e7-47da-ac84-c186d6928f34"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes",
+            "pods",
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "services/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:endpointslicemirroring-controller",
+        "resourceVersion": "111",
+        "uid": "a6ced330-40e0-4f59-a534-1f91d8903fbe"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints",
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "services/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:ephemeral-volume-controller",
+        "resourceVersion": "113",
+        "uid": "acf075b3-b4f0-4f96-8039-0ddeedd34add"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:expand-controller",
+        "resourceVersion": "112",
+        "uid": "493d8c68-9a0e-4111-be1f-e05c3d7f394f"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:generic-garbage-collector",
+        "resourceVersion": "116",
+        "uid": "7ad50765-83fe-4ae5-8cee-74aac9ed297e"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:horizontal-pod-autoscaler",
+        "resourceVersion": "117",
+        "uid": "f5970bce-ac5c-4fab-b257-c4b13a9573e8"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*/scale"
+          ],
+          "verbs": [
+            "get",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "metrics.k8s.io"
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "custom.metrics.k8s.io"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "external.metrics.k8s.io"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:job-controller",
+        "resourceVersion": "118",
+        "uid": "cf934dfb-7398-4ad6-8331-1ec9900da334"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "jobs"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "jobs/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "jobs/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "list",
+            "patch",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:kube-apiserver-serving-clustertrustbundle-publisher",
+        "resourceVersion": "139",
+        "uid": "3ddb2864-1566-4681-8ee8-8dfac8d7ab39"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resourceNames": [
+            "kubernetes.io/kube-apiserver-serving"
+          ],
+          "resources": [
+            "signers"
+          ],
+          "verbs": [
+            "attest"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "clustertrustbundles"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:legacy-service-account-token-cleaner",
+        "resourceVersion": "141",
+        "uid": "db768159-75f1-4fea-869f-525c91698e48"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resourceNames": [
+            "kube-apiserver-legacy-service-account-token-tracking"
+          ],
+          "resources": [
+            "configmaps"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "secrets"
+          ],
+          "verbs": [
+            "delete",
+            "patch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:namespace-controller",
+        "resourceVersion": "119",
+        "uid": "93f7d386-fb1a-4ec5-81ad-a2ff58381c09"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces/finalize",
+            "namespaces/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:node-controller",
+        "resourceVersion": "120",
+        "uid": "3f69fb7f-f41a-4993-8466-e0070e5dc7e8"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:persistent-volume-binder",
+        "resourceVersion": "121",
+        "uid": "45e3576a-5576-45db-926a-41dcf49b44ef"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "storageclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:pod-garbage-collector",
+        "resourceVersion": "122",
+        "uid": "9b2bd626-e9b4-415b-b99b-74a61cd459be"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "delete",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:podcertificaterequestcleaner",
+        "resourceVersion": "133",
+        "uid": "909c6f60-ba27-4f5c-877c-77064fc9211a"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "podcertificaterequests"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:pv-protection-controller",
+        "resourceVersion": "135",
+        "uid": "53603c38-7674-49b2-92b9-508a83232555"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:pvc-protection-controller",
+        "resourceVersion": "134",
+        "uid": "7433c0eb-4f5b-46d9-af79-0c97ec606111"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:replicaset-controller",
+        "resourceVersion": "123",
+        "uid": "7d0e99e4-9764-4101-aea2-b6f469869272"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "replicasets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "replicasets/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "replicasets/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "list",
+            "patch",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:replication-controller",
+        "resourceVersion": "124",
+        "uid": "2c92b16e-62d2-4ddf-80ff-68b0464ca214"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "replicationcontrollers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "replicationcontrollers/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "replicationcontrollers/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "list",
+            "patch",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:resource-claim-controller",
+        "resourceVersion": "114",
+        "uid": "98378641-faba-4c9b-8989-be8d90c10b48"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaims/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims/binding"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:resourcequota-controller",
+        "resourceVersion": "125",
+        "uid": "c71f5951-256f-4a8e-ab7a-86c89700fe2a"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "resourcequotas/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:root-ca-cert-publisher",
+        "resourceVersion": "138",
+        "uid": "33400bad-0a0d-4885-a1d6-9d38569e7f3e"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps"
+          ],
+          "verbs": [
+            "create",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:route-controller",
+        "resourceVersion": "126",
+        "uid": "d3d1ec32-d0f7-454d-ada2-91c35ae7469b"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/status"
+          ],
+          "verbs": [
+            "patch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:selinux-warning-controller",
+        "resourceVersion": "143",
+        "uid": "edc62ac6-afe8-414d-ab3c-bbf6c946680e"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csidrivers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:service-account-controller",
+        "resourceVersion": "127",
+        "uid": "38fee14b-655b-4f69-b4d2-8783fe29bb7c"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:service-cidrs-controller",
+        "resourceVersion": "129",
+        "uid": "4880784c-a2bf-47fa-b82c-30c925a70059"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "servicecidrs"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "servicecidrs/finalizers"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "servicecidrs/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ipaddresses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:service-controller",
+        "resourceVersion": "128",
+        "uid": "7b6413f6-849d-4cd4-a1a4-47ee962a1676"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "services/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:statefulset-controller",
+        "resourceVersion": "130",
+        "uid": "516cd59d-661a-4c40-b63d-44c4dd754b11"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "statefulsets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "statefulsets/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "statefulsets/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "controllerrevisions"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "delete",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:storage-version-migrator-controller",
+        "resourceVersion": "142",
+        "uid": "7a05660c-59de-400a-8644-bd46d5b74270"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "list",
+            "patch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apiextensions.k8s.io"
+          ],
+          "resources": [
+            "customresourcedefinitions"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apiextensions.k8s.io"
+          ],
+          "resources": [
+            "customresourcedefinitions/status"
+          ],
+          "verbs": [
+            "patch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storagemigration.k8s.io"
+          ],
+          "resources": [
+            "storageversionmigrations/status"
+          ],
+          "verbs": [
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:ttl-after-finished-controller",
+        "resourceVersion": "137",
+        "uid": "8e1cb581-8418-413f-8ead-e6b38502ab4a"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "jobs"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:ttl-controller",
+        "resourceVersion": "131",
+        "uid": "c76ccdcc-0128-4df3-936e-6cc95476c81f"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:validatingadmissionpolicy-status-controller",
+        "resourceVersion": "140",
+        "uid": "406b2e98-9d37-4ad8-ba9c-30bd00220ae9"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "admissionregistration.k8s.io"
+          ],
+          "resources": [
+            "validatingadmissionpolicies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "admissionregistration.k8s.io"
+          ],
+          "resources": [
+            "validatingadmissionpolicies/status"
+          ],
+          "verbs": [
+            "get",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:controller:volumeattributesclass-protection-controller",
+        "resourceVersion": "136",
+        "uid": "3158e9ff-c455-4947-81fe-b92de0459ba5"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "volumeattributesclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "creationTimestamp": "2026-08-28T15:51:09Z",
+        "name": "system:coredns",
+        "resourceVersion": "275",
+        "uid": "f550f324-c707-4903-94cb-1747e5555b6c"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints",
+            "services",
+            "pods",
+            "namespaces"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:discovery",
+        "resourceVersion": "72",
+        "uid": "67faaf93-8a20-4070-8bc5-a8ed9ad1d7f4"
+      },
+      "rules": [
+        {
+          "nonResourceURLs": [
+            "/api",
+            "/api/*",
+            "/apis",
+            "/apis/*",
+            "/healthz",
+            "/livez",
+            "/openapi",
+            "/openapi/*",
+            "/readyz",
+            "/version",
+            "/version/"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:heapster",
+        "resourceVersion": "82",
+        "uid": "e3d98a79-23b0-4dc9-8e9a-115a2b9df898"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "events",
+            "namespaces",
+            "nodes",
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "deployments"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:kube-aggregator",
+        "resourceVersion": "87",
+        "uid": "d7a6f3be-7561-4dd4-988c-e0eedc624d0f"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints",
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:kube-controller-manager",
+        "resourceVersion": "88",
+        "uid": "45e1a3fc-0817-493c-8348-44135a13dbf7"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resourceNames": [
+            "kube-controller-manager"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "get",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "secrets",
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "secrets"
+          ],
+          "verbs": [
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "namespaces",
+            "secrets",
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "secrets",
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authentication.k8s.io"
+          ],
+          "resources": [
+            "tokenreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "subjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "*"
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts/token"
+          ],
+          "verbs": [
+            "create"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:kube-dns",
+        "resourceVersion": "89",
+        "uid": "968a6a08-68bd-4304-8747-5da7e59eda6b"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints",
+            "services"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:kube-scheduler",
+        "resourceVersion": "101",
+        "uid": "7e2cfc35-54ab-4df9-b5d4-4582763931c4"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resourceNames": [
+            "kube-scheduler"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leasecandidates"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "bindings",
+            "pods/binding"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "replicationcontrollers",
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps",
+            "extensions"
+          ],
+          "resources": [
+            "replicasets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "statefulsets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims",
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authentication.k8s.io"
+          ],
+          "resources": [
+            "tokenreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "subjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csinodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "volumeattachments"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csidrivers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csistoragecapacities"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "deviceclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/finalizers"
+          ],
+          "verbs": [
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims"
+          ],
+          "verbs": [
+            "create",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "devicetaintrules"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims/binding"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:kubelet-api-admin",
+        "resourceVersion": "99",
+        "uid": "5284d4ec-1a25-434e-b530-50b24655adba"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "proxy"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/log",
+            "nodes/metrics",
+            "nodes/proxy",
+            "nodes/stats"
+          ],
+          "verbs": [
+            "*"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/configz",
+            "nodes/healthz",
+            "nodes/pods"
+          ],
+          "verbs": [
+            "*"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:monitoring",
+        "resourceVersion": "73",
+        "uid": "154fd68f-abcc-4d53-b36a-ce05358443d0"
+      },
+      "rules": [
+        {
+          "nonResourceURLs": [
+            "/flagz",
+            "/healthz",
+            "/healthz/*",
+            "/livez",
+            "/livez/*",
+            "/metrics",
+            "/metrics/slis",
+            "/readyz",
+            "/readyz/*",
+            "/statusz"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/metrics"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:node",
+        "resourceVersion": "83",
+        "uid": "cb1cbf9f-efae-49ed-a5ca-5c2d236627aa"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "authentication.k8s.io"
+          ],
+          "resources": [
+            "tokenreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "localsubjectaccessreviews",
+            "subjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "create",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/status"
+          ],
+          "verbs": [
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/eviction"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "secrets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims",
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "certificatesigningrequests"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "coordination.k8s.io"
+          ],
+          "resources": [
+            "leases"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "volumeattachments"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts/token"
+          ],
+          "verbs": [
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims/status"
+          ],
+          "verbs": [
+            "get",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csidrivers"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "csinodes"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "node.k8s.io"
+          ],
+          "resources": [
+            "runtimeclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceslices"
+          ],
+          "verbs": [
+            "deletecollection"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "clustertrustbundles"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "podcertificaterequests"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:node-bootstrapper",
+        "resourceVersion": "85",
+        "uid": "d4d3e513-2fee-45ee-8981-09ac00f1ebd0"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            "certificates.k8s.io"
+          ],
+          "resources": [
+            "certificatesigningrequests"
+          ],
+          "verbs": [
+            "create",
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:node-problem-detector",
+        "resourceVersion": "84",
+        "uid": "280598e3-4681-47f8-a217-67ced571e426"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes/status"
+          ],
+          "verbs": [
+            "patch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:node-proxier",
+        "resourceVersion": "100",
+        "uid": "f0f04243-bad1-4d8d-b772-0489031c606a"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "endpoints",
+            "services"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "servicecidrs"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:persistent-volume-provisioner",
+        "resourceVersion": "90",
+        "uid": "019020ff-bea5-456f-922e-1ad456f179fa"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "create",
+            "delete",
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "storageclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "create",
+            "patch",
+            "update"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:public-info-viewer",
+        "resourceVersion": "75",
+        "uid": "7e4bec24-0ec4-4cc9-938f-c955f15e4e3a"
+      },
+      "rules": [
+        {
+          "nonResourceURLs": [
+            "/healthz",
+            "/livez",
+            "/readyz",
+            "/version",
+            "/version/"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:service-account-issuer-discovery",
+        "resourceVersion": "98",
+        "uid": "2645d6b0-cc79-4f69-b714-85fc6c1b6281"
+      },
+      "rules": [
+        {
+          "nonResourceURLs": [
+            "/.well-known/openid-configuration",
+            "/.well-known/openid-configuration/",
+            "/openid/v1/jwks",
+            "/openid/v1/jwks/"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:08Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults"
+        },
+        "name": "system:volume-scheduler",
+        "resourceVersion": "93",
+        "uid": "da1819b1-e7b2-4d8f-9dea-95938ace60be"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "storageclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "patch",
+            "update",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "aggregationRule": {
+        "clusterRoleSelectors": [
+          {
+            "matchLabels": {
+              "rbac.authorization.k8s.io/aggregate-to-view": "true"
+            }
+          }
+        ]
+      },
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRole",
+      "metadata": {
+        "annotations": {
+          "rbac.authorization.kubernetes.io/autoupdate": "true"
+        },
+        "creationTimestamp": "2026-08-28T15:51:07Z",
+        "labels": {
+          "kubernetes.io/bootstrapping": "rbac-defaults",
+          "rbac.authorization.k8s.io/aggregate-to-edit": "true"
+        },
+        "name": "view",
+        "resourceVersion": "398",
+        "uid": "1a1cc44f-5bed-4d47-be4a-3b85ba4c6a58"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "endpoints",
+            "persistentvolumeclaims",
+            "persistentvolumeclaims/status",
+            "pods",
+            "replicationcontrollers",
+            "replicationcontrollers/scale",
+            "serviceaccounts",
+            "services",
+            "services/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "bindings",
+            "limitranges",
+            "namespaces/status",
+            "pods/log",
+            "pods/status",
+            "replicationcontrollers/status",
+            "resourcequotas",
+            "resourcequotas/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "",
+            "events.k8s.io"
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "controllerrevisions",
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "statefulsets",
+            "statefulsets/scale",
+            "statefulsets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "autoscaling"
+          ],
+          "resources": [
+            "horizontalpodautoscalers",
+            "horizontalpodautoscalers/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "cronjobs",
+            "cronjobs/status",
+            "jobs",
+            "jobs/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "extensions"
+          ],
+          "resources": [
+            "daemonsets",
+            "daemonsets/status",
+            "deployments",
+            "deployments/scale",
+            "deployments/status",
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies",
+            "replicasets",
+            "replicasets/scale",
+            "replicasets/status",
+            "replicationcontrollers/scale"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets",
+            "poddisruptionbudgets/status"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "ingresses",
+            "ingresses/status",
+            "networkpolicies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "resource.k8s.io"
+          ],
+          "resources": [
+            "resourceclaims",
+            "resourceclaims/status",
+            "resourceclaimtemplates"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The Deployment's pod template caps the 'server' container at memory 64Mi, but its startup command allocates roughly 200 MiB of cache (dd if=/dev/zero bs=1M count=200 held in a shell variable). The container breaches its cgroup limit during warm-up and is OOM-killed with exit code 137 before it ever begins serving, so the kubelet crash-loops it and the Deployment never reports a Ready replica, leaving the recommendations panel empty.",
+  "verdict": "confirmed"
+}

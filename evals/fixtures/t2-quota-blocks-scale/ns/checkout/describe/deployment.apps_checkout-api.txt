@@ -1,0 +1,42 @@
+Name:                   checkout-api
+Namespace:              checkout
+CreationTimestamp:      Sat, 29 Aug 2026 06:58:33 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=checkout-api
+Replicas:               6 desired | 2 updated | 2 total | 2 available | 4 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=checkout-api
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-api-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type             Status  Reason
+  ----             ------  ------
+  Available        False   MinimumReplicasUnavailable
+  ReplicaFailure   True    FailedCreate
+  Progressing      True    ReplicaSetUpdated
+OldReplicaSets:    <none>
+NewReplicaSet:     checkout-api-5f66bf789c (2/6 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  1s    deployment-controller  Scaled up replica set checkout-api-5f66bf789c from 0 to 6

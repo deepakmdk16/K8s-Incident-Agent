@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "mechanism": "Deployment fraud/fraud-scoring sets .spec.template.spec.containers[0].resources.requests.cpu to \"512\", which is 512 whole cores rather than the intended \"512m\", exceeding the 6 allocatable CPU that exist in the cluster. The scheduler therefore cannot place the pod the Deployment creates and rejects it with \"0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.\", so pod fraud/fraud-scoring-596445859d-thcdh stays Pending with PodScheduled False and the Deployment stays at ready=0/1.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

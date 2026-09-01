@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "In the Deployment orders-api, .spec.template.spec.containers[api].readinessProbe.httpGet.port is 8081 while the container serves on 8080 (its declared containerPort \"http\"), so the kubelet's readiness HTTP GET is refused at the TCP level on every attempt and both replicas produced by this Deployment hold Ready=False, leaving it at ready=0/2 indefinitely.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

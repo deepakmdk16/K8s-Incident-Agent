@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {"kind": "Deployment", "namespace": "billing", "name": "billing-api"},
+  "mechanism": "The billing-api Deployment's pod template sets DB_HOST=db-primary for its wait-for-db init container, but no Service by that name exists in the billing namespace (the database Service is postgres-primary). The init container blocks forever in its TCP wait loop, so Initialized never becomes true, the api container never starts, and the Deployment stays at 0/2 Ready with the rollout stalled.",
+  "verdict": "confirmed"
+}

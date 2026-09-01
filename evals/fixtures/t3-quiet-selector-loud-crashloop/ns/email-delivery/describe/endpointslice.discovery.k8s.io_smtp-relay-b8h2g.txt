@@ -1,0 +1,19 @@
+Name:         smtp-relay-b8h2g
+Namespace:    email-delivery
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=smtp-relay
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:06Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.136
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/smtp-relay-558df49878-4cnsm
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

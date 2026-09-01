@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:58Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "transcode-worker",
+        "namespace": "media-transcode",
+        "resourceVersion": "50985",
+        "uid": "a940cc77-8288-4b5e-80ba-d351ba9145f5"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.67",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "transcode-worker-d7bbb9c-rmqmc",
+                "namespace": "media-transcode",
+                "uid": "1a9c417b-e9ac-4c51-bd77-187f227a6029"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

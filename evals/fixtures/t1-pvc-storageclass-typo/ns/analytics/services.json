@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:09:03Z",
+        "name": "metrics-db",
+        "namespace": "analytics",
+        "resourceVersion": "57451",
+        "uid": "1c0553d4-dc78-4420-b262-86f45d7cdeab"
+      },
+      "spec": {
+        "clusterIP": "None",
+        "clusterIPs": [
+          "None"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "sql",
+            "port": 5432,
+            "protocol": "TCP",
+            "targetPort": 5432
+          }
+        ],
+        "selector": {
+          "app": "metrics-db"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

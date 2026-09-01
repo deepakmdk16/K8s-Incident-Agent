@@ -1,0 +1,6 @@
+[PAGE] SEV2 ProductPagesDegraded — shop
+Storefront product pages are timing out intermittently storewide; shoppers
+see spinner hangs and empty product grids. The storefront gateway reports
+its calls to the catalog backend are not completing. Catalog deployment
+shop/catalog reports all replicas Ready. Alert source: gateway latency
+monitor. Find the root cause and propose a remediation.

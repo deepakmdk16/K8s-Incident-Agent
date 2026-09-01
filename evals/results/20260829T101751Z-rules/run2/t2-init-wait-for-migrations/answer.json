@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "The init container does not complete, so the pod is blocked before the application container starts.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

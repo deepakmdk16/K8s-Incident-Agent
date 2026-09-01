@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {"kind": "Service", "namespace": "shop", "name": "catalog"},
+  "mechanism": "The catalog Service selects pods with label app=catalog-api, but the catalog pods are labeled app=catalog, so the selector matches zero pods and the Service's EndpointSlice is empty. With no backends behind ClusterIP 10.96.96.22:8080, kube-proxy has nothing to DNAT to and gateway connections to the catalog backend blackhole until they time out, producing storewide spinner hangs and empty product grids while the pods themselves stay Ready.",
+  "verdict": "confirmed"
+}

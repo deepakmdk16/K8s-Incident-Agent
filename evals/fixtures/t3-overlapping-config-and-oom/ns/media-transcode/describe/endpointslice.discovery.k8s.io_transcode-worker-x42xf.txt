@@ -1,0 +1,19 @@
+Name:         transcode-worker-x42xf
+Namespace:    media-transcode
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=transcode-worker
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T01:33:58Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.67
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/transcode-worker-d7bbb9c-rmqmc
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

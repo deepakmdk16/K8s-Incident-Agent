@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T02:12:44Z",
+        "name": "postgres-primary",
+        "namespace": "billing",
+        "resourceVersion": "58138",
+        "uid": "19b6b625-51d6-47c1-85d9-e6a6e535aca5"
+      },
+      "spec": {
+        "clusterIP": "10.96.16.233",
+        "clusterIPs": [
+          "10.96.16.233"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "sql",
+            "port": 5432,
+            "protocol": "TCP",
+            "targetPort": 5432
+          }
+        ],
+        "selector": {
+          "app": "postgres-primary"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

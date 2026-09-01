@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "mechanism": "Deployment fraud/fraud-scoring sets .spec.template.spec.containers[scorer].resources.requests.cpu to \"512\" \u2014 512 whole cores \u2014 where \"512m\" (0.512 core) was intended, which exceeds the cpu=6/6 capacity/allocatable of every node in the cluster. The default scheduler therefore cannot place the replica and keeps emitting FailedScheduling \"0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.\", so the Deployment stays at ready=0/1 with its replica stuck in phase Pending and PodScheduled False.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

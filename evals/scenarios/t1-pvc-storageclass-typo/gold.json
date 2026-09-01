@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t1-pvc-storageclass-typo",
+  "tier": "T1",
+  "failing_resource": {
+    "kind": "statefulset",
+    "namespace": "analytics",
+    "name": "metrics-db"
+  },
+  "fault_class": "unbound-pvc",
+  "mechanism_summary": "The metrics-db StatefulSet's volumeClaimTemplate names storageClassName fast-ssd, which does not exist on the cluster, so the PVC data-metrics-db-0 stays Pending unbound and the pod waits forever on its volume.",
+  "decisive_evidence": "PVC analytics/data-metrics-db-0 is Pending with an event naming storageclass \"fast-ssd\" not found, while `kubectl get storageclasses` shows only 'standard'; the metrics-db-0 pod is Pending on the unbound claim, and the StatefulSet spec carries storageClassName fast-ssd.",
+  "remediation_summary": "volumeClaimTemplates are immutable: delete the StatefulSet (kubectl -n analytics delete statefulset metrics-db), delete the stale Pending PVC data-metrics-db-0 (a recreated StatefulSet reuses an existing PVC by name, so the bad claim must go too), and re-apply the StatefulSet with storageClassName standard; the claim then provisions and the pod starts."
+}

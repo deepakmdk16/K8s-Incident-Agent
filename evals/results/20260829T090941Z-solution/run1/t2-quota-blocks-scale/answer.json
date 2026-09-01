@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "ResourceQuota checkout/checkout-quota sets .spec.hard.pods to \"2\" while Deployment checkout/checkout-api requests 6 replicas, so the quota admission plugin rejects every additional pod created by ReplicaSet checkout/checkout-api-5f66bf789c with `pods \"checkout-api-5f66bf789c-wj8l8\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2`. The deployment is therefore held at `2 desired | ... 2 available | 4 unavailable` with condition `ReplicaFailure True FailedCreate`, and the added capacity for the traffic spike is never created.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,51 @@
+Name:           checkout-api-5f66bf789c
+Namespace:      checkout
+Selector:       app=checkout-api,pod-template-hash=5f66bf789c
+Labels:         app=checkout-api
+                pod-template-hash=5f66bf789c
+Annotations:    deployment.kubernetes.io/desired-replicas: 6
+                deployment.kubernetes.io/max-replicas: 8
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/checkout-api
+Replicas:       2 current / 6 desired
+Pods Status:    2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=checkout-api
+           pod-template-hash=5f66bf789c
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-api-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type             Status  Reason
+  ----             ------  ------
+  ReplicaFailure   True    FailedCreate
+Events:
+  Type     Reason            Age              From                   Message
+  ----     ------            ----             ----                   -------
+  Normal   SuccessfulCreate  1s               replicaset-controller  Created pod: checkout-api-5f66bf789c-v28xx
+  Warning  FailedCreate      1s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-wj8l8" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Normal   SuccessfulCreate  1s               replicaset-controller  Created pod: checkout-api-5f66bf789c-gqzzb
+  Warning  FailedCreate      1s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-7htmh" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      1s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-gql4n" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      1s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-fd87f" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      1s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-whgqr" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      1s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-f7kvq" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      0s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-k7lxt" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      0s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-ct5r6" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      0s               replicaset-controller  Error creating: pods "checkout-api-5f66bf789c-9f5j4" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2
+  Warning  FailedCreate      0s (x4 over 0s)  replicaset-controller  (combined from similar events): Error creating: pods "checkout-api-5f66bf789c-2dgbk" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2

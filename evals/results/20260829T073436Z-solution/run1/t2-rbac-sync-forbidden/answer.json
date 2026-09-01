@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "RoleBinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "mechanism": "The RoleBinding inventory-reader-binding in namespace inventory names a nonexistent subject: .subjects[0].name is \"inventory-synk\" instead of the existing ServiceAccount \"inventory-sync\", so the Role inventory-reader (get/list on configmaps) is granted to nobody that runs. Every authorization check made under the identity inventory-sync therefore falls through to deny, and the binding continues to reference a subject that will never resolve.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

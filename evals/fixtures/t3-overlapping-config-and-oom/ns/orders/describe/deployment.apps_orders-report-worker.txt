@@ -1,0 +1,46 @@
+Name:                   orders-report-worker
+Namespace:              orders
+CreationTimestamp:      Sat, 29 Aug 2026 07:04:01 +0530
+Labels:                 app=orders-report-worker
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=orders-report-worker
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=orders-report-worker
+  Containers:
+   worker:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Limits:
+      memory:  48Mi
+    Requests:
+      cpu:        25m
+      memory:     48Mi
+    Environment:  <none>
+    Mounts:
+      /app from app (rw)
+  Volumes:
+   app:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-report-worker-app
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      False   MinimumReplicasUnavailable
+OldReplicaSets:  <none>
+NewReplicaSet:   orders-report-worker-5645b7fccf (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  51s   deployment-controller  Scaled up replica set orders-report-worker-5645b7fccf from 0 to 1

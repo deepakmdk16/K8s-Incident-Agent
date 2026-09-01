@@ -1,0 +1,35 @@
+Name:           span-collector-98dd7779b
+Namespace:      distributed-tracing
+Selector:       app=span-collector,pod-template-hash=98dd7779b
+Labels:         app=span-collector
+                pod-template-hash=98dd7779b
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/span-collector
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=span-collector
+           pod-template-hash=98dd7779b
+  Containers:
+   collector:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'span-collector started'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  34s   replicaset-controller  Created pod: span-collector-98dd7779b-xjk2q

@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {"kind": "Deployment", "namespace": "inventory", "name": "inventory-sync"},
+  "mechanism": "The inventory-sync Deployment runs under a ServiceAccount that has no Role/RoleBinding granting it read access to the inventory objects it must sync, so every API call from its sync loop is rejected with HTTP 403 forbidden. The busybox-based worker logs the denial and sleeps instead of exiting, so the pod stays 1/1 Running with 0 restarts while no inventory counts are ever written, leaving the storefront feed frozen.",
+  "verdict": "probable"
+}

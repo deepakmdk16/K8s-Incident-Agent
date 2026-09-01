@@ -1,0 +1,22 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "arm": "rules",
+  "run_id": "dbdaea101f76",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0013,
+  "paged_namespace": "shop",
+  "findings": [
+    {
+      "analyzer": "endpoints",
+      "kind": "service",
+      "namespace": "shop",
+      "name": "catalog",
+      "mechanism": "The Service selector does not match the pod labels, so its Endpoints object has no addresses.",
+      "evidence": "service catalog selects {'app': 'catalog-api'} and its Endpoints object has no subsets"
+    }
+  ],
+  "analyzers_fired": 1
+}

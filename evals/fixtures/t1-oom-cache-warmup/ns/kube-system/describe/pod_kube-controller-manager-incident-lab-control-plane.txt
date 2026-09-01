@@ -1,0 +1,97 @@
+Name:                 kube-controller-manager-incident-lab-control-plane
+Namespace:            kube-system
+Priority:             2000001000
+Priority Class Name:  system-node-critical
+Node:                 incident-lab-control-plane/172.18.0.2
+Start Time:           Fri, 28 Aug 2026 21:21:09 +0530
+Labels:               component=kube-controller-manager
+                      tier=control-plane
+Annotations:          kubernetes.io/config.hash: 35fc43345b5ca4dc8fd20e0708534e65
+                      kubernetes.io/config.mirror: 35fc43345b5ca4dc8fd20e0708534e65
+                      kubernetes.io/config.seen: 2026-08-28T15:51:09.179182298Z
+                      kubernetes.io/config.source: file
+Status:               Running
+SeccompProfile:       RuntimeDefault
+IP:                   172.18.0.2
+IPs:
+  IP:           172.18.0.2
+Controlled By:  Node/incident-lab-control-plane
+Containers:
+  kube-controller-manager:
+    Container ID:  containerd://052e839ce617e092c120621e7b22f1a657982bd1985dda520996c01678f1ee24
+    Image:         registry.k8s.io/kube-controller-manager:v1.37.0
+    Image ID:      docker.io/library/import-2026-08-26@sha256:dda35f6553455c1dde75aebfbb20759d24b7de776b884eb06415f242f276200c
+    Port:          10257/TCP (probe-port)
+    Host Port:     10257/TCP (probe-port)
+    Command:
+      kube-controller-manager
+      --allocate-node-cidrs=true
+      --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf
+      --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf
+      --bind-address=127.0.0.1
+      --client-ca-file=/etc/kubernetes/pki/ca.crt
+      --cluster-cidr=10.244.0.0/16
+      --cluster-name=incident-lab
+      --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt
+      --cluster-signing-key-file=/etc/kubernetes/pki/ca.key
+      --controllers=*,bootstrapsigner,tokencleaner
+      --kubeconfig=/etc/kubernetes/controller-manager.conf
+      --leader-elect=true
+      --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
+      --root-ca-file=/etc/kubernetes/pki/ca.crt
+      --service-account-private-key-file=/etc/kubernetes/pki/sa.key
+      --service-cluster-ip-range=10.96.0.0/16
+      --use-service-account-credentials=true
+      --enable-hostpath-provisioner=true
+    State:          Running
+      Started:      Fri, 28 Aug 2026 21:21:06 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        200m
+    Liveness:     http-get https://127.0.0.1:probe-port/healthz delay=10s timeout=15s period=10s successThreshold=1 failureThreshold=8
+    Startup:      http-get https://127.0.0.1:probe-port/healthz delay=10s timeout=15s period=10s successThreshold=1 failureThreshold=24
+    Environment:  <none>
+    Mounts:
+      /etc/ca-certificates from etc-ca-certificates (ro)
+      /etc/kubernetes/controller-manager.conf from kubeconfig (ro)
+      /etc/kubernetes/pki from k8s-certs (ro)
+      /etc/ssl/certs from ca-certs (ro)
+      /usr/local/share/ca-certificates from usr-local-share-ca-certificates (ro)
+      /usr/share/ca-certificates from usr-share-ca-certificates (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  ca-certs:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/ssl/certs
+    HostPathType:  DirectoryOrCreate
+  etc-ca-certificates:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/ca-certificates
+    HostPathType:  DirectoryOrCreate
+  k8s-certs:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/kubernetes/pki
+    HostPathType:  DirectoryOrCreate
+  kubeconfig:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/kubernetes/controller-manager.conf
+    HostPathType:  FileOrCreate
+  usr-local-share-ca-certificates:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/local/share/ca-certificates
+    HostPathType:  DirectoryOrCreate
+  usr-share-ca-certificates:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/share/ca-certificates
+    HostPathType:  DirectoryOrCreate
+QoS Class:         Burstable
+Node-Selectors:    <none>
+Tolerations:       :NoExecute op=Exists
+Events:            <none>

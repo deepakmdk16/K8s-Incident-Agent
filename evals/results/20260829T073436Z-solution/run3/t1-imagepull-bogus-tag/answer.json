@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "web",
+    "name": "storefront"
+  },
+  "mechanism": "The Deployment web/storefront has .spec.template.spec.containers[storefront].image set to \"registry.k8s.io/retail/storefront:2.4.1\", a tag the registry does not have \u2014 the kubelet's pull is rejected with \"not found\" \u2014 instead of an image reference that resolves. Its two pods are admitted and scheduled but their container never starts, staying Waiting with ErrImagePull and then ImagePullBackOff while the kubelet keeps re-pulling on a back-off, so the Deployment stays at 0/2 Ready.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

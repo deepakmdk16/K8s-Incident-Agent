@@ -1,0 +1,38 @@
+Name:         inventory-sync-scripts
+Namespace:    inventory
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+API="https://kubernetes.default.svc"
+echo "inventory-sync: starting; serviceaccount=${SYNC_SA}"
+while true; do
+  if wget -T 5 -q -O /dev/null --no-check-certificate \
+      --header "Authorization: Bearer $TOKEN" "$API/api" 2>/dev/null; then
+    echo "identity=${SYNC_SA} discovery=ok"
+  else
+    echo "identity=${SYNC_SA} discovery=FAILED (token or apiserver unreachable)"
+  fi
+  if MSG="$(wget -T 5 -O /dev/null --no-check-certificate \
+      --header "Authorization: Bearer $TOKEN" \
+      "$API/api/v1/namespaces/inventory/configmaps/inventory-sources" 2>&1)"; then
+    echo "sync ok: fetched inventory-sources"
+  else
+    echo "sync fetch error: $(echo "$MSG" | grep -i 'error\|forbidden' | head -n 1)"
+  fi
+  echo "serving stale inventory snapshot"
+  sleep 10
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

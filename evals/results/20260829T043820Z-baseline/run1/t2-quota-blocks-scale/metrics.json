@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "arm": "baseline",
+  "run_id": "6d3573f923ab",
+  "model": "claude-opus-5",
+  "input_tokens": 7371,
+  "output_tokens": 3299,
+  "cost_usd": 0.11933,
+  "duration_s": 43.47,
+  "prompt_chars": 16440,
+  "prompt_sections": 6
+}

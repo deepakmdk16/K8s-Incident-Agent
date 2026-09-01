@@ -1,0 +1,22 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "arm": "rules",
+  "run_id": "3cd53fc6627e",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.001,
+  "paged_namespace": "recs",
+  "findings": [
+    {
+      "analyzer": "oom",
+      "kind": "deployment",
+      "namespace": "recs",
+      "name": "recommendations",
+      "mechanism": "The container was killed after exceeding its memory limit.",
+      "evidence": "pod recommendations-85fd7764f4-p9rw8 container server last terminated with reason OOMKilled after 2 restarts"
+    }
+  ],
+  "analyzers_fired": 1
+}

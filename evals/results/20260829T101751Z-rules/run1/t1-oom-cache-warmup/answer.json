@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "recs",
+    "name": "recommendations"
+  },
+  "mechanism": "The container was killed after exceeding its memory limit.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

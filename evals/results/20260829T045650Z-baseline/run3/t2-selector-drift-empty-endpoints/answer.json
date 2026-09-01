@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {"kind": "Service", "namespace": "shop", "name": "catalog"},
+  "mechanism": "Service shop/catalog selects pods with label app=catalog-api, but the catalog Deployment's pods are labeled app=catalog, so no pod matches the selector and the Service's EndpointSlice is empty. Connections the storefront gateway makes to the catalog ClusterIP on 8080 have no backend to route to and stall until they time out, producing storewide product page hangs even though the catalog pods are Running and Ready.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "recs",
+    "name": "recommendations"
+  },
+  "mechanism": "In the Deployment recs/recommendations, spec.template.spec.containers[server].resources.limits.memory is 64Mi while the container's own startup command allocates a ~200 MiB cache (\"dd if=/dev/zero bs=1M count=200\"), so the container exceeds its cgroup limit mid-warmup and is OOMKilled with exit code 137 before printing \"catalog cache ready\". The kubelet restarts and re-kills it (restart count 2, BackOff), so the Deployment's single replica never becomes Ready and it reports Available=False / MinimumReplicasUnavailable.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

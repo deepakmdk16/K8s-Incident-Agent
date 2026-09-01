@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {"kind": "Deployment", "namespace": "billing", "name": "billing-api"},
+  "mechanism": "The billing-api Deployment's pod template sets DB_HOST=db-primary for its wait-for-db init container, but no Service by that name exists in the cluster; the only database Service is billing/postgres-primary. The init container's TCP poll of db-primary:5432 can never succeed, so it runs forever, Initialized stays False, the api container is pinned in PodInitializing, and the Deployment reports 0/2 Ready with Available=False.",
+  "verdict": "confirmed"
+}

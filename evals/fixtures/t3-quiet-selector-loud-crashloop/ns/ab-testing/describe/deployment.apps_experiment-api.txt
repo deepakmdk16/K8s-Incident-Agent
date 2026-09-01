@@ -1,0 +1,40 @@
+Name:                   experiment-api
+Namespace:              ab-testing
+CreationTimestamp:      Sat, 29 Aug 2026 07:44:06 +0530
+Labels:                 app=experiment-api
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=experiment-api
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=experiment-api
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'experiment-api started'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   experiment-api-787dddcc77 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  4m14s  deployment-controller  Scaled up replica set experiment-api-787dddcc77 from 0 to 1

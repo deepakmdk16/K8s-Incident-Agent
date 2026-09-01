@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.132"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "profile-api-78bcbb5655-kq9cr",
+            "namespace": "user-profiles",
+            "uid": "a3ebbc53-8058-46bb-80ef-44a4a85380bc"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:14:06Z"
+        },
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "generateName": "profile-api-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "profile-api"
+        },
+        "name": "profile-api-nkm2d",
+        "namespace": "user-profiles",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "profile-api",
+            "uid": "d50fe1f5-312f-45fa-acba-2e0e9cb808aa"
+          }
+        ],
+        "resourceVersion": "58663",
+        "uid": "2de87820-ec10-4374-9792-c83c17dc15d2"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

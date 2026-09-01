@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "failing_resource": {
+    "kind": "statefulset",
+    "namespace": "analytics",
+    "name": "metrics-db"
+  },
+  "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

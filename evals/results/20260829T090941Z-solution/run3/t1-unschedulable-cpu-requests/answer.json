@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "mechanism": "Deployment fraud/fraud-scoring sets .spec.template.spec.containers[scorer].resources.requests.cpu to \"512\" (512 whole cores) instead of \"512m\"; the only node has cpu=6/6 allocatable, so the default scheduler rejects the pod with \"0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.\" and the replica stays Pending with PodScheduled False and no node assigned, keeping the Deployment at ready=0/1.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

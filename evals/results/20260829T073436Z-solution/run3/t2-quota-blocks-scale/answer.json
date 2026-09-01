@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "The ResourceQuota checkout-quota in namespace checkout sets .spec.hard.pods to \"2\" while deployment/checkout-api asks for 6 replicas, so quota admission rejects every pod creation past the second with \"exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2\". The quota is fully consumed (used 2, hard 2) and keeps denying the ReplicaSet's repeated create attempts, holding the deployment at 2 of 6 replicas with ReplicaFailure=True/FailedCreate.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

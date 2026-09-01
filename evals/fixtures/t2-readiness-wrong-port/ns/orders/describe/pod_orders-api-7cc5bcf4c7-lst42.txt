@@ -1,0 +1,63 @@
+Name:             orders-api-7cc5bcf4c7-lst42
+Namespace:        orders
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:40:38 +0530
+Labels:           app=orders-api
+                  pod-template-hash=7cc5bcf4c7
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.122
+IPs:
+  IP:           10.244.0.122
+Controlled By:  ReplicaSet/orders-api-7cc5bcf4c7
+Containers:
+  api:
+    Container ID:  containerd://62c573438fedcc8a724d2f2e8da41399415008e53caafe782786fde899af925c
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          8080/TCP (http)
+    Host Port:     0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Sat, 29 Aug 2026 07:40:38 +0530
+    Ready:          False
+    Restart Count:  0
+    Readiness:      http-get http://:8081/ delay=0s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6p4qb (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      orders-api-scripts
+    Optional:  false
+  kube-api-access-6p4qb:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  15s               default-scheduler  Successfully assigned orders/orders-api-7cc5bcf4c7-lst42 to incident-lab-control-plane
+  Normal   Pulled     15s               kubelet            spec.containers{api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    15s               kubelet            spec.containers{api}: Container created
+  Normal   Started    15s               kubelet            spec.containers{api}: Container started
+  Warning  Unhealthy  5s (x4 over 15s)  kubelet            spec.containers{api}: Readiness probe failed: Get "http://10.244.0.122:8081/": dial tcp 10.244.0.122:8081: connect: connection refused

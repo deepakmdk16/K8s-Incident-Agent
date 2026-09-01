@@ -1,0 +1,16 @@
+Name:         orders-config
+Namespace:    orders
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+database_url:
+----
+postgres://orders@orders-db.internal:5432/orders?sslmode=disable
+
+
+BinaryData
+====
+
+Events:  <none>

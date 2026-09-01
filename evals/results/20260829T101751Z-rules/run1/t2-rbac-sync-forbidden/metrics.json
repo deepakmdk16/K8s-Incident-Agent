@@ -1,0 +1,13 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "arm": "rules",
+  "run_id": "3a524e117c34",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0008,
+  "paged_namespace": "inventory",
+  "findings": [],
+  "analyzers_fired": 0
+}

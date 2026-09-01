@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {"kind": "ResourceQuota", "namespace": "checkout", "name": "checkout-quota"},
+  "mechanism": "The checkout-quota ResourceQuota hard-limits namespace checkout to pods=2, so admission rejects every checkout-api pod creation past the second with 'exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2'. The scale-up to 6 replicas therefore added zero real capacity — only 2 pods exist and are Ready — leaving the same two replicas to absorb the full traffic spike, which drives the p99 latency SLO burn and payment-step timeouts.",
+  "verdict": "confirmed"
+}

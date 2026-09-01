@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "unknown",
+    "namespace": "inventory",
+    "name": "unknown"
+  },
+  "mechanism": "No analyzer signature matched any object in the namespace.",
+  "verdict": "inconclusive",
+  "missing_evidence": "a signature for this failure mode, which the analyzer list does not contain"
+}

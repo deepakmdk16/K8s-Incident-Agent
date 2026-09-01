@@ -1,0 +1,5 @@
+[PAGE] SEV2 BillingReleaseStalled — billing
+The billing-api release started over 20 minutes ago and the new version is
+still not live: deployment billing/billing-api reports 0/2 Ready and
+invoices are queuing unprocessed. The database tier reports healthy. Alert
+source: release watchdog. Find the root cause and propose a remediation.

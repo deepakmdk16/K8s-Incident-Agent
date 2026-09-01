@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:12:44Z"
+        },
+        "creationTimestamp": "2026-08-29T02:12:44Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "postgres-primary",
+        "namespace": "billing",
+        "resourceVersion": "58183",
+        "uid": "bf098a3e-aee0-474d-bd07-1c00b6658802"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.126",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "postgres-primary-65b8877bbf-9z42x",
+                "namespace": "billing",
+                "uid": "a2f56bba-539e-40c7-9949-0a5b46de27a9"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "sql",
+              "port": 5432,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

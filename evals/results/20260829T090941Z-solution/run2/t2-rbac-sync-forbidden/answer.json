@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "RoleBinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "mechanism": "RoleBinding inventory/inventory-reader-binding has .subjects[0].name set to \"inventory-synk\" instead of the existing ServiceAccount name \"inventory-sync\", so Role inventory/inventory-reader (get, list on configmaps) is bound to a nonexistent subject and Deployment inventory/inventory-sync's identity holds no permissions. The worker's API fetch is therefore rejected \u2014 \"sync fetch error: wget: server returned error: HTTP/1.1 403 Forbidden\" \u2014 and it logs \"serving stale inventory snapshot\" while its container stays ready.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

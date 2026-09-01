@@ -1,0 +1,122 @@
+# Scenario t2-readiness-wrong-port — fault-as-code.
+# Atom: failing readiness probe (deterministic fault roster, req 3).
+# Mechanism: orders-api serves on :8080 but its readinessProbe targets
+# :8081, so probes fail on every cycle, pods run but never become Ready,
+# the Service's Endpoints stays empty, and the checkout gateway's calls are
+# refused (the T2 distance: 5xx page at the gateway, fault is one wrong
+# port number on the backend's probe; the app itself is healthy).
+# App logic ships in ConfigMap-mounted scripts (contract rule 2).
+# Wait condition: orders-api pods Running with Ready=False AND a
+# 'Readiness probe failed' event naming :8081 AND Endpoints empty.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: orders
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-api-scripts
+  namespace: orders
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    mkdir -p /www
+    echo "orders ok" > /www/index.html
+    echo "orders-api: serving on :8080"
+    exec httpd -f -p 8080 -h /www
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-api
+  namespace: orders
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: orders-api
+  template:
+    metadata:
+      labels:
+        app: orders-api
+    spec:
+      containers:
+        - name: api
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            periodSeconds: 5
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: orders-api-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-api
+  namespace: orders
+spec:
+  selector:
+    app: orders-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: checkout-gateway-scripts
+  namespace: orders
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "gateway: starting orders poller"
+    while true; do
+      if wget -T 3 -q -O /dev/null http://orders-api.orders.svc.cluster.local:8080/ 2>/dev/null; then
+        echo "gateway: orders fetch ok"
+      else
+        echo "gateway: orders fetch FAILED (timeout or connection refused)"
+      fi
+      sleep 5
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-gateway
+  namespace: orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkout-gateway
+  template:
+    metadata:
+      labels:
+        app: checkout-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: checkout-gateway-scripts

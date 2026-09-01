@@ -1,0 +1,7 @@
+[PAGE] SEV2 CheckoutLatencySLOBurn — checkout
+Checkout p99 latency has been burning through its SLO for 25 minutes during
+a traffic spike. The checkout-api deployment in namespace checkout was
+scaled up to 6 replicas to absorb the spike, but latency has not come down
+and shoppers see slow checkouts and timeouts at the payment step.
+Alert source: checkout latency SLO monitor.
+Find the root cause and propose a remediation.

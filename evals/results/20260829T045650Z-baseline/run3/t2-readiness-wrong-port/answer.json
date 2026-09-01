@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {"kind": "Deployment", "namespace": "orders", "name": "orders-api"},
+  "mechanism": "The orders-api Deployment's pod template defines a readiness probe against http://:8081/ while the container actually listens on :8080, so every probe is refused (\"dial tcp 10.244.0.122:8081: connect: connection refused\") and both replicas remain not Ready. Because Kubernetes only adds Ready pods to a Service's ready endpoints, the orders-api Service is left with no backends, so calls to the orders backend never complete and surface as 5xx at the checkout gateway.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.126"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "postgres-primary-65b8877bbf-9z42x",
+            "namespace": "billing",
+            "uid": "a2f56bba-539e-40c7-9949-0a5b46de27a9"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:12:44Z"
+        },
+        "creationTimestamp": "2026-08-29T02:12:44Z",
+        "generateName": "postgres-primary-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "postgres-primary"
+        },
+        "name": "postgres-primary-wb2ml",
+        "namespace": "billing",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "postgres-primary",
+            "uid": "19b6b625-51d6-47c1-85d9-e6a6e535aca5"
+          }
+        ],
+        "resourceVersion": "58181",
+        "uid": "a37dcaa1-b070-4882-8df3-562c4fa16f47"
+      },
+      "ports": [
+        {
+          "name": "sql",
+          "port": 5432,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

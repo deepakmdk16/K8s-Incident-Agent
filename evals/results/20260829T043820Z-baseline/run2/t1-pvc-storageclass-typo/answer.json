@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "failing_resource": {"kind": "StatefulSet", "namespace": "analytics", "name": "metrics-db"},
+  "mechanism": "The StatefulSet's volumeClaimTemplate requests StorageClass 'fast-ssd', which does not exist in this cluster (the only provisioner running is kind's local-path-provisioner serving 'standard'). The generated PVC data-metrics-db-0 therefore can never be provisioned or bound, and the scheduler rejects metrics-db-0 with 'pod has unbound immediate PersistentVolumeClaims. not found', leaving it Pending and the StatefulSet at 0/1 Ready.",
+  "verdict": "probable"
+}

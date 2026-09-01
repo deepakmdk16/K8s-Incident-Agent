@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "arm": "baseline",
+  "run_id": "f0e100996da0",
+  "model": "claude-opus-5",
+  "input_tokens": 7476,
+  "output_tokens": 3402,
+  "cost_usd": 0.12243,
+  "duration_s": 43.72,
+  "prompt_chars": 16740,
+  "prompt_sections": 6
+}

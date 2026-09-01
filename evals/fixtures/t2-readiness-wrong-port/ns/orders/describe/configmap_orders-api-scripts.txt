@@ -1,0 +1,22 @@
+Name:         orders-api-scripts
+Namespace:    orders
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+mkdir -p /www
+echo "orders ok" > /www/index.html
+echo "orders-api: serving on :8080"
+exec httpd -f -p 8080 -h /www
+
+
+
+BinaryData
+====
+
+Events:  <none>

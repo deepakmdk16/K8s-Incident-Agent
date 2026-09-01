@@ -1,0 +1,19 @@
+Name:         push-dispatcher-7qzmm
+Namespace:    push-notifications
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=push-dispatcher
+Annotations:  <none>
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.61
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/push-dispatcher-657b86bd4d-nqzvt
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

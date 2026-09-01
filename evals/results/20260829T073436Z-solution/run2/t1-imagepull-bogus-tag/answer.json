@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "web",
+    "name": "storefront"
+  },
+  "mechanism": "The Deployment web/storefront has .spec.template.spec.containers[storefront].image set to \"registry.k8s.io/retail/storefront:2.4.1\", a tag that does not exist in the registry instead of a published tag, so the kubelet's pull is rejected with \"not found\" and both replicas sit in Waiting with ErrImagePull/ImagePullBackOff while the kubelet keeps re-pulling on back-off, leaving the Deployment at 0/2 Ready.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

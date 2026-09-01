@@ -1,0 +1,12 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "arm": "baseline",
+  "run_id": "46a91e4331b5",
+  "model": "claude-opus-5",
+  "input_tokens": 11055,
+  "output_tokens": 3149,
+  "cost_usd": 0.134,
+  "duration_s": 43.41,
+  "prompt_chars": 29469,
+  "prompt_sections": 5
+}

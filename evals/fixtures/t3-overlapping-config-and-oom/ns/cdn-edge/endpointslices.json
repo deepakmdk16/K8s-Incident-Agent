@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.54"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "edge-cache-778d9548d7-z5cnx",
+            "namespace": "cdn-edge",
+            "uid": "27c3c780-7bd5-41eb-95d3-db303641f5ae"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:56Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "generateName": "edge-cache-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "edge-cache"
+        },
+        "name": "edge-cache-fbnnd",
+        "namespace": "cdn-edge",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "edge-cache",
+            "uid": "626298f4-2a21-4844-87b0-48619ff6137c"
+          }
+        ],
+        "resourceVersion": "50791",
+        "uid": "4546d1bf-3836-4ebe-a08f-0be879089279"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

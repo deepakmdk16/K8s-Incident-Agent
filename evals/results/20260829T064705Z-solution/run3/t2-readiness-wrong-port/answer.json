@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "In Deployment orders/orders-api, .spec.template.spec.containers[api].readinessProbe.httpGet.port is 8081 while the container listens on 8080 (the declared containerPort http), so the kubelet's readiness HTTP GET to 8081 is refused (\"connect: connection refused\") and both pods report Ready=False, keeping them out of the orders-api Service endpoints.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

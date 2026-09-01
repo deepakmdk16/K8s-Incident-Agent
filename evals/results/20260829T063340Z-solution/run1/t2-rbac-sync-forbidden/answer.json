@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "RoleBinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "mechanism": "RoleBinding inventory-reader-binding in namespace inventory has .subjects[0].name set to \"inventory-synk\" instead of \"inventory-sync\", the ServiceAccount the Deployment actually runs as via .spec.template.spec.serviceAccountName. That identity therefore holds no namespace grant, and the API server rejects the worker's sync fetch with \"HTTP/1.1 403 Forbidden\", after which the worker falls back to serving the previously cached snapshot.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

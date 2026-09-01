@@ -1,0 +1,60 @@
+Name:             rates-fetcher-64c66dfb56-g5ctf
+Namespace:        currency-rates
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:03:58 +0530
+Labels:           app=rates-fetcher
+                  pod-template-hash=64c66dfb56
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.70
+IPs:
+  IP:           10.244.0.70
+Controlled By:  ReplicaSet/rates-fetcher-64c66dfb56
+Containers:
+  fetcher:
+    Container ID:  containerd://d05fbde77e038b4d5c164f9f507e4f8b40a3feffb4ed522bfe512aa076320f2e
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'rates-fetcher started'; exec sleep 2147483647
+    State:          Running
+      Started:      Sat, 29 Aug 2026 07:03:58 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-n29qf (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-n29qf:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  29s   default-scheduler  Successfully assigned currency-rates/rates-fetcher-64c66dfb56-g5ctf to incident-lab-control-plane
+  Normal  Pulled     29s   kubelet            spec.containers{fetcher}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    29s   kubelet            spec.containers{fetcher}: Container created
+  Normal  Started    29s   kubelet            spec.containers{fetcher}: Container started

@@ -1,0 +1,123 @@
+# Scenario t2-rbac-sync-forbidden — fault-as-code.
+# Atom: RBAC denial (deterministic fault roster, req 3).
+# Mechanism: RoleBinding inventory-reader-binding's subject names
+# ServiceAccount 'inventory-synk' — a typo; no such SA exists — so the real
+# worker SA 'inventory-sync' is never bound to the inventory-reader Role and
+# its API reads return 403. The worker does NOT crash: it logs the denial
+# and keeps serving a stale snapshot (the T2 distance: a freshness page, a
+# quiet permissions typo, zero workload events). The typo'd subject being
+# NONEXISTENT makes the binding the only defensible fix (red-team: if it
+# named a real SA, changing the pod's serviceAccountName would be equally
+# valid and exact-match gold a coin flip).
+# The worker's discovery probe (GET /api, granted to all authenticated
+# subjects via system:discovery) proves in-log that the token header is
+# actually sent: an anonymous/mis-built request would fail discovery too,
+# and fixing the binding would not recover (red-team).
+# Wait condition: worker log contains BOTH 'discovery=ok' and '403
+# Forbidden'. See wait.sh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: inventory
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: inventory-sync
+  namespace: inventory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-sources
+  namespace: inventory
+data:
+  warehouse_feed_url: "http://warehouse-feed.internal:8080/stock"
+  refresh_seconds: "30"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: inventory-reader
+  namespace: inventory
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: inventory-reader-binding
+  namespace: inventory
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: inventory-reader
+subjects:
+  - kind: ServiceAccount
+    name: inventory-synk
+    namespace: inventory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-sync-scripts
+  namespace: inventory
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+    API="https://kubernetes.default.svc"
+    echo "inventory-sync: starting; serviceaccount=${SYNC_SA}"
+    while true; do
+      if wget -T 5 -q -O /dev/null --no-check-certificate \
+          --header "Authorization: Bearer $TOKEN" "$API/api" 2>/dev/null; then
+        echo "identity=${SYNC_SA} discovery=ok"
+      else
+        echo "identity=${SYNC_SA} discovery=FAILED (token or apiserver unreachable)"
+      fi
+      if MSG="$(wget -T 5 -O /dev/null --no-check-certificate \
+          --header "Authorization: Bearer $TOKEN" \
+          "$API/api/v1/namespaces/inventory/configmaps/inventory-sources" 2>&1)"; then
+        echo "sync ok: fetched inventory-sources"
+      else
+        echo "sync fetch error: $(echo "$MSG" | grep -i 'error\|forbidden' | head -n 1)"
+      fi
+      echo "serving stale inventory snapshot"
+      sleep 10
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-sync
+  namespace: inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-sync
+  template:
+    metadata:
+      labels:
+        app: inventory-sync
+    spec:
+      serviceAccountName: inventory-sync
+      containers:
+        - name: sync
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          env:
+            - name: SYNC_SA
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: inventory-sync-scripts

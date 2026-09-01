@@ -1,0 +1,139 @@
+{
+  "arm": "baseline",
+  "runs": 3,
+  "started_utc": "20260829T045650Z",
+  "model_pinned": "claude-opus-5",
+  "sampling": "no sampling parameters (removed on the pinned model); replicate runs instead",
+  "pooled": {
+    "overall": {
+      "correct": 30,
+      "cases": 36
+    },
+    "by_tier": {
+      "T1": {
+        "correct": 15,
+        "cases": 15
+      },
+      "T2": {
+        "correct": 10,
+        "cases": 15
+      },
+      "T3": {
+        "correct": 5,
+        "cases": 6
+      }
+    },
+    "by_verdict": {
+      "confirmed": {
+        "correct": 30,
+        "cases": 33
+      },
+      "probable": {
+        "correct": 0,
+        "cases": 3
+      }
+    },
+    "confirmed_wrong": 3
+  },
+  "per_run": {
+    "1": {
+      "overall": {
+        "correct": 10,
+        "cases": 12
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 5,
+          "cases": 5
+        },
+        "T2": {
+          "correct": 3,
+          "cases": 5
+        },
+        "T3": {
+          "correct": 2,
+          "cases": 2
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 10,
+          "cases": 11
+        },
+        "probable": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 1
+    },
+    "2": {
+      "overall": {
+        "correct": 10,
+        "cases": 12
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 5,
+          "cases": 5
+        },
+        "T2": {
+          "correct": 3,
+          "cases": 5
+        },
+        "T3": {
+          "correct": 2,
+          "cases": 2
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 10,
+          "cases": 11
+        },
+        "probable": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 1
+    },
+    "3": {
+      "overall": {
+        "correct": 10,
+        "cases": 12
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 5,
+          "cases": 5
+        },
+        "T2": {
+          "correct": 4,
+          "cases": 5
+        },
+        "T3": {
+          "correct": 1,
+          "cases": 2
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 10,
+          "cases": 11
+        },
+        "probable": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 1
+    }
+  },
+  "totals": {
+    "input_tokens": 237141,
+    "output_tokens": 119972,
+    "cost_usd": 4.185,
+    "cases_without_measured_cost": 0
+  }
+}

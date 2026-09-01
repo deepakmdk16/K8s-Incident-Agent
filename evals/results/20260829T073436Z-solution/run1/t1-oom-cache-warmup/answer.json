@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "recs",
+    "name": "recommendations"
+  },
+  "mechanism": "The Deployment recs/recommendations declares .spec.template.spec.containers[server].resources.limits.memory = 64Mi while the same container's command allocates a ~200 MiB cache (\"dd if=/dev/zero bs=1M count=200\") at startup; the allocation breaches the cgroup limit and the container is OOMKilled (exit code 137) during warm-up, so the container never passes its cache-warming step, is repeatedly restarted into CrashLoopBackOff, and the Deployment reports 0/1 available. The limit must be at least the ~200 MiB the warm-up needs (e.g. 256Mi).",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

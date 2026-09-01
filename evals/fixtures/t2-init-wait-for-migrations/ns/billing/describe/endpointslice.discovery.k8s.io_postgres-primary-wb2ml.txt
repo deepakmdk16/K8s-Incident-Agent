@@ -1,0 +1,19 @@
+Name:         postgres-primary-wb2ml
+Namespace:    billing
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=postgres-primary
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:12:44Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  sql   5432  TCP
+Endpoints:
+  - Addresses:  10.244.0.126
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/postgres-primary-65b8877bbf-9z42x
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

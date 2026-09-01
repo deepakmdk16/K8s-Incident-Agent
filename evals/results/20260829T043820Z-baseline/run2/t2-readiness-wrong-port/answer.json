@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {"kind": "Deployment", "namespace": "orders", "name": "orders-api"},
+  "mechanism": "The orders-api Deployment's pod template defines a readiness probe against http://:8081/ while the container declares and actually listens on port 8080, so every probe fails with 'connection refused' and no replica ever becomes Ready. With 0/2 Ready pods, the orders-api Service has no endpoints, so requests to the orders backend never reach a pod and fail at submission.",
+  "verdict": "confirmed"
+}

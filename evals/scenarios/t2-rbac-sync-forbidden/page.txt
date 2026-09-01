@@ -1,0 +1,5 @@
+[PAGE] SEV3 InventoryCountsStale — inventory
+Storefront inventory counts have not updated for over 30 minutes; sold-out
+items still show as in stock and merchandising reports the feed is frozen.
+The inventory-sync worker in namespace inventory is running. Alert source:
+data-freshness monitor. Find the root cause and propose a remediation.

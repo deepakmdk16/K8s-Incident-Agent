@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {"kind": "Deployment", "namespace": "fraud", "name": "fraud-scoring"},
+  "mechanism": "The fraud-scoring Deployment's pod template sets the scorer container's CPU request to `512` (512 whole cores, almost certainly a typo for `512m`), which exceeds the allocatable CPU of the cluster's only node. The scheduler cannot place the pod on any node and rejects it with `0/1 nodes are available: 1 Insufficient cpu`, so the pod stays Pending with no node assigned, the container never starts, and the Deployment remains 0/1 available, emitting no fraud scores.",
+  "verdict": "confirmed"
+}

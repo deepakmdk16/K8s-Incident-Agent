@@ -1,0 +1,24 @@
+Name:         report-generator-scripts
+Namespace:    analytics-batch
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+[ -n "${EXPORT_BUCKET:-}" ] || {
+  echo "FATAL: EXPORT_BUCKET not configured; nightly report export cannot start"
+  exit 1
+}
+echo "report-generator: exporting nightly reports to ${EXPORT_BUCKET}"
+while true; do echo "report-generator: idle until next export window"; sleep 60; done
+
+
+
+BinaryData
+====
+
+Events:  <none>

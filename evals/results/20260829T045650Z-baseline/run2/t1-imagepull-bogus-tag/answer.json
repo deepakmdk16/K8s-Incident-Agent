@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {"kind": "Deployment", "namespace": "web", "name": "storefront"},
+  "mechanism": "The Deployment's pod template references registry.k8s.io/retail/storefront:2.4.1, a tag that does not exist in the registry, so containerd fails at reference resolution with 'code = NotFound ... not found'. The storefront container is therefore never created (empty Container ID, 0 restarts) and both replicas stay in ImagePullBackOff with Ready=False, leaving the Deployment at 0/2 Ready and Available=False.",
+  "verdict": "confirmed"
+}

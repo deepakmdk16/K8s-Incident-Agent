@@ -1,0 +1,6 @@
+[PAGE] SEV1 OrderSubmit5xx — orders
+Storefront checkout is unable to place orders: POST /api/orders returns
+502/503 for most customers and checkout conversion is dropping sharply.
+Deployment orders/orders-api has reported 0/2 Ready for over 20 minutes,
+and the gateway shows no healthy upstream for the order-submission service.
+Find the root cause and propose a remediation.

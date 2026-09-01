@@ -1,0 +1,6 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "failing_resource": {"kind": "Deployment", "namespace": "orders", "name": "orders-api"},
+  "mechanism": "The orders-api pod template injects DATABASE_URL via configMapKeyRef to key 'db_url' in ConfigMap orders/orders-config with Optional: false, but that key does not exist, so kubelet fails env resolution before container creation and both replicas sit in CreateContainerConfigError, never starting. Because neither pod ever becomes Ready, the orders-api Service has zero endpoints, leaving the gateway with no healthy upstream and returning 502/503 for POST /api/orders.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Full checkpoints gate before anything leaves this machine.
+set -u
+ROOT="$(git rev-parse --show-toplevel)"
+bash "$ROOT/scripts/checkpoints.sh" || {
+  echo "pre-push: checkpoints failed — push blocked. Fix or (deliberately) push with --no-verify." >&2
+  exit 1
+}

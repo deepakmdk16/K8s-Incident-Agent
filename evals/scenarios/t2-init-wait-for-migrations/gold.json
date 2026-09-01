@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-init-wait-for-migrations",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "fault_class": "init-container-failure",
+  "mechanism_summary": "The billing-api pods' wait-for-db init container polls a database host named db-primary (its DB_HOST env), but the database service is actually named postgres-primary, so the init wait loop never succeeds and both pods stay stuck at Init:0/1.",
+  "decisive_evidence": "Both billing-api pods held at Init:0/1 with the wait-for-db init container Running (restartCount 0, no failure events) and its logs repeating 'waiting for db-primary:5432'; the namespace's service list shows postgres-primary (healthy, endpoints populated) and no db-primary — the name diff between the init container's DB_HOST and the real Service is the fault.",
+  "remediation_summary": "Correct the init container's DB_HOST on the billing-api deployment from db-primary to postgres-primary — kubectl -n billing patch deployment billing-api --type=json -p '[{\"op\":\"replace\",\"path\":\"/spec/template/spec/initContainers/0/env/0/value\",\"value\":\"postgres-primary\"}]' — the replacement pods' init check succeeds immediately and the rollout completes."
+}

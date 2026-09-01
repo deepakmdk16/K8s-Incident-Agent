@@ -1,0 +1,19 @@
+Name:         webhook-relay-p8zv9
+Namespace:    webhooks
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=webhook-relay
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T01:33:58Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.69
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/webhook-relay-5449d69858-8lg7t
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

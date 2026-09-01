@@ -1,0 +1,36 @@
+Name:           storefront-gateway-6785fd7b5d
+Namespace:      shop
+Selector:       app=storefront-gateway,pod-template-hash=6785fd7b5d
+Labels:         app=storefront-gateway
+                pod-template-hash=6785fd7b5d
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/storefront-gateway
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=storefront-gateway
+           pod-template-hash=6785fd7b5d
+  Containers:
+   gateway:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          storefront-gateway-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  16s   replicaset-controller  Created pod: storefront-gateway-6785fd7b5d-cq9bt

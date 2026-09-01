@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "In Deployment billing/billing-api, .spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value is \"db-primary\", but the only database Service in namespace billing is \"postgres-primary\"; the init container's script polls db-primary:5432, that name has no Service to resolve to, so every connection attempt fails and the init container never exits 0, leaving each pod with Initialized=False.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

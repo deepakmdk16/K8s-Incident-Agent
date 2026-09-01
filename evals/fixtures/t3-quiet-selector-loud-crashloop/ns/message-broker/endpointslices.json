@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.131"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "queue-server-5c879fdf4-tcvls",
+            "namespace": "message-broker",
+            "uid": "39c49faa-1169-4d04-be99-8b3d7664bed8"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:14:06Z"
+        },
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "generateName": "queue-server-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "queue-server"
+        },
+        "name": "queue-server-scc68",
+        "namespace": "message-broker",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "queue-server",
+            "uid": "1f789545-6eda-42a4-b2d0-4d364b1f7cb6"
+          }
+        ],
+        "resourceVersion": "58675",
+        "uid": "16d22515-3437-4369-9598-d1f1257a5f9e"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

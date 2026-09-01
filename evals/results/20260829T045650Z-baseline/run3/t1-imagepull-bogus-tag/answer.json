@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {"kind": "Deployment", "namespace": "web", "name": "storefront"},
+  "mechanism": "The storefront Deployment's pod template pins image registry.k8s.io/retail/storefront:2.4.1, a reference that does not exist in the registry; the kubelet's pull fails with 'code = NotFound ... failed to resolve reference ... not found' and backs off. Because no container image can be obtained, neither replica's container ever starts, so both pods sit in ImagePullBackOff with empty Container IDs and the Deployment reports 0/2 Ready with Available=False (MinimumReplicasUnavailable).",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,5 @@
+[PAGE] SEV2 CheckoutWorkerDown — payments
+Deployment payments/checkout-worker has reported 0/1 Ready for over 15
+minutes. Checkout jobs are not being consumed from the queue; merchant
+checkouts time out at the payment step. Alert source: workload availability
+monitor. Find the root cause and propose a remediation.

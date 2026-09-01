@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "In Deployment orders/orders-api, .spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key is \"db_url\", but ConfigMap orders/orders-config contains only the key \"database_url\". The kubelet rejects the container configuration with \"couldn't find key db_url in ConfigMap orders/orders-config\", so both replicas stay in CreateContainerConfigError and no pod with label app=orders-api ever becomes an endpoint of Service orders-api.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,40 @@
+Name:                   partner-gateway
+Namespace:              partner-api
+CreationTimestamp:      Sat, 29 Aug 2026 07:03:55 +0530
+Labels:                 app=partner-gateway
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=partner-gateway
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=partner-gateway
+  Containers:
+   gateway:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'partner-gateway started'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   partner-gateway-cbdcb8f65 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  57s   deployment-controller  Scaled up replica set partner-gateway-cbdcb8f65 from 0 to 1

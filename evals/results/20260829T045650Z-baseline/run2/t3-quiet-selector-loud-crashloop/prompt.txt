@@ -1,0 +1,329 @@
+You are an on-call Kubernetes engineer. You just got paged:
+
+[PAGE] SEV2 SearchTimeouts — search
+Site search is timing out storewide; shoppers get "search is unavailable"
+fallbacks on every query. The web gateway reports its calls to the search
+backend are not completing. The search deployment reports all replicas
+Ready. Alert source: gateway latency monitor. Find the root cause and
+propose a remediation.
+
+You grabbed the following output from the cluster. Diagnose the root
+cause of the paged symptom from this output alone.
+
+$ kubectl get all -A
+NAMESPACE             NAME                                                        READY   STATUS             RESTARTS      AGE     IP             NODE                            NOMINATED NODE   READINESS GATES
+ab-testing            pod/experiment-api-787dddcc77-rczkh                         1/1     Running            0             4m14s   10.244.0.134   incident-lab-control-plane   <none>           <none>
+analytics-batch       pod/report-generator-646bc6f94f-sgdm2                       0/1     CrashLoopBackOff   5 (80s ago)   4m9s    10.244.0.152   incident-lab-control-plane   <none>           <none>
+asset-pipeline        pod/thumbnailer-85d4959957-nnh2b                            1/1     Running            0             4m13s   10.244.0.140   incident-lab-control-plane   <none>           <none>
+cdn-edge              pod/edge-cache-778d9548d7-x77hk                             1/1     Running            0             4m14s   10.244.0.133   incident-lab-control-plane   <none>           <none>
+currency-rates        pod/rates-fetcher-64c66dfb56-zr42r                          1/1     Running            0             4m11s   10.244.0.148   incident-lab-control-plane   <none>           <none>
+distributed-tracing   pod/span-collector-98dd7779b-jnft5                          1/1     Running            0             4m13s   10.244.0.141   incident-lab-control-plane   <none>           <none>
+email-delivery        pod/smtp-relay-558df49878-4cnsm                             1/1     Running            0             4m14s   10.244.0.136   incident-lab-control-plane   <none>           <none>
+feature-flags         pod/flag-server-546bfb8f8-2k9mn                             1/1     Running            0             4m14s   10.244.0.137   incident-lab-control-plane   <none>           <none>
+geo-routing           pod/geoip-api-779d7f574c-6w8tm                              1/1     Running            0             4m13s   10.244.0.138   incident-lab-control-plane   <none>           <none>
+internal-dns          pod/dns-forwarder-66fc5c9dd9-tp7zv                          1/1     Running            0             4m13s   10.244.0.142   incident-lab-control-plane   <none>           <none>
+kube-system           pod/coredns-559f6c778d-9sqc8                                1/1     Running            0             10h     10.244.0.3     incident-lab-control-plane   <none>           <none>
+kube-system           pod/coredns-559f6c778d-t9nfq                                1/1     Running            0             10h     10.244.0.4     incident-lab-control-plane   <none>           <none>
+kube-system           pod/etcd-incident-lab-control-plane                      1/1     Running            0             10h     172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system           pod/kindnet-88ckx                                           1/1     Running            0             10h     172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-apiserver-incident-lab-control-plane            1/1     Running            0             10h     172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-controller-manager-incident-lab-control-plane   1/1     Running            0             10h     172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-proxy-6ndq6                                        1/1     Running            0             10h     172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-scheduler-incident-lab-control-plane            1/1     Running            0             10h     172.18.0.2     incident-lab-control-plane   <none>           <none>
+local-path-storage    pod/local-path-provisioner-75f7fc7dc5-q6tkt                 1/1     Running            0             10h     10.244.0.2     incident-lab-control-plane   <none>           <none>
+log-aggregation       pod/log-shipper-598b9c9858-4kqv6                            1/1     Running            0             4m14s   10.244.0.130   incident-lab-control-plane   <none>           <none>
+loyalty-points        pod/points-engine-84666f6c5f-dzmst                          1/1     Running            0             4m12s   10.244.0.143   incident-lab-control-plane   <none>           <none>
+media-transcode       pod/transcode-worker-d7bbb9c-k84dc                          1/1     Running            0             4m12s   10.244.0.145   incident-lab-control-plane   <none>           <none>
+message-broker        pod/queue-server-5c879fdf4-tcvls                            1/1     Running            0             4m14s   10.244.0.131   incident-lab-control-plane   <none>           <none>
+partner-api           pod/partner-gateway-cbdcb8f65-g9fbj                         1/1     Running            0             4m12s   10.244.0.146   incident-lab-control-plane   <none>           <none>
+platform-metrics      pod/metrics-collector-5d66786b84-zjhcc                      1/1     Running            0             4m14s   10.244.0.129   incident-lab-control-plane   <none>           <none>
+pricing-sync          pod/price-worker-55864d8565-qkgwd                           1/1     Running            0             4m12s   10.244.0.144   incident-lab-control-plane   <none>           <none>
+push-notifications    pod/push-dispatcher-657b86bd4d-rx856                        1/1     Running            0             4m13s   10.244.0.139   incident-lab-control-plane   <none>           <none>
+search                pod/search-5478989674-6rxcp                                 1/1     Running            0             4m9s    10.244.0.150   incident-lab-control-plane   <none>           <none>
+search                pod/search-5478989674-pswt8                                 1/1     Running            0             4m9s    10.244.0.149   incident-lab-control-plane   <none>           <none>
+search                pod/web-gateway-557b9db57b-65gxl                            1/1     Running            0             4m9s    10.244.0.151   incident-lab-control-plane   <none>           <none>
+session-store         pod/session-cache-5f875fd7c7-qdnzj                          1/1     Running            0             4m14s   10.244.0.135   incident-lab-control-plane   <none>           <none>
+user-profiles         pod/profile-api-78bcbb5655-kq9cr                            1/1     Running            0             4m14s   10.244.0.132   incident-lab-control-plane   <none>           <none>
+webhooks              pod/webhook-relay-5449d69858-4q94v                          1/1     Running            0             4m12s   10.244.0.147   incident-lab-control-plane   <none>           <none>
+
+NAMESPACE             NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE     SELECTOR
+ab-testing            service/experiment-api      ClusterIP   10.96.196.102   <none>        8080/TCP                 4m14s   app=experiment-api
+asset-pipeline        service/thumbnailer         ClusterIP   10.96.25.86     <none>        8080/TCP                 4m14s   app=thumbnailer
+cdn-edge              service/edge-cache          ClusterIP   10.96.24.209    <none>        8080/TCP                 4m14s   app=edge-cache
+currency-rates        service/rates-fetcher       ClusterIP   10.96.216.177   <none>        8080/TCP                 4m14s   app=rates-fetcher
+default               service/kubernetes          ClusterIP   10.96.0.1       <none>        443/TCP                  10h     <none>
+distributed-tracing   service/span-collector      ClusterIP   10.96.144.85    <none>        8080/TCP                 4m14s   app=span-collector
+email-delivery        service/smtp-relay          ClusterIP   10.96.26.115    <none>        8080/TCP                 4m14s   app=smtp-relay
+feature-flags         service/flag-server         ClusterIP   10.96.226.58    <none>        8080/TCP                 4m14s   app=flag-server
+geo-routing           service/geoip-api           ClusterIP   10.96.17.159    <none>        8080/TCP                 4m14s   app=geoip-api
+internal-dns          service/dns-forwarder       ClusterIP   10.96.153.64    <none>        8080/TCP                 4m14s   app=dns-forwarder
+kube-system           service/kube-dns            ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP   10h     k8s-app=kube-dns
+log-aggregation       service/log-shipper         ClusterIP   10.96.72.70     <none>        8080/TCP                 4m14s   app=log-shipper
+loyalty-points        service/points-engine       ClusterIP   10.96.118.0     <none>        8080/TCP                 4m14s   app=points-engine
+media-transcode       service/transcode-worker    ClusterIP   10.96.89.32     <none>        8080/TCP                 4m14s   app=transcode-worker
+message-broker        service/queue-server        ClusterIP   10.96.242.236   <none>        8080/TCP                 4m14s   app=queue-server
+partner-api           service/partner-gateway     ClusterIP   10.96.147.10    <none>        8080/TCP                 4m14s   app=partner-gateway
+platform-metrics      service/metrics-collector   ClusterIP   10.96.7.192     <none>        8080/TCP                 4m14s   app=metrics-collector
+pricing-sync          service/price-worker        ClusterIP   10.96.140.115   <none>        8080/TCP                 4m14s   app=price-worker
+push-notifications    service/push-dispatcher     ClusterIP   10.96.232.218   <none>        8080/TCP                 4m14s   app=push-dispatcher
+search                service/search              ClusterIP   10.96.24.225    <none>        8080/TCP                 4m9s    app=search-api
+session-store         service/session-cache       ClusterIP   10.96.26.70     <none>        8080/TCP                 4m14s   app=session-cache
+user-profiles         service/profile-api         ClusterIP   10.96.108.145   <none>        8080/TCP                 4m14s   app=profile-api
+webhooks              service/webhook-relay       ClusterIP   10.96.142.211   <none>        8080/TCP                 4m14s   app=webhook-relay
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   10h   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   10h   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE             NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS               IMAGES                                                        SELECTOR
+ab-testing            deployment.apps/experiment-api           1/1     1            1           4m14s   api                      busybox:1.36                                                  app=experiment-api
+analytics-batch       deployment.apps/report-generator         0/1     1            0           4m9s    generator                busybox:1.36                                                  app=report-generator
+asset-pipeline        deployment.apps/thumbnailer              1/1     1            1           4m14s   worker                   busybox:1.36                                                  app=thumbnailer
+cdn-edge              deployment.apps/edge-cache               1/1     1            1           4m14s   cache                    busybox:1.36                                                  app=edge-cache
+currency-rates        deployment.apps/rates-fetcher            1/1     1            1           4m14s   fetcher                  busybox:1.36                                                  app=rates-fetcher
+distributed-tracing   deployment.apps/span-collector           1/1     1            1           4m14s   collector                busybox:1.36                                                  app=span-collector
+email-delivery        deployment.apps/smtp-relay               1/1     1            1           4m14s   relay                    busybox:1.36                                                  app=smtp-relay
+feature-flags         deployment.apps/flag-server              1/1     1            1           4m14s   server                   busybox:1.36                                                  app=flag-server
+geo-routing           deployment.apps/geoip-api                1/1     1            1           4m14s   api                      busybox:1.36                                                  app=geoip-api
+internal-dns          deployment.apps/dns-forwarder            1/1     1            1           4m14s   forwarder                busybox:1.36                                                  app=dns-forwarder
+kube-system           deployment.apps/coredns                  2/2     2            2           10h     coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage    deployment.apps/local-path-provisioner   1/1     1            1           10h     local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+log-aggregation       deployment.apps/log-shipper              1/1     1            1           4m14s   shipper                  busybox:1.36                                                  app=log-shipper
+loyalty-points        deployment.apps/points-engine            1/1     1            1           4m14s   engine                   busybox:1.36                                                  app=points-engine
+media-transcode       deployment.apps/transcode-worker         1/1     1            1           4m14s   worker                   busybox:1.36                                                  app=transcode-worker
+message-broker        deployment.apps/queue-server             1/1     1            1           4m14s   server                   busybox:1.36                                                  app=queue-server
+partner-api           deployment.apps/partner-gateway          1/1     1            1           4m14s   gateway                  busybox:1.36                                                  app=partner-gateway
+platform-metrics      deployment.apps/metrics-collector        1/1     1            1           4m14s   collector                busybox:1.36                                                  app=metrics-collector
+pricing-sync          deployment.apps/price-worker             1/1     1            1           4m14s   worker                   busybox:1.36                                                  app=price-worker
+push-notifications    deployment.apps/push-dispatcher          1/1     1            1           4m14s   dispatcher               busybox:1.36                                                  app=push-dispatcher
+search                deployment.apps/search                   2/2     2            2           4m9s    api                      busybox:1.36                                                  app=search
+search                deployment.apps/web-gateway              1/1     1            1           4m9s    gateway                  busybox:1.36                                                  app=web-gateway
+session-store         deployment.apps/session-cache            1/1     1            1           4m14s   cache                    busybox:1.36                                                  app=session-cache
+user-profiles         deployment.apps/profile-api              1/1     1            1           4m14s   api                      busybox:1.36                                                  app=profile-api
+webhooks              deployment.apps/webhook-relay            1/1     1            1           4m14s   relay                    busybox:1.36                                                  app=webhook-relay
+
+NAMESPACE             NAME                                                DESIRED   CURRENT   READY   AGE     CONTAINERS               IMAGES                                                        SELECTOR
+ab-testing            replicaset.apps/experiment-api-787dddcc77           1         1         1       4m14s   api                      busybox:1.36                                                  app=experiment-api,pod-template-hash=787dddcc77
+analytics-batch       replicaset.apps/report-generator-646bc6f94f         1         1         0       4m9s    generator                busybox:1.36                                                  app=report-generator,pod-template-hash=646bc6f94f
+asset-pipeline        replicaset.apps/thumbnailer-85d4959957              1         1         1       4m13s   worker                   busybox:1.36                                                  app=thumbnailer,pod-template-hash=85d4959957
+cdn-edge              replicaset.apps/edge-cache-778d9548d7               1         1         1       4m14s   cache                    busybox:1.36                                                  app=edge-cache,pod-template-hash=778d9548d7
+currency-rates        replicaset.apps/rates-fetcher-64c66dfb56            1         1         1       4m12s   fetcher                  busybox:1.36                                                  app=rates-fetcher,pod-template-hash=64c66dfb56
+distributed-tracing   replicaset.apps/span-collector-98dd7779b            1         1         1       4m13s   collector                busybox:1.36                                                  app=span-collector,pod-template-hash=98dd7779b
+email-delivery        replicaset.apps/smtp-relay-558df49878               1         1         1       4m14s   relay                    busybox:1.36                                                  app=smtp-relay,pod-template-hash=558df49878
+feature-flags         replicaset.apps/flag-server-546bfb8f8               1         1         1       4m14s   server                   busybox:1.36                                                  app=flag-server,pod-template-hash=546bfb8f8
+geo-routing           replicaset.apps/geoip-api-779d7f574c                1         1         1       4m13s   api                      busybox:1.36                                                  app=geoip-api,pod-template-hash=779d7f574c
+internal-dns          replicaset.apps/dns-forwarder-66fc5c9dd9            1         1         1       4m13s   forwarder                busybox:1.36                                                  app=dns-forwarder,pod-template-hash=66fc5c9dd9
+kube-system           replicaset.apps/coredns-559f6c778d                  2         2         2       10h     coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage    replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       10h     local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+log-aggregation       replicaset.apps/log-shipper-598b9c9858              1         1         1       4m14s   shipper                  busybox:1.36                                                  app=log-shipper,pod-template-hash=598b9c9858
+loyalty-points        replicaset.apps/points-engine-84666f6c5f            1         1         1       4m13s   engine                   busybox:1.36                                                  app=points-engine,pod-template-hash=84666f6c5f
+media-transcode       replicaset.apps/transcode-worker-d7bbb9c            1         1         1       4m12s   worker                   busybox:1.36                                                  app=transcode-worker,pod-template-hash=d7bbb9c
+message-broker        replicaset.apps/queue-server-5c879fdf4              1         1         1       4m14s   server                   busybox:1.36                                                  app=queue-server,pod-template-hash=5c879fdf4
+partner-api           replicaset.apps/partner-gateway-cbdcb8f65           1         1         1       4m12s   gateway                  busybox:1.36                                                  app=partner-gateway,pod-template-hash=cbdcb8f65
+platform-metrics      replicaset.apps/metrics-collector-5d66786b84        1         1         1       4m14s   collector                busybox:1.36                                                  app=metrics-collector,pod-template-hash=5d66786b84
+pricing-sync          replicaset.apps/price-worker-55864d8565             1         1         1       4m13s   worker                   busybox:1.36                                                  app=price-worker,pod-template-hash=55864d8565
+push-notifications    replicaset.apps/push-dispatcher-657b86bd4d          1         1         1       4m13s   dispatcher               busybox:1.36                                                  app=push-dispatcher,pod-template-hash=657b86bd4d
+search                replicaset.apps/search-5478989674                   2         2         2       4m9s    api                      busybox:1.36                                                  app=search,pod-template-hash=5478989674
+search                replicaset.apps/web-gateway-557b9db57b              1         1         1       4m9s    gateway                  busybox:1.36                                                  app=web-gateway,pod-template-hash=557b9db57b
+session-store         replicaset.apps/session-cache-5f875fd7c7            1         1         1       4m14s   cache                    busybox:1.36                                                  app=session-cache,pod-template-hash=5f875fd7c7
+user-profiles         replicaset.apps/profile-api-78bcbb5655              1         1         1       4m14s   api                      busybox:1.36                                                  app=profile-api,pod-template-hash=78bcbb5655
+webhooks              replicaset.apps/webhook-relay-5449d69858            1         1         1       4m12s   relay                    busybox:1.36                                                  app=webhook-relay,pod-template-hash=5449d69858
+
+$ kubectl describe pod/report-generator-646bc6f94f-sgdm2 -n analytics-batch
+Name:             report-generator-646bc6f94f-sgdm2
+Namespace:        analytics-batch
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:44:11 +0530
+Labels:           app=report-generator
+                  pod-template-hash=646bc6f94f
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.152
+IPs:
+  IP:           10.244.0.152
+Controlled By:  ReplicaSet/report-generator-646bc6f94f
+Containers:
+  generator:
+    Container ID:  containerd://0c0ee2abd31bc351e8cba70dac9f8e1753547ca860e323c958baf3178aa46628
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sat, 29 Aug 2026 07:47:00 +0530
+      Finished:     Sat, 29 Aug 2026 07:47:00 +0530
+    Ready:          False
+    Restart Count:  5
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qhw7c (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      report-generator-scripts
+    Optional:  false
+  kube-api-access-qhw7c:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  4m10s               default-scheduler  Successfully assigned analytics-batch/report-generator-646bc6f94f-sgdm2 to incident-lab-control-plane
+  Normal   Pulled     81s (x6 over 4m9s)  kubelet            spec.containers{generator}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    81s (x6 over 4m9s)  kubelet            spec.containers{generator}: Container created
+  Normal   Started    81s (x6 over 4m9s)  kubelet            spec.containers{generator}: Container started
+  Warning  BackOff    4s (x6 over 4m8s)   kubelet            spec.containers{generator}: Back-off restarting failed container generator in pod report-generator-646bc6f94f-sgdm2_analytics-batch(271b6fa6-de7e-4c0a-a3d2-094a64e3993e)
+
+$ kubectl logs report-generator-646bc6f94f-sgdm2 -c generator -n analytics-batch --tail=50
+2026-08-29T02:17:00.968798402Z FATAL: EXPORT_BUCKET not configured; nightly report export cannot start
+
+$ kubectl logs report-generator-646bc6f94f-sgdm2 -c generator -n analytics-batch --previous --tail=50
+2026-08-29T02:17:00.968798402Z FATAL: EXPORT_BUCKET not configured; nightly report export cannot start
+
+$ kubectl describe deployment.apps/report-generator -n analytics-batch
+Name:                   report-generator
+Namespace:              analytics-batch
+CreationTimestamp:      Sat, 29 Aug 2026 07:44:11 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=report-generator
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=report-generator
+  Containers:
+   generator:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          report-generator-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      False   MinimumReplicasUnavailable
+OldReplicaSets:  <none>
+NewReplicaSet:   report-generator-646bc6f94f (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  4m11s  deployment-controller  Scaled up replica set report-generator-646bc6f94f from 0 to 1
+
+$ kubectl describe replicaset.apps/report-generator-646bc6f94f -n analytics-batch
+Name:           report-generator-646bc6f94f
+Namespace:      analytics-batch
+Selector:       app=report-generator,pod-template-hash=646bc6f94f
+Labels:         app=report-generator
+                pod-template-hash=646bc6f94f
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/report-generator
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=report-generator
+           pod-template-hash=646bc6f94f
+  Containers:
+   generator:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          report-generator-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  4m11s  replicaset-controller  Created pod: report-generator-646bc6f94f-sgdm2
+
+The case id for your answer is "t3-quiet-selector-loud-crashloop".
+
+Write your findings as a markdown report with EXACTLY these four sections:
+
+## Root cause
+The failing resource and the causal mechanism, stated plainly.
+
+## Evidence chain
+Every claim cites the exact piece of the provided output it came from (name the
+source, e.g. "describe of pod X", "log line: ...", quote the relevant line).
+
+## Investigation ledger
+Each alternative explanation you considered and ruled out, with the evidence
+that ruled it out. If you considered only one explanation, say so.
+
+## Verification recipe
+The 2-3 exact commands a human runs to independently confirm the root cause in
+under 2 minutes.
+
+Verdict rules (use the word, never a number — numeric self-confidence such as
+"90% sure" is forbidden anywhere in the report):
+- "confirmed": you have direct causal evidence linking mechanism to symptom.
+- "probable": evidence is consistent but indirect.
+- "inconclusive": name the additional evidence that would settle it.
+
+After the report, output the machine-read answer as the LAST fenced code block,
+exactly this shape:
+
+```json
+{
+  "case_id": "<case id, echoed verbatim>",
+  "failing_resource": {"kind": "...", "namespace": "...", "name": "..."},
+  "mechanism": "1-3 sentences: the causal mechanism of the paged symptom only.",
+  "verdict": "confirmed | probable | inconclusive",
+  "missing_evidence": "required iff verdict is inconclusive: what would settle it"
+}
+```
+
+`failing_resource` is the resource whose spec must CHANGE to fix the incident
+(e.g. the owning workload, not the crashing pod it produced). In `mechanism`,
+never mention any workload or mechanism other than the failing one — even to
+rule it out; ruled-out alternatives belong in the Investigation ledger.

@@ -1,0 +1,92 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "1",
+          "deployment.kubernetes.io/max-replicas": "2",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T02:14:07Z",
+        "generation": 1,
+        "labels": {
+          "app": "push-dispatcher",
+          "pod-template-hash": "657b86bd4d"
+        },
+        "name": "push-dispatcher-657b86bd4d",
+        "namespace": "push-notifications",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "push-dispatcher",
+            "uid": "3b42d641-ebdd-42c7-b6cb-9c3b03b3cbd7"
+          }
+        ],
+        "resourceVersion": "58783",
+        "uid": "9ff52483-15f9-49eb-8d01-787098ba2795"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "push-dispatcher",
+            "pod-template-hash": "657b86bd4d"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "push-dispatcher",
+              "pod-template-hash": "657b86bd4d"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "-c",
+                  "echo 'push-dispatcher started'; exec sleep 2147483647"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "dispatcher",
+                "resources": {
+                  "requests": {
+                    "cpu": "10m",
+                    "memory": "16Mi"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File"
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "fullyLabeledReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

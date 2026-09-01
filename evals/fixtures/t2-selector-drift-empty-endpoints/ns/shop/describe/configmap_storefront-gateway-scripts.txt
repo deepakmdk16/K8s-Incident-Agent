@@ -1,0 +1,27 @@
+Name:         storefront-gateway-scripts
+Namespace:    shop
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "gateway: starting catalog poller"
+while true; do
+  if wget -T 3 -q -O /dev/null http://catalog.shop.svc.cluster.local:8080/ 2>/dev/null; then
+    echo "gateway: catalog fetch ok"
+  else
+    echo "gateway: catalog fetch FAILED (timeout or connection refused)"
+  fi
+  sleep 5
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

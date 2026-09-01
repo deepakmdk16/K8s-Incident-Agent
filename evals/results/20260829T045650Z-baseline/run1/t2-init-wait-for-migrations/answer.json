@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {"kind": "Deployment", "namespace": "billing", "name": "billing-api"},
+  "mechanism": "The billing-api Deployment's pod template sets DB_HOST=db-primary for its wait-for-db init container, but the database Service in the billing namespace is named postgres-primary, so db-primary resolves to nothing. The init container loops forever on 'waiting for db-primary:5432', the pods never reach Initialized, the api container is never started, and the Deployment reports 0/2 Ready with the rollout stalled.",
+  "verdict": "confirmed"
+}

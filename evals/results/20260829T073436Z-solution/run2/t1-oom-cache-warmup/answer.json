@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "recs",
+    "name": "recommendations"
+  },
+  "mechanism": "The Deployment recs/recommendations sets .spec.template.spec.containers[server].resources.limits.memory to 64Mi while that same container's startup command allocates a 200 MiB cache string (\"dd if=/dev/zero bs=1M count=200\"); the container's cgroup limit is breached during warmup, so the container is OOMKilled with exit code 137 after logging only \"warming catalog cache\", and the kubelet's restart/BackOff cycle repeats the kill, leaving the Deployment at 0/1 available.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

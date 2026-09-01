@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.67"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "transcode-worker-d7bbb9c-rmqmc",
+            "namespace": "media-transcode",
+            "uid": "1a9c417b-e9ac-4c51-bd77-187f227a6029"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:58Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "generateName": "transcode-worker-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "transcode-worker"
+        },
+        "name": "transcode-worker-x42xf",
+        "namespace": "media-transcode",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "transcode-worker",
+            "uid": "5b06435d-1283-44ad-b6b4-c1e7bb179eeb"
+          }
+        ],
+        "resourceVersion": "50984",
+        "uid": "2ae4163f-728c-420d-bb50-9db472fe07a2"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

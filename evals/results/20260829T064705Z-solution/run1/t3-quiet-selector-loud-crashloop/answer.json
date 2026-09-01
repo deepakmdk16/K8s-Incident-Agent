@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "search",
+    "name": "search"
+  },
+  "mechanism": "Service search in namespace search has .spec.selector = {\"app\": \"search-api\"}, while the pods created by deployment/search are labelled app=search, so the selector matches zero pods and the endpoint controller writes an Endpoints object with no addresses; connections to the search ClusterIP:8080 therefore hit a service with no backend and are refused/black-holed by kube-proxy.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

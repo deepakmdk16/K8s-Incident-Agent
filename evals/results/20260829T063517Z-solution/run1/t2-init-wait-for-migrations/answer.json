@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "Deployment billing/billing-api sets .spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value to \"db-primary\", a hostname for which no Service object exists in the billing namespace, so the init container's connection attempts to db-primary:5432 fail on unresolvable DNS. The failed probe keeps the init container from exiting 0, so kubelet holds the pod at Initialized=False and refuses to start the api container (PodInitializing), and the Deployment is admitted 0 of 2 ready replicas.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

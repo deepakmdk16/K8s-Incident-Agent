@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {"kind": "Service", "namespace": "shop", "name": "catalog"},
+  "mechanism": "Service shop/catalog has selector app=catalog-api while the catalog pods are labelled app=catalog, so the selector matches zero pods and the Service's EndpointSlice is empty. The storefront gateway resolves the ClusterIP 10.96.96.22 but kube-proxy has no backend to forward to, so its catalog calls hang until timeout and product pages render empty or spin.",
+  "verdict": "confirmed"
+}

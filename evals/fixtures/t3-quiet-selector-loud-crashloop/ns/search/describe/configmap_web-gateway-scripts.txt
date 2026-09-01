@@ -1,0 +1,27 @@
+Name:         web-gateway-scripts
+Namespace:    search
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "gateway: starting search poller"
+while true; do
+  if wget -T 3 -q -O /dev/null http://search.search.svc.cluster.local:8080/ 2>/dev/null; then
+    echo "gateway: search fetch ok"
+  else
+    echo "gateway: search fetch FAILED (timeout or connection refused)"
+  fi
+  sleep 5
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

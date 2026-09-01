@@ -1,0 +1,7 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {"kind": "Deployment", "namespace": "inventory", "name": "inventory-sync"},
+  "mechanism": "The inventory-sync Deployment runs under a ServiceAccount that has no RBAC role bound to it for the resources the sync loop must read and update, so every API call it makes is rejected with 403 Forbidden. The worker swallows the denial and keeps retrying, so the container remains 1/1 Running with 0 restarts while publishing no new inventory counts, leaving the storefront feed frozen for over 30 minutes.",
+  "verdict": "probable",
+  "missing_evidence": "A pod log line or `kubectl auth can-i --list --as=system:serviceaccount:inventory:<sa>` output showing the Forbidden/denied verbs for the worker's ServiceAccount would move this to confirmed."
+}

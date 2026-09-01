@@ -1,0 +1,5 @@
+[PAGE] SEV2 AnalyticsDBDown — analytics
+StatefulSet analytics/metrics-db has reported 0/1 Ready for over 20 minutes
+after this morning's redeploy. Analytics dashboards are empty and report
+generation has stopped. Alert source: workload availability monitor.
+Find the root cause and propose a remediation.

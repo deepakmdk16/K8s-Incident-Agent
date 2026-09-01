@@ -1,0 +1,22 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "arm": "rules",
+  "run_id": "56841ab08159",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0007,
+  "paged_namespace": "payments",
+  "findings": [
+    {
+      "analyzer": "crashloop",
+      "kind": "deployment",
+      "namespace": "payments",
+      "name": "checkout-worker",
+      "mechanism": "The application container exits with a fatal error immediately at startup, so the pod enters a restart back-off.",
+      "evidence": "pod checkout-worker-66bfcdfc47-d9gdj container worker is waiting with reason CrashLoopBackOff"
+    }
+  ],
+  "analyzers_fired": 1
+}

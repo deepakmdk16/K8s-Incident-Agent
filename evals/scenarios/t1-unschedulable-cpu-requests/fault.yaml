@@ -1,0 +1,47 @@
+# Scenario t1-unschedulable-cpu-requests — fault-as-code.
+# Atom: pod-unschedulable (deterministic fault roster, decision doc req 3).
+# Mechanism: the scorer container requests cpu "512" — 512 whole cores, far
+# beyond any real host's allocatable cpu (host-independent by construction;
+# the kind node has 6) — so the scheduler can place the pod nowhere and it
+# stays Pending with FailedScheduling "Insufficient cpu". The container
+# command is a plain serve loop that runs fine once the request is corrected
+# (counterfactual rule 1); busybox:1.36 is node-cached, so recovery pulls
+# nothing.
+# Wait condition: pod for app=fraud-scoring in fraud has PodScheduled=False
+# with reason Unschedulable AND a FailedScheduling event whose message
+# mentions "Insufficient cpu".
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fraud
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-scoring
+  namespace: fraud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fraud-scoring
+  template:
+    metadata:
+      labels:
+        app: fraud-scoring
+    spec:
+      containers:
+        - name: scorer
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              echo "fraud-scoring: score server starting"
+              while true; do
+                echo "fraud-scoring: scored transaction batch"
+                sleep 10
+              done
+          resources:
+            requests:
+              cpu: "512"

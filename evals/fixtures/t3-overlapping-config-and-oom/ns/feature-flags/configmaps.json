@@ -1,0 +1,42 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "data": {
+        "default_state": "off",
+        "refresh_interval_seconds": "60"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "name": "flag-server-config",
+        "namespace": "feature-flags",
+        "resourceVersion": "50589",
+        "uid": "e1022a7c-64e2-49e2-a3ed-79bea67effed"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIDBTCCAe2gAwIBAgIIZglNhE9YKuQwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczAeFw0yNjA4MjgxNTQ2MDRaFw0zNjA4MjUxNTUxMDRaMBUx\nEzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQDTKbiwgWILDI03NB6Sv91w05ClvZ/WNM8eFxxYnz8c/kyXH/g3IsLuRffh\nMMxoh/KJhK15Xfx949VHfH77IS3l/uvdrCX+CD9bkaAoBffv0ZRZllQbuyjREoik\nmEi8TycP2JAkVLvI50Oz+FAzAJz3a/1vueRawjtDbgsbP20edMn4NYqP0MfS4lZj\noKdfKuu268a1Sb+hqD6m/E0yffjEpUusz7LLpyv2Nt8etNC8lKCYtpClZTZ3xMQy\nniGP8peR7ba/hDPC+t7RzqtZYVQowj80RDuassQ/9+bQ1nHh+HMu1qhjDoj2xkMu\ngp+gWyONIZ2eqhvZtiZzHkmcTyCfAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP\nBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSWYhiRuYwCnV4p67so4gs02kE6YTAV\nBgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQChFRKv+8lV\nAW0XcoC10pm9rFj0V7AUq71ZdPYewRJuCoQWKxJGynbOjHXeXR9HJqumebv8sheK\nv0GCd/Xp9fc/d5fyc0hP9PzEV49urr7ULn6CRe7uQjGCjFkbRGuO3wnppq6Gy305\njkyv7X9lKHogXiSv2rG9fP09U2GJBpo7JKiZThw33UhKty1LZwYBlCE1zqxL7LTy\n5f4oIsUFHPKYtz6oQVtrTRX9kyW/ldn0uCAuM5vlXZzawbAkla3y42TEVQSAqTLO\nx9WW3SCwynebDowzyMHi4kGtLqPUTi7kdc4c8a4N0yj99dsrnOEH+G9XGlN5V5fj\n840VM+JB1nv3\n-----END CERTIFICATE-----\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {
+          "kubernetes.io/description": "Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters."
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "name": "kube-root-ca.crt",
+        "namespace": "feature-flags",
+        "resourceVersion": "50587",
+        "uid": "0ca1a906-6466-46cf-932e-89e38e94b57a"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

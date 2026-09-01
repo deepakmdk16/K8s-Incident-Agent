@@ -1,0 +1,61 @@
+Name:             web-gateway-557b9db57b-65gxl
+Namespace:        search
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:44:11 +0530
+Labels:           app=web-gateway
+                  pod-template-hash=557b9db57b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.151
+IPs:
+  IP:           10.244.0.151
+Controlled By:  ReplicaSet/web-gateway-557b9db57b
+Containers:
+  gateway:
+    Container ID:  containerd://b75590a2138fbd914553ae041e162cd0a2e48df720fac3581a726b80bf42ef21
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Sat, 29 Aug 2026 07:44:12 +0530
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-2sdmj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      web-gateway-scripts
+    Optional:  false
+  kube-api-access-2sdmj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  4m46s  default-scheduler  Successfully assigned search/web-gateway-557b9db57b-65gxl to incident-lab-control-plane
+  Normal  Pulled     4m45s  kubelet            spec.containers{gateway}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    4m45s  kubelet            spec.containers{gateway}: Container created
+  Normal  Started    4m45s  kubelet            spec.containers{gateway}: Container started

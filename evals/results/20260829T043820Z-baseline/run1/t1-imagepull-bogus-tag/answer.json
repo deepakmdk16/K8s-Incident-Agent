@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {"kind": "Deployment", "namespace": "web", "name": "storefront"},
+  "mechanism": "The Deployment's pod template references the container image registry.k8s.io/retail/storefront:2.4.1, which does not exist in the registry. The kubelet fails to resolve that reference (containerd returns code = NotFound, 'not found'), so every replica stays in ErrImagePull/ImagePullBackOff and no container is ever created, leaving the Deployment at 0/2 available and the storefront origin with no healthy backend.",
+  "verdict": "confirmed"
+}

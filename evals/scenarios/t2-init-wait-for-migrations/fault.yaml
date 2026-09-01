@@ -1,0 +1,128 @@
+# Scenario t2-init-wait-for-migrations — fault-as-code.
+# Atom: init-container failure (deterministic fault roster, req 3).
+# Mechanism: billing-api's wait-for-db init container polls the database at
+# DB_HOST=db-primary:5432 — a typo; the real, healthy database Service in
+# this scenario is postgres-primary — so the wait loop never succeeds and
+# both pods sit at Init:0/1 forever (LOOP-FOREVER design, deliberate: init
+# state.running, restartCount 0, no failure events; wait.sh matches exactly
+# this observable, per the red-team). The healthy dependency ships HERE so
+# correcting the typo actually recovers (counterfactual rule 1).
+# Wait condition: both billing-api pods with the init container Running and
+# a persistent 'waiting for db-primary:5432' log loop. See wait.sh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: billing
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-primary-scripts
+  namespace: billing
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "postgres-primary: accepting connections on :5432"
+    while true; do echo ready | nc -l -p 5432; done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-primary
+  namespace: billing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-primary
+  template:
+    metadata:
+      labels:
+        app: postgres-primary
+    spec:
+      containers:
+        - name: db
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          ports:
+            - name: sql
+              containerPort: 5432
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: postgres-primary-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-primary
+  namespace: billing
+spec:
+  selector:
+    app: postgres-primary
+  ports:
+    - name: sql
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: billing-api-scripts
+  namespace: billing
+data:
+  wait-for-db.sh: |
+    #!/bin/sh
+    set -u
+    echo "wait-for-db: waiting for ${DB_HOST}:5432 before starting billing-api"
+    until nc -z -w 2 "$DB_HOST" 5432 2>/dev/null; do
+      echo "waiting for ${DB_HOST}:5432"
+      sleep 5
+    done
+    echo "wait-for-db: ${DB_HOST}:5432 reachable"
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "billing-api: serving on :8080"
+    while true; do echo "billing-api: heartbeat"; sleep 30; done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-api
+  namespace: billing
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: billing-api
+  template:
+    metadata:
+      labels:
+        app: billing-api
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.36
+          command: ["sh", "/app/wait-for-db.sh"]
+          env:
+            - name: DB_HOST
+              value: db-primary
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      containers:
+        - name: api
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: billing-api-scripts

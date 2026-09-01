@@ -1,0 +1,4 @@
+2026-08-29T02:09:37.993982756Z gateway: starting catalog poller
+2026-08-29T02:09:39.034121294Z gateway: catalog fetch FAILED (timeout or connection refused)
+2026-08-29T02:09:45.042570616Z gateway: catalog fetch FAILED (timeout or connection refused)
+2026-08-29T02:09:51.059433821Z gateway: catalog fetch FAILED (timeout or connection refused)

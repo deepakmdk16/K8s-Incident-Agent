@@ -1,0 +1,22 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "arm": "rules",
+  "run_id": "29bccdca45db",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0007,
+  "paged_namespace": "fraud",
+  "findings": [
+    {
+      "analyzer": "unschedulable",
+      "kind": "deployment",
+      "namespace": "fraud",
+      "name": "fraud-scoring",
+      "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+      "evidence": "pod fraud-scoring-596445859d-thcdh is Pending with condition reason Unschedulable: 0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling."
+    }
+  ],
+  "analyzers_fired": 1
+}

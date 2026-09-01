@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "Deployment billing/billing-api sets .spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value to \"db-primary\" instead of the actual database Service name \"postgres-primary\", so each probe to db-primary:5432 fails on unresolvable DNS and the init container's exit-zero condition is never met, leaving the pod Initialized=False.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

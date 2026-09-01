@@ -1,0 +1,16 @@
+Name:                     metrics-db
+Namespace:                analytics
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=metrics-db
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       None
+IPs:                      None
+Port:                     sql  5432/TCP
+TargetPort:               5432/TCP
+Endpoints:                
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

@@ -1,0 +1,36 @@
+Name:           checkout-gateway-7b867bfc46
+Namespace:      orders
+Selector:       app=checkout-gateway,pod-template-hash=7b867bfc46
+Labels:         app=checkout-gateway
+                pod-template-hash=7b867bfc46
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/checkout-gateway
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=checkout-gateway
+           pod-template-hash=7b867bfc46
+  Containers:
+   gateway:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-gateway-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  15s   replicaset-controller  Created pod: checkout-gateway-7b867bfc46-fgfqx

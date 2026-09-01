@@ -1,0 +1,9 @@
+Name:         catalog-26fsd
+Namespace:    shop
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=catalog
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:09:37Z
+AddressType:  IPv4
+Ports: <unset>
+Endpoints: <none>
+Events:  <none>

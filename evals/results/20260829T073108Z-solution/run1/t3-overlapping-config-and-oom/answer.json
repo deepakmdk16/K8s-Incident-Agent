@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "In Deployment orders/orders-api, .spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key is set to \"db_url\" while the referenced ConfigMap holds the key \"database_url\". The kubelet cannot resolve that key, rejects container creation with \"couldn't find key db_url in ConfigMap orders/orders-config\", and both replicas sit Pending with the api container stuck in CreateContainerConfigError at restarts=0, never starting.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

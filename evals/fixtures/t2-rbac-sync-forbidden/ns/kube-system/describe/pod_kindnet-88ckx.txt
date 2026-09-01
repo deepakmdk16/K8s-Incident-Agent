@@ -1,0 +1,84 @@
+Name:                 kindnet-88ckx
+Namespace:            kube-system
+Priority:             2000001000
+Priority Class Name:  system-node-critical
+Service Account:      kindnet
+Node:                 incident-lab-control-plane/172.18.0.2
+Start Time:           Fri, 28 Aug 2026 21:21:17 +0530
+Labels:               app=kindnet
+                      controller-revision-hash=7f8ff95644
+                      k8s-app=kindnet
+                      pod-template-generation=1
+                      tier=node
+Annotations:          <none>
+Status:               Running
+IP:                   172.18.0.2
+IPs:
+  IP:           172.18.0.2
+Controlled By:  DaemonSet/kindnet
+Containers:
+  kindnet-cni:
+    Container ID:   containerd://1b1eecd6fa295811f373d7788323fecd7afbdd911fba8fe2048c28ec83637d4e
+    Image:          docker.io/kindest/kindnetd:v20260820-69b56db7
+    Image ID:       sha256:8e13ccc0aaa682502a49e5f98b88acf75fbf5f724875058b3e7a78b1f38a11e7
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Fri, 28 Aug 2026 21:21:18 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:     100m
+      memory:  50Mi
+    Environment:
+      HOST_IP:                  (v1:status.hostIP)
+      POD_IP:                   (v1:status.podIP)
+      POD_SUBNET:              10.244.0.0/16
+      CONTROL_PLANE_ENDPOINT:  incident-lab-control-plane:6443
+    Mounts:
+      /etc/cni/net.d from cni-cfg (rw)
+      /lib/modules from lib-modules (ro)
+      /run/xtables.lock from xtables-lock (rw)
+      /var/run/nri from nri-plugin (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-bj2h7 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  cni-cfg:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/cni/net.d
+    HostPathType:  
+  xtables-lock:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/xtables.lock
+    HostPathType:  FileOrCreate
+  lib-modules:
+    Type:          HostPath (bare host directory volume)
+    Path:          /lib/modules
+    HostPathType:  
+  nri-plugin:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/run/nri
+    HostPathType:  
+  kube-api-access-bj2h7:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 op=Exists
+                             node.kubernetes.io/disk-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/network-unavailable:NoSchedule op=Exists
+                             node.kubernetes.io/not-ready:NoExecute op=Exists
+                             node.kubernetes.io/pid-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/unreachable:NoExecute op=Exists
+                             node.kubernetes.io/unschedulable:NoSchedule op=Exists
+Events:                      <none>

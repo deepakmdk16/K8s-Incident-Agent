@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {"kind": "Service", "namespace": "shop", "name": "catalog"},
+  "mechanism": "The Service shop/catalog selects pods with label app=catalog-api, but the catalog pods are labeled app=catalog, so the selector matches nothing and the Service's EndpointSlice is empty. Traffic sent by the storefront gateway to the catalog ClusterIP 10.96.96.22:8080 has no backend to be forwarded to and is blackholed, so calls hang until the client times out and product pages render empty.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "shop",
+    "name": "catalog"
+  },
+  "mechanism": "Service shop/catalog has .spec.selector set to {\"app\": \"catalog-api\"} while the pods produced by Deployment shop/catalog carry the label app=catalog, so the selector matches zero pods and the endpoint controller writes Endpoints shop/catalog with no addresses (\"endpointAddresses=0\"). With no backend addresses, kube-proxy has no destination for the ClusterIP 10.96.96.22:8080, so every connection to that Service address is dropped or refused instead of reaching a catalog pod.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

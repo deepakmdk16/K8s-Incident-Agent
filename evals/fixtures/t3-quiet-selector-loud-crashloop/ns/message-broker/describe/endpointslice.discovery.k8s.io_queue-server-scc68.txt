@@ -1,0 +1,19 @@
+Name:         queue-server-scc68
+Namespace:    message-broker
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=queue-server
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:06Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.131
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/queue-server-5c879fdf4-tcvls
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

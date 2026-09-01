@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.53"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "log-shipper-598b9c9858-5s4xs",
+            "namespace": "log-aggregation",
+            "uid": "3d080847-8f58-4136-9836-9a1d55c74636"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T01:33:56Z"
+        },
+        "creationTimestamp": "2026-08-29T01:33:55Z",
+        "generateName": "log-shipper-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "log-shipper"
+        },
+        "name": "log-shipper-jvtkd",
+        "namespace": "log-aggregation",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "log-shipper",
+            "uid": "342a675c-7d5f-4e64-b3da-c97b28d9f09c"
+          }
+        ],
+        "resourceVersion": "50801",
+        "uid": "e64d6b61-4f9d-47b8-9f7d-a4a770b4a038"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "failing_resource": {
+    "kind": "RoleBinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "mechanism": "The RoleBinding inventory-reader-binding in namespace inventory has .subjects[0].name set to \"inventory-synk\" instead of \"inventory-sync\", so it binds Role/inventory-reader to a ServiceAccount name that does not exist in the namespace and grants get/list on configmaps to nobody real. The identity the workload actually presents therefore carries no configmap read permission and its API fetch is rejected by the authorizer with HTTP 403 Forbidden.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

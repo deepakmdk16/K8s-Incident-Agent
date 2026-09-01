@@ -1,0 +1,228 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T02:10:38Z",
+        "generation": 1,
+        "name": "checkout-gateway",
+        "namespace": "orders",
+        "resourceVersion": "57805",
+        "uid": "ac0e9fbc-abf9-40da-818b-ac03f3c74323"
+      },
+      "spec": {
+        "progressDeadlineSeconds": 600,
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app": "checkout-gateway"
+          }
+        },
+        "strategy": {
+          "rollingUpdate": {
+            "maxSurge": "25%",
+            "maxUnavailable": "25%"
+          },
+          "type": "RollingUpdate"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "checkout-gateway"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "/app/run.sh"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "gateway",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/app",
+                    "name": "scripts"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "checkout-gateway-scripts"
+                },
+                "name": "scripts"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-08-29T02:10:38Z",
+            "lastUpdateTime": "2026-08-29T02:10:38Z",
+            "message": "Deployment has minimum availability.",
+            "reason": "MinimumReplicasAvailable",
+            "status": "True",
+            "type": "Available"
+          },
+          {
+            "lastTransitionTime": "2026-08-29T02:10:38Z",
+            "lastUpdateTime": "2026-08-29T02:10:38Z",
+            "message": "ReplicaSet \"checkout-gateway-7b867bfc46\" has successfully progressed.",
+            "reason": "NewReplicaSetAvailable",
+            "status": "True",
+            "type": "Progressing"
+          }
+        ],
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0,
+        "updatedReplicas": 1
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-08-29T02:10:38Z",
+        "generation": 1,
+        "name": "orders-api",
+        "namespace": "orders",
+        "resourceVersion": "57768",
+        "uid": "a432427c-d6f0-4fe4-abd1-d7b2d1ea072f"
+      },
+      "spec": {
+        "progressDeadlineSeconds": 600,
+        "replicas": 2,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app": "orders-api"
+          }
+        },
+        "strategy": {
+          "rollingUpdate": {
+            "maxSurge": "25%",
+            "maxUnavailable": "25%"
+          },
+          "type": "RollingUpdate"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "orders-api"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "/app/run.sh"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "api",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "name": "http",
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "failureThreshold": 3,
+                  "httpGet": {
+                    "path": "/",
+                    "port": 8081,
+                    "scheme": "HTTP"
+                  },
+                  "periodSeconds": 5,
+                  "successThreshold": 1,
+                  "timeoutSeconds": 1
+                },
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/app",
+                    "name": "scripts"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "orders-api-scripts"
+                },
+                "name": "scripts"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-08-29T02:10:38Z",
+            "lastUpdateTime": "2026-08-29T02:10:38Z",
+            "message": "Deployment does not have minimum availability.",
+            "reason": "MinimumReplicasUnavailable",
+            "status": "False",
+            "type": "Available"
+          },
+          {
+            "lastTransitionTime": "2026-08-29T02:10:38Z",
+            "lastUpdateTime": "2026-08-29T02:10:38Z",
+            "message": "ReplicaSet \"orders-api-7cc5bcf4c7\" is progressing.",
+            "reason": "ReplicaSetUpdated",
+            "status": "True",
+            "type": "Progressing"
+          }
+        ],
+        "observedGeneration": 1,
+        "replicas": 2,
+        "terminatingReplicas": 0,
+        "unavailableReplicas": 2,
+        "updatedReplicas": 2
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

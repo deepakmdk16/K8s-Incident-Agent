@@ -1,0 +1,102 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:22:33Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "fraud-scoring-596445859d-thcdh",
+        "namespace": "fraud",
+        "resourceVersion": "47448",
+        "uid": "b37cf4de-1a93-47a4-a036-59b9dc973fd6"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:22:33Z",
+      "message": "0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:22:33Z",
+        "name": "fraud-scoring-596445859d-thcdh.18d0221b5e8211d6",
+        "namespace": "fraud",
+        "resourceVersion": "47451",
+        "uid": "02e02946-ce54-46ac-bb21-2d43b07068e6"
+      },
+      "reason": "FailedScheduling",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:22:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "fraud-scoring-596445859d",
+        "namespace": "fraud",
+        "resourceVersion": "47445",
+        "uid": "e7bb07e7-d8d4-456b-ae43-637542f1ab9a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:22:33Z",
+      "message": "Created pod: fraud-scoring-596445859d-thcdh",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:22:33Z",
+        "name": "fraud-scoring-596445859d.18d0221b5e7cea5b",
+        "namespace": "fraud",
+        "resourceVersion": "47450",
+        "uid": "eacefc9f-dbd0-4323-a849-40a1ec542b56"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:22:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "fraud-scoring",
+        "namespace": "fraud",
+        "resourceVersion": "47444",
+        "uid": "1b148daa-d2b4-4c24-a0fa-2ad13d05479b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:22:33Z",
+      "message": "Scaled up replica set fraud-scoring-596445859d from 0 to 1",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:22:33Z",
+        "name": "fraud-scoring.18d0221b5e5a0b17",
+        "namespace": "fraud",
+        "resourceVersion": "47447",
+        "uid": "955f2053-6ae1-45ca-8071-25b60f5eb569"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

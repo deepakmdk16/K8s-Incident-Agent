@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "tier": "T3",
+  "failing_resource": {
+    "kind": "service",
+    "namespace": "search",
+    "name": "search"
+  },
+  "fault_class": "service-selector-mismatch",
+  "mechanism_summary": "The search Service's selector selects app=search-api while the search pods carry the label app=search, so the Service's Endpoints object stays empty and gateway connections to the service are refused even though the pods themselves are healthy.",
+  "decisive_evidence": "Endpoints search/search has no addresses while both search pods are Running and Ready with passing probes; the Service spec shows selector app=search-api against pod labels app=search; web-gateway logs show 'search fetch FAILED' against the service DNS name. The loud CrashLoopBackOff in analytics-batch is unrelated to the paged search path (different namespace, no dependency from the gateway or search pods) and must appear in the investigation ledger as ruled out, not in the mechanism.",
+  "remediation_summary": "Fix the search Service's selector to match the pod labels — kubectl -n search patch service search -p '{\"spec\":{\"selector\":{\"app\":\"search\"}}}' — Endpoints then populates with both pod IPs and gateway fetches succeed with no workload change."
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "failing_resource": {
+    "kind": "StatefulSet",
+    "namespace": "analytics",
+    "name": "metrics-db"
+  },
+  "mechanism": "StatefulSet analytics/metrics-db sets .spec.volumeClaimTemplates[0].spec.storageClassName to \"fast-ssd\", but the cluster's only StorageClass is \"standard\"; the resulting claim analytics/data-metrics-db-0 is rejected with ProvisioningFailed \"storageclass.storage.k8s.io \\\"fast-ssd\\\" not found\", so no volume is provisioned and the scheduler rejects metrics-db-0 with \"pod has unbound immediate PersistentVolumeClaims\".",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

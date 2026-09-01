@@ -1,0 +1,16 @@
+Name:          data-metrics-db-0
+Namespace:     analytics
+StorageClass:  fast-ssd
+Status:        Pending
+Volume:        
+Labels:        app=metrics-db
+Annotations:   <none>
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      
+Access Modes:  
+VolumeMode:    Filesystem
+Used By:       metrics-db-0
+Events:
+  Type     Reason              Age              From                         Message
+  ----     ------              ----             ----                         -------
+  Warning  ProvisioningFailed  1s (x2 over 1s)  persistentvolume-controller  storageclass.storage.k8s.io "fast-ssd" not found

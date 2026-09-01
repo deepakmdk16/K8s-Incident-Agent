@@ -1,0 +1,10 @@
+Name:         system:controller:bootstrap-signer
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+PolicyRule:
+  Resources             Non-Resource URLs  Resource Names  Verbs
+  ---------             -----------------  --------------  -----
+  events                []                 []              [create patch update]
+  events.events.k8s.io  []                 []              [create patch update]
+  configmaps            []                 []              [get list watch]
+  configmaps            []                 [cluster-info]  [update]

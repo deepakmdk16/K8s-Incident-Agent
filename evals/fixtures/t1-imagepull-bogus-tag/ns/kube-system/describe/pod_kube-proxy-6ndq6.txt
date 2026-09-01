@@ -1,0 +1,75 @@
+Name:                 kube-proxy-6ndq6
+Namespace:            kube-system
+Priority:             2000001000
+Priority Class Name:  system-node-critical
+Service Account:      kube-proxy
+Node:                 incident-lab-control-plane/172.18.0.2
+Start Time:           Fri, 28 Aug 2026 21:21:17 +0530
+Labels:               controller-revision-hash=6f6bf99bf5
+                      k8s-app=kube-proxy
+                      pod-template-generation=1
+Annotations:          <none>
+Status:               Running
+IP:                   172.18.0.2
+IPs:
+  IP:           172.18.0.2
+Controlled By:  DaemonSet/kube-proxy
+Containers:
+  kube-proxy:
+    Container ID:  containerd://7553287a81934f801ab4190b9a335df922b718afe9e7efe06299ee6538dd4c2b
+    Image:         registry.k8s.io/kube-proxy:v1.37.0
+    Image ID:      docker.io/library/import-2026-08-26@sha256:d5e740cce95911da5590b633aae2f7f7e3370ec9d212d4dbbbf3bf19fa07551f
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /usr/local/bin/kube-proxy
+      --config=/var/lib/kube-proxy/config.conf
+      --hostname-override=$(NODE_NAME)
+    State:          Running
+      Started:      Fri, 28 Aug 2026 21:21:18 +0530
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      NODE_NAME:   (v1:spec.nodeName)
+    Mounts:
+      /lib/modules from lib-modules (ro)
+      /run/xtables.lock from xtables-lock (rw)
+      /var/lib/kube-proxy from kube-proxy (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-rz9g2 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-proxy:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      kube-proxy
+    Optional:  false
+  xtables-lock:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/xtables.lock
+    HostPathType:  FileOrCreate
+  lib-modules:
+    Type:          HostPath (bare host directory volume)
+    Path:          /lib/modules
+    HostPathType:  
+  kube-api-access-rz9g2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 op=Exists
+                             node.kubernetes.io/disk-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/network-unavailable:NoSchedule op=Exists
+                             node.kubernetes.io/not-ready:NoExecute op=Exists
+                             node.kubernetes.io/pid-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/unreachable:NoExecute op=Exists
+                             node.kubernetes.io/unschedulable:NoSchedule op=Exists
+Events:                      <none>

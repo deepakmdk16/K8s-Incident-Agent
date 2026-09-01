@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The Deployment's container command allocates a ~200 MiB in-memory catalog cache (dd bs=1M count=200) at startup, but its pod template sets a memory limit of only 64Mi. The kernel OOM-kills the container during warm-up every time (Reason: OOMKilled, exit 137, twice within ~25s, logs stop at 'warming catalog cache'), so it never reaches its serving loop, never becomes Ready, and the Deployment stays 0/1 Available with MinimumReplicasUnavailable.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.135"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "session-cache-5f875fd7c7-qdnzj",
+            "namespace": "session-store",
+            "uid": "5f2e13b6-53a2-4094-9553-e6353c2ffbab"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:14:06Z"
+        },
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "generateName": "session-cache-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "session-cache"
+        },
+        "name": "session-cache-dzmkk",
+        "namespace": "session-store",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "session-cache",
+            "uid": "3d5b5185-307c-4cbe-90f2-8ec1082d40e9"
+          }
+        ],
+        "resourceVersion": "58695",
+        "uid": "8a84a9d2-9b50-48be-bcc0-c0a3bacd0dc3"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

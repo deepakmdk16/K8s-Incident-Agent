@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "search",
+    "name": "search"
+  },
+  "mechanism": "The Service search in namespace search has .spec.selector set to {app: \"search-api\"} while the pods intended to back it are labelled {app: \"search\"}, so the selector matches zero pods and the endpoint controller writes an Endpoints object search with no subsets. Every TCP connection to that Service's ClusterIP 10.96.24.225 on port 8080 is therefore dropped or refused by kube-proxy because the Service has no backend address to forward it to.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {"kind": "ResourceQuota", "namespace": "checkout", "name": "checkout-quota"},
+  "mechanism": "ResourceQuota checkout-quota caps namespace checkout at pods=2, so when checkout-api was scaled to 6 replicas the API server admission-denied every pod create past the second one ('is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2'). The deployment is stuck at 2 available of 6 desired with ReplicaFailure/FailedCreate, so serving capacity never increased. The two existing pods absorb the entire traffic spike, keeping checkout p99 latency high and causing payment-step timeouts.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,38 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "arm": "rules",
+  "run_id": "32be49e378b2",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0008,
+  "paged_namespace": "analytics",
+  "findings": [
+    {
+      "analyzer": "unschedulable",
+      "kind": "statefulset",
+      "namespace": "analytics",
+      "name": "metrics-db",
+      "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+      "evidence": "pod metrics-db-0 is Pending with condition reason Unschedulable: 0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. not found"
+    },
+    {
+      "analyzer": "unbound-pvc",
+      "kind": "statefulset",
+      "namespace": "analytics",
+      "name": "metrics-db",
+      "mechanism": "The PersistentVolumeClaim stays Pending because its storageClassName does not match any StorageClass in the cluster.",
+      "evidence": "persistentvolumeclaim data-metrics-db-0 is in phase Pending"
+    },
+    {
+      "analyzer": "endpoints",
+      "kind": "service",
+      "namespace": "analytics",
+      "name": "metrics-db",
+      "mechanism": "The Service selector does not match the pod labels, so its Endpoints object has no addresses.",
+      "evidence": "service metrics-db selects {'app': 'metrics-db'} and its Endpoints object has no subsets"
+    }
+  ],
+  "analyzers_fired": 3
+}

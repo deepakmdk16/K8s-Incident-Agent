@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "shop",
+    "name": "catalog"
+  },
+  "mechanism": "Service shop/catalog has .spec.selector set to {app: catalog-api} while the pods it is meant to front are labelled {app: catalog}, so the selector matches zero pods and the endpoint controller writes Endpoints shop/catalog with no subsets (endpointAddresses=0). With no backend address to DNAT to, TCP connections to its ClusterIP 10.96.96.22:8080 are rejected or dropped \u2014 \"timeout or connection refused\" \u2014 instead of being load-balanced to the catalog pods.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

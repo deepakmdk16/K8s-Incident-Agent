@@ -1,0 +1,36 @@
+Name:           report-generator-646bc6f94f
+Namespace:      analytics-batch
+Selector:       app=report-generator,pod-template-hash=646bc6f94f
+Labels:         app=report-generator
+                pod-template-hash=646bc6f94f
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/report-generator
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=report-generator
+           pod-template-hash=646bc6f94f
+  Containers:
+   generator:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          report-generator-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  4m11s  replicaset-controller  Created pod: report-generator-646bc6f94f-sgdm2

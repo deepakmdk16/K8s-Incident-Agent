@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t1-imagepull-bogus-tag",
+  "tier": "T1",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "web",
+    "name": "storefront"
+  },
+  "fault_class": "image-pull-backoff",
+  "mechanism_summary": "The pod template of deployment web/storefront references image registry.k8s.io/retail/storefront:2.4.1, which does not exist on the registry: every pull attempt is rejected by containerd with a not found error, kubelet backs off between attempts (ErrImagePull, then ImagePullBackOff), and the containers are never created or started.",
+  "decisive_evidence": "Pod events in web for the storefront pods: reason Failed with message 'Failed to pull image \"registry.k8s.io/retail/storefront:2.4.1\": ... registry.k8s.io/retail/storefront:2.4.1: not found' — the containerd not-found message naming the exact image reference — plus the BackOff events it produces.",
+  "remediation_summary": "Update the storefront deployment's container image to a reference that actually exists (kubectl -n web set image deployment/storefront storefront=<existing storefront release reference>); the pod template image field is mutable, so the rollout proceeds and the pods start once the reference resolves."
+}

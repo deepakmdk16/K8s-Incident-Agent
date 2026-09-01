@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {"kind": "ResourceQuota", "namespace": "checkout", "name": "checkout-quota"},
+  "mechanism": "The ResourceQuota checkout-quota caps namespace checkout at pods=2, so when checkout-api was scaled to 6 replicas the ReplicaSet controller could only create 2 pods and all further creations were rejected at admission with 'exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2'. The deployment is stuck at 2/6 available with ReplicaFailure/FailedCreate, so the spike is still being served by two pods and p99 latency never dropped. Raising the quota's pods hard limit is what unblocks the added capacity.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,47 @@
+Name:           kube-proxy
+Namespace:      kube-system
+Selector:       k8s-app=kube-proxy
+Node-Selector:  kubernetes.io/os=linux
+Labels:         k8s-app=kube-proxy
+Annotations:    deprecated.daemonset.template.generation: 1
+Desired Number of Nodes Scheduled: 1
+Current Number of Nodes Scheduled: 1
+Number of Nodes Scheduled with Up-to-date Pods: 1
+Number of Nodes Scheduled with Available Pods: 1
+Number of Nodes Misscheduled: 0
+Pods Status:  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           k8s-app=kube-proxy
+  Service Account:  kube-proxy
+  Containers:
+   kube-proxy:
+    Image:      registry.k8s.io/kube-proxy:v1.37.0
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      /usr/local/bin/kube-proxy
+      --config=/var/lib/kube-proxy/config.conf
+      --hostname-override=$(NODE_NAME)
+    Environment:
+      NODE_NAME:   (v1:spec.nodeName)
+    Mounts:
+      /lib/modules from lib-modules (ro)
+      /run/xtables.lock from xtables-lock (rw)
+      /var/lib/kube-proxy from kube-proxy (rw)
+  Volumes:
+   kube-proxy:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      kube-proxy
+    Optional:  false
+   xtables-lock:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/xtables.lock
+    HostPathType:  FileOrCreate
+   lib-modules:
+    Type:               HostPath (bare host directory volume)
+    Path:               /lib/modules
+    HostPathType:       
+  Priority Class Name:  system-node-critical
+  Node-Selectors:       kubernetes.io/os=linux
+  Tolerations:          op=Exists
+Events:                 <none>

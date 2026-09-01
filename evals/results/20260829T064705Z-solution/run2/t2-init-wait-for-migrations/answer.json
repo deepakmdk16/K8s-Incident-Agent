@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "Deployment billing/billing-api sets .spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value to \"db-primary\", but the only database Service in the namespace is \"postgres-primary\", so the init container's connect attempt to db-primary:5432 fails on every iteration and the init container never completes, leaving both pods with Initialized=False.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,123 @@
+{
+  "arm": "solution",
+  "runs": 3,
+  "started_utc": "20260829T073436Z",
+  "model_pinned": "claude-opus-5",
+  "sampling": "no sampling parameters (removed on the pinned model); replicate runs instead",
+  "pooled": {
+    "overall": {
+      "correct": 31,
+      "cases": 36
+    },
+    "by_tier": {
+      "T1": {
+        "correct": 15,
+        "cases": 15
+      },
+      "T2": {
+        "correct": 11,
+        "cases": 15
+      },
+      "T3": {
+        "correct": 5,
+        "cases": 6
+      }
+    },
+    "by_verdict": {
+      "confirmed": {
+        "correct": 31,
+        "cases": 36
+      }
+    },
+    "confirmed_wrong": 5
+  },
+  "per_run": {
+    "1": {
+      "overall": {
+        "correct": 10,
+        "cases": 12
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 5,
+          "cases": 5
+        },
+        "T2": {
+          "correct": 4,
+          "cases": 5
+        },
+        "T3": {
+          "correct": 1,
+          "cases": 2
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 10,
+          "cases": 12
+        }
+      },
+      "confirmed_wrong": 2
+    },
+    "2": {
+      "overall": {
+        "correct": 10,
+        "cases": 12
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 5,
+          "cases": 5
+        },
+        "T2": {
+          "correct": 3,
+          "cases": 5
+        },
+        "T3": {
+          "correct": 2,
+          "cases": 2
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 10,
+          "cases": 12
+        }
+      },
+      "confirmed_wrong": 2
+    },
+    "3": {
+      "overall": {
+        "correct": 11,
+        "cases": 12
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 5,
+          "cases": 5
+        },
+        "T2": {
+          "correct": 4,
+          "cases": 5
+        },
+        "T3": {
+          "correct": 2,
+          "cases": 2
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 11,
+          "cases": 12
+        }
+      },
+      "confirmed_wrong": 1
+    }
+  },
+  "totals": {
+    "input_tokens": 1324221,
+    "output_tokens": 141046,
+    "cost_usd": 6.3471,
+    "cases_without_measured_cost": 0
+  }
+}

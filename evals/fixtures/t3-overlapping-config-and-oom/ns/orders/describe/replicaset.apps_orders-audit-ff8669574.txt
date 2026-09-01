@@ -1,0 +1,37 @@
+Name:           orders-audit-ff8669574
+Namespace:      orders
+Selector:       app=orders-audit,pod-template-hash=ff8669574
+Labels:         app=orders-audit
+                pod-template-hash=ff8669574
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/orders-audit
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=orders-audit
+           pod-template-hash=ff8669574
+  Containers:
+   audit:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Environment:
+      DATABASE_URL:  <set to the key 'database_url' of config map 'orders-config'>  Optional: false
+    Mounts:
+      /app from app (rw)
+  Volumes:
+   app:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          orders-audit-app
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  51s   replicaset-controller  Created pod: orders-audit-ff8669574-z72nx

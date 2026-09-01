@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "failing_resource": {"kind": "Deployment", "namespace": "web", "name": "storefront"},
+  "mechanism": "The Deployment's pod template pins the image registry.k8s.io/retail/storefront:2.4.1, a tag that does not exist in the registry. The kubelet's pull fails at reference resolution with 'code = NotFound ... not found', so no container image is ever unpacked and both replicas stay in ErrImagePull/ImagePullBackOff. With zero containers ever started, no replica can report Ready, producing the paged 0/2 Ready condition and MinimumReplicasUnavailable.",
+  "verdict": "confirmed"
+}

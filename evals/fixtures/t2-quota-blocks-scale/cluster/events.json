@@ -1,0 +1,350 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "checkout-api-5f66bf789c-gqzzb",
+        "namespace": "checkout",
+        "resourceVersion": "48407",
+        "uid": "9b4026a2-0f95-4441-8940-e1ce5e0ced91"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Successfully assigned checkout/checkout-api-5f66bf789c-gqzzb to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c-gqzzb.18d0226f564e3301",
+        "namespace": "checkout",
+        "resourceVersion": "48413",
+        "uid": "fd83b6e9-aace-4748-811a-b37ce3459a9c"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "checkout-api-5f66bf789c-v28xx",
+        "namespace": "checkout",
+        "resourceVersion": "48401",
+        "uid": "70cd8225-0950-459e-9f9d-62e668cca3eb"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Successfully assigned checkout/checkout-api-5f66bf789c-v28xx to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c-v28xx.18d0226f560db6ee",
+        "namespace": "checkout",
+        "resourceVersion": "48406",
+        "uid": "bb2bb7c9-c07d-42bb-8d66-08263c32720c"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48397",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Created pod: checkout-api-5f66bf789c-v28xx",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f55f26180",
+        "namespace": "checkout",
+        "resourceVersion": "48403",
+        "uid": "cf494bb9-288e-4c0b-b342-76f5d5f18c4b"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48397",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Error creating: pods \"checkout-api-5f66bf789c-wj8l8\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f561fb1a7",
+        "namespace": "checkout",
+        "resourceVersion": "48408",
+        "uid": "4cfcd619-0463-4fc0-ad12-fe530d87874b"
+      },
+      "reason": "FailedCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48397",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Created pod: checkout-api-5f66bf789c-gqzzb",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f562bf342",
+        "namespace": "checkout",
+        "resourceVersion": "48411",
+        "uid": "ef383e01-247e-4222-8f89-31ca2c48f794"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48410",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Error creating: pods \"checkout-api-5f66bf789c-7htmh\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f5672b39e",
+        "namespace": "checkout",
+        "resourceVersion": "48415",
+        "uid": "581c9f19-75cd-48d1-840f-d0d9c68a5cd8"
+      },
+      "reason": "FailedCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48416",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Error creating: pods \"checkout-api-5f66bf789c-gql4n\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f56a0772d",
+        "namespace": "checkout",
+        "resourceVersion": "48419",
+        "uid": "9b017fe4-64fb-4ba9-a698-b9713c23ab40"
+      },
+      "reason": "FailedCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48416",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Error creating: pods \"checkout-api-5f66bf789c-fd87f\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f56abde57",
+        "namespace": "checkout",
+        "resourceVersion": "48420",
+        "uid": "d9f02447-120e-479d-914f-cc0de431bfb3"
+      },
+      "reason": "FailedCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48416",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Error creating: pods \"checkout-api-5f66bf789c-whgqr\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f56bf1048",
+        "namespace": "checkout",
+        "resourceVersion": "48421",
+        "uid": "bf517d61-15a0-4576-9cb6-30a404b0f207"
+      },
+      "reason": "FailedCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "checkout-api-5f66bf789c",
+        "namespace": "checkout",
+        "resourceVersion": "48416",
+        "uid": "72b883f7-ece7-4029-ae56-d09cc83ba9e7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Error creating: pods \"checkout-api-5f66bf789c-f7kvq\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api-5f66bf789c.18d0226f59252e34",
+        "namespace": "checkout",
+        "resourceVersion": "48422",
+        "uid": "e0d79aa7-13cc-4dbc-89ac-7a78767ea298"
+      },
+      "reason": "FailedCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:28:33Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "checkout-api",
+        "namespace": "checkout",
+        "resourceVersion": "48396",
+        "uid": "63187da0-444a-4a46-88a1-9978359e8413"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:28:33Z",
+      "message": "Scaled up replica set checkout-api-5f66bf789c from 0 to 6",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:28:33Z",
+        "name": "checkout-api.18d0226f55b46d96",
+        "namespace": "checkout",
+        "resourceVersion": "48399",
+        "uid": "b9d350e9-2e4d-4abe-b7fa-93437fc4367e"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,61 @@
+schema: 1
+id: t2-selector-drift-empty-endpoints
+mode: captured
+captured_at: 2026-08-29T02:09:54Z
+context: kind-incident-lab
+kubectl_client: v1.37.0
+server: v1.37.0
+node: kubelet=v1.37.0 runtime=containerd://2.3.4 os=Debian GNU/Linux 13 (trixie)
+capture_policy:
+  workload_log_tail: 2000
+  system_log_tail: 300
+  system_namespaces: kube-system kube-public kube-node-lease local-path-storage
+log_channels:
+  - pod: kube-system/coredns-559f6c778d-9sqc8
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-9sqc8" not found 
+  - pod: kube-system/coredns-559f6c778d-t9nfq
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-t9nfq" not found 
+  - pod: kube-system/etcd-incident-lab-control-plane
+    container: etcd
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "etcd" in pod "etcd-incident-lab-control-plane" not found 
+  - pod: kube-system/kindnet-88ckx
+    container: kindnet-cni
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kindnet-cni" in pod "kindnet-88ckx" not found 
+  - pod: kube-system/kube-apiserver-incident-lab-control-plane
+    container: kube-apiserver
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-apiserver" in pod "kube-apiserver-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-controller-manager-incident-lab-control-plane
+    container: kube-controller-manager
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-controller-manager" in pod "kube-controller-manager-incident-lab-control-plane" not found
+  - pod: kube-system/kube-proxy-6ndq6
+    container: kube-proxy
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-proxy" in pod "kube-proxy-6ndq6" not found 
+  - pod: kube-system/kube-scheduler-incident-lab-control-plane
+    container: kube-scheduler
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-scheduler" in pod "kube-scheduler-incident-lab-control-plane" not found 
+  - pod: local-path-storage/local-path-provisioner-75f7fc7dc5-q6tkt
+    container: local-path-provisioner
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "local-path-provisioner" in pod "local-path-provisioner-75f7fc7dc5-q6tkt" not found 
+  - pod: shop/catalog-65498fccb-g52gl
+    container: api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "api" in pod "catalog-65498fccb-g52gl" not found 
+  - pod: shop/catalog-65498fccb-lbrwn
+    container: api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "api" in pod "catalog-65498fccb-lbrwn" not found 
+  - pod: shop/storefront-gateway-6785fd7b5d-cq9bt
+    container: gateway
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "gateway" in pod "storefront-gateway-6785fd7b5d-cq9bt" not found 

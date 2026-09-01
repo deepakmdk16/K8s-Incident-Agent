@@ -1,0 +1,282 @@
+You are an on-call Kubernetes engineer. You just got paged:
+
+[PAGE] SEV2 StorefrontReleaseDegraded — web
+Deployment web/storefront has reported 0/2 Ready for over 15 minutes,
+beginning right after the new storefront release went out. Product pages
+are still being served, but degraded from the edge cache: stale prices and
+inventory, and no personalization. Alert source: workload availability
+monitor. Find the root cause and propose a remediation.
+
+You grabbed the following output from the cluster. Diagnose the root
+cause of the paged symptom from this output alone.
+
+$ kubectl get all -A
+NAMESPACE            NAME                                                        READY   STATUS         RESTARTS   AGE   IP            NODE                            NOMINATED NODE   READINESS GATES
+kube-system          pod/coredns-559f6c778d-9sqc8                                1/1     Running        0          9h    10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-t9nfq                                1/1     Running        0          9h    10.244.0.4    incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running        0          9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-88ckx                                           1/1     Running        0          9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running        0          9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running        0          9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-6ndq6                                        1/1     Running        0          9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running        0          9h    172.18.0.2    incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-q6tkt                 1/1     Running        0          9h    10.244.0.2    incident-lab-control-plane   <none>           <none>
+web                  pod/storefront-68b686c56f-c7tvt                             0/1     ErrImagePull   0          6s    10.244.0.11   incident-lab-control-plane   <none>           <none>
+web                  pod/storefront-68b686c56f-d4pp7                             0/1     ErrImagePull   0          6s    10.244.0.10   incident-lab-control-plane   <none>           <none>
+
+NAMESPACE     NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+default       service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP                  9h    <none>
+kube-system   service/kube-dns     ClusterIP   10.96.0.10   <none>        53/UDP,53/TCP,9153/TCP   9h    k8s-app=kube-dns
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   9h    kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   9h    kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+kube-system          deployment.apps/coredns                  2/2     2            2           9h    coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           9h    local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+web                  deployment.apps/storefront               0/2     2            0           6s    storefront               registry.k8s.io/retail/storefront:2.4.1                       app=storefront
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       9h    coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       9h    local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+web                  replicaset.apps/storefront-68b686c56f               2         2         0       6s    storefront               registry.k8s.io/retail/storefront:2.4.1                       app=storefront,pod-template-hash=68b686c56f
+
+$ kubectl describe pod/storefront-68b686c56f-c7tvt -n web
+Name:             storefront-68b686c56f-c7tvt
+Namespace:        web
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 06:49:37 +0530
+Labels:           app=storefront
+                  pod-template-hash=68b686c56f
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.11
+IPs:
+  IP:           10.244.0.11
+Controlled By:  ReplicaSet/storefront-68b686c56f
+Containers:
+  storefront:
+    Container ID:  
+    Image:         registry.k8s.io/retail/storefront:2.4.1
+    Image ID:      
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-vz9cr (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-vz9cr:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  16s               default-scheduler  Successfully assigned web/storefront-68b686c56f-c7tvt to incident-lab-control-plane
+  Normal   BackOff    15s               kubelet            spec.containers{storefront}: Back-off pulling image "registry.k8s.io/retail/storefront:2.4.1"
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Error: ImagePullBackOff
+  Normal   Pulling    3s (x2 over 15s)  kubelet            spec.containers{storefront}: Pulling image "registry.k8s.io/retail/storefront:2.4.1"
+  Warning  Failed     3s (x2 over 15s)  kubelet            spec.containers{storefront}: Failed to pull image "registry.k8s.io/retail/storefront:2.4.1": rpc error: code = NotFound desc = failed to pull and unpack image "registry.k8s.io/retail/storefront:2.4.1": failed to resolve reference "registry.k8s.io/retail/storefront:2.4.1": registry.k8s.io/retail/storefront:2.4.1: not found
+  Warning  Failed     3s (x2 over 15s)  kubelet            spec.containers{storefront}: Error: ErrImagePull
+
+$ kubectl describe pod/storefront-68b686c56f-d4pp7 -n web
+Name:             storefront-68b686c56f-d4pp7
+Namespace:        web
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 06:49:37 +0530
+Labels:           app=storefront
+                  pod-template-hash=68b686c56f
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.10
+IPs:
+  IP:           10.244.0.10
+Controlled By:  ReplicaSet/storefront-68b686c56f
+Containers:
+  storefront:
+    Container ID:  
+    Image:         registry.k8s.io/retail/storefront:2.4.1
+    Image ID:      
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qhkkf (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-qhkkf:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  16s               default-scheduler  Successfully assigned web/storefront-68b686c56f-d4pp7 to incident-lab-control-plane
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Failed to pull image "registry.k8s.io/retail/storefront:2.4.1": rpc error: code = NotFound desc = failed to pull and unpack image "registry.k8s.io/retail/storefront:2.4.1": failed to resolve reference "registry.k8s.io/retail/storefront:2.4.1": registry.k8s.io/retail/storefront:2.4.1: not found
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Error: ErrImagePull
+  Normal   BackOff    15s               kubelet            spec.containers{storefront}: Back-off pulling image "registry.k8s.io/retail/storefront:2.4.1"
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Error: ImagePullBackOff
+  Normal   Pulling    0s (x2 over 15s)  kubelet            spec.containers{storefront}: Pulling image "registry.k8s.io/retail/storefront:2.4.1"
+
+$ kubectl describe deployment.apps/storefront -n web
+Name:                   storefront
+Namespace:              web
+CreationTimestamp:      Sat, 29 Aug 2026 06:49:37 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=storefront
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=storefront
+  Containers:
+   storefront:
+    Image:      registry.k8s.io/retail/storefront:2.4.1
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   storefront-68b686c56f (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  16s   deployment-controller  Scaled up replica set storefront-68b686c56f from 0 to 2
+
+$ kubectl describe replicaset.apps/storefront-68b686c56f -n web
+Name:           storefront-68b686c56f
+Namespace:      web
+Selector:       app=storefront,pod-template-hash=68b686c56f
+Labels:         app=storefront
+                pod-template-hash=68b686c56f
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/storefront
+Replicas:       2 current / 2 desired
+Pods Status:    0 Running / 2 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=storefront
+           pod-template-hash=68b686c56f
+  Containers:
+   storefront:
+    Image:      registry.k8s.io/retail/storefront:2.4.1
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  16s   replicaset-controller  Created pod: storefront-68b686c56f-d4pp7
+  Normal  SuccessfulCreate  16s   replicaset-controller  Created pod: storefront-68b686c56f-c7tvt
+
+The case id for your answer is "t1-imagepull-bogus-tag".
+
+Write your findings as a markdown report with EXACTLY these four sections:
+
+## Root cause
+The failing resource and the causal mechanism, stated plainly.
+
+## Evidence chain
+Every claim cites the exact piece of the provided output it came from (name the
+source, e.g. "describe of pod X", "log line: ...", quote the relevant line).
+
+## Investigation ledger
+Each alternative explanation you considered and ruled out, with the evidence
+that ruled it out. If you considered only one explanation, say so.
+
+## Verification recipe
+The 2-3 exact commands a human runs to independently confirm the root cause in
+under 2 minutes.
+
+Verdict rules (use the word, never a number — numeric self-confidence such as
+"90% sure" is forbidden anywhere in the report):
+- "confirmed": you have direct causal evidence linking mechanism to symptom.
+- "probable": evidence is consistent but indirect.
+- "inconclusive": name the additional evidence that would settle it.
+
+After the report, output the machine-read answer as the LAST fenced code block,
+exactly this shape:
+
+```json
+{
+  "case_id": "<case id, echoed verbatim>",
+  "failing_resource": {"kind": "...", "namespace": "...", "name": "..."},
+  "mechanism": "1-3 sentences: the causal mechanism of the paged symptom only.",
+  "verdict": "confirmed | probable | inconclusive",
+  "missing_evidence": "required iff verdict is inconclusive: what would settle it"
+}
+```
+
+`failing_resource` is the resource whose spec must CHANGE to fix the incident
+(e.g. the owning workload, not the crashing pod it produced). In `mechanism`,
+never mention any workload or mechanism other than the failing one — even to
+rule it out; ruled-out alternatives belong in the Investigation ledger.

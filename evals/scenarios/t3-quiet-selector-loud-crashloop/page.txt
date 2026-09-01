@@ -1,0 +1,6 @@
+[PAGE] SEV2 SearchTimeouts — search
+Site search is timing out storewide; shoppers get "search is unavailable"
+fallbacks on every query. The web gateway reports its calls to the search
+backend are not completing. The search deployment reports all replicas
+Ready. Alert source: gateway latency monitor. Find the root cause and
+propose a remediation.

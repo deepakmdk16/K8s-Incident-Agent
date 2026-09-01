@@ -1,0 +1,4 @@
+2026-08-29T02:10:38.439734934Z gateway: starting orders poller
+2026-08-29T02:10:39.508143160Z gateway: orders fetch FAILED (timeout or connection refused)
+2026-08-29T02:10:45.522575462Z gateway: orders fetch FAILED (timeout or connection refused)
+2026-08-29T02:10:51.538618083Z gateway: orders fetch FAILED (timeout or connection refused)

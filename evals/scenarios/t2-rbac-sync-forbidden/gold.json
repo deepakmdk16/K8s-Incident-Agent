@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-rbac-sync-forbidden",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "rolebinding",
+    "namespace": "inventory",
+    "name": "inventory-reader-binding"
+  },
+  "fault_class": "rbac-denial",
+  "mechanism_summary": "The RoleBinding inventory-reader-binding's subject names ServiceAccount inventory-synk — a typo for inventory-sync — so the sync worker's ServiceAccount is never bound to the inventory-reader Role and its API reads are denied with 403 Forbidden while the worker quietly keeps serving stale data.",
+  "decisive_evidence": "inventory-sync logs show 'identity=inventory-sync discovery=ok' (the token is sent and accepted) followed by 403 Forbidden on the namespaced read; the captured RoleBinding JSON shows subject inventory-synk while the only ServiceAccount in the namespace is inventory-sync — the one-letter diff between binding subject and actual SA is the fault.",
+  "remediation_summary": "Fix the binding's subject to the real ServiceAccount: kubectl -n inventory patch rolebinding inventory-reader-binding --type=json -p '[{\"op\":\"replace\",\"path\":\"/subjects/0/name\",\"value\":\"inventory-sync\"}]'; within one 10s sync cycle the worker logs 'sync ok: fetched inventory-sources' and fresh data flows with no workload change."
+}

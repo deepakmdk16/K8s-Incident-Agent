@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t1-unschedulable-cpu-requests",
+  "tier": "T1",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "fault_class": "pod-unschedulable",
+  "mechanism_summary": "The scorer container of the fraud-scoring deployment requests cpu \"512\" (512 whole cores), far beyond any node's allocatable capacity, so the scheduler finds no node that can satisfy the request and the pod stays unschedulable with FailedScheduling 'Insufficient cpu'.",
+  "decisive_evidence": "The fraud-scoring pod's PodScheduled condition is False with reason Unschedulable, and its FailedScheduling event reads '0/1 nodes are available: 1 Insufficient cpu' — on a node whose allocatable cpu is 6 against the 512-core request in the pod spec.",
+  "remediation_summary": "Lower the scorer container's cpu request on the fraud/fraud-scoring deployment to a value a node can satisfy — e.g. `kubectl -n fraud set resources deployment fraud-scoring --requests=cpu=250m` — and the rollout's replacement pod schedules and starts serving."
+}

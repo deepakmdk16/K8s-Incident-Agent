@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "payments",
+    "name": "checkout-worker"
+  },
+  "mechanism": "The application container exits with a fatal error immediately at startup, so the pod enters a restart back-off.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

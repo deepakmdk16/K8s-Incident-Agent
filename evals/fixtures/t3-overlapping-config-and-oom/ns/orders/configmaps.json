@@ -1,0 +1,86 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "data": {
+        "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIDBTCCAe2gAwIBAgIIZglNhE9YKuQwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczAeFw0yNjA4MjgxNTQ2MDRaFw0zNjA4MjUxNTUxMDRaMBUx\nEzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQDTKbiwgWILDI03NB6Sv91w05ClvZ/WNM8eFxxYnz8c/kyXH/g3IsLuRffh\nMMxoh/KJhK15Xfx949VHfH77IS3l/uvdrCX+CD9bkaAoBffv0ZRZllQbuyjREoik\nmEi8TycP2JAkVLvI50Oz+FAzAJz3a/1vueRawjtDbgsbP20edMn4NYqP0MfS4lZj\noKdfKuu268a1Sb+hqD6m/E0yffjEpUusz7LLpyv2Nt8etNC8lKCYtpClZTZ3xMQy\nniGP8peR7ba/hDPC+t7RzqtZYVQowj80RDuassQ/9+bQ1nHh+HMu1qhjDoj2xkMu\ngp+gWyONIZ2eqhvZtiZzHkmcTyCfAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP\nBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSWYhiRuYwCnV4p67so4gs02kE6YTAV\nBgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQChFRKv+8lV\nAW0XcoC10pm9rFj0V7AUq71ZdPYewRJuCoQWKxJGynbOjHXeXR9HJqumebv8sheK\nv0GCd/Xp9fc/d5fyc0hP9PzEV49urr7ULn6CRe7uQjGCjFkbRGuO3wnppq6Gy305\njkyv7X9lKHogXiSv2rG9fP09U2GJBpo7JKiZThw33UhKty1LZwYBlCE1zqxL7LTy\n5f4oIsUFHPKYtz6oQVtrTRX9kyW/ldn0uCAuM5vlXZzawbAkla3y42TEVQSAqTLO\nx9WW3SCwynebDowzyMHi4kGtLqPUTi7kdc4c8a4N0yj99dsrnOEH+G9XGlN5V5fj\n840VM+JB1nv3\n-----END CERTIFICATE-----\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {
+          "kubernetes.io/description": "Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters."
+        },
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "name": "kube-root-ca.crt",
+        "namespace": "orders",
+        "resourceVersion": "51065",
+        "uid": "e24b3ab6-c036-4f70-980b-55a362a08919"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\n# orders-api: order submission HTTP API.\nset -eu\n: \"${DATABASE_URL:?DATABASE_URL is required}\"\nDB_HOST=\"${DATABASE_URL#*@}\"; DB_HOST=\"${DB_HOST%%:*}\"\necho \"orders-api: starting; order store at ${DB_HOST}\"\necho \"orders-api: listening on :8080\"\nexec httpd -f -p 8080 -h /tmp\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "name": "orders-api-app",
+        "namespace": "orders",
+        "resourceVersion": "51068",
+        "uid": "79209e45-2ab8-4f1b-bcd1-f71bb6f9dd8c"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\n# orders-audit: writes the order audit trail.\nset -eu\n: \"${DATABASE_URL:?DATABASE_URL is required}\"\nDB_HOST=\"${DATABASE_URL#*@}\"; DB_HOST=\"${DB_HOST%%:*}\"\necho \"audit: config ok - database_url resolved from orders-config (host=${DB_HOST})\"\nwhile :; do\n  echo \"audit: trail writer heartbeat\"\n  sleep 60\ndone\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "name": "orders-audit-app",
+        "namespace": "orders",
+        "resourceVersion": "51069",
+        "uid": "4e0c919d-28af-47b7-a228-7fdf5dc75f67"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "database_url": "postgres://orders@orders-db.internal:5432/orders?sslmode=disable"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "name": "orders-config",
+        "namespace": "orders",
+        "resourceVersion": "51067",
+        "uid": "d8eeff06-f0e5-45cb-a888-1bd5a9a6f79a"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\n# orders-report-worker: builds the nightly order export.\nset -eu\necho \"report-worker: loading order history into in-memory export buffer (~150MiB)\"\nEXPORT_BUFFER=\"$(dd if=/dev/zero bs=1M count=150 2>/dev/null | tr '\\000' 'x')\"\necho \"report-worker: export buffer ready (${#EXPORT_BUFFER} bytes); nightly export served from memory\"\nwhile :; do\n  echo \"report-worker: idle; next export window 00:30 UTC\"\n  sleep 60\ndone\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "name": "orders-report-worker-app",
+        "namespace": "orders",
+        "resourceVersion": "51070",
+        "uid": "c045cab8-c71a-4003-851c-eb5a2ab3d619"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

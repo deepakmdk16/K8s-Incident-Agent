@@ -1,0 +1,19 @@
+Name:         geoip-api-mxgdh
+Namespace:    geo-routing
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=geoip-api
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:07Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.138
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/geoip-api-779d7f574c-6w8tm
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

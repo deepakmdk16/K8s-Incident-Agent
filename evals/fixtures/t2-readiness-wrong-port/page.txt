@@ -1,0 +1,6 @@
+[PAGE] SEV2 OrdersAPIErrors — orders
+Order placement is returning 5xx at the checkout gateway for all shoppers;
+carts are being rejected at submission. The gateway reports its calls to
+the orders backend are not completing. The orders-api deployment was
+released about 30 minutes ago. Alert source: gateway 5xx-rate monitor.
+Find the root cause and propose a remediation.

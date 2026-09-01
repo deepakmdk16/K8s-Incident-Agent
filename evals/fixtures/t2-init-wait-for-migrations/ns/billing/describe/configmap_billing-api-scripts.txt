@@ -1,0 +1,32 @@
+Name:         billing-api-scripts
+Namespace:    billing
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "billing-api: serving on :8080"
+while true; do echo "billing-api: heartbeat"; sleep 30; done
+
+
+wait-for-db.sh:
+----
+#!/bin/sh
+set -u
+echo "wait-for-db: waiting for ${DB_HOST}:5432 before starting billing-api"
+until nc -z -w 2 "$DB_HOST" 5432 2>/dev/null; do
+  echo "waiting for ${DB_HOST}:5432"
+  sleep 5
+done
+echo "wait-for-db: ${DB_HOST}:5432 reachable"
+
+
+
+BinaryData
+====
+
+Events:  <none>

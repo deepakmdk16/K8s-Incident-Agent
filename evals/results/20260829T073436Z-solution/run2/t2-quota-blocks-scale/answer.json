@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "The ResourceQuota checkout-quota in namespace checkout caps .spec.hard.pods at \"2\" while the namespace needs at least 6 to hold the requested replica count, and its status shows pods used 2 of hard 2. With the allowance exhausted, quota admission rejects each new pod creation in the namespace with \"exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2\", and the rejections repeat on every create attempt so the namespace stays pinned at two pods.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

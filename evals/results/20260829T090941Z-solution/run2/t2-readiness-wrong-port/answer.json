@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "Deployment orders/orders-api sets .spec.template.spec.containers[api].readinessProbe.httpGet.port to 8081 while the container serves on 8080 (the same template declares containerPort 8080 named http and the container logs \"orders-api: serving on :8080\"), so every readiness probe fails with `Readiness probe failed: Get \"http://10.244.0.122:8081/\": dial tcp 10.244.0.122:8081: connect: connection refused`. Both replicas therefore hold Ready=False and are published only as notReadyAddresses, so Service orders/orders-api has endpointAddresses=0 and no request to the orders backend is ever routed.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

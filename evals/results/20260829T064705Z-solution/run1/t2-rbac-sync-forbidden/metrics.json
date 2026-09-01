@@ -1,0 +1,23 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "arm": "solution",
+  "run_id": "f2eed201a440",
+  "model": "claude-opus-5",
+  "input_tokens": 30932,
+  "output_tokens": 2954,
+  "cost_usd": 0.147375,
+  "uncached_input_tokens": 8,
+  "cache_read_tokens": 20833,
+  "cache_write_tokens": 10091,
+  "duration_s": 33.91,
+  "turns": 4,
+  "tool_calls": 7,
+  "submit_attempts": 1,
+  "verdict_proposed": "confirmed",
+  "verdict_final": "confirmed",
+  "salvaged": false,
+  "evidence_items": 7,
+  "ruled_out_items": 3,
+  "verification_present": 3,
+  "verification_total": 3
+}

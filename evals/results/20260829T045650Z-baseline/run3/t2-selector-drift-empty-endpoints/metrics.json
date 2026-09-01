@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "arm": "baseline",
+  "run_id": "1f802b493b5f",
+  "model": "claude-opus-5",
+  "input_tokens": 2943,
+  "output_tokens": 2922,
+  "cost_usd": 0.087765,
+  "duration_s": 36.94,
+  "prompt_chars": 6110,
+  "prompt_sections": 0
+}

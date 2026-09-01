@@ -1,0 +1,20 @@
+Name:         flag-server-config
+Namespace:    feature-flags
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+default_state:
+----
+off
+
+refresh_interval_seconds:
+----
+60
+
+
+BinaryData
+====
+
+Events:  <none>

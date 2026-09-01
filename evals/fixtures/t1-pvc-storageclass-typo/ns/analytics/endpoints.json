@@ -1,0 +1,27 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:09:03Z"
+        },
+        "creationTimestamp": "2026-08-29T02:09:03Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller",
+          "service.kubernetes.io/headless": ""
+        },
+        "name": "metrics-db",
+        "namespace": "analytics",
+        "resourceVersion": "57452",
+        "uid": "f2f69c7e-bc48-4d1d-830f-e075defe2db3"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,59 @@
+Name:             storefront-68b686c56f-d4pp7
+Namespace:        web
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 06:49:37 +0530
+Labels:           app=storefront
+                  pod-template-hash=68b686c56f
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.10
+IPs:
+  IP:           10.244.0.10
+Controlled By:  ReplicaSet/storefront-68b686c56f
+Containers:
+  storefront:
+    Container ID:  
+    Image:         registry.k8s.io/retail/storefront:2.4.1
+    Image ID:      
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo "storefront starting on :8080"; while true; do printf "HTTP/1.1 200 OK\r\n\r\nstorefront ok\n" | nc -l -p 8080; done
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qhkkf (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-qhkkf:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  16s               default-scheduler  Successfully assigned web/storefront-68b686c56f-d4pp7 to incident-lab-control-plane
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Failed to pull image "registry.k8s.io/retail/storefront:2.4.1": rpc error: code = NotFound desc = failed to pull and unpack image "registry.k8s.io/retail/storefront:2.4.1": failed to resolve reference "registry.k8s.io/retail/storefront:2.4.1": registry.k8s.io/retail/storefront:2.4.1: not found
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Error: ErrImagePull
+  Normal   BackOff    15s               kubelet            spec.containers{storefront}: Back-off pulling image "registry.k8s.io/retail/storefront:2.4.1"
+  Warning  Failed     15s               kubelet            spec.containers{storefront}: Error: ImagePullBackOff
+  Normal   Pulling    0s (x2 over 15s)  kubelet            spec.containers{storefront}: Pulling image "registry.k8s.io/retail/storefront:2.4.1"

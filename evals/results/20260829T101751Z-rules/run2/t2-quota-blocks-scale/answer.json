@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "resourcequota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "The ResourceQuota in this namespace is exhausted, so new pods are rejected.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

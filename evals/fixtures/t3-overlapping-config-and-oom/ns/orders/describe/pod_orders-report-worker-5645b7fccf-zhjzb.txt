@@ -1,0 +1,76 @@
+Name:             orders-report-worker-5645b7fccf-zhjzb
+Namespace:        orders
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:04:01 +0530
+Labels:           app=orders-report-worker
+                  pod-template-hash=5645b7fccf
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.74
+IPs:
+  IP:           10.244.0.74
+Controlled By:  ReplicaSet/orders-report-worker-5645b7fccf
+Containers:
+  worker:
+    Container ID:  containerd://9a7461550f7fd9e6ce8b2a6b2ee145cc5fb686cab0328cc8c4fa47fc00fe1431
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Sat, 29 Aug 2026 07:04:45 +0530
+      Finished:     Sat, 29 Aug 2026 07:04:46 +0530
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Sat, 29 Aug 2026 07:04:18 +0530
+      Finished:     Sat, 29 Aug 2026 07:04:19 +0530
+    Ready:          False
+    Restart Count:  3
+    Limits:
+      memory:  48Mi
+    Requests:
+      cpu:        25m
+      memory:     48Mi
+    Environment:  <none>
+    Mounts:
+      /app from app (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-j9psw (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  app:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      orders-report-worker-app
+    Optional:  false
+  kube-api-access-j9psw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age               From               Message
+  ----     ------       ----              ----               -------
+  Normal   Scheduled    51s               default-scheduler  Successfully assigned orders/orders-report-worker-5645b7fccf-zhjzb to incident-lab-control-plane
+  Warning  FailedMount  50s               kubelet            MountVolume.SetUp failed for volume "app" : failed to sync configmap cache: timed out waiting for the condition
+  Normal   Pulled       7s (x4 over 50s)  kubelet            spec.containers{worker}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created      7s (x4 over 49s)  kubelet            spec.containers{worker}: Container created
+  Normal   Started      7s (x4 over 49s)  kubelet            spec.containers{worker}: Container started
+  Warning  BackOff      6s (x3 over 47s)  kubelet            spec.containers{worker}: Back-off restarting failed container worker in pod orders-report-worker-5645b7fccf-zhjzb_orders(d3624658-b3ba-43b1-a678-6d465ee8bd5e)

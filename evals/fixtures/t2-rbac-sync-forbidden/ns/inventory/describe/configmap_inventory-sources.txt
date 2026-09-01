@@ -1,0 +1,20 @@
+Name:         inventory-sources
+Namespace:    inventory
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+refresh_seconds:
+----
+30
+
+warehouse_feed_url:
+----
+http://warehouse-feed.internal:8080/stock
+
+
+BinaryData
+====
+
+Events:  <none>

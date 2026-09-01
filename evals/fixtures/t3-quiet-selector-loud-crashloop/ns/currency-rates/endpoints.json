@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-08-29T02:14:09Z"
+        },
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "rates-fetcher",
+        "namespace": "currency-rates",
+        "resourceVersion": "58923",
+        "uid": "78f97f30-6509-407a-adb9-8a74d3735dd5"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.148",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "rates-fetcher-64c66dfb56-zr42r",
+                "namespace": "currency-rates",
+                "uid": "a732434f-ec02-4937-9316-15b4b42ddbec"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,494 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-c7tvt",
+        "namespace": "web",
+        "resourceVersion": "47016",
+        "uid": "586a6d81-2d04-43c0-bd22-c398f33c26c7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:37Z",
+      "message": "Successfully assigned web/storefront-68b686c56f-c7tvt to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:37Z",
+        "name": "storefront-68b686c56f-c7tvt.18d021f29e8f485b",
+        "namespace": "web",
+        "resourceVersion": "47025",
+        "uid": "44e12746-c146-491f-acd0-fae1e58545de"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-c7tvt",
+        "namespace": "web",
+        "resourceVersion": "47019",
+        "uid": "586a6d81-2d04-43c0-bd22-c398f33c26c7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Pulling image \"registry.k8s.io/retail/storefront:2.4.1\"",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-c7tvt.18d021f2b5a5dd84",
+        "namespace": "web",
+        "resourceVersion": "47030",
+        "uid": "e1a9e1c0-350b-40cc-affc-c852821f0433"
+      },
+      "reason": "Pulling",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-c7tvt",
+        "namespace": "web",
+        "resourceVersion": "47019",
+        "uid": "586a6d81-2d04-43c0-bd22-c398f33c26c7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Failed to pull image \"registry.k8s.io/retail/storefront:2.4.1\": rpc error: code = NotFound desc = failed to pull and unpack image \"registry.k8s.io/retail/storefront:2.4.1\": failed to resolve reference \"registry.k8s.io/retail/storefront:2.4.1\": registry.k8s.io/retail/storefront:2.4.1: not found",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-c7tvt.18d021f2ca406999",
+        "namespace": "web",
+        "resourceVersion": "47034",
+        "uid": "fc38060f-7e16-40b2-a096-6dd6b5492ac7"
+      },
+      "reason": "Failed",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-c7tvt",
+        "namespace": "web",
+        "resourceVersion": "47019",
+        "uid": "586a6d81-2d04-43c0-bd22-c398f33c26c7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Error: ErrImagePull",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-c7tvt.18d021f2ca42bc72",
+        "namespace": "web",
+        "resourceVersion": "47035",
+        "uid": "ab93e635-dd9b-43fc-bf5a-14ce8e1237f1"
+      },
+      "reason": "Failed",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-c7tvt",
+        "namespace": "web",
+        "resourceVersion": "47019",
+        "uid": "586a6d81-2d04-43c0-bd22-c398f33c26c7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Back-off pulling image \"registry.k8s.io/retail/storefront:2.4.1\"",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-c7tvt.18d021f2cc66869f",
+        "namespace": "web",
+        "resourceVersion": "47036",
+        "uid": "54a2538b-3d6f-4189-9fed-6fc38e23afdd"
+      },
+      "reason": "BackOff",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-c7tvt",
+        "namespace": "web",
+        "resourceVersion": "47019",
+        "uid": "586a6d81-2d04-43c0-bd22-c398f33c26c7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Error: ImagePullBackOff",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-c7tvt.18d021f2cc675620",
+        "namespace": "web",
+        "resourceVersion": "47037",
+        "uid": "d5371fd0-b88a-462d-a9f4-19ee93ff6a5e"
+      },
+      "reason": "Failed",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:37Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-d4pp7",
+        "namespace": "web",
+        "resourceVersion": "47014",
+        "uid": "b5849b28-7299-4427-8d7c-bf2f7bb2d4dc"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:37Z",
+      "message": "Successfully assigned web/storefront-68b686c56f-d4pp7 to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:37Z",
+        "name": "storefront-68b686c56f-d4pp7.18d021f29e7a3ffe",
+        "namespace": "web",
+        "resourceVersion": "47022",
+        "uid": "7363a0da-6e9d-4a8f-a926-6d871b08076d"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-d4pp7",
+        "namespace": "web",
+        "resourceVersion": "47017",
+        "uid": "b5849b28-7299-4427-8d7c-bf2f7bb2d4dc"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Pulling image \"registry.k8s.io/retail/storefront:2.4.1\"",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-d4pp7.18d021f2b4a19727",
+        "namespace": "web",
+        "resourceVersion": "47028",
+        "uid": "8e257739-54f4-443b-8d30-8f4c57500726"
+      },
+      "reason": "Pulling",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-d4pp7",
+        "namespace": "web",
+        "resourceVersion": "47017",
+        "uid": "b5849b28-7299-4427-8d7c-bf2f7bb2d4dc"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Failed to pull image \"registry.k8s.io/retail/storefront:2.4.1\": rpc error: code = NotFound desc = failed to pull and unpack image \"registry.k8s.io/retail/storefront:2.4.1\": failed to resolve reference \"registry.k8s.io/retail/storefront:2.4.1\": registry.k8s.io/retail/storefront:2.4.1: not found",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-d4pp7.18d021f2bfa9629e",
+        "namespace": "web",
+        "resourceVersion": "47032",
+        "uid": "47a3d3aa-5141-43d5-8616-85698c3d201a"
+      },
+      "reason": "Failed",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-d4pp7",
+        "namespace": "web",
+        "resourceVersion": "47017",
+        "uid": "b5849b28-7299-4427-8d7c-bf2f7bb2d4dc"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Error: ErrImagePull",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-d4pp7.18d021f2bfa9c251",
+        "namespace": "web",
+        "resourceVersion": "47033",
+        "uid": "34cc6609-6db7-49d2-bebb-0b938ac2b5bc"
+      },
+      "reason": "Failed",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-d4pp7",
+        "namespace": "web",
+        "resourceVersion": "47017",
+        "uid": "b5849b28-7299-4427-8d7c-bf2f7bb2d4dc"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Back-off pulling image \"registry.k8s.io/retail/storefront:2.4.1\"",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-d4pp7.18d021f2cc693f59",
+        "namespace": "web",
+        "resourceVersion": "47039",
+        "uid": "b4d4e752-92c4-4700-bf1f-1b99d3254b8c"
+      },
+      "reason": "BackOff",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:38Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{storefront}",
+        "kind": "Pod",
+        "name": "storefront-68b686c56f-d4pp7",
+        "namespace": "web",
+        "resourceVersion": "47017",
+        "uid": "b5849b28-7299-4427-8d7c-bf2f7bb2d4dc"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:38Z",
+      "message": "Error: ImagePullBackOff",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:38Z",
+        "name": "storefront-68b686c56f-d4pp7.18d021f2cc69f9dc",
+        "namespace": "web",
+        "resourceVersion": "47040",
+        "uid": "f7d555d5-1643-4e25-a1f7-3fd5b07ffba4"
+      },
+      "reason": "Failed",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "storefront-68b686c56f",
+        "namespace": "web",
+        "resourceVersion": "47011",
+        "uid": "143ffde6-b2d9-4a1a-9e8e-3380fb2d39c3"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:37Z",
+      "message": "Created pod: storefront-68b686c56f-d4pp7",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:37Z",
+        "name": "storefront-68b686c56f.18d021f29e5dc6aa",
+        "namespace": "web",
+        "resourceVersion": "47015",
+        "uid": "7f462b62-0f1c-4aea-b0f5-9018700681e6"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "storefront-68b686c56f",
+        "namespace": "web",
+        "resourceVersion": "47011",
+        "uid": "143ffde6-b2d9-4a1a-9e8e-3380fb2d39c3"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:37Z",
+      "message": "Created pod: storefront-68b686c56f-c7tvt",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:37Z",
+        "name": "storefront-68b686c56f.18d021f29e7634c1",
+        "namespace": "web",
+        "resourceVersion": "47020",
+        "uid": "56a6fce3-0fc4-4d36-b0e1-9e514a2212dc"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:19:37Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "storefront",
+        "namespace": "web",
+        "resourceVersion": "47010",
+        "uid": "95a21bad-965a-42fb-8f1c-1d749956f388"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:19:37Z",
+      "message": "Scaled up replica set storefront-68b686c56f from 0 to 2",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:19:37Z",
+        "name": "storefront.18d021f29e3c9ce7",
+        "namespace": "web",
+        "resourceVersion": "47013",
+        "uid": "5aa7d1fa-2b61-4b10-a3ea-b5f132ae94db"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "ResourceQuota checkout/checkout-quota sets .spec.hard.pods to \"2\" while Deployment checkout/checkout-api requests 6 replicas, so quota admission rejects every pod after the second: the ReplicaSet controller logs 'Error creating: pods \"checkout-api-5f66bf789c-wj8l8\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2' and retries, and the Deployment sits at \"2 desired | 2 updated | 2 total | 2 available | 4 unavailable\" with ReplicaFailure=FailedCreate. Only two pods absorb the traffic spike, so the added capacity the scale-up was supposed to deliver never exists.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

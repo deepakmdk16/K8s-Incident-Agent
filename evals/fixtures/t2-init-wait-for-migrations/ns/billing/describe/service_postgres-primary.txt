@@ -1,0 +1,16 @@
+Name:                     postgres-primary
+Namespace:                billing
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=postgres-primary
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.16.233
+IPs:                      10.96.16.233
+Port:                     sql  5432/TCP
+TargetPort:               5432/TCP
+Endpoints:                10.244.0.126:5432
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

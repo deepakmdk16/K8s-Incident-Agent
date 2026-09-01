@@ -1,0 +1,63 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.140"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "thumbnailer-85d4959957-nnh2b",
+            "namespace": "asset-pipeline",
+            "uid": "c0568f6b-f094-4c6d-86b0-02cbec6fb884"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T02:14:06Z",
+        "generateName": "thumbnailer-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "thumbnailer"
+        },
+        "name": "thumbnailer-xskt9",
+        "namespace": "asset-pipeline",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "thumbnailer",
+            "uid": "f447abce-0cdf-41ea-bd0b-e02ceaf81982"
+          }
+        ],
+        "resourceVersion": "58779",
+        "uid": "a3fb5f61-dacf-4d68-9c67-3c4ecc96e4a2"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

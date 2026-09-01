@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {"kind": "Deployment", "namespace": "payments", "name": "checkout-worker"},
+  "mechanism": "The checkout-worker Deployment's pod template defines no env or envFrom entries (Environment: <none>), so the worker container starts without AMQP_URL, logs 'FATAL: AMQP_URL not set' and exits 1 about two seconds into every run. The kubelet restarts it into CrashLoopBackOff (14 restarts, two recorded terminations both exit code 1 with identical 2-second lifetimes), so the container is never Ready and the Deployment reports Available=False/MinimumReplicasUnavailable, leaving the checkout queue unconsumed.",
+  "verdict": "confirmed"
+}

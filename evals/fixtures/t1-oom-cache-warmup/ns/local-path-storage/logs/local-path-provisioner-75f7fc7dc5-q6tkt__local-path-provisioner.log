@@ -1,0 +1,4 @@
+2026-08-28T15:51:29.264809533Z time="2026-08-28T15:51:29Z" level=debug msg="Applied config: {\"nodePathMap\":[{\"node\":\"DEFAULT_PATH_FOR_NON_LISTED_NODES\",\"paths\":[\"/var/local-path-provisioner\"]}],\"storageClassConfigs\":null}"
+2026-08-28T15:51:29.265531337Z time="2026-08-28T15:51:29Z" level=debug msg="Provisioner started"
+2026-08-28T15:51:29.265704173Z I0828 15:51:29.265597       1 controller.go:838] "Starting provisioner controller" component="rancher.io/local-path_local-path-provisioner-75f7fc7dc5-q6tkt_a81e9b5b-81c7-4220-a117-5e25632be9a1"
+2026-08-28T15:51:29.366548330Z I0828 15:51:29.366438       1 controller.go:887] "Started provisioner controller" component="rancher.io/local-path_local-path-provisioner-75f7fc7dc5-q6tkt_a81e9b5b-81c7-4220-a117-5e25632be9a1"

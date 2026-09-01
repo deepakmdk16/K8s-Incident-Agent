@@ -1,0 +1,7 @@
+Name:         kube-proxy
+Labels:       <none>
+Annotations:  <none>
+PolicyRule:
+  Resources   Non-Resource URLs  Resource Names  Verbs
+  ---------   -----------------  --------------  -----
+  configmaps  []                 [kube-proxy]    [get]

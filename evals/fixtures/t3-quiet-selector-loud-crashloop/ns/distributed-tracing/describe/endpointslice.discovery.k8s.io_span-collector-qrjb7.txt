@@ -1,0 +1,19 @@
+Name:         span-collector-qrjb7
+Namespace:    distributed-tracing
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=span-collector
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:14:07Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.141
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/span-collector-98dd7779b-jnft5
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

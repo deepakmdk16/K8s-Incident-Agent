@@ -1,0 +1,10 @@
+Name:         system:controller:bootstrap-signer
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+Role:
+  Kind:  Role
+  Name:  system:controller:bootstrap-signer
+Subjects:
+  Kind            Name              Namespace
+  ----            ----              ---------
+  ServiceAccount  bootstrap-signer  kube-system

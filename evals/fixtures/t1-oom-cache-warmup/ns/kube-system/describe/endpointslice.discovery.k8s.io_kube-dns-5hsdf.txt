@@ -1,0 +1,31 @@
+Name:         kube-dns-5hsdf
+Namespace:    kube-system
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              k8s-app=kube-dns
+              kubernetes.io/cluster-service=true
+              kubernetes.io/name=CoreDNS
+              kubernetes.io/service-name=kube-dns
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-28T15:51:30Z
+AddressType:  IPv4
+Ports:
+  Name     Port  Protocol
+  ----     ----  --------
+  dns      53    UDP
+  dns-tcp  53    TCP
+  metrics  9153  TCP
+Endpoints:
+  - Addresses:  10.244.0.4
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/coredns-559f6c778d-t9nfq
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+  - Addresses:  10.244.0.3
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/coredns-559f6c778d-9sqc8
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

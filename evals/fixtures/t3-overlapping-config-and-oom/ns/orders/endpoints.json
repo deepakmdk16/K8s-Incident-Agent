@@ -1,0 +1,56 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:34:01Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "orders-api",
+        "namespace": "orders",
+        "resourceVersion": "51140",
+        "uid": "da16c575-9f8c-4725-a7b2-8fe9c0ed4f45"
+      },
+      "subsets": [
+        {
+          "notReadyAddresses": [
+            {
+              "ip": "10.244.0.71",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "orders-api-6c64874687-t6d22",
+                "namespace": "orders",
+                "uid": "5d299f83-0b60-495c-9508-80aa5fff2c9b"
+              }
+            },
+            {
+              "ip": "10.244.0.72",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "orders-api-6c64874687-8c47z",
+                "namespace": "orders",
+                "uid": "5a2aab28-60a4-42f9-88f5-3cfe4191d687"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

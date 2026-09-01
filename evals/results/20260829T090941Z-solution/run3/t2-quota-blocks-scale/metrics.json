@@ -1,0 +1,23 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "arm": "solution",
+  "run_id": "13881ee9eb59",
+  "model": "claude-opus-5",
+  "input_tokens": 32306,
+  "output_tokens": 3180,
+  "cost_usd": 0.150527,
+  "uncached_input_tokens": 8,
+  "cache_read_tokens": 22761,
+  "cache_write_tokens": 9537,
+  "duration_s": 36.68,
+  "turns": 4,
+  "tool_calls": 5,
+  "submit_attempts": 1,
+  "verdict_proposed": "confirmed",
+  "verdict_final": "confirmed",
+  "salvaged": false,
+  "evidence_items": 6,
+  "ruled_out_items": 3,
+  "verification_present": 3,
+  "verification_total": 3
+}

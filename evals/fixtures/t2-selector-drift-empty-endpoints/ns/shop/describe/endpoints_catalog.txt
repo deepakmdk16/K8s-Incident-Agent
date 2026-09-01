@@ -1,0 +1,6 @@
+Name:         catalog
+Namespace:    shop
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T02:09:37Z
+Subsets:
+Events:  <none>

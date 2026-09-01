@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Fast pre-commit gate: branch hygiene + secret/privacy scan.
+# Wired via: git config core.hooksPath githooks  (preflight.sh warns if not)
+set -u
+ROOT="$(git rev-parse --show-toplevel)"
+
+# Branch hygiene: one branch per slice; main only receives merges.
+branch="$(git symbolic-ref --short HEAD 2>/dev/null || echo detached)"
+if [ "$branch" = "main" ] && [ ! -f "$(git rev-parse --git-dir)/MERGE_HEAD" ] \
+   && [ "${ALLOW_MAIN:-0}" != "1" ]; then
+  echo "pre-commit: direct commits to main are blocked (branch per slice)." >&2
+  echo "Cut a branch, or override deliberately with: ALLOW_MAIN=1 git commit ..." >&2
+  exit 1
+fi
+
+# Secrets can never enter history: even a later scrub leaves them in git objects.
+if git diff --cached --name-only | grep -qE '(^|/)\.env$'; then
+  echo "pre-commit: .env is staged — secrets never enter git history." >&2
+  exit 1
+fi
+bash "$ROOT/scripts/checkpoints.sh" --secrets-only || {
+  echo "pre-commit: secret/privacy scan failed — nothing committed." >&2
+  exit 1
+}

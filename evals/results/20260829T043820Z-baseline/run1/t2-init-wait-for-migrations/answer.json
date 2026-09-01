@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {"kind": "Deployment", "namespace": "billing", "name": "billing-api"},
+  "mechanism": "The billing-api Deployment's pod template sets DB_HOST=db-primary for its wait-for-db init container, but no Service by that name exists in the cluster; the only database Service is billing/postgres-primary on 5432/TCP. The init container's TCP probe to db-primary:5432 therefore never resolves and loops every 5 seconds forever, so Initialized stays False, the api container never starts, and the Deployment remains 0/2 Ready with Available=False/MinimumReplicasUnavailable.",
+  "verdict": "confirmed"
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "ResourceQuota checkout/checkout-quota sets .spec.hard[pods] to \"2\" where it needs to allow at least the 6 replicas requested of Deployment checkout/checkout-api; its status already shows used 2 / hard 2. Consequently the admission of each further pod created by ReplicaSet checkout/checkout-api-5f66bf789c is rejected with \"Error creating: pods \\\"checkout-api-5f66bf789c-wj8l8\\\" is forbidden: exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2\", and the replicaset-controller keeps retrying and re-failing, leaving Deployment checkout/checkout-api at \"2 updated | 2 total | 2 available | 4 unavailable\" with ReplicaFailure=True (FailedCreate).",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

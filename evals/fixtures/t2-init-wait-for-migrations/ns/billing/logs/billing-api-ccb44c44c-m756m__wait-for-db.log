@@ -1,0 +1,6 @@
+2026-08-29T02:12:44.453953024Z wait-for-db: waiting for db-primary:5432 before starting billing-api
+2026-08-29T02:12:44.456940057Z waiting for db-primary:5432
+2026-08-29T02:12:49.459830132Z waiting for db-primary:5432
+2026-08-29T02:12:54.462257680Z waiting for db-primary:5432
+2026-08-29T02:12:59.464608865Z waiting for db-primary:5432
+2026-08-29T02:13:04.469219042Z waiting for db-primary:5432

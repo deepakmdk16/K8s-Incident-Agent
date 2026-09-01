@@ -1,0 +1,20 @@
+Name:         push-dispatcher-config
+Namespace:    push-notifications
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+batch_size:
+----
+100
+
+delivery_timeout_seconds:
+----
+10
+
+
+BinaryData
+====
+
+Events:  <none>

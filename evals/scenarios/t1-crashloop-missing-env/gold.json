@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t1-crashloop-missing-env",
+  "tier": "T1",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "payments",
+    "name": "checkout-worker"
+  },
+  "fault_class": "app-crashloop",
+  "mechanism_summary": "The container entrypoint requires AMQP_URL; it is unset, so the process logs 'FATAL: AMQP_URL not set' and exits 1, and kubelet restarts it with exponential backoff.",
+  "decisive_evidence": "Current-channel container logs for the payments/checkout-worker pod (FATAL line), plus the pod's CrashLoopBackOff waiting reason and restart count.",
+  "remediation_summary": "Set AMQP_URL on the checkout-worker deployment (direct env or ConfigMap/Secret ref) to the queue endpoint and roll out."
+}

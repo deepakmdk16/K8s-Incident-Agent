@@ -1,0 +1,38 @@
+Name:           search-5478989674
+Namespace:      search
+Selector:       app=search,pod-template-hash=5478989674
+Labels:         app=search
+                pod-template-hash=5478989674
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/search
+Replicas:       2 current / 2 desired
+Pods Status:    2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=search
+           pod-template-hash=5478989674
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Readiness:    http-get http://:8080/ delay=0s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          search-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  4m47s  replicaset-controller  Created pod: search-5478989674-pswt8
+  Normal  SuccessfulCreate  4m47s  replicaset-controller  Created pod: search-5478989674-6rxcp

@@ -1,0 +1,20 @@
+Name:         webhook-relay-config
+Namespace:    webhooks
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+retry_count:
+----
+5
+
+timeout_seconds:
+----
+8
+
+
+BinaryData
+====
+
+Events:  <none>

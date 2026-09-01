@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "mechanism": "The container cannot start because the ConfigMap it references was not found.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

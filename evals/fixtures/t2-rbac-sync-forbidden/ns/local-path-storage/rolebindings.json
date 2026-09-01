@@ -1,0 +1,33 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-08-28T15:51:10Z",
+        "name": "local-path-provisioner-bind",
+        "namespace": "local-path-storage",
+        "resourceVersion": "311",
+        "uid": "9134bdea-bf3d-4469-9c92-228c6c282d20"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "local-path-provisioner-role"
+      },
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "local-path-provisioner-service-account",
+          "namespace": "local-path-storage"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

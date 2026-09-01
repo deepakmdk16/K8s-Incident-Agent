@@ -1,0 +1,60 @@
+Name:             thumbnailer-85d4959957-nnh2b
+Namespace:        asset-pipeline
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sat, 29 Aug 2026 07:44:07 +0530
+Labels:           app=thumbnailer
+                  pod-template-hash=85d4959957
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.140
+IPs:
+  IP:           10.244.0.140
+Controlled By:  ReplicaSet/thumbnailer-85d4959957
+Containers:
+  worker:
+    Container ID:  containerd://f374a40a2987bbc74a2258b036a86aa3fc90676c1b88aee90bd8cbadb755ab4f
+    Image:         busybox:1.36
+    Image ID:      docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'thumbnailer started'; exec sleep 2147483647
+    State:          Running
+      Started:      Sat, 29 Aug 2026 07:44:07 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-rt49p (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-rt49p:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  4m16s  default-scheduler  Successfully assigned asset-pipeline/thumbnailer-85d4959957-nnh2b to incident-lab-control-plane
+  Normal  Pulled     4m16s  kubelet            spec.containers{worker}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    4m16s  kubelet            spec.containers{worker}: Container created
+  Normal  Started    4m16s  kubelet            spec.containers{worker}: Container started

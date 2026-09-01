@@ -1,0 +1,234 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "recommendations-85fd7764f4-p9rw8",
+        "namespace": "recs",
+        "resourceVersion": "47838",
+        "uid": "98cf8363-8570-4e63-afe1-677b9f20ab3e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:28Z",
+      "message": "Successfully assigned recs/recommendations-85fd7764f4-p9rw8 to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:28Z",
+        "name": "recommendations-85fd7764f4-p9rw8.18d0224429bf8dbb",
+        "namespace": "recs",
+        "resourceVersion": "47843",
+        "uid": "c817b199-f83f-4b3a-8378-e6ab3caddeb8"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 3,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{server}",
+        "kind": "Pod",
+        "name": "recommendations-85fd7764f4-p9rw8",
+        "namespace": "recs",
+        "resourceVersion": "47841",
+        "uid": "98cf8363-8570-4e63-afe1-677b9f20ab3e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:42Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:28Z",
+        "name": "recommendations-85fd7764f4-p9rw8.18d022443f30ffe6",
+        "namespace": "recs",
+        "resourceVersion": "47888",
+        "uid": "031bc3ed-69e2-4d91-878e-5743afe92ffa"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 3,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{server}",
+        "kind": "Pod",
+        "name": "recommendations-85fd7764f4-p9rw8",
+        "namespace": "recs",
+        "resourceVersion": "47841",
+        "uid": "98cf8363-8570-4e63-afe1-677b9f20ab3e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:42Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:28Z",
+        "name": "recommendations-85fd7764f4-p9rw8.18d022443f7d7f20",
+        "namespace": "recs",
+        "resourceVersion": "47890",
+        "uid": "abdbf494-5409-4503-a9b3-db9462e3e8ed"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 3,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:28Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{server}",
+        "kind": "Pod",
+        "name": "recommendations-85fd7764f4-p9rw8",
+        "namespace": "recs",
+        "resourceVersion": "47841",
+        "uid": "98cf8363-8570-4e63-afe1-677b9f20ab3e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:42Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:28Z",
+        "name": "recommendations-85fd7764f4-p9rw8.18d02244411b45eb",
+        "namespace": "recs",
+        "resourceVersion": "47891",
+        "uid": "553d3859-9ace-42b0-9b0a-f46a76a2a0bd"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 2,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:29Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{server}",
+        "kind": "Pod",
+        "name": "recommendations-85fd7764f4-p9rw8",
+        "namespace": "recs",
+        "resourceVersion": "47841",
+        "uid": "98cf8363-8570-4e63-afe1-677b9f20ab3e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:42Z",
+      "message": "Back-off restarting failed container server in pod recommendations-85fd7764f4-p9rw8_recs(98cf8363-8570-4e63-afe1-677b9f20ab3e)",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:29Z",
+        "name": "recommendations-85fd7764f4-p9rw8.18d022448b4823d6",
+        "namespace": "recs",
+        "resourceVersion": "47895",
+        "uid": "b425b963-5d45-405d-97cd-404e73addf43"
+      },
+      "reason": "BackOff",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:28Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "recommendations-85fd7764f4",
+        "namespace": "recs",
+        "resourceVersion": "47835",
+        "uid": "535963c1-9e87-4bf0-a9af-56c9f26155a8"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:28Z",
+      "message": "Created pod: recommendations-85fd7764f4-p9rw8",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:28Z",
+        "name": "recommendations-85fd7764f4.18d02244299ff4ed",
+        "namespace": "recs",
+        "resourceVersion": "47839",
+        "uid": "7d860564-b739-4706-9010-344c83750e42"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-08-29T01:25:28Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "recommendations",
+        "namespace": "recs",
+        "resourceVersion": "47834",
+        "uid": "96c0d5e3-0da1-450d-97a9-e4509d6746b5"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-08-29T01:25:28Z",
+      "message": "Scaled up replica set recommendations-85fd7764f4 from 0 to 1",
+      "metadata": {
+        "creationTimestamp": "2026-08-29T01:25:28Z",
+        "name": "recommendations.18d02244297b9ce3",
+        "namespace": "recs",
+        "resourceVersion": "47837",
+        "uid": "4d116a5b-0342-49d3-a790-25dfb61f83e9"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

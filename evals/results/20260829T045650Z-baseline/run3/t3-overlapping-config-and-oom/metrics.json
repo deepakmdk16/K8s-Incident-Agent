@@ -1,0 +1,12 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "arm": "baseline",
+  "run_id": "e557f73b978d",
+  "model": "claude-opus-5",
+  "input_tokens": 14559,
+  "output_tokens": 4262,
+  "cost_usd": 0.179345,
+  "duration_s": 54.67,
+  "prompt_chars": 38340,
+  "prompt_sections": 9
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "failing_resource": {
+    "kind": "ResourceQuota",
+    "namespace": "checkout",
+    "name": "checkout-quota"
+  },
+  "mechanism": "ResourceQuota checkout/checkout-quota sets .spec.hard.pods to \"2\" while deployment checkout-api requests 6 replicas; with usage already at 2/2, the API server rejects each pod create from ReplicaSet checkout-api-5f66bf789c with \"exceeded quota: checkout-quota, requested: pods=1, used: pods=2, limited: pods=2\", so only 2 of the 6 pods are ever admitted and the deployment reports ReplicaFailure=True.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

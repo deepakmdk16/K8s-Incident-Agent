@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "fraud",
+    "name": "fraud-scoring"
+  },
+  "mechanism": "Deployment fraud/fraud-scoring sets .spec.template.spec.containers[0].resources.requests.cpu to \"512\", i.e. 512 whole cores, where \"512m\" (0.512 core) was intended; the cluster's single node has cpu=6 allocatable, so the default scheduler cannot fit the pod and rejects it with \"0/1 nodes are available: 1 Insufficient cpu\", leaving it unscheduled in Pending.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

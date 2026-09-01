@@ -1,0 +1,4 @@
+2026-08-29T02:11:44.541392879Z inventory-sync: starting; serviceaccount=inventory-sync
+2026-08-29T02:11:44.585289702Z identity=inventory-sync discovery=ok
+2026-08-29T02:11:44.632577889Z sync fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-08-29T02:11:44.632590973Z serving stale inventory snapshot

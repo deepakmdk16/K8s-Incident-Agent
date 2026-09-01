@@ -1,0 +1,11 @@
+Name:         system::extension-apiserver-authentication-reader
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+Role:
+  Kind:  Role
+  Name:  extension-apiserver-authentication-reader
+Subjects:
+  Kind  Name                            Namespace
+  ----  ----                            ---------
+  User  system:kube-controller-manager  
+  User  system:kube-scheduler           

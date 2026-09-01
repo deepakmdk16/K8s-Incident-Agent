@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The Deployment's container command allocates a ~200 MiB cache buffer at startup (dd bs=1M count=200) while its memory limit is only 64Mi, so the cgroup OOM killer SIGKILLs the container during warmup every time (Reason: OOMKilled, Exit Code: 137, logs stop after 'warming catalog cache'). The container never reaches its serving loop, so the pod never becomes Ready and the Deployment stays 0/1 Available in CrashLoopBackOff, leaving the recommendations panel empty.",
+  "verdict": "confirmed"
+}

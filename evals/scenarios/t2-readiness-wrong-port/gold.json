@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-readiness-wrong-port",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "orders",
+    "name": "orders-api"
+  },
+  "fault_class": "readiness-probe-failing",
+  "mechanism_summary": "The orders-api deployment's readiness probe targets port 8081 while the container serves on 8080, so the probe fails on every cycle, the pods run but stay not ready, and the service has no addresses to route to.",
+  "decisive_evidence": "Both orders-api pods Running with Ready=False and recurring 'Readiness probe failed: ... :8081' Unhealthy events, while the container spec and its script serve on 8080; Endpoints orders-api is empty, matching the gateway's failed fetches.",
+  "remediation_summary": "Point the readiness probe at the port the container actually serves: kubectl -n orders patch deployment orders-api --type=json -p '[{\"op\":\"replace\",\"path\":\"/spec/template/spec/containers/0/readinessProbe/httpGet/port\",\"value\":8080}]'; after the rollout the pods become Ready, Endpoints populates, and gateway calls succeed."
+}

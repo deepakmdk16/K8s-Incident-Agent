@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "failing_resource": {"kind": "Service", "namespace": "shop", "name": "catalog"},
+  "mechanism": "The catalog Service's selector is app=catalog-api, but the catalog pods are labeled app=catalog, so the selector matches no pods and the Service's endpoint list is empty. Requests from the storefront gateway to catalog.shop.svc:8080 therefore have no backend to reach and hang until they time out, even though the catalog pods are all Running and Ready.",
+  "verdict": "confirmed"
+}

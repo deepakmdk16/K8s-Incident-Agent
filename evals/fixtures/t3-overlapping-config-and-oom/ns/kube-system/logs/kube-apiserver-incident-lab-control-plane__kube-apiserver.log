@@ -1,0 +1,253 @@
+2026-08-28T15:51:06.352975420Z I0828 15:51:06.352382       1 options.go:261] external host was not specified, using 172.18.0.2
+2026-08-28T15:51:06.356545355Z I0828 15:51:06.356504       1 server.go:151] Version: v1.37.0
+2026-08-28T15:51:06.356551438Z I0828 15:51:06.356524       1 server.go:153] "Golang settings" GOGC="" GOMAXPROCS="" GOTRACEBACK=""
+2026-08-28T15:51:06.529044221Z I0828 15:51:06.528965       1 shared_informer.go:503] "Waiting for caches to sync" controller="node_authorizer"
+2026-08-28T15:51:06.529261016Z E0828 15:51:06.529192       1 options.go:205] The manifest file is empty, ignoring.
+2026-08-28T15:51:06.569791732Z I0828 15:51:06.569738       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-08-28T15:51:06.571313382Z I0828 15:51:06.571274       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-08-28T15:51:06.572579028Z I0828 15:51:06.572521       1 plugins.go:157] Loaded 15 mutating admission controller(s) successfully in the following order: NamespaceLifecycle,LimitRanger,ServiceAccount,NodeRestriction,TaintNodesByCondition,Priority,DefaultTolerationSeconds,DefaultStorageClass,StorageObjectInUseProtection,PodGroupProtection,RuntimeClass,DefaultIngressClass,PodTopologyLabels,MutatingAdmissionPolicy,MutatingAdmissionWebhook.
+2026-08-28T15:51:06.572583320Z I0828 15:51:06.572529       1 plugins.go:160] Loaded 15 validating admission controller(s) successfully in the following order: LimitRanger,ServiceAccount,PodSecurity,Priority,PersistentVolumeClaimResize,RuntimeClass,CertificateApproval,CertificateSigning,ClusterTrustBundleAttest,CertificateSubjectRestriction,NodeDeclaredFeatureValidator,PodResizeValidator,ValidatingAdmissionPolicy,ValidatingAdmissionWebhook,ResourceQuota.
+2026-08-28T15:51:06.572653113Z I0828 15:51:06.572609       1 instance.go:244] Using reconciler: lease
+2026-08-28T15:51:06.580117153Z I0828 15:51:06.580059       1 handler.go:309] Adding GroupVersion apiextensions.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.580122153Z W0828 15:51:06.580068       1 genericapiserver.go:798] Skipping API apiextensions.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.581853765Z I0828 15:51:06.581797       1 cidrallocator.go:198] starting ServiceCIDR Allocator Controller
+2026-08-28T15:51:06.640719869Z I0828 15:51:06.640616       1 handler.go:309] Adding GroupVersion  v1 to ResourceManager
+2026-08-28T15:51:06.640742244Z I0828 15:51:06.640721       1 apis.go:112] API group "internal.apiserver.k8s.io" is not enabled, skipping.
+2026-08-28T15:51:06.663425954Z I0828 15:51:06.663357       1 apis.go:112] API group "lifecycle.k8s.io" is not enabled, skipping.
+2026-08-28T15:51:06.791756545Z I0828 15:51:06.791654       1 handler.go:309] Adding GroupVersion authentication.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.791774504Z W0828 15:51:06.791669       1 genericapiserver.go:798] Skipping API authentication.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.791775462Z W0828 15:51:06.791671       1 genericapiserver.go:798] Skipping API authentication.k8s.io/v1alpha1 because it has no resources.
+2026-08-28T15:51:06.791903423Z I0828 15:51:06.791830       1 handler.go:309] Adding GroupVersion authorization.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.791913465Z W0828 15:51:06.791838       1 genericapiserver.go:798] Skipping API authorization.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.792131302Z I0828 15:51:06.792078       1 handler.go:309] Adding GroupVersion autoscaling v2 to ResourceManager
+2026-08-28T15:51:06.792366014Z I0828 15:51:06.792311       1 handler.go:309] Adding GroupVersion autoscaling v1 to ResourceManager
+2026-08-28T15:51:06.792754520Z I0828 15:51:06.792707       1 handler.go:309] Adding GroupVersion batch v1 to ResourceManager
+2026-08-28T15:51:06.792759687Z W0828 15:51:06.792713       1 genericapiserver.go:798] Skipping API batch/v1beta1 because it has no resources.
+2026-08-28T15:51:06.793254070Z I0828 15:51:06.793206       1 handler.go:309] Adding GroupVersion certificates.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.793256904Z W0828 15:51:06.793211       1 genericapiserver.go:798] Skipping API certificates.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.793257487Z W0828 15:51:06.793212       1 genericapiserver.go:798] Skipping API certificates.k8s.io/v1alpha1 because it has no resources.
+2026-08-28T15:51:06.793407906Z I0828 15:51:06.793362       1 handler.go:309] Adding GroupVersion coordination.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.793410323Z W0828 15:51:06.793367       1 genericapiserver.go:798] Skipping API coordination.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.793410948Z W0828 15:51:06.793368       1 genericapiserver.go:798] Skipping API coordination.k8s.io/v1alpha2 because it has no resources.
+2026-08-28T15:51:06.793575951Z I0828 15:51:06.793528       1 handler.go:309] Adding GroupVersion discovery.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.793579409Z W0828 15:51:06.793536       1 genericapiserver.go:798] Skipping API discovery.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.794446090Z I0828 15:51:06.794398       1 handler.go:309] Adding GroupVersion networking.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.794456465Z W0828 15:51:06.794403       1 genericapiserver.go:798] Skipping API networking.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.794638093Z I0828 15:51:06.794585       1 handler.go:309] Adding GroupVersion node.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.794640093Z W0828 15:51:06.794592       1 genericapiserver.go:798] Skipping API node.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.794640593Z W0828 15:51:06.794594       1 genericapiserver.go:798] Skipping API node.k8s.io/v1alpha1 because it has no resources.
+2026-08-28T15:51:06.795467274Z I0828 15:51:06.795403       1 handler.go:309] Adding GroupVersion policy v1 to ResourceManager
+2026-08-28T15:51:06.795470732Z W0828 15:51:06.795417       1 genericapiserver.go:798] Skipping API policy/v1beta1 because it has no resources.
+2026-08-28T15:51:06.796014783Z I0828 15:51:06.795961       1 handler.go:309] Adding GroupVersion rbac.authorization.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.796019033Z W0828 15:51:06.795969       1 genericapiserver.go:798] Skipping API rbac.authorization.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.796020116Z W0828 15:51:06.795972       1 genericapiserver.go:798] Skipping API rbac.authorization.k8s.io/v1alpha1 because it has no resources.
+2026-08-28T15:51:06.796164910Z I0828 15:51:06.796115       1 handler.go:309] Adding GroupVersion scheduling.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.796167410Z W0828 15:51:06.796122       1 genericapiserver.go:798] Skipping API scheduling.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.796168119Z W0828 15:51:06.796124       1 genericapiserver.go:798] Skipping API scheduling.k8s.io/v1alpha3 because it has no resources.
+2026-08-28T15:51:06.798997499Z I0828 15:51:06.797842       1 handler.go:309] Adding GroupVersion storage.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.799011333Z W0828 15:51:06.798981       1 genericapiserver.go:798] Skipping API storage.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.799159502Z W0828 15:51:06.798997       1 genericapiserver.go:798] Skipping API storage.k8s.io/v1alpha1 because it has no resources.
+2026-08-28T15:51:06.800088726Z I0828 15:51:06.800029       1 handler.go:309] Adding GroupVersion storagemigration.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.800094059Z W0828 15:51:06.800048       1 genericapiserver.go:798] Skipping API storagemigration.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.801289787Z I0828 15:51:06.801235       1 handler.go:309] Adding GroupVersion flowcontrol.apiserver.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.801297079Z W0828 15:51:06.801249       1 genericapiserver.go:798] Skipping API flowcontrol.apiserver.k8s.io/v1beta3 because it has no resources.
+2026-08-28T15:51:06.801297871Z W0828 15:51:06.801251       1 genericapiserver.go:798] Skipping API flowcontrol.apiserver.k8s.io/v1beta2 because it has no resources.
+2026-08-28T15:51:06.801298454Z W0828 15:51:06.801252       1 genericapiserver.go:798] Skipping API flowcontrol.apiserver.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.804134501Z I0828 15:51:06.804060       1 handler.go:309] Adding GroupVersion apps v1 to ResourceManager
+2026-08-28T15:51:06.804142710Z W0828 15:51:06.804075       1 genericapiserver.go:798] Skipping API apps/v1beta2 because it has no resources.
+2026-08-28T15:51:06.804143543Z W0828 15:51:06.804080       1 genericapiserver.go:798] Skipping API apps/v1beta1 because it has no resources.
+2026-08-28T15:51:06.805781028Z I0828 15:51:06.805348       1 handler.go:309] Adding GroupVersion admissionregistration.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.805787529Z W0828 15:51:06.805355       1 genericapiserver.go:798] Skipping API admissionregistration.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.805790279Z W0828 15:51:06.805358       1 genericapiserver.go:798] Skipping API admissionregistration.k8s.io/v1alpha1 because it has no resources.
+2026-08-28T15:51:06.805791279Z I0828 15:51:06.805666       1 handler.go:309] Adding GroupVersion events.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.805793779Z W0828 15:51:06.805690       1 genericapiserver.go:798] Skipping API events.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.806851338Z I0828 15:51:06.806794       1 handler.go:309] Adding GroupVersion resource.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.806862921Z W0828 15:51:06.806803       1 genericapiserver.go:798] Skipping API resource.k8s.io/v1beta2 because it has no resources.
+2026-08-28T15:51:06.806864171Z W0828 15:51:06.806807       1 genericapiserver.go:798] Skipping API resource.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.806864630Z W0828 15:51:06.806808       1 genericapiserver.go:798] Skipping API resource.k8s.io/v1alpha3 because it has no resources.
+2026-08-28T15:51:06.812228636Z I0828 15:51:06.812113       1 handler.go:309] Adding GroupVersion apiregistration.k8s.io v1 to ResourceManager
+2026-08-28T15:51:06.812239927Z W0828 15:51:06.812125       1 genericapiserver.go:798] Skipping API apiregistration.k8s.io/v1beta1 because it has no resources.
+2026-08-28T15:51:06.979136159Z I0828 15:51:06.979023       1 dynamic_cafile_content.go:161] "Starting controller" name="request-header::/etc/kubernetes/pki/front-proxy-ca.crt"
+2026-08-28T15:51:06.979151451Z I0828 15:51:06.979032       1 dynamic_cafile_content.go:161] "Starting controller" name="client-ca-bundle::/etc/kubernetes/pki/ca.crt"
+2026-08-28T15:51:06.979258661Z I0828 15:51:06.979184       1 dynamic_serving_content.go:135] "Starting controller" name="serving-cert::/etc/kubernetes/pki/apiserver.crt::/etc/kubernetes/pki/apiserver.key"
+2026-08-28T15:51:06.979555041Z I0828 15:51:06.979457       1 secure_serving.go:214] Serving securely on [::]:6443
+2026-08-28T15:51:06.979560833Z I0828 15:51:06.979483       1 tlsconfig.go:243] "Starting DynamicServingCertificateController"
+2026-08-28T15:51:06.979588834Z I0828 15:51:06.979558       1 controller.go:87] "Starting OpenAPI AggregationController"
+2026-08-28T15:51:06.979654418Z I0828 15:51:06.979614       1 remote_available_controller.go:434] Starting RemoteAvailability controller
+2026-08-28T15:51:06.979656085Z I0828 15:51:06.979625       1 cache.go:32] Waiting for caches to sync for RemoteAvailability controller
+2026-08-28T15:51:06.980688227Z I0828 15:51:06.979640       1 controller.go:116] "Deleting old lease on startup" lease="kube-system/apiserver-pyfwhcikx5tddsmhcaj5nka3dy"
+2026-08-28T15:51:06.980696477Z I0828 15:51:06.979652       1 local_available_controller.go:156] Starting LocalAvailability controller
+2026-08-28T15:51:06.980697310Z I0828 15:51:06.979655       1 cache.go:32] Waiting for caches to sync for LocalAvailability controller
+2026-08-28T15:51:06.980697810Z I0828 15:51:06.979722       1 cluster_authentication_trust_controller.go:459] Starting cluster_authentication_trust_controller controller
+2026-08-28T15:51:06.980698435Z I0828 15:51:06.979726       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-08-28T15:51:06.980698810Z I0828 15:51:06.979765       1 controller.go:127] "Starting legacy_token_tracking_controller"
+2026-08-28T15:51:06.980699227Z I0828 15:51:06.979769       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-08-28T15:51:06.980699602Z I0828 15:51:06.979823       1 system_namespaces_controller.go:66] Starting system namespaces controller
+2026-08-28T15:51:06.980699977Z I0828 15:51:06.979852       1 gc_controller.go:85] "Starting apiserver lease garbage collector"
+2026-08-28T15:51:06.980700394Z I0828 15:51:06.979855       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-08-28T15:51:06.980700769Z I0828 15:51:06.979901       1 customresource_discovery_controller.go:294] Starting DiscoveryController
+2026-08-28T15:51:06.980701144Z I0828 15:51:06.979922       1 storage_readiness_hook.go:70] Storage is ready for all registered resources
+2026-08-28T15:51:06.980701519Z I0828 15:51:06.979929       1 apf_controller.go:377] Starting API Priority and Fairness config controller
+2026-08-28T15:51:06.980702019Z I0828 15:51:06.979969       1 controller.go:142] Starting OpenAPI controller
+2026-08-28T15:51:06.980702394Z I0828 15:51:06.979977       1 controller.go:90] Starting OpenAPI V3 controller
+2026-08-28T15:51:06.980702769Z I0828 15:51:06.979981       1 naming_controller.go:305] Starting NamingConditionController
+2026-08-28T15:51:06.980703644Z I0828 15:51:06.979996       1 nonstructuralschema_controller.go:202] Starting NonStructuralSchemaConditionController
+2026-08-28T15:51:06.980704019Z I0828 15:51:06.980001       1 apiapproval_controller.go:196] Starting KubernetesAPIApprovalPolicyConformantConditionController
+2026-08-28T15:51:06.980704394Z I0828 15:51:06.980005       1 crd_finalizer.go:276] "Starting CRDFinalizer"
+2026-08-28T15:51:06.980704769Z I0828 15:51:06.980011       1 aggregator.go:185] waiting for initial CRD sync...
+2026-08-28T15:51:06.980705144Z I0828 15:51:06.980022       1 dynamic_cafile_content.go:161] "Starting controller" name="client-ca-bundle::/etc/kubernetes/pki/ca.crt"
+2026-08-28T15:51:06.980705519Z I0828 15:51:06.980024       1 default_servicecidr_controller.go:110] "Starting" controller="kubernetes-service-cidr-controller"
+2026-08-28T15:51:06.980705894Z I0828 15:51:06.980030       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-08-28T15:51:06.980706269Z I0828 15:51:06.980078       1 dynamic_cafile_content.go:161] "Starting controller" name="request-header::/etc/kubernetes/pki/front-proxy-ca.crt"
+2026-08-28T15:51:06.980706685Z I0828 15:51:06.980322       1 crdregistration_controller.go:114] Starting crd-autoregister controller
+2026-08-28T15:51:06.980707060Z I0828 15:51:06.980325       1 shared_informer.go:503] "Waiting for caches to sync" controller="crd-autoregister"
+2026-08-28T15:51:06.980707435Z I0828 15:51:06.980630       1 apiservice_controller.go:100] Starting APIServiceRegistrationController
+2026-08-28T15:51:06.980707810Z I0828 15:51:06.980634       1 cache.go:32] Waiting for caches to sync for APIServiceRegistrationController controller
+2026-08-28T15:51:06.980711561Z I0828 15:51:06.980642       1 controller.go:89] "Starting OpenAPI V3 AggregationController"
+2026-08-28T15:51:06.983040724Z I0828 15:51:06.983008       1 repairip.go:210] Starting ipallocator-repair-controller
+2026-08-28T15:51:06.983046474Z I0828 15:51:06.983019       1 shared_informer.go:503] "Waiting for caches to sync" controller="ipallocator-repair-controller"
+2026-08-28T15:51:06.987969598Z I0828 15:51:06.979643       1 dynamic_serving_content.go:135] "Starting controller" name="aggregator-proxy-cert::/etc/kubernetes/pki/front-proxy-client.crt::/etc/kubernetes/pki/front-proxy-client.key"
+2026-08-28T15:51:07.029389286Z I0828 15:51:07.029276       1 shared_informer.go:510] "Caches are synced" controller="node_authorizer"
+2026-08-28T15:51:07.049813084Z E0828 15:51:07.049756       1 controller.go:208] "Failed to ensure lease exists, will retry" err="namespaces \"kube-system\" not found" interval="200ms"
+2026-08-28T15:51:07.070794850Z I0828 15:51:07.070722       1 shared_informer.go:531] "Caches are synced"
+2026-08-28T15:51:07.070801017Z I0828 15:51:07.070732       1 policy_source.go:253] refreshing policies
+2026-08-28T15:51:07.072204415Z I0828 15:51:07.072151       1 shared_informer.go:531] "Caches are synced"
+2026-08-28T15:51:07.072208540Z I0828 15:51:07.072159       1 policy_source.go:253] refreshing policies
+2026-08-28T15:51:07.081032729Z I0828 15:51:07.080979       1 cache.go:39] Caches are synced for LocalAvailability controller
+2026-08-28T15:51:07.081040812Z I0828 15:51:07.081007       1 shared_informer.go:531] "Caches are synced"
+2026-08-28T15:51:07.081042104Z I0828 15:51:07.081008       1 shared_informer.go:510] "Caches are synced" controller="crd-autoregister"
+2026-08-28T15:51:07.081090771Z I0828 15:51:07.081028       1 shared_informer.go:531] "Caches are synced"
+2026-08-28T15:51:07.081094271Z I0828 15:51:07.081042       1 shared_informer.go:531] "Caches are synced"
+2026-08-28T15:51:07.081095188Z I0828 15:51:07.081061       1 cache.go:39] Caches are synced for APIServiceRegistrationController controller
+2026-08-28T15:51:07.081097813Z I0828 15:51:07.081077       1 handler_discovery.go:450] Starting ResourceDiscoveryManager
+2026-08-28T15:51:07.081606280Z I0828 15:51:07.081081       1 shared_informer.go:531] "Caches are synced"
+2026-08-28T15:51:07.081609488Z I0828 15:51:07.081105       1 default_servicecidr_controller.go:170] "Creating default ServiceCIDR" CIDRs=["10.96.0.0/16"]
+2026-08-28T15:51:07.081610405Z I0828 15:51:07.081114       1 apf_controller.go:382] Running API Priority and Fairness config worker
+2026-08-28T15:51:07.081611030Z I0828 15:51:07.081118       1 apf_controller.go:385] Running API Priority and Fairness periodic rebalancing process
+2026-08-28T15:51:07.081611488Z I0828 15:51:07.081157       1 aggregator.go:187] initial CRD sync complete...
+2026-08-28T15:51:07.081612196Z I0828 15:51:07.081161       1 autoregister_controller.go:144] Starting autoregister controller
+2026-08-28T15:51:07.081614780Z I0828 15:51:07.081163       1 cache.go:32] Waiting for caches to sync for autoregister controller
+2026-08-28T15:51:07.081615363Z I0828 15:51:07.081166       1 cache.go:39] Caches are synced for autoregister controller
+2026-08-28T15:51:07.081615905Z I0828 15:51:07.081166       1 cache.go:39] Caches are synced for RemoteAvailability controller
+2026-08-28T15:51:07.083185556Z I0828 15:51:07.083109       1 shared_informer.go:510] "Caches are synced" controller="ipallocator-repair-controller"
+2026-08-28T15:51:07.086994411Z I0828 15:51:07.086936       1 default_servicecidr_controller.go:234] "Setting default ServiceCIDR condition Ready to True"
+2026-08-28T15:51:07.087713590Z I0828 15:51:07.087175       1 cidrallocator.go:302] created ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T15:51:07.089839542Z I0828 15:51:07.089782       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T15:51:07.089970794Z I0828 15:51:07.089871       1 default_servicecidr_controller.go:234] "Setting default ServiceCIDR condition Ready to True"
+2026-08-28T15:51:07.252530080Z I0828 15:51:07.252420       1 controller.go:667] quota admission added evaluator for: leases.coordination.k8s.io
+2026-08-28T15:51:07.982559178Z I0828 15:51:07.982201       1 storage_scheduling.go:189] created PriorityClass system-node-critical with value 2000001000
+2026-08-28T15:51:07.983990702Z I0828 15:51:07.983920       1 storage_scheduling.go:189] created PriorityClass system-cluster-critical with value 2000000000
+2026-08-28T15:51:07.983998660Z I0828 15:51:07.983929       1 storage_scheduling.go:205] all system priority classes are created successfully or already exist.
+2026-08-28T15:51:08.120805603Z I0828 15:51:08.120707       1 controller.go:667] quota admission added evaluator for: roles.rbac.authorization.k8s.io
+2026-08-28T15:51:08.130463597Z I0828 15:51:08.130376       1 controller.go:667] quota admission added evaluator for: rolebindings.rbac.authorization.k8s.io
+2026-08-28T15:51:08.186091564Z I0828 15:51:08.185699       1 alloc.go:329] "allocated clusterIPs" service="default/kubernetes" clusterIPs={"IPv4":"10.96.0.1"}
+2026-08-28T15:51:08.188253975Z W0828 15:51:08.188200       1 lease.go:270] Resetting endpoints for master service "kubernetes" to [172.18.0.2]
+2026-08-28T15:51:08.188629398Z I0828 15:51:08.188566       1 controller.go:667] quota admission added evaluator for: endpoints
+2026-08-28T15:51:08.189889544Z I0828 15:51:08.189832       1 controller.go:667] quota admission added evaluator for: endpointslices.discovery.k8s.io
+2026-08-28T15:51:09.406219162Z I0828 15:51:09.406122       1 controller.go:667] quota admission added evaluator for: serviceaccounts
+2026-08-28T15:51:09.408362156Z I0828 15:51:09.408291       1 controller.go:667] quota admission added evaluator for: deployments.apps
+2026-08-28T15:51:09.411788129Z I0828 15:51:09.411720       1 alloc.go:329] "allocated clusterIPs" service="kube-system/kube-dns" clusterIPs={"IPv4":"10.96.0.10"}
+2026-08-28T15:51:09.415160894Z I0828 15:51:09.415034       1 controller.go:667] quota admission added evaluator for: daemonsets.apps
+2026-08-28T15:51:17.561948024Z I0828 15:51:17.561792       1 controller.go:667] quota admission added evaluator for: replicasets.apps
+2026-08-28T15:51:17.811500198Z I0828 15:51:17.811398       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T15:51:17.813106559Z I0828 15:51:17.813004       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T15:51:17.861500952Z I0828 15:51:17.861335       1 controller.go:667] quota admission added evaluator for: controllerrevisions.apps
+2026-08-28T16:01:06.998909527Z I0828 16:01:06.998676       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T16:11:07.000236895Z I0828 16:11:06.999863       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T16:21:07.001253116Z I0828 16:21:07.000831       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T16:31:07.002016696Z I0828 16:31:07.001550       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T16:41:07.001790408Z I0828 16:41:07.001506       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T16:52:39.147239044Z I0828 16:52:39.146966       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T17:03:09.237282919Z I0828 17:03:09.236984       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T17:13:21.771587721Z I0828 17:13:21.771180       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T17:23:21.772407300Z I0828 17:23:21.772267       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T17:33:21.773291494Z I0828 17:33:21.772888       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T17:43:21.773489712Z I0828 17:43:21.773134       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T17:53:26.811219457Z I0828 17:53:26.810724       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T18:03:26.810971267Z I0828 18:03:26.810715       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T18:13:26.811527323Z I0828 18:13:26.811085       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T18:23:26.812740236Z I0828 18:23:26.812422       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T18:33:26.814792392Z I0828 18:33:26.814490       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T18:43:38.826105218Z I0828 18:43:38.825794       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T18:53:38.826288712Z I0828 18:53:38.825972       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:03:38.827089547Z I0828 19:03:38.826667       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:13:43.159428225Z I0828 19:13:43.158975       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:23:53.095936543Z I0828 19:23:53.095374       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:33:53.096767985Z I0828 19:33:53.096337       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:43:58.088477413Z I0828 19:43:58.088220       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:54:09.979064865Z I0828 19:54:09.978849       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T19:55:09.945214189Z I0828 19:55:09.944475       1 controller.go:667] quota admission added evaluator for: namespaces
+2026-08-28T20:04:12.492377190Z I0828 20:04:12.492229       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T20:14:12.494216296Z I0828 20:14:12.493917       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T20:24:50.880207722Z I0828 20:24:50.879907       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T20:35:27.701764817Z I0828 20:35:27.701506       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T20:46:09.554929737Z I0828 20:46:09.554502       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T20:56:51.750884015Z I0828 20:56:51.750580       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T21:07:32.629916689Z I0828 21:07:32.629447       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T21:18:11.250465468Z I0828 21:18:11.250174       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T21:28:56.038402683Z I0828 21:28:56.038144       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T21:39:39.512719056Z I0828 21:39:39.511810       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T21:50:22.550255856Z I0828 21:50:22.549985       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T22:01:03.150430939Z I0828 22:01:03.149972       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T22:11:50.531575582Z I0828 22:11:50.531334       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T22:22:36.778703561Z I0828 22:22:36.778555       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T22:33:15.344941993Z I0828 22:33:15.344387       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T22:43:56.056401842Z I0828 22:43:56.055886       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T22:54:38.064769447Z I0828 22:54:38.064479       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T23:05:21.272327219Z I0828 23:05:21.271817       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T23:16:05.463963001Z I0828 23:16:05.463397       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T23:26:50.089643921Z I0828 23:26:50.089089       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T23:37:35.711332247Z I0828 23:37:35.710820       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T23:48:15.774043918Z I0828 23:48:15.773689       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-28T23:58:54.578464341Z I0828 23:58:54.578049       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T00:09:35.507300597Z I0829 00:09:35.506941       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T00:20:14.700698689Z I0829 00:20:14.700415       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T00:30:58.996797214Z I0829 00:30:58.996553       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T00:41:40.988081033Z I0829 00:41:40.987849       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T00:52:25.120120210Z I0829 00:52:25.119578       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T01:03:02.753875406Z I0829 01:03:02.753682       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T01:13:44.877439621Z I0829 01:13:44.877027       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T01:23:47.354365013Z I0829 01:23:47.354124       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T01:31:28.071705987Z I0829 01:31:28.071631       1 alloc.go:329] "allocated clusterIPs" service="platform-metrics/metrics-collector" clusterIPs={"IPv4":"10.96.24.122"}
+2026-08-29T01:31:28.089504462Z I0829 01:31:28.089386       1 alloc.go:329] "allocated clusterIPs" service="log-aggregation/log-shipper" clusterIPs={"IPv4":"10.96.188.53"}
+2026-08-29T01:31:28.105002078Z I0829 01:31:28.104824       1 alloc.go:329] "allocated clusterIPs" service="message-broker/queue-server" clusterIPs={"IPv4":"10.96.73.165"}
+2026-08-29T01:31:28.117614098Z I0829 01:31:28.117533       1 alloc.go:329] "allocated clusterIPs" service="user-profiles/profile-api" clusterIPs={"IPv4":"10.96.112.7"}
+2026-08-29T01:31:28.129168520Z I0829 01:31:28.129099       1 alloc.go:329] "allocated clusterIPs" service="cdn-edge/edge-cache" clusterIPs={"IPv4":"10.96.160.22"}
+2026-08-29T01:31:28.142208072Z I0829 01:31:28.142131       1 alloc.go:329] "allocated clusterIPs" service="ab-testing/experiment-api" clusterIPs={"IPv4":"10.96.90.125"}
+2026-08-29T01:31:28.153662246Z I0829 01:31:28.153592       1 alloc.go:329] "allocated clusterIPs" service="email-delivery/smtp-relay" clusterIPs={"IPv4":"10.96.168.182"}
+2026-08-29T01:31:28.164789970Z I0829 01:31:28.164674       1 alloc.go:329] "allocated clusterIPs" service="session-store/session-cache" clusterIPs={"IPv4":"10.96.237.114"}
+2026-08-29T01:31:28.185480248Z I0829 01:31:28.185382       1 alloc.go:329] "allocated clusterIPs" service="feature-flags/flag-server" clusterIPs={"IPv4":"10.96.224.208"}
+2026-08-29T01:31:28.201712220Z I0829 01:31:28.201631       1 alloc.go:329] "allocated clusterIPs" service="geo-routing/geoip-api" clusterIPs={"IPv4":"10.96.119.189"}
+2026-08-29T01:31:28.213333557Z I0829 01:31:28.213155       1 alloc.go:329] "allocated clusterIPs" service="push-notifications/push-dispatcher" clusterIPs={"IPv4":"10.96.102.192"}
+2026-08-29T01:31:28.224287744Z I0829 01:31:28.224214       1 alloc.go:329] "allocated clusterIPs" service="asset-pipeline/thumbnailer" clusterIPs={"IPv4":"10.96.99.121"}
+2026-08-29T01:31:28.234958979Z I0829 01:31:28.234897       1 alloc.go:329] "allocated clusterIPs" service="distributed-tracing/span-collector" clusterIPs={"IPv4":"10.96.192.112"}
+2026-08-29T01:31:28.246594815Z I0829 01:31:28.246447       1 alloc.go:329] "allocated clusterIPs" service="internal-dns/dns-forwarder" clusterIPs={"IPv4":"10.96.164.53"}
+2026-08-29T01:31:28.257977075Z I0829 01:31:28.257622       1 alloc.go:329] "allocated clusterIPs" service="loyalty-points/points-engine" clusterIPs={"IPv4":"10.96.129.68"}
+2026-08-29T01:31:28.270345768Z I0829 01:31:28.270223       1 alloc.go:329] "allocated clusterIPs" service="pricing-sync/price-worker" clusterIPs={"IPv4":"10.96.112.205"}
+2026-08-29T01:31:28.287855375Z I0829 01:31:28.287775       1 alloc.go:329] "allocated clusterIPs" service="media-transcode/transcode-worker" clusterIPs={"IPv4":"10.96.31.226"}
+2026-08-29T01:31:28.309102390Z I0829 01:31:28.308975       1 alloc.go:329] "allocated clusterIPs" service="partner-api/partner-gateway" clusterIPs={"IPv4":"10.96.102.190"}
+2026-08-29T01:31:28.321381710Z I0829 01:31:28.321313       1 alloc.go:329] "allocated clusterIPs" service="webhooks/webhook-relay" clusterIPs={"IPv4":"10.96.146.82"}
+2026-08-29T01:31:28.332873717Z I0829 01:31:28.332764       1 alloc.go:329] "allocated clusterIPs" service="currency-rates/rates-fetcher" clusterIPs={"IPv4":"10.96.235.232"}
+2026-08-29T01:31:33.625647726Z I0829 01:31:33.625335       1 alloc.go:329] "allocated clusterIPs" service="orders/orders-api" clusterIPs={"IPv4":"10.96.58.103"}
+2026-08-29T01:33:49.805902657Z I0829 01:33:49.805587       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-08-29T01:33:55.514658920Z I0829 01:33:55.514445       1 alloc.go:329] "allocated clusterIPs" service="platform-metrics/metrics-collector" clusterIPs={"IPv4":"10.96.212.102"}
+2026-08-29T01:33:55.530195780Z I0829 01:33:55.530116       1 alloc.go:329] "allocated clusterIPs" service="log-aggregation/log-shipper" clusterIPs={"IPv4":"10.96.13.139"}
+2026-08-29T01:33:55.542819671Z I0829 01:33:55.542646       1 alloc.go:329] "allocated clusterIPs" service="message-broker/queue-server" clusterIPs={"IPv4":"10.96.17.34"}
+2026-08-29T01:33:55.554541632Z I0829 01:33:55.554294       1 alloc.go:329] "allocated clusterIPs" service="user-profiles/profile-api" clusterIPs={"IPv4":"10.96.97.139"}
+2026-08-29T01:33:55.566161212Z I0829 01:33:55.566079       1 alloc.go:329] "allocated clusterIPs" service="cdn-edge/edge-cache" clusterIPs={"IPv4":"10.96.129.217"}
+2026-08-29T01:33:55.577178547Z I0829 01:33:55.577096       1 alloc.go:329] "allocated clusterIPs" service="ab-testing/experiment-api" clusterIPs={"IPv4":"10.96.189.132"}
+2026-08-29T01:33:55.588206216Z I0829 01:33:55.588136       1 alloc.go:329] "allocated clusterIPs" service="email-delivery/smtp-relay" clusterIPs={"IPv4":"10.96.123.223"}
+2026-08-29T01:33:55.600786937Z I0829 01:33:55.600590       1 alloc.go:329] "allocated clusterIPs" service="session-store/session-cache" clusterIPs={"IPv4":"10.96.145.183"}
+2026-08-29T01:33:55.613307489Z I0829 01:33:55.613038       1 alloc.go:329] "allocated clusterIPs" service="feature-flags/flag-server" clusterIPs={"IPv4":"10.96.34.192"}
+2026-08-29T01:33:55.635256779Z I0829 01:33:55.635148       1 alloc.go:329] "allocated clusterIPs" service="geo-routing/geoip-api" clusterIPs={"IPv4":"10.96.161.237"}
+2026-08-29T01:33:55.648014803Z I0829 01:33:55.647922       1 alloc.go:329] "allocated clusterIPs" service="push-notifications/push-dispatcher" clusterIPs={"IPv4":"10.96.182.158"}
+2026-08-29T01:33:55.659277944Z I0829 01:33:55.659199       1 alloc.go:329] "allocated clusterIPs" service="asset-pipeline/thumbnailer" clusterIPs={"IPv4":"10.96.128.198"}
+2026-08-29T01:33:55.670429788Z I0829 01:33:55.670353       1 alloc.go:329] "allocated clusterIPs" service="distributed-tracing/span-collector" clusterIPs={"IPv4":"10.96.56.199"}
+2026-08-29T01:33:55.681570464Z I0829 01:33:55.681501       1 alloc.go:329] "allocated clusterIPs" service="internal-dns/dns-forwarder" clusterIPs={"IPv4":"10.96.6.54"}
+2026-08-29T01:33:55.692804145Z I0829 01:33:55.692724       1 alloc.go:329] "allocated clusterIPs" service="loyalty-points/points-engine" clusterIPs={"IPv4":"10.96.181.219"}
+2026-08-29T01:33:55.703835189Z I0829 01:33:55.703771       1 alloc.go:329] "allocated clusterIPs" service="pricing-sync/price-worker" clusterIPs={"IPv4":"10.96.64.189"}
+2026-08-29T01:33:55.716533418Z I0829 01:33:55.716300       1 alloc.go:329] "allocated clusterIPs" service="media-transcode/transcode-worker" clusterIPs={"IPv4":"10.96.62.8"}
+2026-08-29T01:33:55.734319997Z I0829 01:33:55.734198       1 alloc.go:329] "allocated clusterIPs" service="partner-api/partner-gateway" clusterIPs={"IPv4":"10.96.127.142"}
+2026-08-29T01:33:55.746564573Z I0829 01:33:55.746398       1 alloc.go:329] "allocated clusterIPs" service="webhooks/webhook-relay" clusterIPs={"IPv4":"10.96.15.86"}
+2026-08-29T01:33:55.767612517Z I0829 01:33:55.767519       1 alloc.go:329] "allocated clusterIPs" service="currency-rates/rates-fetcher" clusterIPs={"IPv4":"10.96.205.204"}
+2026-08-29T01:34:01.093402611Z I0829 01:34:01.093138       1 alloc.go:329] "allocated clusterIPs" service="orders/orders-api" clusterIPs={"IPv4":"10.96.40.243"}

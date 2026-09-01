@@ -1,0 +1,122 @@
+# Scenario t2-selector-drift-empty-endpoints — fault-as-code.
+# Atom: service selector mismatch (deterministic fault roster, req 3).
+# Mechanism: Service shop/catalog selects app=catalog-api while the catalog
+# pods carry app=catalog, so the Service's Endpoints object is empty; the
+# storefront gateway's requests to the service are refused while the catalog
+# pods themselves are Ready with passing probes (the T2 distance: the paged
+# symptom is at the gateway, the fault is a quiet one-word drift on the
+# Service). App logic ships in ConfigMap-mounted scripts (contract rule 2).
+# Wait condition: Endpoints 'catalog' has no addresses AND catalog pods are
+# Ready AND a gateway log line shows the fetch failing. See wait.sh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-scripts
+  namespace: shop
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    mkdir -p /www
+    echo "catalog ok" > /www/index.html
+    echo "catalog: serving on :8080"
+    exec httpd -f -p 8080 -h /www
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: shop
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: api
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 5
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: catalog-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  namespace: shop
+spec:
+  selector:
+    app: catalog-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storefront-gateway-scripts
+  namespace: shop
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "gateway: starting catalog poller"
+    while true; do
+      if wget -T 3 -q -O /dev/null http://catalog.shop.svc.cluster.local:8080/ 2>/dev/null; then
+        echo "gateway: catalog fetch ok"
+      else
+        echo "gateway: catalog fetch FAILED (timeout or connection refused)"
+      fi
+      sleep 5
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storefront-gateway
+  namespace: shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storefront-gateway
+  template:
+    metadata:
+      labels:
+        app: storefront-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: busybox:1.36
+          command: ["sh", "/app/run.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+      volumes:
+        - name: scripts
+          configMap:
+            name: storefront-gateway-scripts

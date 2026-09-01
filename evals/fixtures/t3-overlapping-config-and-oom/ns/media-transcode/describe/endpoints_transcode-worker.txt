@@ -1,0 +1,13 @@
+Name:         transcode-worker
+Namespace:    media-transcode
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-08-29T01:33:58Z
+Subsets:
+  Addresses:          10.244.0.67
+  NotReadyAddresses:  <none>
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "failing_resource": {"kind": "Deployment", "namespace": "payments", "name": "checkout-worker"},
+  "mechanism": "The checkout-worker Deployment's pod template defines no environment variables (Environment: <none>), but its container command begins with a guard that exits 1 with 'FATAL: AMQP_URL not set' when AMQP_URL is unset. The container therefore terminates within the same second it starts on every attempt, driving the pod into CrashLoopBackOff so the Deployment holds 0/1 available replicas and no consumer drains the checkout queue.",
+  "verdict": "confirmed"
+}

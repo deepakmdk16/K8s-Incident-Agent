@@ -1,0 +1,10 @@
+Name:         inventory-reader-binding
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  Role
+  Name:  inventory-reader
+Subjects:
+  Kind            Name            Namespace
+  ----            ----            ---------
+  ServiceAccount  inventory-synk  inventory

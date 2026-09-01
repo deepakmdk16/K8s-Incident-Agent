@@ -1,0 +1,23 @@
+Name:         checkout-api-scripts
+Namespace:    checkout
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "checkout-api: serving on :8080"
+while true; do
+  printf 'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\nok\n' | nc -l -p 8080 >/dev/null 2>&1
+  echo "checkout-api: request served"
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

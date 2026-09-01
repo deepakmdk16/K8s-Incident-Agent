@@ -1,0 +1,48 @@
+# Scenario t1-oom-cache-warmup — fault-as-code.
+# Atom: OOMKilled (deterministic fault roster, decision doc req 3).
+# Mechanism: the server's warmup step materializes a ~200MiB in-memory
+# catalog cache (command substitution held in the foreground shell's CACHE
+# variable) under resources.limits.memory 64Mi; the cgroup limit is crossed
+# mid-warmup and the kernel OOM-kills the container (OOMKilled, exit 137)
+# on every start. Counterfactual (rule 1): with a corrected limit the same
+# shell finishes warmup, logs "catalog cache ready", and falls into the
+# serve loop — the pod goes Ready and stays Running.
+# Wait condition: pod for app=recommendations in recs reaches
+# restartCount >= 2 with lastState.terminated.reason OOMKilled (or exit
+# code 137). See wait.sh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: recs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendations
+  namespace: recs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendations
+  template:
+    metadata:
+      labels:
+        app: recommendations
+    spec:
+      containers:
+        - name: server
+          image: busybox:1.36
+          resources:
+            requests:
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+          command:
+            - sh
+            - -c
+            - >-
+              echo "warming catalog cache";
+              CACHE="$(dd if=/dev/zero bs=1M count=200 2>/dev/null | tr '\0' x)";
+              echo "catalog cache ready";
+              while :; do echo "serving recommendations"; sleep 30; done

@@ -1,0 +1,22 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "arm": "rules",
+  "run_id": "7befdf0da49f",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0008,
+  "paged_namespace": "checkout",
+  "findings": [
+    {
+      "analyzer": "quota",
+      "kind": "resourcequota",
+      "namespace": "checkout",
+      "name": "checkout-quota",
+      "mechanism": "The ResourceQuota in this namespace is exhausted, so new pods are rejected.",
+      "evidence": "resourcequota checkout-quota is at its hard limit for pods"
+    }
+  ],
+  "analyzers_fired": 1
+}

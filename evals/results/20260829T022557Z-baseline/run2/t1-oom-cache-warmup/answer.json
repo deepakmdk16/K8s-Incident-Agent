@@ -1,0 +1,6 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "failing_resource": {"kind": "Deployment", "namespace": "recs", "name": "recommendations"},
+  "mechanism": "The Deployment's pod template runs a startup command that allocates roughly 200 MiB for a catalog cache warm-up while capping the container at memory limit 64Mi, so the kernel OOM-kills the process mid-warm-up every time (Reason: OOMKilled, Exit Code: 137, Restart Count: 2, logs stop at 'warming catalog cache'). The container therefore never becomes Ready and the kubelet backs off restarting it, leaving the Deployment at 0/1 available with no backend to populate the recommendations panel.",
+  "verdict": "confirmed"
+}

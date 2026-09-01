@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "failing_resource": {
+    "kind": "Deployment",
+    "namespace": "billing",
+    "name": "billing-api"
+  },
+  "mechanism": "Deployment billing/billing-api sets .spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value to \"db-primary\", but the database Service in that namespace is Service billing/postgres-primary, so the name the init container dials does not resolve; the init script loops on \"waiting for db-primary:5432\" and never exits zero, leaving both pods with condition Initialized False and container api in State Waiting / Reason PodInitializing, so the Deployment reports ready=0/2.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}
