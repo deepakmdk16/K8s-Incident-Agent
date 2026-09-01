@@ -134,6 +134,24 @@ def namespaces(fixture: Path) -> list[str]:
     return sorted(p.name for p in (fixture / "ns").iterdir() if p.is_dir())
 
 
+# A namespace name is a DNS-1123 label: lowercase alphanumerics and '-', with
+# '.' only ever a separator between labels. Tokenizing on that alphabet is what
+# makes the match exact — 'prod' is named by 'web.prod.svc.cluster.local', but
+# never by 'prod-eu'.
+_NS_TOKEN = re.compile(r"[a-z0-9][a-z0-9-]*")
+
+
+def namespaces_named_in(text: str, known: set[str]) -> set[str]:
+    """The known namespaces `text` names as whole labels.
+
+    Substring containment fails open the moment two names overlap: it reads any
+    mention of 'prod-eu' as licence to cite 'prod'. A name counts only when it
+    appears as a complete token.
+    """
+    tokens = set(_NS_TOKEN.findall(text.lower()))
+    return {ns for ns in known if ns in tokens}
+
+
 def page(fixture: Path) -> str:
     """The alert the on-call engineer was paged with."""
     return (fixture / "page.txt").read_text(encoding="utf-8")

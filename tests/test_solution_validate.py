@@ -306,6 +306,108 @@ def test_v2_rejects_an_unlinked_foreign_namespace() -> None:
     assert any(v.startswith("V2 ADMISSIBILITY") for v in result.violations)
 
 
+def _foreign(ledger: tl.ToolLedger) -> None:
+    """A read of kube-system: admissible only once something connects it."""
+    arguments: dict[str, object] = {"namespace": "kube-system"}
+    ledger.record(
+        tl.ToolInvocation(
+            "foreign",
+            "namespace_overview",
+            arguments,
+            tl.dispatch(RBAC, "namespace_overview", arguments),
+            tl.namespaces_touched("namespace_overview", arguments),
+        )
+    )
+
+
+def test_v2_does_not_admit_a_namespace_named_only_inside_a_longer_page_name() -> None:
+    """'kube-system' is not named by 'kube-system-canary'.
+
+    Substring admissibility fails open exactly where two names overlap: a page
+    naming one namespace would silently license citations from another.
+    """
+    page = (
+        "Storefront inventory counts have not updated for over 30 minutes. "
+        "The kube-system-canary dashboard is the only other red signal."
+    )
+    ledger = _ledger()
+    ledger.record(tl.ToolInvocation("paged", "page", {}, page, frozenset({""})))
+    _foreign(ledger)
+    submission = _submission(
+        evidence=[
+            {
+                "role": "symptom",
+                "claim": "c",
+                "tool_call_id": "paged",
+                "quote": "inventory counts have not updated",
+            },
+            {
+                "role": "link",
+                "claim": "c",
+                "tool_call_id": "foreign",
+                "quote": "namespace kube-system",
+            },
+            {
+                "role": "defect",
+                "claim": "c",
+                "tool_call_id": "c1",
+                "quote": "rolebinding/inventory-reader-binding subjects[].name='inventory-synk'",
+            },
+        ]
+    )
+    result = va.validate(
+        submission, ledger, RBAC, "t2-rbac-sync-forbidden", "inventory", page, submission.mechanism
+    )
+    assert any(v.startswith("V2 ADMISSIBILITY") for v in result.violations)
+
+
+def test_v2_does_not_admit_a_namespace_named_only_inside_a_longer_quoted_name() -> None:
+    """The same exactness applies to a namespace a verified quote brings in."""
+    ledger = _ledger()
+    ledger.record(
+        tl.ToolInvocation(
+            "canary",
+            "page",
+            {},
+            "the kube-system-canary dashboard has been red since 09:02",
+            frozenset({""}),
+        )
+    )
+    _foreign(ledger)
+    submission = _submission(
+        evidence=[
+            {
+                "role": "symptom",
+                "claim": "c",
+                "tool_call_id": "page",
+                "quote": "inventory counts have not updated",
+            },
+            {
+                "role": "link",
+                "claim": "c",
+                "tool_call_id": "canary",
+                "quote": "kube-system-canary dashboard has been red",
+            },
+            {
+                "role": "defect",
+                "claim": "c",
+                "tool_call_id": "foreign",
+                "quote": "namespace kube-system",
+            },
+        ]
+    )
+    result = va.validate(
+        submission,
+        ledger,
+        RBAC,
+        "t2-rbac-sync-forbidden",
+        "inventory",
+        fx.page(RBAC),
+        submission.mechanism,
+    )
+    assert any(v.startswith("V2 ADMISSIBILITY") for v in result.violations)
+
+
 def test_v3_rejects_a_remediation_that_edits_a_different_object() -> None:
     """The exact question all three anchor rows for this case got wrong."""
     bad = _submission(

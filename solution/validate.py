@@ -400,7 +400,7 @@ def validate(
     verified_quotes: list[str] = []
 
     known = set(fx.namespaces(fixture))
-    admissible = {paged_namespace, ""} | {ns for ns in known if ns in page_text}
+    admissible = {paged_namespace, ""} | fx.namespaces_named_in(page_text, known)
 
     # V1 QUOTE (re-executed) and V2 ADMISSIBILITY, in citation order so that a
     # verified quote can itself bring a further namespace into the story.
@@ -442,7 +442,7 @@ def validate(
                 "connected to the paged symptom. Cite the reference that links it first"
             )
             continue
-        admissible |= {ns for ns in known if ns in quote}
+        admissible |= fx.namespaces_named_in(quote, known)
 
     # V3 SPEC-OWNER
     if submission.remediation.normalized() != submission.failing_resource.normalized():

@@ -75,8 +75,9 @@ def paged_namespace(fixture: Path, page_text: str) -> str:
     match = _PAGE_NAMESPACE.search(first_line)
     if match is not None and match.group(1) in known:
         return match.group(1)
+    named = fx.namespaces_named_in(page_text, set(known))
     for namespace in sorted(known, key=len, reverse=True):
-        if namespace in page_text:
+        if namespace in named:
             return namespace
     return known[0] if known else ""
 

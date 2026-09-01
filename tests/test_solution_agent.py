@@ -296,6 +296,17 @@ def test_paged_namespace_resolves_for_every_fixture() -> None:
         assert namespace in fx.namespaces(case), case.name
 
 
+def test_paged_namespace_ignores_a_name_that_is_only_part_of_a_longer_one() -> None:
+    """'kube-system-canary' does not page kube-system.
+
+    The fallback matched by substring, so any longer name containing a real
+    namespace resolved to it — and the paged namespace is what seeds V2
+    admissibility, so a wrong one licenses citations from the wrong place.
+    """
+    assert agent.paged_namespace(RBAC, "The kube-system-canary dashboard is red.") != "kube-system"
+    assert agent.paged_namespace(RBAC, "Errors across kube-system since 09:02.") == "kube-system"
+
+
 def test_tool_results_carry_the_citation_id_the_model_is_told_to_use(tmp_path: Path) -> None:
     """Regression guard: the API's own tool_use ids are opaque and unciteable.
 

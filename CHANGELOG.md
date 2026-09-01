@@ -15,6 +15,47 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [10] The admissibility check matched namespaces by substring — 2026-09-01, 14:11 UTC
+
+**Change:** V2 admissibility now decides whether a text *names* a namespace by
+exact DNS-1123 label tokens instead of substring containment. One helper,
+[solution/fixture.py](solution/fixture.py) `namespaces_named_in`, placed beside
+`namespaces()` because that module is already the authority on what a namespace
+is; [solution/validate.py](solution/validate.py) calls it at both sites that
+grew the admissible set (the page-text seed and each verified quote), and
+[solution/agent.py](solution/agent.py) `paged_namespace` calls it in the
+fallback that picks the paged namespace in the first place.
+
+**Why:** no eval row failed — the defect is latent, which is why it was worth
+finding before harder cases make it fire. The rule was
+`{ns for ns in known if ns in page_text}`: pure substring containment, so a
+page naming `prod-eu` silently admitted citations from `prod`, and the same
+test one layer up in `paged_namespace` resolved the paged namespace itself to
+`kube-system` from the words `kube-system-canary` (reproduced directly against
+the `t2-rbac-sync-forbidden` fixture: old rule → `kube-system`, new rule → no
+match). A wrong paged namespace poisons the admissible set from the first
+citation, so fixing V2 alone would have left the hole one layer up. Today's
+12 fixtures have no overlapping namespace names, which is the only reason it
+never fired; roadmap item 1.4 authors cases whose cause and symptom sit in
+different namespaces, and it would have fired there.
+
+**Evidence after:** three regression tests that fail on the old rule and pass
+on the new one — two in
+[tests/test_solution_validate.py](tests/test_solution_validate.py), one per
+admissibility site, and one in
+[tests/test_solution_agent.py](tests/test_solution_agent.py) for the
+paged-namespace fallback. Suite goes 228 → **231 passed**, `bash
+scripts/checkpoints.sh` reports **0 failure(s)** (ruff clean, pyright strict
+0 errors), and `make verify` re-derives the unchanged **36/36** solution row
+from the committed bundles: the tightening only narrows admissibility, and it
+narrows nothing the frozen evidence relies on.
+
+**Next decision it drove:** the exactness precondition for roadmap 1.4 is now
+in place, so the remaining half of that item — authoring cross-namespace cases
+with `gold.failing_resource` deliberately outside the paged namespace, plus
+the ExternalName and ingress-backend branches in `_reference_paths` — is
+unblocked and needs an authoring cluster, not more validator work.
+
 ## [9] The "a decision tree does this" objection, measured: rules reach 27/36 — 2026-08-29
 
 **Change:** a third comparison arm, `ablation/` — a deterministic non-LLM
