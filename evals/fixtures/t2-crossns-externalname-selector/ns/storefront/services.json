@@ -1,0 +1,29 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-09-02T03:10:15Z",
+        "name": "payments-gateway",
+        "namespace": "storefront",
+        "resourceVersion": "1215",
+        "uid": "7be9c1a9-515a-4d9f-977a-f9502179a4a4"
+      },
+      "spec": {
+        "externalName": "payments-gateway.payments.svc.cluster.local",
+        "sessionAffinity": "None",
+        "type": "ExternalName"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

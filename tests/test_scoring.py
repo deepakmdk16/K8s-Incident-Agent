@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from evals import run_eval
 from evals.scoring import (
     Answer,
     CaseScore,
@@ -62,12 +63,16 @@ def test_gold_mechanism_self_classifies(path: Path) -> None:
 
 
 def test_every_fixture_has_gold() -> None:
+    """A fixture nothing can score is a capture with no ground truth.
+
+    Checked against every scenario root, not just the frozen one: a v2 case
+    ships its fixture into the same evals/fixtures/ tree so the credential scan
+    and schema gate reach it without being taught a second location.
+    """
     fixtures = sorted(d.name for d in (REPO / "evals" / "fixtures").iterdir() if d.is_dir())
     assert fixtures, "no fixtures found under evals/fixtures/"
-    missing = [
-        fix for fix in fixtures if not (REPO / "evals" / "scenarios" / fix / "gold.json").is_file()
-    ]
-    assert not missing, f"fixtures without gold.json: {missing}"
+    missing = [fix for fix in fixtures if run_eval.find_gold(fix) is None]
+    assert not missing, f"fixtures without gold.json in any scenario root: {missing}"
 
 
 def test_gold_rejects_unknown_class_and_tier(tmp_path: Path) -> None:

@@ -15,6 +15,66 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [12] The first case whose cause is in another namespace — 2026-09-02, 03:46 UTC
+
+**Change:** roadmap 1.4's authoring half.
+`evals/scenarios-v2/t2-crossns-externalname-selector/` — a T2 case where the
+page fires on `storefront` and the object whose spec must change is
+`service/payments-gateway` in **`payments`**. `storefront/checkout-api` gates
+its readiness on a payment gateway it reaches through an ExternalName alias;
+the Service that alias points at selects `app=payments-gateway` while its pods
+carry `app=payments-gateway-api`, so its Endpoints never populate. New cases
+land in an additive root — `evals/run_eval.discover_cases` takes a `root`, and
+`--scenarios-root` selects it — so the frozen 12-case set keeps its identity
+and its count. Fixtures stay in the single `evals/fixtures/` tree, where the
+credential scan and schema gate already reach them.
+
+**Why:** every case in the frozen set has its cause and symptom in one
+namespace, so none of them can tell an agent that follows a reference across a
+boundary from one that searches the paged namespace exhaustively. It is also
+the case that exercises the V2 admissibility rule ([10]) in the direction that
+matters.
+
+**Evidence after:** three findings, two of them defects the case exposed in
+code that has been shipping since the start.
+
+1. *The V2 fix does what it was built for.* Against the captured fixture, the
+   page alone licenses `['', 'storefront']`; after the agent reads the
+   ExternalName Service and quotes its target, `payments` becomes citable.
+   That works **only** because [10] treats `.` as a label separator, so
+   `payments-gateway.payments.svc.cluster.local` names `payments` — the
+   design decision now has a case that would fail without it.
+2. *An ExternalName Service rendered as a broken one.* The namespace overview
+   printed `service/payments-gateway selector={} endpointAddresses=0` — an
+   alias has no selector and no Endpoints **by design**, so it read as
+   identical to a Service whose selector matches nothing, inviting a diagnosis
+   of the healthy alias instead of the fault it points at. Now rendered as
+   `type=ExternalName externalName=…`. No frozen fixture contains an
+   ExternalName Service, so no scored row can move.
+3. *A Service another namespace depends on reported no consumers.*
+   `find_consumers` on the payments Service said "no workload in payments
+   references service/payments-gateway" — true and useless. It now reports the
+   aliasing Service and the namespace it lives in.
+
+The free rules arm scores the case **0/1**, and its log names the reason:
+`2 analyzer(s) fired in ns storefront, chose readiness` — it answered
+`deployment/checkout-api` in the *paged* namespace, the designed distractor,
+against gold `service/payments-gateway` in `payments`
+([evals/results/20260902T034542Z-rules/](evals/results/20260902T034542Z-rules/summary.md)).
+The case discriminates exactly as intended, and it proves the harness runs the
+additive root end to end for $0.00. Counterfactual rehearsed live before the
+pristine capture (authoring contract rule 6): gold's remediation applied
+verbatim moved Endpoints from `<none>` to two pod IPs and checkout-api from
+0/2 to 2/2 Ready, with nothing in `storefront` touched — recorded in the
+case's `notes.md`. Suite 238 → **248 passed**, `bash scripts/checkpoints.sh`
+**0 failure(s)**, fixture schema complete at 13.
+
+**Next decision it drove:** the case is authored, captured and free-scored, but
+no LLM arm has seen it — the baseline and solution numbers on it need a scored
+run, which costs API spend and is the next decision to take. The roadmap's
+ingress-backend edge was deliberately **not** built: no case exercises it, and
+untested speculative code in the tool layer is worse than a recorded gap.
+
 ## [11] Cost and latency were recorded but never scored — 2026-09-02, 00:22 UTC
 
 **Change:** the declared bar now asserts spend and wall-clock, not just

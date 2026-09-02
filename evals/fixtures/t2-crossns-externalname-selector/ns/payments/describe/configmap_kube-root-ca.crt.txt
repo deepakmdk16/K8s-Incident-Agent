@@ -1,0 +1,36 @@
+Name:         kube-root-ca.crt
+Namespace:    payments
+Labels:       <none>
+Annotations:  kubernetes.io/description:
+                Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubern...
+
+Data
+====
+ca.crt:
+----
+-----BEGIN CERTIFICATE-----
+MIIDBTCCAe2gAwIBAgIIHS14PxS8HnQwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+AxMKa3ViZXJuZXRlczAeFw0yNjA5MDIwMjU2MzFaFw0zNjA4MzAwMzAxMzFaMBUx
+EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQD2LUc/VxqKq/Qz/vmsXnX8Mraphmw1Zg7jkSysLVn1qwRSsrfSWFsMkEH2
+lchMgiddMGAgjPnxoRurAN9plmN2QZQuAAAZY32GfuEgZaehMSz5/0gBFuNGODWm
+lFnBUR2r7NRqnH9S3OTIcFuGQifkxLFsrEnE5uPNAB6IpbYh9Mh8D0FY51r0F7TY
+3NRutfCEIQZBDi16TItKtYYuvW0en6rkMUipbZQlH4wT7EB0I4p+mYStb7FEbKCj
+hPa+mfBrO/djJjUH3Q4djWqZ6hoU6GxJ3p5IgNtYT8gfn4gDhGQUgNJpxP92S1ZQ
+n1ZPdYyAvawZaqCPlGjvOnpzqlS1AgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSPk6Z+faDyEvb4MPKXCbceJG+tZjAV
+BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQDC72iVQYze
+fUW4Bg62MlPyoohPN8mfPAKGGj7K+SxW2LVFrDkTJ5huKn02dTxuweolD76cQ+fq
+EG/UhCLatkvH2W6O8JKfKRUB/e5E9ajP7YazuhwxWhRdPSYWkNlUn2fpz200XZPY
+kb7dq7mK89wrHAUHDtO5k5HHRyxgeGLikn7wkHivHVojUDXYByCTiVh8+zgCKPTE
+T+HJroN6WHsCngWnrOkeqd4Wx68C9BV9k/l9i1Tn1b8wC1eVHuBSzZ81wbQOnnoT
+vWoUJ9MXjMdhZ47iefwD8b5aNogImt9qEO3rzGQQNmgmVtjJ71oer18/s2s7AOrX
+rVUezaSCSQoK
+-----END CERTIFICATE-----
+
+
+
+BinaryData
+====
+
+Events:  <none>

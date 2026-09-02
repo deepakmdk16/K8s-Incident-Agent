@@ -19,6 +19,7 @@ RBAC = FIXTURES / "t2-rbac-sync-forbidden"
 QUIET = FIXTURES / "t3-quiet-selector-loud-crashloop"
 INIT = FIXTURES / "t2-init-wait-for-migrations"
 OVERLAP = FIXTURES / "t3-overlapping-config-and-oom"
+CROSSNS = FIXTURES / "t2-crossns-externalname-selector"
 
 
 def test_overview_shows_a_ready_pod_and_its_rbac_object_counts() -> None:
@@ -170,3 +171,29 @@ def test_tool_specs_are_unique_and_include_the_only_exit() -> None:
     assert len(names) == len(set(names))
     assert tl.SUBMIT_ANSWER in names
     assert frozenset(names) - {tl.SUBMIT_ANSWER} == tl.READ_TOOL_NAMES
+
+
+def test_an_externalname_service_is_not_rendered_as_a_broken_one() -> None:
+    """An alias has no selector and no Endpoints by design.
+
+    Rendered with the ClusterIP fields it read `selector={} endpointAddresses=0`
+    — identical to a Service whose selector matches nothing, and an invitation
+    to diagnose the healthy alias instead of the fault it points at.
+    """
+    out = tl.render_namespace_overview(CROSSNS, "storefront")
+    assert "service/payments-gateway type=ExternalName" in out
+    assert "externalName=payments-gateway.payments.svc.cluster.local" in out
+    assert "endpointAddresses" not in out
+
+
+def test_find_consumers_crosses_the_namespace_boundary_through_an_alias() -> None:
+    """The consumer of payments/payments-gateway lives in another namespace."""
+    out = tl.render_consumers(CROSSNS, "payments", "services", "payments-gateway")
+    assert "service/payments-gateway in namespace storefront aliases this Service" in out
+    assert "spec.externalName=payments-gateway.payments.svc.cluster.local" in out
+
+
+def test_a_service_nothing_aliases_reports_no_cross_namespace_consumer() -> None:
+    """The edge must not fire on every Service that happens to share a name."""
+    out = tl.render_consumers(CROSSNS, "storefront", "services", "payments-gateway")
+    assert "aliases this Service" not in out

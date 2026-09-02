@@ -1,0 +1,73 @@
+Name:                 coredns-559f6c778d-jsqvf
+Namespace:            kube-system
+Priority:             2000000000
+Priority Class Name:  system-cluster-critical
+Service Account:      coredns
+Node:                 incident-lab-control-plane/172.18.0.3
+Start Time:           Wed, 02 Sep 2026 08:31:53 +0530
+Labels:               k8s-app=kube-dns
+                      pod-template-hash=559f6c778d
+Annotations:          <none>
+Status:               Running
+IP:                   10.244.0.3
+IPs:
+  IP:           10.244.0.3
+Controlled By:  ReplicaSet/coredns-559f6c778d
+Containers:
+  coredns:
+    Container ID:  containerd://3d19de6f1d8acdd06f8140258d78f3d107d44d7ed3be8c29576b74fe7b8283c3
+    Image:         registry.k8s.io/coredns/coredns:v1.14.6
+    Image ID:      sha256:fbccbf70a429fb9ce1cdb13a40ed96b16272ef763dafe050b2c0d121dd29811b
+    Ports:         53/UDP (dns), 53/TCP (dns-tcp), 9153/TCP (metrics), 8080/TCP (liveness-probe), 8181/TCP (readiness-probe)
+    Host Ports:    0/UDP (dns), 0/TCP (dns-tcp), 0/TCP (metrics), 0/TCP (liveness-probe), 0/TCP (readiness-probe)
+    Args:
+      -conf
+      /etc/coredns/Corefile
+    State:          Running
+      Started:      Wed, 02 Sep 2026 08:31:54 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      memory:  170Mi
+    Requests:
+      cpu:        100m
+      memory:     70Mi
+    Liveness:     http-get http://:liveness-probe/health delay=60s timeout=5s period=10s successThreshold=1 failureThreshold=5
+    Readiness:    http-get http://:readiness-probe/ready delay=0s timeout=1s period=10s successThreshold=1 failureThreshold=3
+    Environment:  <none>
+    Mounts:
+      /etc/coredns from config-volume (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pqlwz (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  config-volume:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      coredns
+    Optional:  false
+  kube-api-access-pqlwz:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 CriticalAddonsOnly op=Exists
+                             node-role.kubernetes.io/control-plane:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  10m   default-scheduler  0/1 nodes are available: 1 node(s) had untolerated taint(s). preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+  Normal   Scheduled         10m   default-scheduler  Successfully assigned kube-system/coredns-559f6c778d-jsqvf to incident-lab-control-plane
+  Normal   Pulled            10m   kubelet            spec.containers{coredns}: Container image "registry.k8s.io/coredns/coredns:v1.14.6" already present on machine and can be accessed by the pod
+  Normal   Created           10m   kubelet            spec.containers{coredns}: Container created
+  Normal   Started           10m   kubelet            spec.containers{coredns}: Container started
+  Warning  Unhealthy         10m   kubelet            spec.containers{coredns}: Readiness probe failed: Get "http://10.244.0.3:8181/ready": dial tcp 10.244.0.3:8181: connect: connection refused

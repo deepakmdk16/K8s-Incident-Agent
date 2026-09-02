@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-crossns-externalname-selector",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "storefront",
+    "name": "checkout-api"
+  },
+  "mechanism": "The readiness probe fails, so the pod never becomes ready.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

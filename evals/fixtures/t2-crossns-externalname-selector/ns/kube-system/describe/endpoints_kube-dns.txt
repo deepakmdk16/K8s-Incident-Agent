@@ -1,0 +1,18 @@
+Name:         kube-dns
+Namespace:    kube-system
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+              k8s-app=kube-dns
+              kubernetes.io/cluster-service=true
+              kubernetes.io/name=CoreDNS
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-09-02T03:02:04Z
+Subsets:
+  Addresses:          10.244.0.2,10.244.0.3
+  NotReadyAddresses:  <none>
+  Ports:
+    Name     Port  Protocol
+    ----     ----  --------
+    metrics  9153  TCP
+    dns-tcp  53    TCP
+    dns      53    UDP
+
+Events:  <none>

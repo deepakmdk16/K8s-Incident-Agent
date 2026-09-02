@@ -1,0 +1,66 @@
+Name:             payments-gateway-api-9c78bc7b-mhxwf
+Namespace:        payments
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Wed, 02 Sep 2026 08:40:15 +0530
+Labels:           app=payments-gateway-api
+                  pod-template-hash=9c78bc7b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.12
+IPs:
+  IP:           10.244.0.12
+Controlled By:  ReplicaSet/payments-gateway-api-9c78bc7b
+Containers:
+  gateway:
+    Container ID:  containerd://274dc162ddf51d6c5f64540a71e7f6b52f92229a8c7500fb83467862488bc385
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Command:
+      httpd
+      -f
+      -p
+      8080
+      -h
+      /www
+    State:          Running
+      Started:      Wed, 02 Sep 2026 08:40:16 +0530
+    Ready:          True
+    Restart Count:  0
+    Readiness:      http-get http://:8080/health delay=3s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4t4ff (ro)
+      /www from content (rw)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  content:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      gateway-content
+    Optional:  false
+  kube-api-access-4t4ff:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  112s  default-scheduler  Successfully assigned payments/payments-gateway-api-9c78bc7b-mhxwf to incident-lab-control-plane
+  Normal  Pulled     112s  kubelet            spec.containers{gateway}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    111s  kubelet            spec.containers{gateway}: Container created
+  Normal  Started    111s  kubelet            spec.containers{gateway}: Container started

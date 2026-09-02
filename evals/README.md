@@ -12,7 +12,11 @@ case; rules / baseline / solution columns) — the measured-improvement evidence
 Cost and latency are re-derived per case from each bundle's committed
 `metrics.json` and the solution arm's means are asserted against declared
 ceilings, so a correct-but-far-costlier arm fails the gate; human time per task
-is deliberately not reported — no human trial was run (`evals/scoring.md`). Wired into
+is deliberately not reported — no human trial was run (`evals/scoring.md`). Authoring a new case needs the cluster
+`evals/cluster.sh` builds (pinned node image, node-cached workload image); new
+cases go in the additive root `evals/scenarios-v2/` so the frozen 12-case set
+keeps its count, and `run_eval --scenarios-root` selects which root to score.
+Wired into
 `scripts/checkpoints.sh`: a red eval fails the gate, and `run.sh` must be
 `chmod +x` or the gate silently skips it.
 

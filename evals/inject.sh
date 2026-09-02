@@ -11,7 +11,13 @@
 # capture. Scenarios create only Namespaces and namespaced objects, so the
 # wipe fully resets between scenarios (authoring contract rule 3).
 #
-# Usage: inject.sh --id <scenario-id> [--context <ctx>] [--force] [--no-capture]
+# Usage: inject.sh --id <id> [--root <dir>] [--context <ctx>] [--force] [--no-capture]
+#
+# --root selects the scenario root (default evals/scenarios, the set frozen at
+# case-set-freeze). New cases are authored in an additive root such as
+# evals/scenarios-v2 so the frozen 12-case set keeps its identity; fixtures
+# stay in the single evals/fixtures/ root, where every gate scan already
+# reaches them.
 set -u
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -21,19 +27,20 @@ NOISE_TIMEOUT=180
 
 die() { echo "inject: $*" >&2; exit 1; }
 
-ID=""; CONTEXT="kind-incident-lab"; FORCE=0; NOCAP=0
+ID=""; CONTEXT="kind-incident-lab"; FORCE=0; NOCAP=0; SCEN_ROOT="evals/scenarios"
 while [ $# -gt 0 ]; do
   case "$1" in
     --id) ID="$2"; shift 2 ;;
+    --root) SCEN_ROOT="$2"; shift 2 ;;
     --context) CONTEXT="$2"; shift 2 ;;
     --force) FORCE=1; shift ;;
     --no-capture) NOCAP=1; shift ;;
-    *) die "unknown arg: $1 (usage: --id X [--context C] [--force] [--no-capture])" ;;
+    *) die "unknown arg: $1 (usage: --id X [--root D] [--context C] [--force] [--no-capture])" ;;
   esac
 done
 [ -n "$ID" ] || die "--id is required"
 
-SCEN="$ROOT/evals/scenarios/$ID"
+SCEN="$ROOT/$SCEN_ROOT/$ID"
 [ -d "$SCEN" ] || die "no scenario dir $SCEN"
 [ -s "$SCEN/fault.yaml" ] || die "$ID: fault.yaml missing or empty"
 [ -s "$SCEN/page.txt" ] || die "$ID: page.txt missing or empty (symptom-first: no page, no scenario)"

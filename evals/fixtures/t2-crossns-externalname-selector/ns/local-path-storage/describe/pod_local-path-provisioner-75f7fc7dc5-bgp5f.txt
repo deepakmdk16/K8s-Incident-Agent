@@ -1,0 +1,71 @@
+Name:             local-path-provisioner-75f7fc7dc5-bgp5f
+Namespace:        local-path-storage
+Priority:         0
+Service Account:  local-path-provisioner-service-account
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Wed, 02 Sep 2026 08:31:53 +0530
+Labels:           app=local-path-provisioner
+                  pod-template-hash=75f7fc7dc5
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.4
+IPs:
+  IP:           10.244.0.4
+Controlled By:  ReplicaSet/local-path-provisioner-75f7fc7dc5
+Containers:
+  local-path-provisioner:
+    Container ID:  containerd://295497593e3b0b44c6030b93fb1c84be70f01cc6c719eb65742bad5311a040b8
+    Image:         docker.io/kindest/local-path-provisioner:v20260820-69b56db7
+    Image ID:      sha256:0771a8a05619f4bb6f4c8484f942f509b21a04ebe56ee26d17a3006e250bfd46
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      local-path-provisioner
+      --debug
+      start
+      --helper-image
+      docker.io/kindest/local-path-helper:v20260131-7181c60a
+      --config
+      /etc/config/config.json
+    State:          Running
+      Started:      Wed, 02 Sep 2026 08:31:54 +0530
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POD_NAMESPACE:      local-path-storage (v1:metadata.namespace)
+      CONFIG_MOUNT_PATH:  /etc/config/
+    Mounts:
+      /etc/config/ from config-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-59td6 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  config-volume:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      local-path-config
+    Optional:  false
+  kube-api-access-59td6:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 node-role.kubernetes.io/control-plane:NoSchedule
+                             node-role.kubernetes.io/master:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  10m   default-scheduler  0/1 nodes are available: 1 node(s) had untolerated taint(s). preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+  Normal   Scheduled         10m   default-scheduler  Successfully assigned local-path-storage/local-path-provisioner-75f7fc7dc5-bgp5f to incident-lab-control-plane
+  Normal   Pulled            10m   kubelet            spec.containers{local-path-provisioner}: Container image "docker.io/kindest/local-path-provisioner:v20260820-69b56db7" already present on machine and can be accessed by the pod
+  Normal   Created           10m   kubelet            spec.containers{local-path-provisioner}: Container created
+  Normal   Started           10m   kubelet            spec.containers{local-path-provisioner}: Container started

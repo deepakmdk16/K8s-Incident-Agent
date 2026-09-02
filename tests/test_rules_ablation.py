@@ -17,7 +17,7 @@ import pytest
 
 from ablation import rules
 from common.report_contract import extract_answer
-from evals import scoring
+from evals import run_eval, scoring
 
 REPO = Path(__file__).resolve().parents[1]
 FIXTURES = REPO / "evals" / "fixtures"
@@ -81,9 +81,9 @@ def test_ablation_never_learns_the_case_set() -> None:
     banned = set(CASES)
     for case_id in CASES:
         banned |= set(rules.fx.namespaces(FIXTURES / case_id)) - {"default"}
-        gold = json.loads(
-            (REPO / "evals" / "scenarios" / case_id / "gold.json").read_text(encoding="utf-8")
-        )
+        gold_path = run_eval.find_gold(case_id)
+        assert gold_path is not None, f"no gold.json in any scenario root for {case_id}"
+        gold = json.loads(gold_path.read_text(encoding="utf-8"))
         banned.add(str(gold["failing_resource"]["name"]))
     # namespaces every real cluster has are not case knowledge
     banned -= {"kube-system", "kube-public", "kube-node-lease", "local-path-storage"}

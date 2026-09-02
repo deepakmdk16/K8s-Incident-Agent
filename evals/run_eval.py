@@ -98,7 +98,24 @@ class Outcome:
         return base
 
 
-def discover_cases(only: set[str] | None = None) -> list[Case]:
+# The frozen 12-case set lives in evals/scenarios/ and keeps that root to
+# itself: its identity IS the reported case count, so a 13th directory there
+# would silently change what "the frozen set" means. New cases land in an
+# additive root and are run by pointing --scenarios-root at it.
+FROZEN_ROOT = "evals/scenarios"
+SCENARIO_ROOTS = (FROZEN_ROOT, "evals/scenarios-v2")
+
+
+def find_gold(case_id: str) -> Path | None:
+    """The gold.json for a case, in whichever scenario root defines it."""
+    for root in SCENARIO_ROOTS:
+        candidate = ROOT / root / case_id / "gold.json"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def discover_cases(only: set[str] | None = None, root: str = FROZEN_ROOT) -> list[Case]:
     """Every scenario with a gold.json whose fixture exists, optionally filtered.
 
     A scenario authored ahead of its capture (gold.json present, fixture not
@@ -109,7 +126,7 @@ def discover_cases(only: set[str] | None = None) -> list[Case]:
     stays a hard failure in checkpoints.sh and test_every_fixture_has_gold.
     """
     cases: list[Case] = []
-    for gold_path in sorted(ROOT.glob("evals/scenarios/*/gold.json")):
+    for gold_path in sorted(ROOT.glob(f"{root}/*/gold.json")):
         case_id = gold_path.parent.name
         if only is not None and case_id not in only:
             continue
@@ -122,7 +139,7 @@ def discover_cases(only: set[str] | None = None) -> list[Case]:
             continue
         cases.append(Case(case_id=case_id, fixture=fixture, gold=scoring.load_gold(gold_path)))
     if not cases:
-        raise FileNotFoundError("no scorable cases found under evals/scenarios/")
+        raise FileNotFoundError(f"no scorable cases found under {root}/")
     return cases
 
 
@@ -286,6 +303,12 @@ def main() -> None:
     parser.add_argument("--arm", choices=sorted(ARMS), required=True)
     parser.add_argument("--runs", type=int, default=3, help="replicate runs (default 3)")
     parser.add_argument("--cases", default=None, help="comma-separated case ids (default: all)")
+    parser.add_argument(
+        "--scenarios-root",
+        default=FROZEN_ROOT,
+        choices=SCENARIO_ROOTS,
+        help=f"scenario root to score (default {FROZEN_ROOT}, the frozen set)",
+    )
     parser.add_argument("--out", type=Path, default=None, help="results dir (default: timestamped)")
     args = parser.parse_args()
 
@@ -297,7 +320,7 @@ def main() -> None:
     log = get_logger(run_id, name="run_eval")
 
     only = {c.strip() for c in args.cases.split(",")} if args.cases else None
-    cases = discover_cases(only)
+    cases = discover_cases(only, args.scenarios_root)
     log.info("arm=%s cases=%d runs=%d out=%s", args.arm, len(cases), args.runs, out_dir)
 
     outcomes: list[Outcome] = []

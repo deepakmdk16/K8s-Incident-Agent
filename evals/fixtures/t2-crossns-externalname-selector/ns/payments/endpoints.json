@@ -1,0 +1,26 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-02T03:10:15Z"
+        },
+        "creationTimestamp": "2026-09-02T03:10:15Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "payments-gateway",
+        "namespace": "payments",
+        "resourceVersion": "1239",
+        "uid": "add2297e-4d1a-46e6-88c0-e812e927fc13"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

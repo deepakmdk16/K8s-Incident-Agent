@@ -1,0 +1,138 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "1",
+          "deployment.kubernetes.io/max-replicas": "2",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-09-02T03:01:42Z",
+        "generation": 1,
+        "labels": {
+          "app": "local-path-provisioner",
+          "pod-template-hash": "75f7fc7dc5"
+        },
+        "name": "local-path-provisioner-75f7fc7dc5",
+        "namespace": "local-path-storage",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "local-path-provisioner",
+            "uid": "76aac943-c1b5-409b-a2fb-54a5822dfb5b"
+          }
+        ],
+        "resourceVersion": "511",
+        "uid": "2c5d8bf7-d3c7-4f9d-b332-38ac860663b8"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "local-path-provisioner",
+            "pod-template-hash": "75f7fc7dc5"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "local-path-provisioner",
+              "pod-template-hash": "75f7fc7dc5"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "local-path-provisioner",
+                  "--debug",
+                  "start",
+                  "--helper-image",
+                  "docker.io/kindest/local-path-helper:v20260131-7181c60a",
+                  "--config",
+                  "/etc/config/config.json"
+                ],
+                "env": [
+                  {
+                    "name": "POD_NAMESPACE",
+                    "valueFrom": {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "metadata.namespace"
+                      }
+                    }
+                  },
+                  {
+                    "name": "CONFIG_MOUNT_PATH",
+                    "value": "/etc/config/"
+                  }
+                ],
+                "image": "docker.io/kindest/local-path-provisioner:v20260820-69b56db7",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "local-path-provisioner",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/etc/config/",
+                    "name": "config-volume"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "nodeSelector": {
+              "kubernetes.io/os": "linux"
+            },
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "serviceAccount": "local-path-provisioner-service-account",
+            "serviceAccountName": "local-path-provisioner-service-account",
+            "terminationGracePeriodSeconds": 30,
+            "tolerations": [
+              {
+                "effect": "NoSchedule",
+                "key": "node-role.kubernetes.io/control-plane",
+                "operator": "Equal"
+              },
+              {
+                "effect": "NoSchedule",
+                "key": "node-role.kubernetes.io/master",
+                "operator": "Equal"
+              }
+            ],
+            "volumes": [
+              {
+                "configMap": {
+                  "defaultMode": 420,
+                  "name": "local-path-config"
+                },
+                "name": "config-volume"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "fullyLabeledReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

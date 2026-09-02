@@ -1,0 +1,17 @@
+Name:         gateway-content
+Namespace:    payments
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+health:
+----
+ok
+
+
+
+BinaryData
+====
+
+Events:  <none>

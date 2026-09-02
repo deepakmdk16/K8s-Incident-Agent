@@ -182,6 +182,15 @@ def render_namespace_overview(fixture: Path, namespace: str) -> str:
             len(_items(subset, "addresses"))
             for subset in _items(endpoints.get(name, {}), "subsets")
         )
+        # An ExternalName Service is a DNS alias: it has no selector and no
+        # Endpoints BY DESIGN, so rendering it with the ClusterIP fields makes
+        # a healthy alias look exactly like a service whose selector matches
+        # nothing. Show what it actually is — the target is also the only
+        # reference edge that leaves this namespace.
+        external = _text(_obj(svc, "spec"), "externalName")
+        if external:
+            lines.append(f"  service/{name} type=ExternalName externalName={external}")
+            continue
         lines.append(
             f"  service/{name} selector={_labels(svc, 'spec', 'selector')} "
             f"endpointAddresses={addresses}"
@@ -334,6 +343,27 @@ def _reference_paths(spec: dict[str, Any], kind: str, name: str) -> list[str]:
     return paths
 
 
+def _externalname_aliases(fixture: Path, namespace: str, name: str) -> list[str]:
+    """Services in any namespace whose ExternalName target is this Service.
+
+    The alias is the only reference edge in a captured snapshot that crosses a
+    namespace boundary, and it is directional — the consumer names the target,
+    never the reverse. Without this, a Service an entire other namespace
+    depends on reports no consumers at all, which reads as "nothing uses it".
+    """
+    hits: list[str] = []
+    for other in fx.namespaces(fixture):
+        for svc in fx.load_kind(fixture, "services", other):
+            target = _text(_obj(svc, "spec"), "externalName")
+            segments = target.rstrip(".").split(".")
+            if len(segments) >= 2 and segments[0] == name and segments[1] == namespace:
+                hits.append(
+                    f"service/{_name(svc)} in namespace {other} aliases this Service via "
+                    f"spec.externalName={target}"
+                )
+    return hits
+
+
 def render_consumers(fixture: Path, namespace: str, kind: str, name: str) -> str:
     resolved = fx.normalize_kind(kind)
     lines: list[str] = []
@@ -355,6 +385,8 @@ def render_consumers(fixture: Path, namespace: str, kind: str, name: str) -> str
                     f"rolebinding/{_name(binding)} subjects[].name='{subject_name}' "
                     f"roleRef={_text(role, 'kind')}/{_text(role, 'name')} ({verdict})"
                 )
+    if resolved == "services":
+        lines += _externalname_aliases(fixture, namespace, name)
     existing = sorted(_name(i) for i in fx.load_kind(fixture, resolved, namespace))
     if not lines:
         lines.append(f"no workload in {namespace} references {resolved[:-1]}/{name}")

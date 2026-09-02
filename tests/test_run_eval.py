@@ -8,10 +8,13 @@ from pathlib import Path
 import pytest
 
 from evals.run_eval import (
+    FROZEN_ROOT,
+    SCENARIO_ROOTS,
     ArmFn,
     Case,
     InfrastructureError,
     discover_cases,
+    find_gold,
     run_case,
     summarize,
     write_outputs,
@@ -122,3 +125,32 @@ def test_write_outputs_emits_rows_and_summaries(tmp_path: Path) -> None:
     assert summary["pooled"]["overall"] == {"correct": 1, "cases": 1}
     assert summary["totals"]["cost_usd"] == 0.01
     assert "| pooled | 1/1 |" in (tmp_path / "summary.md").read_text()
+
+
+def test_the_frozen_case_set_keeps_its_identity() -> None:
+    """A new case must not silently join the set every reported number is about.
+
+    The frozen set's identity IS its count — evals/reported.json asserts 12
+    cases x 3 runs — so an additive root is the only place a 13th case can
+    land. This is the check that catches a v2 case authored into the wrong
+    directory, which no other gate would notice until the bar failed.
+    """
+    frozen = discover_cases()
+    assert len(frozen) == 12
+    assert all((ROOT / FROZEN_ROOT / case.case_id).is_dir() for case in frozen)
+
+
+def test_an_additive_root_is_discovered_separately() -> None:
+    for root in SCENARIO_ROOTS:
+        if root == FROZEN_ROOT:
+            continue
+        if not (ROOT / root).is_dir():
+            continue
+        extra = discover_cases(root=root)
+        assert extra, f"{root} exists but discovers no case"
+        assert not {c.case_id for c in extra} & {c.case_id for c in discover_cases()}
+
+
+def test_find_gold_locates_a_case_in_either_root() -> None:
+    assert find_gold("t1-crashloop-missing-env") == GOLD
+    assert find_gold("no-such-case") is None

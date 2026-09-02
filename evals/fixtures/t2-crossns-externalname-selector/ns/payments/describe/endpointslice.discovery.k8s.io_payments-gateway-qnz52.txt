@@ -1,0 +1,9 @@
+Name:         payments-gateway-qnz52
+Namespace:    payments
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=payments-gateway
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-09-02T03:10:15Z
+AddressType:  IPv4
+Ports: <unset>
+Endpoints: <none>
+Events:  <none>

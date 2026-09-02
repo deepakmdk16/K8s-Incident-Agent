@@ -126,9 +126,14 @@ if [ -d "$TARGET/evals/fixtures" ]; then
       || MISS="$MISS log_channels(per-channel-status)"
     [ -s "$FIX/page.txt" ] || MISS="$MISS page.txt"
     # scoring spec (evals/scoring.md): a fixture without ground truth cannot
-    # be scored — every fixture needs its agent-invisible gold.json
-    [ -s "$TARGET/evals/scenarios/$(basename "$FIX")/gold.json" ] \
-      || MISS="$MISS scenarios/$(basename "$FIX")/gold.json"
+    # be scored — every fixture needs its agent-invisible gold.json, in
+    # whichever scenario root defines it (the frozen set, or an additive one;
+    # evals/run_eval.py SCENARIO_ROOTS is the authority both sides follow).
+    FIXID="$(basename "$FIX")"; GOLDFOUND=0
+    for SROOT in "$TARGET"/evals/scenarios "$TARGET"/evals/scenarios-v2; do
+      [ -s "$SROOT/$FIXID/gold.json" ] && GOLDFOUND=1
+    done
+    [ "$GOLDFOUND" -eq 1 ] || MISS="$MISS scenarios*/$FIXID/gold.json"
     for req in cluster/get-all.txt cluster/events.json cluster/nodes.json cluster/version.json; do
       [ -s "$FIX/$req" ] || MISS="$MISS $req"
     done

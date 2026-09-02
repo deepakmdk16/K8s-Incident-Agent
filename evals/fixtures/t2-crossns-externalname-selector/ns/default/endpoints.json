@@ -1,0 +1,39 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "creationTimestamp": "2026-09-02T03:01:34Z",
+        "labels": {
+          "endpointslice.kubernetes.io/skip-mirror": "true"
+        },
+        "name": "kubernetes",
+        "namespace": "default",
+        "resourceVersion": "253",
+        "uid": "5933ef24-c997-40fc-9802-4d84f0d35259"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "172.18.0.3"
+            }
+          ],
+          "ports": [
+            {
+              "name": "https",
+              "port": 6443,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,86 @@
+Name:                 etcd-incident-lab-control-plane
+Namespace:            kube-system
+Priority:             2000001000
+Priority Class Name:  system-node-critical
+Node:                 incident-lab-control-plane/172.18.0.3
+Start Time:           Wed, 02 Sep 2026 08:31:35 +0530
+Labels:               component=etcd
+                      tier=control-plane
+Annotations:          kubeadm.kubernetes.io/etcd.advertise-client-urls: https://172.18.0.3:2379
+                      kubernetes.io/config.hash: f09bdb2aa54ecb8612408e270c8700a0
+                      kubernetes.io/config.mirror: f09bdb2aa54ecb8612408e270c8700a0
+                      kubernetes.io/config.seen: 2026-09-02T03:01:35.558436674Z
+                      kubernetes.io/config.source: file
+Status:               Running
+SeccompProfile:       RuntimeDefault
+IP:                   172.18.0.3
+IPs:
+  IP:           172.18.0.3
+Controlled By:  Node/incident-lab-control-plane
+Containers:
+  etcd:
+    Container ID:  containerd://e452f6a4f072be78953a2bb69d7b1320f0c9046c74793e47a90f864895524b5f
+    Image:         registry.k8s.io/etcd:3.7.0-0
+    Image ID:      sha256:c2e426bbd1cd63b4d1cbdca2eba371a0a2e64b6934dcc48c51a62d488fe64fe8
+    Port:          2381/TCP (probe-port)
+    Host Port:     2381/TCP (probe-port)
+    Command:
+      etcd
+      --advertise-client-urls=https://172.18.0.3:2379
+      --cert-file=/etc/kubernetes/pki/etcd/server.crt
+      --client-cert-auth=true
+      --data-dir=/var/lib/etcd
+      --feature-gates=InitialCorruptCheck=true
+      --initial-advertise-peer-urls=https://172.18.0.3:2380
+      --initial-cluster=incident-lab-control-plane=https://172.18.0.3:2380
+      --key-file=/etc/kubernetes/pki/etcd/server.key
+      --listen-client-urls=https://127.0.0.1:2379,https://172.18.0.3:2379
+      --listen-metrics-urls=http://127.0.0.1:2381
+      --listen-peer-urls=https://172.18.0.3:2380
+      --name=incident-lab-control-plane
+      --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+      --peer-client-cert-auth=true
+      --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+      --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+      --snapshot-count=10000
+      --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+      --watch-progress-notify-interval=5s
+    State:          Running
+      Started:      Wed, 02 Sep 2026 08:31:32 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        100m
+      memory:     100Mi
+    Liveness:     http-get http://127.0.0.1:probe-port/livez delay=10s timeout=15s period=10s successThreshold=1 failureThreshold=8
+    Readiness:    http-get http://127.0.0.1:probe-port/readyz delay=0s timeout=15s period=1s successThreshold=1 failureThreshold=3
+    Startup:      http-get http://127.0.0.1:probe-port/readyz delay=10s timeout=15s period=10s successThreshold=1 failureThreshold=24
+    Environment:  <none>
+    Mounts:
+      /etc/kubernetes/pki/etcd from etcd-certs (rw)
+      /var/lib/etcd from etcd-data (rw)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  etcd-certs:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/kubernetes/pki/etcd
+    HostPathType:  DirectoryOrCreate
+  etcd-data:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/lib/etcd
+    HostPathType:  DirectoryOrCreate
+QoS Class:         Burstable
+Node-Selectors:    <none>
+Tolerations:       :NoExecute op=Exists
+Events:
+  Type    Reason   Age   From     Message
+  ----    ------   ----  ----     -------
+  Normal  Pulled   10m   kubelet  spec.containers{etcd}: Container image "registry.k8s.io/etcd:3.7.0-0" already present on machine and can be accessed by the pod
+  Normal  Created  10m   kubelet  spec.containers{etcd}: Container created
+  Normal  Started  10m   kubelet  spec.containers{etcd}: Container started

@@ -14,6 +14,33 @@ self-improving loop): a solved issue must not be solvable twice.
 **Lesson for reliable agents:** …
 -->
 
+## 2026-09-02 — `kind load docker-image` exits 0 having imported nothing
+
+**What happened:** preparing the authoring cluster for the first v2 case, the
+workload image was loaded with `kind load docker-image busybox:1.36 --name
+incident-lab`. It printed an error line and **exited 0**. Taking the exit code
+at face value would have left the node without the image, and the next capture
+would have recorded `ErrImagePull` events instead of the injected fault — a
+fixture that looks like a real incident but documents the wrong one.
+
+**Evidence:** the command emitted `ctr: content digest sha256:b7f3d86d…: not
+found` and returned success; `docker exec incident-lab-control-plane crictl
+images | grep busybox` then printed nothing. The working path is
+`docker save` → `docker cp` → `ctr -n k8s.io images import`, verified by the
+same `crictl images` check.
+
+**Prevention now in place:** [evals/cluster.sh](../evals/cluster.sh) does the
+import through `ctr` and then **asserts the image is present in the node**,
+failing loudly if it is not. The script also pins the kind node image by digest
+so a fixture cannot be captured on a different Kubernetes version than the set
+it joins. Its comment says why `kind load` is not used.
+
+**Lesson for reliable agents:** a zero exit code is a claim, not evidence.
+Where a command's whole purpose is to leave state behind, verify the state —
+especially before an irreversible step downstream (here, a capture that would
+be committed as ground truth). This is the same shape as the repo's
+"error-as-green" failure mode: a gate that certifies a thing it never checked.
+
 ## 2026-08-28 — identity-linked API key 400s without a workspace id the Console won't show
 
 **What happened:** the first live scored run failed 3/3 with

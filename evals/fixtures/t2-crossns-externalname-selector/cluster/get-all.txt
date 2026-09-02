@@ -1,0 +1,36 @@
+NAMESPACE            NAME                                                     READY   STATUS    RESTARTS   AGE     IP            NODE                         NOMINATED NODE   READINESS GATES
+kube-system          pod/coredns-559f6c778d-9lrfg                             1/1     Running   0          8m43s   10.244.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-jsqvf                             1/1     Running   0          8m43s   10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running   0          8m51s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-d6vmg                                        1/1     Running   0          8m44s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running   0          8m52s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running   0          8m51s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-4bpcr                                     1/1     Running   0          8m44s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running   0          8m51s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-bgp5f              1/1     Running   0          8m43s   10.244.0.4    incident-lab-control-plane   <none>           <none>
+payments             pod/payments-gateway-api-9c78bc7b-k65l8                  1/1     Running   0          11s     10.244.0.11   incident-lab-control-plane   <none>           <none>
+payments             pod/payments-gateway-api-9c78bc7b-mhxwf                  1/1     Running   0          11s     10.244.0.12   incident-lab-control-plane   <none>           <none>
+storefront           pod/checkout-api-7db48f7c7b-6jjnr                        0/1     Running   0          11s     10.244.0.10   incident-lab-control-plane   <none>           <none>
+storefront           pod/checkout-api-7db48f7c7b-d9ktf                        0/1     Running   0          11s     10.244.0.9    incident-lab-control-plane   <none>           <none>
+
+NAMESPACE     NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP                                   PORT(S)                  AGE     SELECTOR
+default       service/kubernetes         ClusterIP      10.96.0.1      <none>                                        443/TCP                  8m52s   <none>
+kube-system   service/kube-dns           ClusterIP      10.96.0.10     <none>                                        53/UDP,53/TCP,9153/TCP   8m51s   k8s-app=kube-dns
+payments      service/payments-gateway   ClusterIP      10.96.191.39   <none>                                        8080/TCP                 11s     app=payments-gateway
+storefront    service/payments-gateway   ExternalName   <none>         payments-gateway.payments.svc.cluster.local   <none>                   11s     <none>
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE     CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   8m50s   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   8m51s   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS               IMAGES                                                        SELECTOR
+kube-system          deployment.apps/coredns                  2/2     2            2           8m51s   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           8m50s   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+payments             deployment.apps/payments-gateway-api     2/2     2            2           11s     gateway                  busybox:1.36                                                  app=payments-gateway-api
+storefront           deployment.apps/checkout-api             0/2     2            0           11s     checkout-api             busybox:1.36                                                  app=checkout-api
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE     CONTAINERS               IMAGES                                                        SELECTOR
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       8m44s   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       8m44s   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+payments             replicaset.apps/payments-gateway-api-9c78bc7b       2         2         2       11s     gateway                  busybox:1.36                                                  app=payments-gateway-api,pod-template-hash=9c78bc7b
+storefront           replicaset.apps/checkout-api-7db48f7c7b             2         2         0       11s     checkout-api             busybox:1.36                                                  app=checkout-api,pod-template-hash=7db48f7c7b
