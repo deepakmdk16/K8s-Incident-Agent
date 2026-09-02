@@ -7,10 +7,12 @@ one primary metric meaningful to the user, **≥10 cases**, **one deliberately
 challenging case**, the **same cases** for `baseline/` and `solution/`, and a
 written definition of "good" *before* the first run. Output: the comparison
 table pinned in `evals/reported.json` (root-cause identification overall and
-per tier, resource identification, calibration; rules / baseline / solution
-columns) — the measured-improvement evidence. Cost per arm is disclosed from
-each bundle's `summary.json`; human time per task is deliberately not
-reported — no human trial was run (`evals/scoring.md`). Wired into
+per tier, resource identification, calibration, mean cost and mean duration per
+case; rules / baseline / solution columns) — the measured-improvement evidence.
+Cost and latency are re-derived per case from each bundle's committed
+`metrics.json` and the solution arm's means are asserted against declared
+ceilings, so a correct-but-far-costlier arm fails the gate; human time per task
+is deliberately not reported — no human trial was run (`evals/scoring.md`). Wired into
 `scripts/checkpoints.sh`: a red eval fails the gate, and `run.sh` must be
 `chmod +x` or the gate silently skips it.
 

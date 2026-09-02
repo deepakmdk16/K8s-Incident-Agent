@@ -1,5 +1,5 @@
 {
-  "_comment": "The exact bundles every number in README.md and CHANGELOG.md is quoted from. evals/run.sh re-derives every cell from these directories with the frozen scorer on every gate run and asserts the solution arm against the bar below; the rules/baseline cells are re-derived and printed, not independently asserted.",
+  "_comment": "The exact bundles every number in README.md and CHANGELOG.md is quoted from. evals/run.sh re-derives every cell from these directories with the frozen scorer on every gate run and asserts the solution arm against the bar below; the rules/baseline cells are re-derived and printed, not independently asserted. The two mean_case_* ceilings are set at 2x the observed pooled mean of the solution bundle ($0.1807/case, 44.1s/case): run-to-run drift of a 12-case mean was +-15% across the three committed runs, so 2x cannot fire on noise, while a systematically 2x-costlier or slower agent fails the gate even at 36/36.",
   "rules": "20260829T101751Z-rules",
   "baseline": "20260829T045650Z-baseline",
   "solution": "20260829T090941Z-solution",
@@ -11,6 +11,8 @@
     "cases": 12,
     "runs": 3,
     "solution_beats_rules_pooled": true,
-    "rules_failing_cases_min": 3
+    "rules_failing_cases_min": 3,
+    "solution_mean_case_usd_max": 0.36,
+    "solution_mean_case_duration_s_max": 88.0
   }
 }

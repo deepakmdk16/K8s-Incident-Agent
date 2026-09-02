@@ -80,11 +80,12 @@ one frozen scorer. `make verify` re-derives every scored cell below from the
 committed evidence bundles offline, in about a second, and fails if the
 solution arm misses its declared bar in `evals/reported.json` (pooled ≥36/36,
 resource identification ≥36/36, confirmed-wrong ≤0, beats both other arms,
-rules failing on ≥3 cases). The rules and baseline cells are re-derived and
-printed for side-by-side comparison; they are not independently asserted
-against this document. (The cost row is sourced separately, from
-`totals.cost_usd` in each bundle's `summary.json` — see the cost figures under
-the reproduction guide.)
+rules failing on ≥3 cases, mean spend ≤$0.36/case, mean latency ≤88s/case).
+The rules and baseline cells are re-derived and printed for side-by-side
+comparison; they are not independently asserted against this document. Cost and
+latency are re-derived per case from each bundle's committed `metrics.json`;
+the full-matrix cost row is that per-case mean times the 36 rows, and matches
+`totals.cost_usd` in each bundle's `summary.json`.
 
 | metric | rules-only | baseline | **solution** |
 |---|---|---|---|
@@ -95,10 +96,16 @@ the reproduction guide.)
 | resource identification | 33/36 | 33/36 | **36/36** |
 | right object, sentence unmatched | 3 | 3 | **0** |
 | confirmed-wrong (said `confirmed`, was wrong) | 3 | 3 | **0** |
+| mean cost / case | $0.0000 | $0.1163 | **$0.1807** |
+| mean duration / case | 0.0s | 43.0s | **44.1s** |
 | cost, full matrix | $0.00 | $4.19 | $6.51 |
 
 The solution identifies the root cause in **every** run of **every** case, and
-its calibration is exact: it never once asserted `confirmed` and was wrong.
+its calibration is exact: it never once asserted `confirmed` and was wrong. It
+buys those six points over the baseline at 1.55x the spend per case ($0.1807 vs
+$0.1163) and effectively the same wall-clock (44.1s vs 43.0s). Both are now
+asserted by the same gate, so no future arm can trade an order of magnitude of
+cost for the same score unnoticed.
 
 The metric is root-cause identification rate under a frozen scorer, reported
 per difficulty tier over 3 replicate runs, with calibration (`confirmed-wrong`)

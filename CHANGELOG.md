@@ -15,6 +15,44 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [11] Cost and latency were recorded but never scored — 2026-09-02, 00:22 UTC
+
+**Change:** the declared bar now asserts spend and wall-clock, not just
+correctness. [evals/verify_reported.py](evals/verify_reported.py) re-derives
+mean cost and mean duration per case from the `metrics.json` committed beside
+every `answer.json`, prints both for all three arms, and fails the gate if the
+solution arm exceeds the two new ceilings in
+[evals/reported.json](evals/reported.json). The bar logic was extracted into a
+pure `check_bar()` so it could be tested at all — it had no tests before this,
+which meant no check in it had ever been shown to fire.
+
+**Why:** roadmap 1.6. Every scored run already wrote `cost_usd` and
+`duration_s` per case and nothing read them, so an arm that reached 36/36 by
+spending ten times as much would have passed the gate silently — and with the
+frozen set saturated at 36/36, cost and latency are two of the few axes left
+where a future change can still be measured at all.
+
+**Evidence after:** the ceilings are set at **2x the observed pooled mean**
+($0.1807/case, 44.1s/case → $0.36 and 88s), derived from the committed bundle
+rather than picked: the same case varies up to **2.42x** in cost across
+replicate runs, so a per-case ceiling would fire on noise, while the 12-case
+run means moved only $0.157/$0.181/$0.204 (±15%) across the three runs. A
+per-case *cost max* would also have been toothless, since `MAX_CASE_USD`
+already truncates it at $0.60. Seven new tests in
+[tests/test_verify_reported.py](tests/test_verify_reported.py) — suite 231 →
+**238 passed** — trip each ceiling and each previously-untested check;
+`bash scripts/checkpoints.sh` reports **0 failure(s)** and the gate line now
+reads `36/36 … $0.1807 and 44.1s per case`. The measured comparison this
+exposes: the solution buys six pooled points over the baseline at **1.55x**
+the spend ($0.1807 vs $0.1163) and effectively the same wall-clock (44.1s vs
+43.0s), and mean × 36 reconciles to each bundle's `summary.json` totals to the
+cent ($6.51, $4.19).
+
+**Next decision it drove:** the three remaining roadmap items in flight (1.1,
+1.4, 2.1) all need an authoring cluster, and each will add rows to a bar that
+now costs something to miss — so the next slice is bringing up the authoring
+cluster, not more offline harness work.
+
 ## [10] The admissibility check matched namespaces by substring — 2026-09-01, 14:11 UTC
 
 **Change:** V2 admissibility now decides whether a text *names* a namespace by
