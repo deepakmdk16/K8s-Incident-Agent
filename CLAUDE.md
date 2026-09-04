@@ -16,6 +16,12 @@ loads every session — keep it lean.
   commit message with the reason.
 - **Every claim connects to evidence in the repo.** No number in README or
   CHANGELOG that a reader cannot reproduce from the tree.
+- **A score gap names a difference, never its cause.** Before attributing an
+  arm-to-arm gap to capability, decompose it into the per-row sub-scores the
+  harness already records (`resource_correct`, `class_correct`,
+  `matched_classes` in `rows.jsonl`). A pooled number can move for reasons the
+  rubric's vocabulary controls rather than the agent's behaviour — twice now
+  (docs/failure-modes.md, 2026-08-29 and 2026-09-04).
 - **Report outcomes as measured — quote the output.** A test that did not
   demonstrably pass is inconclusive, never a pass. Never claim "done" on
   unverified code, and never report a gate as green from a summary line, a

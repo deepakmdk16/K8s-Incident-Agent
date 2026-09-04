@@ -1,0 +1,91 @@
+{
+  "arm": "solution",
+  "runs": 3,
+  "started_utc": "20260904T083020Z",
+  "model_pinned": "claude-opus-5",
+  "sampling": "no sampling parameters (removed on the pinned model); replicate runs instead",
+  "pooled": {
+    "overall": {
+      "correct": 3,
+      "cases": 3
+    },
+    "by_tier": {
+      "T2": {
+        "correct": 3,
+        "cases": 3
+      }
+    },
+    "by_verdict": {
+      "confirmed": {
+        "correct": 3,
+        "cases": 3
+      }
+    },
+    "confirmed_wrong": 0
+  },
+  "per_run": {
+    "1": {
+      "overall": {
+        "correct": 1,
+        "cases": 1
+      },
+      "by_tier": {
+        "T2": {
+          "correct": 1,
+          "cases": 1
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 1,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 0
+    },
+    "2": {
+      "overall": {
+        "correct": 1,
+        "cases": 1
+      },
+      "by_tier": {
+        "T2": {
+          "correct": 1,
+          "cases": 1
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 1,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 0
+    },
+    "3": {
+      "overall": {
+        "correct": 1,
+        "cases": 1
+      },
+      "by_tier": {
+        "T2": {
+          "correct": 1,
+          "cases": 1
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 1,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 0
+    }
+  },
+  "totals": {
+    "input_tokens": 143212,
+    "output_tokens": 15425,
+    "cost_usd": 0.6096,
+    "cases_without_measured_cost": 0
+  }
+}

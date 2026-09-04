@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-crossns-externalname-selector",
+  "failing_resource": {"kind": "Service", "namespace": "payments", "name": "payments-gateway"},
+  "mechanism": "The payments-gateway Service selects app=payments-gateway, but its backing pods are labelled app=payments-gateway-api, so the Service has zero endpoints and kube-proxy immediately refuses every connection to its ClusterIP 10.96.191.39. The checkout-api containers poll that address for gateway health, never write their /tmp/ready sentinel, so the exec readiness probe fails permanently and the Deployment stays at 0/2 available, taking no traffic and blocking order submission.",
+  "verdict": "confirmed"
+}

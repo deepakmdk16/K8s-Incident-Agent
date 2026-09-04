@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-crossns-externalname-selector",
+  "failing_resource": {"kind": "Service", "namespace": "payments", "name": "payments-gateway"},
+  "mechanism": "The payments-gateway Service's selector 'app=payments-gateway' matches no pods, because the gateway pods are labelled 'app=payments-gateway-api', leaving the Service with an empty endpoint set. kube-proxy therefore REJECTs all traffic to its ClusterIP 10.96.191.39, which is what the storefront ExternalName alias resolves to, so checkout-api's gateway health poll gets an immediate 'Connection refused'. Checkout-api consequently never writes /tmp/ready, its exec readiness probe fails, and both replicas stay un-Ready so the Deployment reports 0/2 and receives no traffic.",
+  "verdict": "confirmed"
+}

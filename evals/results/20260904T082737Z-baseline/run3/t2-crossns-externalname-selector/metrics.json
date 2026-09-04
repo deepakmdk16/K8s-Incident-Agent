@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-crossns-externalname-selector",
+  "arm": "baseline",
+  "run_id": "5ad9829f4dc9",
+  "model": "claude-opus-5",
+  "input_tokens": 8436,
+  "output_tokens": 3859,
+  "cost_usd": 0.138655,
+  "duration_s": 51.82,
+  "prompt_chars": 19166,
+  "prompt_sections": 6
+}

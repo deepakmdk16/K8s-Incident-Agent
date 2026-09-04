@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-crossns-externalname-selector",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "payments",
+    "name": "payments-gateway"
+  },
+  "mechanism": "Service payments/payments-gateway has .spec.selector set to app=payments-gateway while the pods created by Deployment payments/payments-gateway-api carry the label app=payments-gateway-api, so the selector matches nothing and Endpoints payments/payments-gateway is populated with no addresses. With no backend behind ClusterIP 10.96.191.39, TCP connections to port 8080 are answered with \"wget: can't connect to remote host (10.96.191.39): Connection refused\".",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

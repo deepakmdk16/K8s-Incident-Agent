@@ -1,0 +1,337 @@
+You are an on-call Kubernetes engineer. You just got paged:
+
+[PAGE] SEV1 CheckoutUnavailable — storefront
+Customers cannot complete purchases: the cart page loads, but submitting an
+order returns an error and completed-order volume has been flat at zero for
+25 minutes. Deployment storefront/checkout-api reports 0 of 2 replicas Ready
+and is taking no traffic. The storefront team shipped no release today.
+Alert source: order-volume monitor. Find the root cause and propose a
+remediation.
+
+You grabbed the following output from the cluster. Diagnose the root
+cause of the paged symptom from this output alone.
+
+$ kubectl get all -A
+NAMESPACE            NAME                                                     READY   STATUS    RESTARTS   AGE     IP            NODE                         NOMINATED NODE   READINESS GATES
+kube-system          pod/coredns-559f6c778d-9lrfg                             1/1     Running   0          8m43s   10.244.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-jsqvf                             1/1     Running   0          8m43s   10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running   0          8m51s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-d6vmg                                        1/1     Running   0          8m44s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running   0          8m52s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running   0          8m51s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-4bpcr                                     1/1     Running   0          8m44s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running   0          8m51s   172.18.0.3    incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-bgp5f              1/1     Running   0          8m43s   10.244.0.4    incident-lab-control-plane   <none>           <none>
+payments             pod/payments-gateway-api-9c78bc7b-k65l8                  1/1     Running   0          11s     10.244.0.11   incident-lab-control-plane   <none>           <none>
+payments             pod/payments-gateway-api-9c78bc7b-mhxwf                  1/1     Running   0          11s     10.244.0.12   incident-lab-control-plane   <none>           <none>
+storefront           pod/checkout-api-7db48f7c7b-6jjnr                        0/1     Running   0          11s     10.244.0.10   incident-lab-control-plane   <none>           <none>
+storefront           pod/checkout-api-7db48f7c7b-d9ktf                        0/1     Running   0          11s     10.244.0.9    incident-lab-control-plane   <none>           <none>
+
+NAMESPACE     NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP                                   PORT(S)                  AGE     SELECTOR
+default       service/kubernetes         ClusterIP      10.96.0.1      <none>                                        443/TCP                  8m52s   <none>
+kube-system   service/kube-dns           ClusterIP      10.96.0.10     <none>                                        53/UDP,53/TCP,9153/TCP   8m51s   k8s-app=kube-dns
+payments      service/payments-gateway   ClusterIP      10.96.191.39   <none>                                        8080/TCP                 11s     app=payments-gateway
+storefront    service/payments-gateway   ExternalName   <none>         payments-gateway.payments.svc.cluster.local   <none>                   11s     <none>
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE     CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   8m50s   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   8m51s   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS               IMAGES                                                        SELECTOR
+kube-system          deployment.apps/coredns                  2/2     2            2           8m51s   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           8m50s   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+payments             deployment.apps/payments-gateway-api     2/2     2            2           11s     gateway                  busybox:1.36                                                  app=payments-gateway-api
+storefront           deployment.apps/checkout-api             0/2     2            0           11s     checkout-api             busybox:1.36                                                  app=checkout-api
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE     CONTAINERS               IMAGES                                                        SELECTOR
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       8m44s   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       8m44s   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+payments             replicaset.apps/payments-gateway-api-9c78bc7b       2         2         2       11s     gateway                  busybox:1.36                                                  app=payments-gateway-api,pod-template-hash=9c78bc7b
+storefront           replicaset.apps/checkout-api-7db48f7c7b             2         2         0       11s     checkout-api             busybox:1.36                                                  app=checkout-api,pod-template-hash=7db48f7c7b
+
+$ kubectl describe pod/checkout-api-7db48f7c7b-6jjnr -n storefront
+Name:             checkout-api-7db48f7c7b-6jjnr
+Namespace:        storefront
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Wed, 02 Sep 2026 08:40:15 +0530
+Labels:           app=checkout-api
+                  pod-template-hash=7db48f7c7b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.10
+IPs:
+  IP:           10.244.0.10
+Controlled By:  ReplicaSet/checkout-api-7db48f7c7b
+Containers:
+  checkout-api:
+    Container ID:  containerd://162912e067699805553a565337805df60be007b1b35bc6725f942c76fe69cfd7
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Wed, 02 Sep 2026 08:40:15 +0530
+    Ready:          False
+    Restart Count:  0
+    Readiness:      exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-xbvlp (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      checkout-scripts
+    Optional:  false
+  kube-api-access-xbvlp:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  116s               default-scheduler  Successfully assigned storefront/checkout-api-7db48f7c7b-6jjnr to incident-lab-control-plane
+  Normal   Pulled     116s               kubelet            spec.containers{checkout-api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    116s               kubelet            spec.containers{checkout-api}: Container created
+  Normal   Started    116s               kubelet            spec.containers{checkout-api}: Container started
+  Warning  Unhealthy  0s (x6 over 110s)  kubelet            spec.containers{checkout-api}: Readiness probe failed:
+
+$ kubectl logs checkout-api-7db48f7c7b-6jjnr -c checkout-api -n storefront --tail=50
+2026-09-02T03:10:15.934330248Z checkout-api starting; payment gateway endpoint http://payments-gateway:8080/health
+2026-09-02T03:10:16.978263767Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:16.979854667Z 2026-09-02T03:10:16Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:10:22.994353655Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:22.996167996Z 2026-09-02T03:10:22Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:10:29.010013173Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:29.011124106Z 2026-09-02T03:10:29Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:10:35.027144232Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:35.028622403Z 2026-09-02T03:10:35Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:12:06.165262917Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:12:06.168635031Z 2026-09-02T03:12:06Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:12:12.181229681Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:12:12.184113640Z 2026-09-02T03:12:12Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+
+$ kubectl describe pod/checkout-api-7db48f7c7b-d9ktf -n storefront
+Name:             checkout-api-7db48f7c7b-d9ktf
+Namespace:        storefront
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Wed, 02 Sep 2026 08:40:15 +0530
+Labels:           app=checkout-api
+                  pod-template-hash=7db48f7c7b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.9
+IPs:
+  IP:           10.244.0.9
+Controlled By:  ReplicaSet/checkout-api-7db48f7c7b
+Containers:
+  checkout-api:
+    Container ID:  containerd://643ad143634a051d39ca1298ab4c91c3ef13e412361348608218edab70062092
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Wed, 02 Sep 2026 08:40:15 +0530
+    Ready:          False
+    Restart Count:  0
+    Readiness:      exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-5vdg4 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      checkout-scripts
+    Optional:  false
+  kube-api-access-5vdg4:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  116s               default-scheduler  Successfully assigned storefront/checkout-api-7db48f7c7b-d9ktf to incident-lab-control-plane
+  Normal   Pulled     116s               kubelet            spec.containers{checkout-api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    116s               kubelet            spec.containers{checkout-api}: Container created
+  Normal   Started    116s               kubelet            spec.containers{checkout-api}: Container started
+  Warning  Unhealthy  0s (x6 over 110s)  kubelet            spec.containers{checkout-api}: Readiness probe failed:
+
+$ kubectl logs checkout-api-7db48f7c7b-d9ktf -c checkout-api -n storefront --tail=50
+2026-09-02T03:10:15.931975351Z checkout-api starting; payment gateway endpoint http://payments-gateway:8080/health
+2026-09-02T03:10:16.978260765Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:16.979845829Z 2026-09-02T03:10:16Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:10:22.994353738Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:22.996143715Z 2026-09-02T03:10:22Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:10:29.009978428Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:29.011147145Z 2026-09-02T03:10:29Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:10:35.026437460Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:10:35.028184098Z 2026-09-02T03:10:35Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:12:06.165606436Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:12:06.168936734Z 2026-09-02T03:12:06Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-02T03:12:12.180989041Z wget: can't connect to remote host (10.96.191.39): Connection refused
+2026-09-02T03:12:12.184166467Z 2026-09-02T03:12:12Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+
+$ kubectl describe deployment.apps/checkout-api -n storefront
+Name:                   checkout-api
+Namespace:              storefront
+CreationTimestamp:      Wed, 02 Sep 2026 08:40:15 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=checkout-api
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=checkout-api
+  Containers:
+   checkout-api:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Readiness:    exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   checkout-api-7db48f7c7b (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  117s  deployment-controller  Scaled up replica set checkout-api-7db48f7c7b from 0 to 2
+
+$ kubectl describe replicaset.apps/checkout-api-7db48f7c7b -n storefront
+Name:           checkout-api-7db48f7c7b
+Namespace:      storefront
+Selector:       app=checkout-api,pod-template-hash=7db48f7c7b
+Labels:         app=checkout-api
+                pod-template-hash=7db48f7c7b
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/checkout-api
+Replicas:       2 current / 2 desired
+Pods Status:    2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=checkout-api
+           pod-template-hash=7db48f7c7b
+  Containers:
+   checkout-api:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Readiness:    exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  117s  replicaset-controller  Created pod: checkout-api-7db48f7c7b-d9ktf
+  Normal  SuccessfulCreate  117s  replicaset-controller  Created pod: checkout-api-7db48f7c7b-6jjnr
+
+The case id for your answer is "t2-crossns-externalname-selector".
+
+Write your findings as a markdown report with EXACTLY these four sections:
+
+## Root cause
+The failing resource and the causal mechanism, stated plainly.
+
+## Evidence chain
+Every claim cites the exact piece of the provided output it came from (name the
+source, e.g. "describe of pod X", "log line: ...", quote the relevant line).
+
+## Investigation ledger
+Each alternative explanation you considered and ruled out, with the evidence
+that ruled it out. If you considered only one explanation, say so.
+
+## Verification recipe
+The 2-3 exact commands a human runs to independently confirm the root cause in
+under 2 minutes.
+
+Verdict rules (use the word, never a number — numeric self-confidence such as
+"90% sure" is forbidden anywhere in the report):
+- "confirmed": you have direct causal evidence linking mechanism to symptom.
+- "probable": evidence is consistent but indirect.
+- "inconclusive": name the additional evidence that would settle it.
+
+After the report, output the machine-read answer as the LAST fenced code block,
+exactly this shape:
+
+```json
+{
+  "case_id": "<case id, echoed verbatim>",
+  "failing_resource": {"kind": "...", "namespace": "...", "name": "..."},
+  "mechanism": "1-3 sentences: the causal mechanism of the paged symptom only.",
+  "verdict": "confirmed | probable | inconclusive",
+  "missing_evidence": "required iff verdict is inconclusive: what would settle it"
+}
+```
+
+`failing_resource` is the resource whose spec must CHANGE to fix the incident
+(e.g. the owning workload, not the crashing pod it produced). In `mechanism`,
+never mention any workload or mechanism other than the failing one — even to
+rule it out; ruled-out alternatives belong in the Investigation ledger.

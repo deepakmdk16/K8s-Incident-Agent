@@ -15,6 +15,69 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [13] The cross-namespace case scored — and it does not measure what it was built to measure — 2026-09-04, 08:36 UTC
+
+**Change:** nothing in the solution. Both LLM arms were scored on
+`t2-crossns-externalname-selector` (3 replicate runs each, $1.04 total), and
+the result retires the claim the case was authored to support.
+
+**Why:** [12] shipped the case with the explicit note that no LLM arm had seen
+it and nothing could be claimed until one did. This is that run.
+
+**Evidence after:**
+[evals/results/20260904T082737Z-baseline/](evals/results/20260904T082737Z-baseline/summary.md)
+and
+[evals/results/20260904T083020Z-solution/](evals/results/20260904T083020Z-solution/summary.md).
+
+| arm | pooled | resource_correct | class_correct | confirmed-wrong |
+|---|---|---|---|---|
+| rules | 0/1 | 0/1 | — | 0 |
+| baseline | 1/3 | **3/3** | 1/3 | 2 |
+| solution | 3/3 | **3/3** | 3/3 | 0 |
+
+Read the pooled column alone and the story is "the solution crosses a namespace
+boundary and the baseline cannot." That story is false. **Both LLM arms named
+`service/payments-gateway` in `payments` in every single run.** The entire
+baseline gap is `class_correct`: run 1's mechanism said the Service *selects*
+`app=payments-gateway` — substantively a textbook-correct description — and
+the `service-selector-mismatch` signature requires the literal token
+`\bselector\b`, so it classified as `readiness-probe-failing` instead. Run 3
+described the root cause correctly *and* mentioned the downstream readiness
+symptom, matching two classes where the scorer requires exactly one. The
+baseline's 2 "confirmed-wrong" rows are the same artifact, not two confident
+errors.
+
+The case cannot test cross-namespace attribution against the baseline at all:
+that arm is handed a curated dump of the whole cluster, and the `payments`
+namespace appears in its prompt 30 times before it reads a word. A dump-based
+arm never crosses anything.
+
+What the case *does* demonstrate is the validation gate, and it is worth more
+than the number that motivated the case. In runs 1 and 2 the solution went
+straight to `payments`, diagnosed it correctly, and was **rejected on
+submission**: `V2 ADMISSIBILITY: evidence[3] cites payments, which nothing has
+yet connected to the paged symptom. Cite the reference that links it first`.
+It had found the answer by shortcut and could not *assert* it without
+producing the edge that licenses the crossing. By run 3 it read the
+ExternalName alias before submitting. The gate converted a lucky jump into a
+cited one — exactly the discipline the arm exists to enforce, measured rather
+than asserted.
+
+The shortcut is our own: the ExternalName rendering fix in [12] puts the alias
+target into the opening namespace overview, so the agent no longer has to
+follow a reference to *locate* `payments`. That fix is right — an alias must
+not render as a broken Service — but it means the case tests citation
+discipline, not search.
+
+**Next decision it drove:** no v2 bar block was added to `evals/reported.json`.
+A bar asserting "solution beats baseline" here would enshrine a vocabulary
+artifact as a capability claim, and `confirmed_wrong` is inflated by the same
+artifact, so neither is defensible as a gate. The case stays as a
+V2-admissibility demonstration and a rules-arm discriminator. To measure
+cross-namespace *attribution*, a case needs decisive evidence that a
+whole-cluster dump does not contain — which is a case-design decision, not
+more scoring.
+
 ## [12] The first case whose cause is in another namespace — 2026-09-02, 03:46 UTC
 
 **Change:** roadmap 1.4's authoring half.

@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-crossns-externalname-selector",
+  "failing_resource": {"kind": "Service", "namespace": "payments", "name": "payments-gateway"},
+  "mechanism": "The Service's selector is app=payments-gateway, but the backing gateway pods are labelled app=payments-gateway-api, so the Service matches zero pods and has an empty EndpointSlice. kube-proxy therefore REJECTs every connection to its ClusterIP 10.96.191.39:8080 with an immediate 'Connection refused', which is exactly what the dependent checkout health poll records. That dependency check never succeeds, so the checkout replicas never become Ready and completed-order volume sits at zero.",
+  "verdict": "confirmed"
+}

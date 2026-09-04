@@ -14,6 +14,43 @@ self-improving loop): a solved issue must not be solvable twice.
 **Lesson for reliable agents:** …
 -->
 
+## 2026-09-04 — RECURRENCE: an arm-score gap read as capability when it was vocabulary
+
+**What happened:** the first scored run of the v2 cross-namespace case returned
+solution 3/3 vs baseline 1/3, and the obvious reading — "the solution crosses a
+namespace boundary, the baseline cannot" — was wrong. Both arms named the
+correct object in **every** run. The gap was entirely in mechanism
+classification: one baseline answer said the Service "selects" a label instead
+of naming its "selector" and so missed the `\bselector\b` token the signature
+requires; another described the root cause correctly but also mentioned the
+downstream symptom and matched two classes where exactly one is required. Had
+the pooled number been reported on its own, the repo would have carried a
+capability claim its own evidence contradicts.
+
+This is the second time the rubric's vocabulary has been mistaken for the thing
+it measures — see 2026-08-29, "A mechanical rubric is a measurement instrument
+with a vocabulary, and it can punish the better answer." That entry was about
+authoring gold; this one is about *reading results*.
+
+**Evidence:** `rows.jsonl` of
+[evals/results/20260904T082737Z-baseline/](../evals/results/20260904T082737Z-baseline/summary.md)
+— `resource_correct=3/3, class_correct=1/3`; the two arms' `answer.json`
+failing_resource fields are identical across all six rows. Recorded in
+CHANGELOG [13].
+
+**Prevention now in place:** escalated a level — from a situational log entry
+to a standing rule in [CLAUDE.md](../CLAUDE.md), because this governs the
+project's central activity (comparing arms) rather than one case. The
+instrument already exposed the truth: `verify_reported.py` prints a
+"right object, sentence unmatched" row precisely for this, and `rows.jsonl`
+carries `resource_correct` and `matched_classes` per row. The failure was in
+reading the summary table instead of the rows.
+
+**Lesson for reliable agents:** a metric gap names a *difference*, never its
+cause. Before attributing one to capability, decompose it into the sub-scores
+the harness already records — the most confident wrong conclusions come from a
+true number read as if it answered a question it was never measuring.
+
 ## 2026-09-02 — `kind load docker-image` exits 0 having imported nothing
 
 **What happened:** preparing the authoring cluster for the first v2 case, the
