@@ -1,0 +1,40 @@
+Name:                   log-shipper
+Namespace:              log-aggregation
+CreationTimestamp:      Fri, 04 Sep 2026 18:16:48 +0530
+Labels:                 app=log-shipper
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=log-shipper
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=log-shipper
+  Containers:
+   shipper:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'log-shipper started'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   log-shipper-598b9c9858 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  43s   deployment-controller  Scaled up replica set log-shipper-598b9c9858 from 0 to 1

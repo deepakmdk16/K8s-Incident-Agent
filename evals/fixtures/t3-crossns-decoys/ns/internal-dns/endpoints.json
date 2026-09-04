@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:49Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "dns-forwarder",
+        "namespace": "internal-dns",
+        "resourceVersion": "74891",
+        "uid": "0b48f08d-f456-4725-8ae6-ca05d81c87a6"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.59",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "dns-forwarder-66fc5c9dd9-fqmvw",
+                "namespace": "internal-dns",
+                "uid": "902b1247-236a-4ce7-8b50-e702bf06507a"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

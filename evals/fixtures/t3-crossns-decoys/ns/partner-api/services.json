@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "name": "partner-gateway",
+        "namespace": "partner-api",
+        "resourceVersion": "74686",
+        "uid": "4dea8c0a-5ea1-428b-85e7-7a02e0730c30"
+      },
+      "spec": {
+        "clusterIP": "10.96.53.130",
+        "clusterIPs": [
+          "10.96.53.130"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "partner-gateway"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

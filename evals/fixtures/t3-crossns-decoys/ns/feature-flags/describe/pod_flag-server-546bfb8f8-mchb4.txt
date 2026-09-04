@@ -1,0 +1,60 @@
+Name:             flag-server-546bfb8f8-mchb4
+Namespace:        feature-flags
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Fri, 04 Sep 2026 18:16:48 +0530
+Labels:           app=flag-server
+                  pod-template-hash=546bfb8f8
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.54
+IPs:
+  IP:           10.244.0.54
+Controlled By:  ReplicaSet/flag-server-546bfb8f8
+Containers:
+  server:
+    Container ID:  containerd://01fb7c1fdbc1b1a76d4e2a13d0227ffbf8ec9bedb030a764e9fb52b25a04baf5
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'flag-server started'; exec sleep 2147483647
+    State:          Running
+      Started:      Fri, 04 Sep 2026 18:16:48 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pjgbj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-pjgbj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30s   default-scheduler  Successfully assigned feature-flags/flag-server-546bfb8f8-mchb4 to incident-lab-control-plane
+  Normal  Pulled     30s   kubelet            spec.containers{server}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    30s   kubelet            spec.containers{server}: Container created
+  Normal  Started    30s   kubelet            spec.containers{server}: Container started

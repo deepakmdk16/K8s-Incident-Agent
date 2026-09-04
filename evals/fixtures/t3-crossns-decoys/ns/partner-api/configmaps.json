@@ -1,0 +1,42 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "data": {
+        "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIDBTCCAe2gAwIBAgIIHS14PxS8HnQwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczAeFw0yNjA5MDIwMjU2MzFaFw0zNjA4MzAwMzAxMzFaMBUx\nEzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQD2LUc/VxqKq/Qz/vmsXnX8Mraphmw1Zg7jkSysLVn1qwRSsrfSWFsMkEH2\nlchMgiddMGAgjPnxoRurAN9plmN2QZQuAAAZY32GfuEgZaehMSz5/0gBFuNGODWm\nlFnBUR2r7NRqnH9S3OTIcFuGQifkxLFsrEnE5uPNAB6IpbYh9Mh8D0FY51r0F7TY\n3NRutfCEIQZBDi16TItKtYYuvW0en6rkMUipbZQlH4wT7EB0I4p+mYStb7FEbKCj\nhPa+mfBrO/djJjUH3Q4djWqZ6hoU6GxJ3p5IgNtYT8gfn4gDhGQUgNJpxP92S1ZQ\nn1ZPdYyAvawZaqCPlGjvOnpzqlS1AgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP\nBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSPk6Z+faDyEvb4MPKXCbceJG+tZjAV\nBgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQDC72iVQYze\nfUW4Bg62MlPyoohPN8mfPAKGGj7K+SxW2LVFrDkTJ5huKn02dTxuweolD76cQ+fq\nEG/UhCLatkvH2W6O8JKfKRUB/e5E9ajP7YazuhwxWhRdPSYWkNlUn2fpz200XZPY\nkb7dq7mK89wrHAUHDtO5k5HHRyxgeGLikn7wkHivHVojUDXYByCTiVh8+zgCKPTE\nT+HJroN6WHsCngWnrOkeqd4Wx68C9BV9k/l9i1Tn1b8wC1eVHuBSzZ81wbQOnnoT\nvWoUJ9MXjMdhZ47iefwD8b5aNogImt9qEO3rzGQQNmgmVtjJ71oer18/s2s7AOrX\nrVUezaSCSQoK\n-----END CERTIFICATE-----\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {
+          "kubernetes.io/description": "Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters."
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "name": "kube-root-ca.crt",
+        "namespace": "partner-api",
+        "resourceVersion": "74682",
+        "uid": "f4400992-b38a-4cf6-94b6-9e77eeca09a9"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "cors_origins": "*.partner.example.com",
+        "listen_port": "8080"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "name": "partner-gateway-config",
+        "namespace": "partner-api",
+        "resourceVersion": "74683",
+        "uid": "a18e5cca-338d-4f4d-8613-b54794d42327"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

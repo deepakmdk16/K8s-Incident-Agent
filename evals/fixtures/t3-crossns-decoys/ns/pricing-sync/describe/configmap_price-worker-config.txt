@@ -1,0 +1,20 @@
+Name:         price-worker-config
+Namespace:    pricing-sync
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+source_feed:
+----
+vendor-a
+
+sync_interval_minutes:
+----
+15
+
+
+BinaryData
+====
+
+Events:  <none>

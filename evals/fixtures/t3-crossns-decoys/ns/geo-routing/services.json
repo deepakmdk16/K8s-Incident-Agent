@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "name": "geoip-api",
+        "namespace": "geo-routing",
+        "resourceVersion": "74598",
+        "uid": "35f804e2-48ff-4ea4-b1a7-f4e107229312"
+      },
+      "spec": {
+        "clusterIP": "10.96.49.221",
+        "clusterIPs": [
+          "10.96.49.221"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "geoip-api"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

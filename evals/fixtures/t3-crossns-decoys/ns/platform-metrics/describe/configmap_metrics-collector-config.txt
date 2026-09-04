@@ -1,0 +1,20 @@
+Name:         metrics-collector-config
+Namespace:    platform-metrics
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+retention_days:
+----
+7
+
+scrape_interval_seconds:
+----
+15
+
+
+BinaryData
+====
+
+Events:  <none>

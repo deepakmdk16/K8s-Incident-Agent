@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "name": "rates-fetcher",
+        "namespace": "currency-rates",
+        "resourceVersion": "74705",
+        "uid": "8660aed8-e981-4879-b637-3c41dfc41f9a"
+      },
+      "spec": {
+        "clusterIP": "10.96.205.44",
+        "clusterIPs": [
+          "10.96.205.44"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "rates-fetcher"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.60"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "points-engine-84666f6c5f-p65dh",
+            "namespace": "loyalty-points",
+            "uid": "5bf83023-a85a-4b63-8277-d91b1910f4f1"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:50Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "generateName": "points-engine-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "points-engine"
+        },
+        "name": "points-engine-fgq6j",
+        "namespace": "loyalty-points",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "points-engine",
+            "uid": "a58ac95d-3caf-489e-ac02-072509c81a13"
+          }
+        ],
+        "resourceVersion": "74936",
+        "uid": "2c9e1d69-da53-4ada-83fb-b0a069c4ea0a"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

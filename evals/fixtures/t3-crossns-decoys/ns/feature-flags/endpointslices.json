@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.54"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "flag-server-546bfb8f8-mchb4",
+            "namespace": "feature-flags",
+            "uid": "4cf5e927-fbdd-41db-81a2-8a8ebe63bd10"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:48Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "generateName": "flag-server-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "flag-server"
+        },
+        "name": "flag-server-9knkd",
+        "namespace": "feature-flags",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "flag-server",
+            "uid": "5a821a89-e63c-441d-8ff7-8d56d0ebb98c"
+          }
+        ],
+        "resourceVersion": "74805",
+        "uid": "51f6cd80-7082-48e7-81a9-731af0bfd3aa"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

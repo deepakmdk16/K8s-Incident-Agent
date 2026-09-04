@@ -1,0 +1,21 @@
+2026-09-04T12:46:54.792668337Z checkout-api starting; payment gateway endpoint http://payments-gateway:8080/health
+2026-09-04T12:46:55.825197367Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:46:55.826762829Z 2026-09-04T12:46:55Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:01.841363652Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:01.843051536Z 2026-09-04T12:47:01Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:07.857674841Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:07.858679784Z 2026-09-04T12:47:07Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:13.874048986Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:13.874959602Z 2026-09-04T12:47:13Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:19.889081747Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:19.890184240Z 2026-09-04T12:47:19Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:25.906089645Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:25.906861767Z 2026-09-04T12:47:25Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:31.921119786Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:31.922203078Z 2026-09-04T12:47:31Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:37.937231094Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:37.938398432Z 2026-09-04T12:47:37Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:43.953132346Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:43.954227437Z 2026-09-04T12:47:43Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:49.970371164Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:49.971609135Z 2026-09-04T12:47:49Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions

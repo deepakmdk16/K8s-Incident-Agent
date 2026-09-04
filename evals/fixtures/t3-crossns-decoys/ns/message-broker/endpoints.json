@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:48Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "queue-server",
+        "namespace": "message-broker",
+        "resourceVersion": "74775",
+        "uid": "9b1ce898-8237-4c38-b2b2-22834cc22140"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.47",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "queue-server-5c879fdf4-cbs48",
+                "namespace": "message-broker",
+                "uid": "ee3441fe-a85a-4566-9ec7-9e5b9d3285af"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

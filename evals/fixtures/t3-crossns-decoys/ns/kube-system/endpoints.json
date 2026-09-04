@@ -1,0 +1,72 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-02T03:02:04Z"
+        },
+        "creationTimestamp": "2026-09-02T03:01:42Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller",
+          "k8s-app": "kube-dns",
+          "kubernetes.io/cluster-service": "true",
+          "kubernetes.io/name": "CoreDNS"
+        },
+        "name": "kube-dns",
+        "namespace": "kube-system",
+        "resourceVersion": "548",
+        "uid": "2957f8bd-15bd-4839-b2c9-b09a75d45fd9"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.2",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "coredns-559f6c778d-9lrfg",
+                "namespace": "kube-system",
+                "uid": "b1d11bb3-1d47-447e-a9f4-db25f2f38b90"
+              }
+            },
+            {
+              "ip": "10.244.0.3",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "coredns-559f6c778d-jsqvf",
+                "namespace": "kube-system",
+                "uid": "539768fe-7d2a-437d-b95c-e55c5987b11c"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "metrics",
+              "port": 9153,
+              "protocol": "TCP"
+            },
+            {
+              "name": "dns-tcp",
+              "port": 53,
+              "protocol": "TCP"
+            },
+            {
+              "name": "dns",
+              "port": 53,
+              "protocol": "UDP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

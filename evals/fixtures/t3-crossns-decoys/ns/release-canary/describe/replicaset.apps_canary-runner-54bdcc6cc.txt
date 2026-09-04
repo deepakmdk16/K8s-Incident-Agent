@@ -1,0 +1,41 @@
+Name:           canary-runner-54bdcc6cc
+Namespace:      release-canary
+Selector:       app=canary-runner,pod-template-hash=54bdcc6cc
+Labels:         app=canary-runner
+                pod-template-hash=54bdcc6cc
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/canary-runner
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=canary-runner
+           pod-template-hash=54bdcc6cc
+  Containers:
+   runner:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      if [ -z "${CANARY_TARGET_URL:-}" ]; then
+        echo "canary-runner: CANARY_TARGET_URL is not set, cannot start"
+        exit 1
+      fi
+      echo "canary-runner: polling ${CANARY_TARGET_URL}"
+      exec sleep 2147483647
+      
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  55s   replicaset-controller  Created pod: canary-runner-54bdcc6cc-dc9f2

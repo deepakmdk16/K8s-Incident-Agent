@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.56"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "push-dispatcher-657b86bd4d-t2562",
+            "namespace": "push-notifications",
+            "uid": "c66e47fe-2a17-4c53-922d-75b92e1cac05"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:49Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "generateName": "push-dispatcher-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "push-dispatcher"
+        },
+        "name": "push-dispatcher-snckq",
+        "namespace": "push-notifications",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "push-dispatcher",
+            "uid": "051526ee-298f-436b-a142-55e64c851a3a"
+          }
+        ],
+        "resourceVersion": "74869",
+        "uid": "e555dd82-90cd-443a-a469-ccbf5a081dab"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -15,6 +15,60 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [14] Decoys in the noise pack: the giveaway was not what either arm relied on — 2026-09-04, 13:00 UTC
+
+**Change:** roadmap 1.1. A v2 noise pack
+([evals/scenarios-v2/_noise/generate.sh](evals/scenarios-v2/_noise/generate.sh))
+that copies the frozen 20 healthy namespaces **verbatim** and appends three
+genuinely broken, entirely irrelevant workloads — a crashlooping canary, a
+failing CronJob, an unschedulable trainer — each conditional per authoring rule
+1 and each rehearsed live to recovery. `inject.sh` now takes its noise pack from
+the scenario root, so frozen T3 captures are untouched.
+
+**Why:** the frozen pack is all healthy, so every T3 case hands over a giveaway
+— the only broken object in the cluster is the answer. Roadmap 1.1 claims
+removing it "removes the 'any unhealthy object is the answer' giveaway". That
+claim assumes the arms find the answer by noticing what is broken.
+
+**Evidence after:** a controlled A/B, not a new case. `t3-crossns-decoys` has
+**byte-identical Kubernetes objects** to `t2-crossns-externalname-selector`
+(verified with comments stripped); the noise pack is the only difference, and
+its healthy half is byte-identical to the frozen one. So any change is the
+decoys and nothing else. Pre-registration and full write-up:
+[docs/experiments/2026-09-04-decoy-noise.md](docs/experiments/2026-09-04-decoy-noise.md).
+
+| arm | no decoys | with decoys | resource_correct (decoys) |
+|---|---|---|---|
+| rules | 0/1 | 0/1 | 0/1 |
+| baseline | 1/3 | 0/3 | **3/3** |
+| solution | 3/3 | **3/3** | **3/3** |
+
+**The claim is false for both LLM arms, for opposite reasons.** The solution
+never saw the decoys: across all three runs it touched exactly two namespaces,
+`storefront` and `payments` — no decoy namespace, no healthy-noise namespace.
+It follows references from the page rather than surveying for unhealthy
+objects, so an unrelated broken workload is not something it *can* be
+distracted by. The baseline did see them — they appear in its curated dump 46
+times — and named the right object in all three runs anyway.
+
+The baseline's 1/3 → 0/3 is not a capability drop: `resource_correct` is 3/3 in
+both conditions, and the entire difference is the mechanism-vocabulary artifact
+from [13], caught this time by the rule that entry added to CLAUDE.md rather
+than by hindsight.
+
+The decoys were not free, just not decisive: the solution spent **+59% tool
+calls** (6.3 → 10.0) and +34% turns on the same answer, all of it going deeper
+inside the two namespaces it was already following. That is cost scaling with
+cluster size — roadmap 2.6's concern — not difficulty.
+
+**Next decision it drove:** 1.1 is closed as a source of headroom, per the rule
+pre-registered in STATUS before the pack existed. The pack is kept: it costs
+nothing, it is a more honest cluster, and it is now the measured control for any
+future claim that a case is hard *because* the cluster is noisy. Escalating to
+roadmap 1.3 as pre-registered — webhook configurations are absent from the
+captured object universe entirely, so the ceiling there is structural rather
+than presentational, which is what "no headroom" actually requires.
+
 ## [13] The cross-namespace case scored — and it does not measure what it was built to measure — 2026-09-04, 08:36 UTC
 
 **Change:** nothing in the solution. Both LLM arms were scored on

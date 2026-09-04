@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t3-crossns-decoys",
+  "tier": "T3",
+  "failing_resource": {
+    "kind": "service",
+    "namespace": "payments",
+    "name": "payments-gateway"
+  },
+  "fault_class": "service-selector-mismatch",
+  "mechanism_summary": "The payments-gateway Service in the payments namespace carries the selector app=payments-gateway while the gateway pods carry the label app=payments-gateway-api, so that Service's Endpoints object never populates and every call the storefront checkout workload sends through its ExternalName alias reaches a Service with no backing addresses, even though the gateway pods themselves are Ready.",
+  "decisive_evidence": "Endpoints payments/payments-gateway has no addresses while both payments-gateway-api pods are Running and Ready; the Service spec in payments shows selector app=payments-gateway against pod labels app=payments-gateway-api; service/payments-gateway in storefront is an ExternalName whose target is payments-gateway.payments.svc.cluster.local, and the storefront/checkout-api logs record 'payment gateway UNREACHABLE' against that alias.",
+  "remediation_summary": "Correct the selector on the payments-gateway Service in the payments namespace to match the pod labels - kubectl -n payments patch service payments-gateway -p '{\"spec\":{\"selector\":{\"app\":\"payments-gateway-api\"}}}' - Endpoints then populates with both gateway pod IPs, the checkout readiness gate passes, and storefront/checkout-api returns to 2 of 2 Ready with no change to any object in the storefront namespace."
+}

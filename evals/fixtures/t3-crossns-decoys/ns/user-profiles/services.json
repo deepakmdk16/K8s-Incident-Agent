@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {},
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "name": "profile-api",
+        "namespace": "user-profiles",
+        "resourceVersion": "74499",
+        "uid": "632f69a2-f7e6-40c2-944c-15a4c6041b25"
+      },
+      "spec": {
+        "clusterIP": "10.96.167.254",
+        "clusterIPs": [
+          "10.96.167.254"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "profile-api"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

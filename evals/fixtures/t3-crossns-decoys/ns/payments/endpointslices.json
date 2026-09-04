@@ -1,0 +1,42 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": null,
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:54Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:54Z",
+        "generateName": "payments-gateway-",
+        "generation": 1,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "payments-gateway"
+        },
+        "name": "payments-gateway-jg288",
+        "namespace": "payments",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "payments-gateway",
+            "uid": "294047d0-3863-4a21-84af-94d931bef18b"
+          }
+        ],
+        "resourceVersion": "75108",
+        "uid": "173092a6-25cd-4e2c-9031-758cf666cc81"
+      },
+      "ports": null
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

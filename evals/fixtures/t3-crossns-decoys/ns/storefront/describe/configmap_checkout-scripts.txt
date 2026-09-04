@@ -1,0 +1,29 @@
+Name:         checkout-scripts
+Namespace:    storefront
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+set -u
+UPSTREAM="http://payments-gateway:8080/health"
+echo "checkout-api starting; payment gateway endpoint ${UPSTREAM}"
+while :; do
+  if wget -q -T 3 -O /dev/null "${UPSTREAM}"; then
+    touch /tmp/ready
+    echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') payment gateway reachable - accepting checkout submissions"
+  else
+    rm -f /tmp/ready
+    echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') payment gateway UNREACHABLE at ${UPSTREAM} - holding checkout submissions"
+  fi
+  sleep 5
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

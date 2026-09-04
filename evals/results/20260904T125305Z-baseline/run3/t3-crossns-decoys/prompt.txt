@@ -1,0 +1,658 @@
+You are an on-call Kubernetes engineer. You just got paged:
+
+[PAGE] SEV1 CheckoutUnavailable — storefront
+Customers cannot complete purchases: the cart page loads, but submitting an
+order returns an error and completed-order volume has been flat at zero for
+25 minutes. Deployment storefront/checkout-api reports 0 of 2 replicas Ready
+and is taking no traffic. The storefront team shipped no release today.
+Alert source: order-volume monitor. Find the root cause and propose a
+remediation.
+
+You grabbed the following output from the cluster. Diagnose the root
+cause of the paged symptom from this output alone.
+
+$ kubectl get all -A
+NAMESPACE             NAME                                                     READY   STATUS    RESTARTS      AGE    IP            NODE                         NOMINATED NODE   READINESS GATES
+ab-testing            pod/experiment-api-787dddcc77-r25jz                      1/1     Running   0             17s    10.244.0.49   incident-lab-control-plane   <none>           <none>
+asset-pipeline        pod/thumbnailer-85d4959957-98ckz                         1/1     Running   0             16s    10.244.0.57   incident-lab-control-plane   <none>           <none>
+batch-compute         pod/model-trainer-7bd699964d-j9cgz                       0/1     Pending   0             14s    <none>        <none>                       <none>           <none>
+cdn-edge              pod/edge-cache-778d9548d7-79v2h                          1/1     Running   0             17s    10.244.0.50   incident-lab-control-plane   <none>           <none>
+currency-rates        pod/rates-fetcher-64c66dfb56-2b6pn                       1/1     Running   0             14s    10.244.0.65   incident-lab-control-plane   <none>           <none>
+distributed-tracing   pod/span-collector-98dd7779b-ztlbh                       1/1     Running   0             16s    10.244.0.58   incident-lab-control-plane   <none>           <none>
+email-delivery        pod/smtp-relay-558df49878-fcqvq                          1/1     Running   0             17s    10.244.0.53   incident-lab-control-plane   <none>           <none>
+feature-flags         pod/flag-server-546bfb8f8-mchb4                          1/1     Running   0             17s    10.244.0.54   incident-lab-control-plane   <none>           <none>
+geo-routing           pod/geoip-api-779d7f574c-82dlh                           1/1     Running   0             16s    10.244.0.55   incident-lab-control-plane   <none>           <none>
+internal-dns          pod/dns-forwarder-66fc5c9dd9-fqmvw                       1/1     Running   0             16s    10.244.0.59   incident-lab-control-plane   <none>           <none>
+kube-system           pod/coredns-559f6c778d-9lrfg                             1/1     Running   0             2d9h   10.244.0.2    incident-lab-control-plane   <none>           <none>
+kube-system           pod/coredns-559f6c778d-jsqvf                             1/1     Running   0             2d9h   10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/etcd-incident-lab-control-plane                      1/1     Running   0             2d9h   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kindnet-d6vmg                                        1/1     Running   0             2d9h   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-apiserver-incident-lab-control-plane            1/1     Running   0             2d9h   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-controller-manager-incident-lab-control-plane   1/1     Running   0             2d9h   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-proxy-4bpcr                                     1/1     Running   0             2d9h   172.18.0.3    incident-lab-control-plane   <none>           <none>
+kube-system           pod/kube-scheduler-incident-lab-control-plane            1/1     Running   0             2d9h   172.18.0.3    incident-lab-control-plane   <none>           <none>
+local-path-storage    pod/local-path-provisioner-75f7fc7dc5-bgp5f              1/1     Running   0             2d9h   10.244.0.4    incident-lab-control-plane   <none>           <none>
+log-aggregation       pod/log-shipper-598b9c9858-cbp79                         1/1     Running   0             17s    10.244.0.48   incident-lab-control-plane   <none>           <none>
+loyalty-points        pod/points-engine-84666f6c5f-p65dh                       1/1     Running   0             15s    10.244.0.60   incident-lab-control-plane   <none>           <none>
+media-transcode       pod/transcode-worker-d7bbb9c-kl5k4                       1/1     Running   0             15s    10.244.0.62   incident-lab-control-plane   <none>           <none>
+message-broker        pod/queue-server-5c879fdf4-cbs48                         1/1     Running   0             17s    10.244.0.47   incident-lab-control-plane   <none>           <none>
+partner-api           pod/partner-gateway-cbdcb8f65-qzqxx                      1/1     Running   0             15s    10.244.0.63   incident-lab-control-plane   <none>           <none>
+payments              pod/payments-gateway-api-9c78bc7b-qcwwf                  1/1     Running   0             11s    10.244.0.70   incident-lab-control-plane   <none>           <none>
+payments              pod/payments-gateway-api-9c78bc7b-twfm4                  1/1     Running   0             11s    10.244.0.69   incident-lab-control-plane   <none>           <none>
+platform-metrics      pod/metrics-collector-5d66786b84-5m2ft                   1/1     Running   0             17s    10.244.0.46   incident-lab-control-plane   <none>           <none>
+pricing-sync          pod/price-worker-55864d8565-vj2tw                        1/1     Running   0             15s    10.244.0.61   incident-lab-control-plane   <none>           <none>
+push-notifications    pod/push-dispatcher-657b86bd4d-t2562                     1/1     Running   0             16s    10.244.0.56   incident-lab-control-plane   <none>           <none>
+release-canary        pod/canary-runner-54bdcc6cc-dc9f2                        1/1     Running   2 (13s ago)   14s    10.244.0.66   incident-lab-control-plane   <none>           <none>
+report-exports        pod/nightly-export-29808767-5sr6q                        0/1     Error     0             5s     10.244.0.71   incident-lab-control-plane   <none>           <none>
+session-store         pod/session-cache-5f875fd7c7-459xl                       1/1     Running   0             17s    10.244.0.52   incident-lab-control-plane   <none>           <none>
+storefront            pod/checkout-api-7db48f7c7b-6fb2v                        0/1     Running   0             11s    10.244.0.68   incident-lab-control-plane   <none>           <none>
+storefront            pod/checkout-api-7db48f7c7b-g7299                        0/1     Running   0             11s    10.244.0.67   incident-lab-control-plane   <none>           <none>
+user-profiles         pod/profile-api-78bcbb5655-bsp87                         1/1     Running   0             17s    10.244.0.51   incident-lab-control-plane   <none>           <none>
+webhooks              pod/webhook-relay-5449d69858-vqmz5                       1/1     Running   0             15s    10.244.0.64   incident-lab-control-plane   <none>           <none>
+
+NAMESPACE             NAME                        TYPE           CLUSTER-IP      EXTERNAL-IP                                   PORT(S)                  AGE    SELECTOR
+ab-testing            service/experiment-api      ClusterIP      10.96.194.131   <none>                                        8080/TCP                 17s    app=experiment-api
+asset-pipeline        service/thumbnailer         ClusterIP      10.96.56.21     <none>                                        8080/TCP                 17s    app=thumbnailer
+cdn-edge              service/edge-cache          ClusterIP      10.96.61.230    <none>                                        8080/TCP                 17s    app=edge-cache
+currency-rates        service/rates-fetcher       ClusterIP      10.96.205.44    <none>                                        8080/TCP                 17s    app=rates-fetcher
+default               service/kubernetes          ClusterIP      10.96.0.1       <none>                                        443/TCP                  2d9h   <none>
+distributed-tracing   service/span-collector      ClusterIP      10.96.197.205   <none>                                        8080/TCP                 17s    app=span-collector
+email-delivery        service/smtp-relay          ClusterIP      10.96.160.195   <none>                                        8080/TCP                 17s    app=smtp-relay
+feature-flags         service/flag-server         ClusterIP      10.96.237.19    <none>                                        8080/TCP                 17s    app=flag-server
+geo-routing           service/geoip-api           ClusterIP      10.96.49.221    <none>                                        8080/TCP                 17s    app=geoip-api
+internal-dns          service/dns-forwarder       ClusterIP      10.96.27.61     <none>                                        8080/TCP                 17s    app=dns-forwarder
+kube-system           service/kube-dns            ClusterIP      10.96.0.10      <none>                                        53/UDP,53/TCP,9153/TCP   2d9h   k8s-app=kube-dns
+log-aggregation       service/log-shipper         ClusterIP      10.96.113.139   <none>                                        8080/TCP                 17s    app=log-shipper
+loyalty-points        service/points-engine       ClusterIP      10.96.89.19     <none>                                        8080/TCP                 17s    app=points-engine
+media-transcode       service/transcode-worker    ClusterIP      10.96.91.118    <none>                                        8080/TCP                 17s    app=transcode-worker
+message-broker        service/queue-server        ClusterIP      10.96.62.155    <none>                                        8080/TCP                 17s    app=queue-server
+partner-api           service/partner-gateway     ClusterIP      10.96.53.130    <none>                                        8080/TCP                 17s    app=partner-gateway
+payments              service/payments-gateway    ClusterIP      10.96.215.202   <none>                                        8080/TCP                 11s    app=payments-gateway
+platform-metrics      service/metrics-collector   ClusterIP      10.96.66.158    <none>                                        8080/TCP                 17s    app=metrics-collector
+pricing-sync          service/price-worker        ClusterIP      10.96.149.195   <none>                                        8080/TCP                 17s    app=price-worker
+push-notifications    service/push-dispatcher     ClusterIP      10.96.240.56    <none>                                        8080/TCP                 17s    app=push-dispatcher
+session-store         service/session-cache       ClusterIP      10.96.136.239   <none>                                        8080/TCP                 17s    app=session-cache
+storefront            service/payments-gateway    ExternalName   <none>          payments-gateway.payments.svc.cluster.local   <none>                   11s    <none>
+user-profiles         service/profile-api         ClusterIP      10.96.167.254   <none>                                        8080/TCP                 17s    app=profile-api
+webhooks              service/webhook-relay       ClusterIP      10.96.10.235    <none>                                        8080/TCP                 17s    app=webhook-relay
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE    CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   2d9h   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   2d9h   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE             NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS               IMAGES                                                        SELECTOR
+ab-testing            deployment.apps/experiment-api           1/1     1            1           17s    api                      busybox:1.36                                                  app=experiment-api
+asset-pipeline        deployment.apps/thumbnailer              1/1     1            1           17s    worker                   busybox:1.36                                                  app=thumbnailer
+batch-compute         deployment.apps/model-trainer            0/1     1            0           17s    trainer                  busybox:1.36                                                  app=model-trainer
+cdn-edge              deployment.apps/edge-cache               1/1     1            1           17s    cache                    busybox:1.36                                                  app=edge-cache
+currency-rates        deployment.apps/rates-fetcher            1/1     1            1           17s    fetcher                  busybox:1.36                                                  app=rates-fetcher
+distributed-tracing   deployment.apps/span-collector           1/1     1            1           17s    collector                busybox:1.36                                                  app=span-collector
+email-delivery        deployment.apps/smtp-relay               1/1     1            1           17s    relay                    busybox:1.36                                                  app=smtp-relay
+feature-flags         deployment.apps/flag-server              1/1     1            1           17s    server                   busybox:1.36                                                  app=flag-server
+geo-routing           deployment.apps/geoip-api                1/1     1            1           17s    api                      busybox:1.36                                                  app=geoip-api
+internal-dns          deployment.apps/dns-forwarder            1/1     1            1           17s    forwarder                busybox:1.36                                                  app=dns-forwarder
+kube-system           deployment.apps/coredns                  2/2     2            2           2d9h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage    deployment.apps/local-path-provisioner   1/1     1            1           2d9h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+log-aggregation       deployment.apps/log-shipper              1/1     1            1           17s    shipper                  busybox:1.36                                                  app=log-shipper
+loyalty-points        deployment.apps/points-engine            1/1     1            1           17s    engine                   busybox:1.36                                                  app=points-engine
+media-transcode       deployment.apps/transcode-worker         1/1     1            1           17s    worker                   busybox:1.36                                                  app=transcode-worker
+message-broker        deployment.apps/queue-server             1/1     1            1           17s    server                   busybox:1.36                                                  app=queue-server
+partner-api           deployment.apps/partner-gateway          1/1     1            1           17s    gateway                  busybox:1.36                                                  app=partner-gateway
+payments              deployment.apps/payments-gateway-api     2/2     2            2           11s    gateway                  busybox:1.36                                                  app=payments-gateway-api
+platform-metrics      deployment.apps/metrics-collector        1/1     1            1           17s    collector                busybox:1.36                                                  app=metrics-collector
+pricing-sync          deployment.apps/price-worker             1/1     1            1           17s    worker                   busybox:1.36                                                  app=price-worker
+push-notifications    deployment.apps/push-dispatcher          1/1     1            1           17s    dispatcher               busybox:1.36                                                  app=push-dispatcher
+release-canary        deployment.apps/canary-runner            1/1     1            1           17s    runner                   busybox:1.36                                                  app=canary-runner
+session-store         deployment.apps/session-cache            1/1     1            1           17s    cache                    busybox:1.36                                                  app=session-cache
+storefront            deployment.apps/checkout-api             0/2     2            0           11s    checkout-api             busybox:1.36                                                  app=checkout-api
+user-profiles         deployment.apps/profile-api              1/1     1            1           17s    api                      busybox:1.36                                                  app=profile-api
+webhooks              deployment.apps/webhook-relay            1/1     1            1           17s    relay                    busybox:1.36                                                  app=webhook-relay
+
+NAMESPACE             NAME                                                DESIRED   CURRENT   READY   AGE    CONTAINERS               IMAGES                                                        SELECTOR
+ab-testing            replicaset.apps/experiment-api-787dddcc77           1         1         1       17s    api                      busybox:1.36                                                  app=experiment-api,pod-template-hash=787dddcc77
+asset-pipeline        replicaset.apps/thumbnailer-85d4959957              1         1         1       16s    worker                   busybox:1.36                                                  app=thumbnailer,pod-template-hash=85d4959957
+batch-compute         replicaset.apps/model-trainer-7bd699964d            1         1         0       14s    trainer                  busybox:1.36                                                  app=model-trainer,pod-template-hash=7bd699964d
+cdn-edge              replicaset.apps/edge-cache-778d9548d7               1         1         1       17s    cache                    busybox:1.36                                                  app=edge-cache,pod-template-hash=778d9548d7
+currency-rates        replicaset.apps/rates-fetcher-64c66dfb56            1         1         1       15s    fetcher                  busybox:1.36                                                  app=rates-fetcher,pod-template-hash=64c66dfb56
+distributed-tracing   replicaset.apps/span-collector-98dd7779b            1         1         1       16s    collector                busybox:1.36                                                  app=span-collector,pod-template-hash=98dd7779b
+email-delivery        replicaset.apps/smtp-relay-558df49878               1         1         1       17s    relay                    busybox:1.36                                                  app=smtp-relay,pod-template-hash=558df49878
+feature-flags         replicaset.apps/flag-server-546bfb8f8               1         1         1       17s    server                   busybox:1.36                                                  app=flag-server,pod-template-hash=546bfb8f8
+geo-routing           replicaset.apps/geoip-api-779d7f574c                1         1         1       16s    api                      busybox:1.36                                                  app=geoip-api,pod-template-hash=779d7f574c
+internal-dns          replicaset.apps/dns-forwarder-66fc5c9dd9            1         1         1       16s    forwarder                busybox:1.36                                                  app=dns-forwarder,pod-template-hash=66fc5c9dd9
+kube-system           replicaset.apps/coredns-559f6c778d                  2         2         2       2d9h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage    replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       2d9h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+log-aggregation       replicaset.apps/log-shipper-598b9c9858              1         1         1       17s    shipper                  busybox:1.36                                                  app=log-shipper,pod-template-hash=598b9c9858
+loyalty-points        replicaset.apps/points-engine-84666f6c5f            1         1         1       15s    engine                   busybox:1.36                                                  app=points-engine,pod-template-hash=84666f6c5f
+media-transcode       replicaset.apps/transcode-worker-d7bbb9c            1         1         1       15s    worker                   busybox:1.36                                                  app=transcode-worker,pod-template-hash=d7bbb9c
+message-broker        replicaset.apps/queue-server-5c879fdf4              1         1         1       17s    server                   busybox:1.36                                                  app=queue-server,pod-template-hash=5c879fdf4
+partner-api           replicaset.apps/partner-gateway-cbdcb8f65           1         1         1       15s    gateway                  busybox:1.36                                                  app=partner-gateway,pod-template-hash=cbdcb8f65
+payments              replicaset.apps/payments-gateway-api-9c78bc7b       2         2         2       11s    gateway                  busybox:1.36                                                  app=payments-gateway-api,pod-template-hash=9c78bc7b
+platform-metrics      replicaset.apps/metrics-collector-5d66786b84        1         1         1       17s    collector                busybox:1.36                                                  app=metrics-collector,pod-template-hash=5d66786b84
+pricing-sync          replicaset.apps/price-worker-55864d8565             1         1         1       15s    worker                   busybox:1.36                                                  app=price-worker,pod-template-hash=55864d8565
+push-notifications    replicaset.apps/push-dispatcher-657b86bd4d          1         1         1       16s    dispatcher               busybox:1.36                                                  app=push-dispatcher,pod-template-hash=657b86bd4d
+release-canary        replicaset.apps/canary-runner-54bdcc6cc             1         1         1       14s    runner                   busybox:1.36                                                  app=canary-runner,pod-template-hash=54bdcc6cc
+session-store         replicaset.apps/session-cache-5f875fd7c7            1         1         1       17s    cache                    busybox:1.36                                                  app=session-cache,pod-template-hash=5f875fd7c7
+storefront            replicaset.apps/checkout-api-7db48f7c7b             2         2         0       11s    checkout-api             busybox:1.36                                                  app=checkout-api,pod-template-hash=7db48f7c7b
+user-profiles         replicaset.apps/profile-api-78bcbb5655              1         1         1       17s    api                      busybox:1.36                                                  app=profile-api,pod-template-hash=78bcbb5655
+webhooks              replicaset.apps/webhook-relay-5449d69858            1         1         1       15s    relay                    busybox:1.36                                                  app=webhook-relay,pod-template-hash=5449d69858
+
+NAMESPACE        NAME                           SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE   CONTAINERS   IMAGES         SELECTOR
+report-exports   cronjob.batch/nightly-export   */1 * * * *   <none>     False     1        5s              17s   exporter     busybox:1.36   <none>
+
+NAMESPACE        NAME                                STATUS    COMPLETIONS   DURATION   AGE   CONTAINERS   IMAGES         SELECTOR
+report-exports   job.batch/nightly-export-29808767   Running   0/1           5s         5s    exporter     busybox:1.36   batch.kubernetes.io/controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+
+$ kubectl describe pod/model-trainer-7bd699964d-j9cgz -n batch-compute
+Name:             model-trainer-7bd699964d-j9cgz
+Namespace:        batch-compute
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           app=model-trainer
+                  pod-template-hash=7bd699964d
+Annotations:      <none>
+Status:           Pending
+IP:               
+IPs:              <none>
+Controlled By:    ReplicaSet/model-trainer-7bd699964d
+Containers:
+  trainer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'model-trainer started'; exec sleep 2147483647
+    Requests:
+      cpu:        512
+      memory:     64Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-f2f4s (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  kube-api-access-f2f4s:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age               From               Message
+  ----     ------            ----              ----               -------
+  Warning  FailedScheduling  6s (x2 over 17s)  default-scheduler  0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+
+$ kubectl logs model-trainer-7bd699964d-j9cgz -c trainer -n batch-compute --tail=50
+
+
+$ kubectl logs model-trainer-7bd699964d-j9cgz -c trainer -n batch-compute --previous --tail=50
+
+
+$ kubectl describe pod/nightly-export-29808767-5sr6q -n report-exports
+Name:             nightly-export-29808767-5sr6q
+Namespace:        report-exports
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Fri, 04 Sep 2026 18:17:00 +0530
+Labels:           batch.kubernetes.io/controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+                  batch.kubernetes.io/job-name=nightly-export-29808767
+                  controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+                  job-name=nightly-export-29808767
+Annotations:      <none>
+Status:           Failed
+IP:               10.244.0.71
+IPs:
+  IP:           10.244.0.71
+Controlled By:  Job/nightly-export-29808767
+Containers:
+  exporter:
+    Container ID:  containerd://6606af557584f873f6263fb33dfe4db4cd2cd80389c6285f32779deebba2d228
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      if [ ! -f /export/destination.conf ]; then
+        echo "nightly-export: /export/destination.conf is missing"
+        exit 1
+      fi
+      echo "nightly-export: uploading to $(cat /export/destination.conf)"
+      
+    State:          Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Fri, 04 Sep 2026 18:17:00 +0530
+      Finished:     Fri, 04 Sep 2026 18:17:00 +0530
+    Ready:          False
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /export from export-target (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-gcddw (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  export-target:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-gcddw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  48s   default-scheduler  Successfully assigned report-exports/nightly-export-29808767-5sr6q to incident-lab-control-plane
+  Normal  Pulled     48s   kubelet            spec.containers{exporter}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    48s   kubelet            spec.containers{exporter}: Container created
+  Normal  Started    48s   kubelet            spec.containers{exporter}: Container started
+
+$ kubectl logs nightly-export-29808767-5sr6q -c exporter -n report-exports --tail=50
+2026-09-04T12:47:00.511269586Z nightly-export: /export/destination.conf is missing
+
+$ kubectl describe pod/checkout-api-7db48f7c7b-6fb2v -n storefront
+Name:             checkout-api-7db48f7c7b-6fb2v
+Namespace:        storefront
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Fri, 04 Sep 2026 18:16:54 +0530
+Labels:           app=checkout-api
+                  pod-template-hash=7db48f7c7b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.68
+IPs:
+  IP:           10.244.0.68
+Controlled By:  ReplicaSet/checkout-api-7db48f7c7b
+Containers:
+  checkout-api:
+    Container ID:  containerd://01cfc836701579511602993ee71002da567ee7fbab65c3f74775297bc99ed89b
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Fri, 04 Sep 2026 18:16:54 +0530
+    Ready:          False
+    Restart Count:  0
+    Readiness:      exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-rsr69 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      checkout-scripts
+    Optional:  false
+  kube-api-access-rsr69:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  57s                default-scheduler  Successfully assigned storefront/checkout-api-7db48f7c7b-6fb2v to incident-lab-control-plane
+  Normal   Pulled     57s                kubelet            spec.containers{checkout-api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    57s                kubelet            spec.containers{checkout-api}: Container created
+  Normal   Started    57s                kubelet            spec.containers{checkout-api}: Container started
+  Warning  Unhealthy  1s (x11 over 51s)  kubelet            spec.containers{checkout-api}: Readiness probe failed:
+
+$ kubectl logs checkout-api-7db48f7c7b-6fb2v -c checkout-api -n storefront --tail=50
+2026-09-04T12:46:54.794867866Z checkout-api starting; payment gateway endpoint http://payments-gateway:8080/health
+2026-09-04T12:46:55.826079596Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:46:55.827286025Z 2026-09-04T12:46:55Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:01.841364610Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:01.843036495Z 2026-09-04T12:47:01Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:07.857557884Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:07.858632243Z 2026-09-04T12:47:07Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:13.873222412Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:13.874396608Z 2026-09-04T12:47:13Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:19.889083247Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:19.890200906Z 2026-09-04T12:47:19Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:25.905212814Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:25.906222311Z 2026-09-04T12:47:25Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:31.921119786Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:31.922246578Z 2026-09-04T12:47:31Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:37.937225802Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:37.938485724Z 2026-09-04T12:47:37Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:43.953354139Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:43.954346522Z 2026-09-04T12:47:43Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:49.970374997Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:49.971491842Z 2026-09-04T12:47:49Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+
+$ kubectl describe pod/checkout-api-7db48f7c7b-g7299 -n storefront
+Name:             checkout-api-7db48f7c7b-g7299
+Namespace:        storefront
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Fri, 04 Sep 2026 18:16:54 +0530
+Labels:           app=checkout-api
+                  pod-template-hash=7db48f7c7b
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.67
+IPs:
+  IP:           10.244.0.67
+Controlled By:  ReplicaSet/checkout-api-7db48f7c7b
+Containers:
+  checkout-api:
+    Container ID:  containerd://825456ec4688e9f7ed994fea199c4a1e0e2b372a94e349505578da17bffadc80
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /app/run.sh
+    State:          Running
+      Started:      Fri, 04 Sep 2026 18:16:54 +0530
+    Ready:          False
+    Restart Count:  0
+    Readiness:      exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:    <none>
+    Mounts:
+      /app from scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-kmqmc (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      checkout-scripts
+    Optional:  false
+  kube-api-access-kmqmc:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  57s                default-scheduler  Successfully assigned storefront/checkout-api-7db48f7c7b-g7299 to incident-lab-control-plane
+  Normal   Pulled     57s                kubelet            spec.containers{checkout-api}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    57s                kubelet            spec.containers{checkout-api}: Container created
+  Normal   Started    57s                kubelet            spec.containers{checkout-api}: Container started
+  Warning  Unhealthy  1s (x11 over 51s)  kubelet            spec.containers{checkout-api}: Readiness probe failed:
+
+$ kubectl logs checkout-api-7db48f7c7b-g7299 -c checkout-api -n storefront --tail=50
+2026-09-04T12:46:54.792668337Z checkout-api starting; payment gateway endpoint http://payments-gateway:8080/health
+2026-09-04T12:46:55.825197367Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:46:55.826762829Z 2026-09-04T12:46:55Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:01.841363652Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:01.843051536Z 2026-09-04T12:47:01Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:07.857674841Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:07.858679784Z 2026-09-04T12:47:07Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:13.874048986Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:13.874959602Z 2026-09-04T12:47:13Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:19.889081747Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:19.890184240Z 2026-09-04T12:47:19Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:25.906089645Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:25.906861767Z 2026-09-04T12:47:25Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:31.921119786Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:31.922203078Z 2026-09-04T12:47:31Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:37.937231094Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:37.938398432Z 2026-09-04T12:47:37Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:43.953132346Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:43.954227437Z 2026-09-04T12:47:43Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+2026-09-04T12:47:49.970371164Z wget: can't connect to remote host (10.96.215.202): Connection refused
+2026-09-04T12:47:49.971609135Z 2026-09-04T12:47:49Z payment gateway UNREACHABLE at http://payments-gateway:8080/health - holding checkout submissions
+
+$ kubectl describe deployment.apps/model-trainer -n batch-compute
+Name:                   model-trainer
+Namespace:              batch-compute
+CreationTimestamp:      Fri, 04 Sep 2026 18:16:48 +0530
+Labels:                 app=model-trainer
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=model-trainer
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=model-trainer
+  Containers:
+   trainer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'model-trainer started'; exec sleep 2147483647
+    Requests:
+      cpu:         512
+      memory:      64Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   model-trainer-7bd699964d (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  17s   deployment-controller  Scaled up replica set model-trainer-7bd699964d from 0 to 1
+
+$ kubectl describe deployment.apps/checkout-api -n storefront
+Name:                   checkout-api
+Namespace:              storefront
+CreationTimestamp:      Fri, 04 Sep 2026 18:16:54 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=checkout-api
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=checkout-api
+  Containers:
+   checkout-api:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Readiness:    exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   checkout-api-7db48f7c7b (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  57s   deployment-controller  Scaled up replica set checkout-api-7db48f7c7b from 0 to 2
+
+$ kubectl describe replicaset.apps/model-trainer-7bd699964d -n batch-compute
+Name:           model-trainer-7bd699964d
+Namespace:      batch-compute
+Selector:       app=model-trainer,pod-template-hash=7bd699964d
+Labels:         app=model-trainer
+                pod-template-hash=7bd699964d
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/model-trainer
+Replicas:       1 current / 1 desired
+Pods Status:    0 Running / 1 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=model-trainer
+           pod-template-hash=7bd699964d
+  Containers:
+   trainer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'model-trainer started'; exec sleep 2147483647
+    Requests:
+      cpu:         512
+      memory:      64Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  17s   replicaset-controller  Created pod: model-trainer-7bd699964d-j9cgz
+
+$ kubectl describe replicaset.apps/checkout-api-7db48f7c7b -n storefront
+Name:           checkout-api-7db48f7c7b
+Namespace:      storefront
+Selector:       app=checkout-api,pod-template-hash=7db48f7c7b
+Labels:         app=checkout-api
+                pod-template-hash=7db48f7c7b
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/checkout-api
+Replicas:       2 current / 2 desired
+Pods Status:    2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=checkout-api
+           pod-template-hash=7db48f7c7b
+  Containers:
+   checkout-api:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Readiness:    exec [sh -c test -f /tmp/ready] delay=5s timeout=1s period=5s successThreshold=1 failureThreshold=2
+    Environment:  <none>
+    Mounts:
+      /app from scripts (rw)
+  Volumes:
+   scripts:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-scripts
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  57s   replicaset-controller  Created pod: checkout-api-7db48f7c7b-g7299
+  Normal  SuccessfulCreate  57s   replicaset-controller  Created pod: checkout-api-7db48f7c7b-6fb2v
+
+The case id for your answer is "t3-crossns-decoys".
+
+Write your findings as a markdown report with EXACTLY these four sections:
+
+## Root cause
+The failing resource and the causal mechanism, stated plainly.
+
+## Evidence chain
+Every claim cites the exact piece of the provided output it came from (name the
+source, e.g. "describe of pod X", "log line: ...", quote the relevant line).
+
+## Investigation ledger
+Each alternative explanation you considered and ruled out, with the evidence
+that ruled it out. If you considered only one explanation, say so.
+
+## Verification recipe
+The 2-3 exact commands a human runs to independently confirm the root cause in
+under 2 minutes.
+
+Verdict rules (use the word, never a number — numeric self-confidence such as
+"90% sure" is forbidden anywhere in the report):
+- "confirmed": you have direct causal evidence linking mechanism to symptom.
+- "probable": evidence is consistent but indirect.
+- "inconclusive": name the additional evidence that would settle it.
+
+After the report, output the machine-read answer as the LAST fenced code block,
+exactly this shape:
+
+```json
+{
+  "case_id": "<case id, echoed verbatim>",
+  "failing_resource": {"kind": "...", "namespace": "...", "name": "..."},
+  "mechanism": "1-3 sentences: the causal mechanism of the paged symptom only.",
+  "verdict": "confirmed | probable | inconclusive",
+  "missing_evidence": "required iff verdict is inconclusive: what would settle it"
+}
+```
+
+`failing_resource` is the resource whose spec must CHANGE to fix the incident
+(e.g. the owning workload, not the crashing pod it produced). In `mechanism`,
+never mention any workload or mechanism other than the failing one — even to
+rule it out; ruled-out alternatives belong in the Investigation ledger.

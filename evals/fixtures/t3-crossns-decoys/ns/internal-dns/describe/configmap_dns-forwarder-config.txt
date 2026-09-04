@@ -1,0 +1,20 @@
+Name:         dns-forwarder-config
+Namespace:    internal-dns
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+cache_size:
+----
+1024
+
+upstream_server:
+----
+10.96.0.10
+
+
+BinaryData
+====
+
+Events:  <none>

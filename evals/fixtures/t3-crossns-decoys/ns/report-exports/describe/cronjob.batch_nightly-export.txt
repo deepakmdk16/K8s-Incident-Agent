@@ -1,0 +1,50 @@
+Name:                          nightly-export
+Namespace:                     report-exports
+Labels:                        <none>
+Annotations:                   <none>
+Schedule:                      */1 * * * *
+Concurrency Policy:            Forbid
+Suspend:                       False
+Time Zone:                     <unset>
+Successful Job History Limit:  0
+Failed Job History Limit:      1
+Starting Deadline Seconds:     30s
+Selector:                      <unset>
+Parallelism:                   <unset>
+Completions:                   <unset>
+Pod Template:
+  Labels:  <none>
+  Containers:
+   exporter:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      if [ ! -f /export/destination.conf ]; then
+        echo "nightly-export: /export/destination.conf is missing"
+        exit 1
+      fi
+      echo "nightly-export: uploading to $(cat /export/destination.conf)"
+      
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /export from export-target (rw)
+  Volumes:
+   export-target:
+    Type:            EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:          
+    SizeLimit:       <unset>
+  Node-Selectors:    <none>
+  Tolerations:       <none>
+Last Schedule Time:  Fri, 04 Sep 2026 18:17:00 +0530
+Active Jobs:         <none>
+Events:
+  Type    Reason            Age   From                Message
+  ----    ------            ----  ----                -------
+  Normal  SuccessfulCreate  48s   cronjob-controller  Created job nightly-export-29808767
+  Normal  SawCompletedJob   35s   cronjob-controller  Saw completed job: nightly-export-29808767, condition: Failed

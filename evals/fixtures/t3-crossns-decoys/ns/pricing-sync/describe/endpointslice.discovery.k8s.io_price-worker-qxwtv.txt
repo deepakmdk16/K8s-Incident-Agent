@@ -1,0 +1,19 @@
+Name:         price-worker-qxwtv
+Namespace:    pricing-sync
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=price-worker
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-09-04T12:46:50Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.61
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/price-worker-55864d8565-vj2tw
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

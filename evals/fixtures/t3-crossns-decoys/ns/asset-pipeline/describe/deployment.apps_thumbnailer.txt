@@ -1,0 +1,40 @@
+Name:                   thumbnailer
+Namespace:              asset-pipeline
+CreationTimestamp:      Fri, 04 Sep 2026 18:16:48 +0530
+Labels:                 app=thumbnailer
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=thumbnailer
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=thumbnailer
+  Containers:
+   worker:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'thumbnailer started'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   thumbnailer-85d4959957 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  18s   deployment-controller  Scaled up replica set thumbnailer-85d4959957 from 0 to 1

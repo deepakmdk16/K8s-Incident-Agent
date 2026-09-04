@@ -1,0 +1,13 @@
+Name:         rates-fetcher
+Namespace:    currency-rates
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-09-04T12:46:51Z
+Subsets:
+  Addresses:          10.244.0.65
+  NotReadyAddresses:  <none>
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

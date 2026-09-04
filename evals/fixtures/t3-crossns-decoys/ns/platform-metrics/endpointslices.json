@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.46"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "metrics-collector-5d66786b84-5m2ft",
+            "namespace": "platform-metrics",
+            "uid": "84996fe7-5b8b-4bb9-a766-95a70d48a829"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:48Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "generateName": "metrics-collector-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "metrics-collector"
+        },
+        "name": "metrics-collector-bw958",
+        "namespace": "platform-metrics",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "metrics-collector",
+            "uid": "956203f7-190c-4bcd-9b18-9d6ab219e4b0"
+          }
+        ],
+        "resourceVersion": "74736",
+        "uid": "53e3b00c-f1ec-4ef1-b896-f291230a94a2"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

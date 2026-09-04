@@ -1,0 +1,12 @@
+Name:              payments-gateway
+Namespace:         storefront
+Labels:            <none>
+Annotations:       <none>
+Selector:          <none>
+Type:              ExternalName
+IP Families:       <none>
+IP:                
+IPs:               <none>
+External Name:     payments-gateway.payments.svc.cluster.local
+Session Affinity:  None
+Events:            <none>

@@ -1,0 +1,20 @@
+Name:         profile-api-config
+Namespace:    user-profiles
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+cache_ttl_seconds:
+----
+300
+
+db_host:
+----
+profiles-db.user-profiles.svc
+
+
+BinaryData
+====
+
+Events:  <none>

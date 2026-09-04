@@ -1,0 +1,60 @@
+Name:             points-engine-84666f6c5f-p65dh
+Namespace:        loyalty-points
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Fri, 04 Sep 2026 18:16:50 +0530
+Labels:           app=points-engine
+                  pod-template-hash=84666f6c5f
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.60
+IPs:
+  IP:           10.244.0.60
+Controlled By:  ReplicaSet/points-engine-84666f6c5f
+Containers:
+  engine:
+    Container ID:  containerd://8b3bd9b715ecffe49f5689b9081e68f717aad4c5032b636f2060682126422e8c
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'points-engine started'; exec sleep 2147483647
+    State:          Running
+      Started:      Fri, 04 Sep 2026 18:16:50 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-88f8m (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-88f8m:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  43s   default-scheduler  Successfully assigned loyalty-points/points-engine-84666f6c5f-p65dh to incident-lab-control-plane
+  Normal  Pulled     43s   kubelet            spec.containers{engine}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    43s   kubelet            spec.containers{engine}: Container created
+  Normal  Started    43s   kubelet            spec.containers{engine}: Container started

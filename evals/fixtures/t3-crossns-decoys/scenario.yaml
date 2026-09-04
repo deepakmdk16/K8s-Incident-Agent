@@ -1,0 +1,161 @@
+schema: 1
+id: t3-crossns-decoys
+mode: captured
+captured_at: 2026-09-04T12:47:56Z
+context: kind-incident-lab
+kubectl_client: v1.37.0
+server: v1.37.0
+node: kubelet=v1.37.0 runtime=containerd://2.3.4 os=Debian GNU/Linux 13 (trixie)
+capture_policy:
+  workload_log_tail: 2000
+  system_log_tail: 300
+  system_namespaces: kube-system kube-public kube-node-lease local-path-storage
+log_channels:
+  - pod: ab-testing/experiment-api-787dddcc77-r25jz
+    container: api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "api" in pod "experiment-api-787dddcc77-r25jz" not found 
+  - pod: asset-pipeline/thumbnailer-85d4959957-98ckz
+    container: worker
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "worker" in pod "thumbnailer-85d4959957-98ckz" not found 
+  - pod: batch-compute/model-trainer-7bd699964d-j9cgz
+    container: trainer
+    current: ok
+    previous: ok
+  - pod: cdn-edge/edge-cache-778d9548d7-79v2h
+    container: cache
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "cache" in pod "edge-cache-778d9548d7-79v2h" not found 
+  - pod: currency-rates/rates-fetcher-64c66dfb56-2b6pn
+    container: fetcher
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "fetcher" in pod "rates-fetcher-64c66dfb56-2b6pn" not found 
+  - pod: distributed-tracing/span-collector-98dd7779b-ztlbh
+    container: collector
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "collector" in pod "span-collector-98dd7779b-ztlbh" not found 
+  - pod: email-delivery/smtp-relay-558df49878-fcqvq
+    container: relay
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "relay" in pod "smtp-relay-558df49878-fcqvq" not found 
+  - pod: feature-flags/flag-server-546bfb8f8-mchb4
+    container: server
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "server" in pod "flag-server-546bfb8f8-mchb4" not found 
+  - pod: geo-routing/geoip-api-779d7f574c-82dlh
+    container: api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "api" in pod "geoip-api-779d7f574c-82dlh" not found 
+  - pod: internal-dns/dns-forwarder-66fc5c9dd9-fqmvw
+    container: forwarder
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "forwarder" in pod "dns-forwarder-66fc5c9dd9-fqmvw" not found 
+  - pod: kube-system/coredns-559f6c778d-9lrfg
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-9lrfg" not found 
+  - pod: kube-system/coredns-559f6c778d-jsqvf
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-jsqvf" not found 
+  - pod: kube-system/etcd-incident-lab-control-plane
+    container: etcd
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "etcd" in pod "etcd-incident-lab-control-plane" not found 
+  - pod: kube-system/kindnet-d6vmg
+    container: kindnet-cni
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kindnet-cni" in pod "kindnet-d6vmg" not found 
+  - pod: kube-system/kube-apiserver-incident-lab-control-plane
+    container: kube-apiserver
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-apiserver" in pod "kube-apiserver-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-controller-manager-incident-lab-control-plane
+    container: kube-controller-manager
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-controller-manager" in pod "kube-controller-manager-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-proxy-4bpcr
+    container: kube-proxy
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-proxy" in pod "kube-proxy-4bpcr" not found 
+  - pod: kube-system/kube-scheduler-incident-lab-control-plane
+    container: kube-scheduler
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-scheduler" in pod "kube-scheduler-incident-lab-control-plane" not found 
+  - pod: local-path-storage/local-path-provisioner-75f7fc7dc5-bgp5f
+    container: local-path-provisioner
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "local-path-provisioner" in pod "local-path-provisioner-75f7fc7dc5-bgp5f" not found 
+  - pod: log-aggregation/log-shipper-598b9c9858-cbp79
+    container: shipper
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "shipper" in pod "log-shipper-598b9c9858-cbp79" not found 
+  - pod: loyalty-points/points-engine-84666f6c5f-p65dh
+    container: engine
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "engine" in pod "points-engine-84666f6c5f-p65dh" not found 
+  - pod: media-transcode/transcode-worker-d7bbb9c-kl5k4
+    container: worker
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "worker" in pod "transcode-worker-d7bbb9c-kl5k4" not found 
+  - pod: message-broker/queue-server-5c879fdf4-cbs48
+    container: server
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "server" in pod "queue-server-5c879fdf4-cbs48" not found 
+  - pod: partner-api/partner-gateway-cbdcb8f65-qzqxx
+    container: gateway
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "gateway" in pod "partner-gateway-cbdcb8f65-qzqxx" not found 
+  - pod: payments/payments-gateway-api-9c78bc7b-qcwwf
+    container: gateway
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "gateway" in pod "payments-gateway-api-9c78bc7b-qcwwf" not found 
+  - pod: payments/payments-gateway-api-9c78bc7b-twfm4
+    container: gateway
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "gateway" in pod "payments-gateway-api-9c78bc7b-twfm4" not found 
+  - pod: platform-metrics/metrics-collector-5d66786b84-5m2ft
+    container: collector
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "collector" in pod "metrics-collector-5d66786b84-5m2ft" not found 
+  - pod: pricing-sync/price-worker-55864d8565-vj2tw
+    container: worker
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "worker" in pod "price-worker-55864d8565-vj2tw" not found 
+  - pod: push-notifications/push-dispatcher-657b86bd4d-t2562
+    container: dispatcher
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "dispatcher" in pod "push-dispatcher-657b86bd4d-t2562" not found 
+  - pod: release-canary/canary-runner-54bdcc6cc-dc9f2
+    container: runner
+    current: ok
+    previous: ok
+  - pod: report-exports/nightly-export-29808767-5sr6q
+    container: exporter
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "exporter" in pod "nightly-export-29808767-5sr6q" not found 
+  - pod: report-exports/nightly-export-29808767-9vm8b
+    container: exporter
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "exporter" in pod "nightly-export-29808767-9vm8b" not found 
+  - pod: session-store/session-cache-5f875fd7c7-459xl
+    container: cache
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "cache" in pod "session-cache-5f875fd7c7-459xl" not found 
+  - pod: storefront/checkout-api-7db48f7c7b-6fb2v
+    container: checkout-api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "checkout-api" in pod "checkout-api-7db48f7c7b-6fb2v" not found 
+  - pod: storefront/checkout-api-7db48f7c7b-g7299
+    container: checkout-api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "checkout-api" in pod "checkout-api-7db48f7c7b-g7299" not found 
+  - pod: user-profiles/profile-api-78bcbb5655-bsp87
+    container: api
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "api" in pod "profile-api-78bcbb5655-bsp87" not found 
+  - pod: webhooks/webhook-relay-5449d69858-vqmz5
+    container: relay
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "relay" in pod "webhook-relay-5449d69858-vqmz5" not found 

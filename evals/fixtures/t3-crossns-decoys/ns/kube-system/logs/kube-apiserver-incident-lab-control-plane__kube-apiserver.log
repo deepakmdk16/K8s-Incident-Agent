@@ -1,0 +1,300 @@
+2026-09-02T03:01:33.380179646Z I0902 03:01:33.380135       1 secure_serving.go:214] Serving securely on [::]:6443
+2026-09-02T03:01:33.380182354Z I0902 03:01:33.380158       1 tlsconfig.go:243] "Starting DynamicServingCertificateController"
+2026-09-02T03:01:33.380184772Z I0902 03:01:33.380173       1 apf_controller.go:377] Starting API Priority and Fairness config controller
+2026-09-02T03:01:33.380231240Z I0902 03:01:33.380197       1 system_namespaces_controller.go:66] Starting system namespaces controller
+2026-09-02T03:01:33.380248243Z I0902 03:01:33.380203       1 controller.go:89] "Starting OpenAPI V3 AggregationController"
+2026-09-02T03:01:33.380257912Z I0902 03:01:33.380214       1 controller.go:87] "Starting OpenAPI AggregationController"
+2026-09-02T03:01:33.380267872Z I0902 03:01:33.380229       1 aggregator.go:185] waiting for initial CRD sync...
+2026-09-02T03:01:33.380293628Z I0902 03:01:33.380247       1 controller.go:127] "Starting legacy_token_tracking_controller"
+2026-09-02T03:01:33.380294711Z I0902 03:01:33.380264       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-09-02T03:01:33.380295378Z I0902 03:01:33.380277       1 controller.go:116] "Deleting old lease on startup" lease="kube-system/apiserver-alnnk7buasvrc2nyuhlblkuxme"
+2026-09-02T03:01:33.380296878Z I0902 03:01:33.380288       1 dynamic_cafile_content.go:161] "Starting controller" name="client-ca-bundle::/etc/kubernetes/pki/ca.crt"
+2026-09-02T03:01:33.380364476Z I0902 03:01:33.380328       1 dynamic_cafile_content.go:161] "Starting controller" name="request-header::/etc/kubernetes/pki/front-proxy-ca.crt"
+2026-09-02T03:01:33.380410277Z I0902 03:01:33.380368       1 dynamic_serving_content.go:135] "Starting controller" name="aggregator-proxy-cert::/etc/kubernetes/pki/front-proxy-client.crt::/etc/kubernetes/pki/front-proxy-client.key"
+2026-09-02T03:01:33.380438949Z I0902 03:01:33.380420       1 gc_controller.go:85] "Starting apiserver lease garbage collector"
+2026-09-02T03:01:33.380439783Z I0902 03:01:33.380427       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-09-02T03:01:33.380450494Z I0902 03:01:33.380427       1 default_servicecidr_controller.go:110] "Starting" controller="kubernetes-service-cidr-controller"
+2026-09-02T03:01:33.380451410Z I0902 03:01:33.380432       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-09-02T03:01:33.380488418Z I0902 03:01:33.380258       1 apiservice_controller.go:100] Starting APIServiceRegistrationController
+2026-09-02T03:01:33.380490085Z I0902 03:01:33.380470       1 cache.go:32] Waiting for caches to sync for APIServiceRegistrationController controller
+2026-09-02T03:01:33.381504046Z I0902 03:01:33.380458       1 crd_finalizer.go:276] "Starting CRDFinalizer"
+2026-09-02T03:01:33.381585854Z I0902 03:01:33.380258       1 remote_available_controller.go:434] Starting RemoteAvailability controller
+2026-09-02T03:01:33.381589980Z I0902 03:01:33.381546       1 cache.go:32] Waiting for caches to sync for RemoteAvailability controller
+2026-09-02T03:01:33.381591647Z I0902 03:01:33.380264       1 cluster_authentication_trust_controller.go:459] Starting cluster_authentication_trust_controller controller
+2026-09-02T03:01:33.381592272Z I0902 03:01:33.381558       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-09-02T03:01:33.381593023Z I0902 03:01:33.380345       1 storage_readiness_hook.go:70] Storage is ready for all registered resources
+2026-09-02T03:01:33.381596065Z I0902 03:01:33.380410       1 crdregistration_controller.go:114] Starting crd-autoregister controller
+2026-09-02T03:01:33.381625363Z I0902 03:01:33.381595       1 shared_informer.go:503] "Waiting for caches to sync" controller="crd-autoregister"
+2026-09-02T03:01:33.385965473Z I0902 03:01:33.380418       1 local_available_controller.go:156] Starting LocalAvailability controller
+2026-09-02T03:01:33.386002230Z I0902 03:01:33.385981       1 cache.go:32] Waiting for caches to sync for LocalAvailability controller
+2026-09-02T03:01:33.386050740Z I0902 03:01:33.380423       1 customresource_discovery_controller.go:294] Starting DiscoveryController
+2026-09-02T03:01:33.386053949Z I0902 03:01:33.380430       1 controller.go:142] Starting OpenAPI controller
+2026-09-02T03:01:33.386082580Z I0902 03:01:33.380436       1 controller.go:90] Starting OpenAPI V3 controller
+2026-09-02T03:01:33.386092666Z I0902 03:01:33.380440       1 naming_controller.go:305] Starting NamingConditionController
+2026-09-02T03:01:33.386102834Z I0902 03:01:33.380449       1 repairip.go:210] Starting ipallocator-repair-controller
+2026-09-02T03:01:33.386125923Z I0902 03:01:33.386108       1 shared_informer.go:503] "Waiting for caches to sync" controller="ipallocator-repair-controller"
+2026-09-02T03:01:33.386127756Z I0902 03:01:33.380451       1 nonstructuralschema_controller.go:202] Starting NonStructuralSchemaConditionController
+2026-09-02T03:01:33.386249157Z I0902 03:01:33.380454       1 apiapproval_controller.go:196] Starting KubernetesAPIApprovalPolicyConformantConditionController
+2026-09-02T03:01:33.447533847Z E0902 03:01:33.447461       1 controller.go:208] "Failed to ensure lease exists, will retry" err="namespaces \"kube-system\" not found" interval="200ms"
+2026-09-02T03:01:33.456390229Z I0902 03:01:33.456337       1 shared_informer.go:510] "Caches are synced" controller="node_authorizer"
+2026-09-02T03:01:33.463160302Z I0902 03:01:33.463111       1 shared_informer.go:531] "Caches are synced"
+2026-09-02T03:01:33.463166595Z I0902 03:01:33.463120       1 policy_source.go:253] refreshing policies
+2026-09-02T03:01:33.464559092Z I0902 03:01:33.464499       1 shared_informer.go:531] "Caches are synced"
+2026-09-02T03:01:33.464562468Z I0902 03:01:33.464506       1 policy_source.go:253] refreshing policies
+2026-09-02T03:01:33.481364167Z I0902 03:01:33.481323       1 shared_informer.go:531] "Caches are synced"
+2026-09-02T03:01:33.481368168Z I0902 03:01:33.481337       1 default_servicecidr_controller.go:170] "Creating default ServiceCIDR" CIDRs=["10.96.0.0/16"]
+2026-09-02T03:01:33.481409551Z I0902 03:01:33.481363       1 shared_informer.go:531] "Caches are synced"
+2026-09-02T03:01:33.481412927Z I0902 03:01:33.481383       1 apf_controller.go:382] Running API Priority and Fairness config worker
+2026-09-02T03:01:33.481413844Z I0902 03:01:33.481387       1 apf_controller.go:385] Running API Priority and Fairness periodic rebalancing process
+2026-09-02T03:01:33.481415969Z I0902 03:01:33.481394       1 cache.go:39] Caches are synced for APIServiceRegistrationController controller
+2026-09-02T03:01:33.481416594Z I0902 03:01:33.481409       1 shared_informer.go:531] "Caches are synced"
+2026-09-02T03:01:33.481575377Z I0902 03:01:33.481440       1 handler_discovery.go:450] Starting ResourceDiscoveryManager
+2026-09-02T03:01:33.481748872Z I0902 03:01:33.481593       1 shared_informer.go:531] "Caches are synced"
+2026-09-02T03:01:33.481750914Z I0902 03:01:33.481596       1 cache.go:39] Caches are synced for RemoteAvailability controller
+2026-09-02T03:01:33.482686483Z I0902 03:01:33.482646       1 cidrallocator.go:302] created ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T03:01:33.482691943Z I0902 03:01:33.482667       1 shared_informer.go:510] "Caches are synced" controller="crd-autoregister"
+2026-09-02T03:01:33.482766625Z I0902 03:01:33.482740       1 aggregator.go:187] initial CRD sync complete...
+2026-09-02T03:01:33.482769042Z I0902 03:01:33.482752       1 autoregister_controller.go:144] Starting autoregister controller
+2026-09-02T03:01:33.482771126Z I0902 03:01:33.482761       1 cache.go:32] Waiting for caches to sync for autoregister controller
+2026-09-02T03:01:33.482811468Z I0902 03:01:33.482776       1 cache.go:39] Caches are synced for autoregister controller
+2026-09-02T03:01:33.483050767Z I0902 03:01:33.482744       1 default_servicecidr_controller.go:234] "Setting default ServiceCIDR condition Ready to True"
+2026-09-02T03:01:33.485639180Z I0902 03:01:33.485574       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T03:01:33.486341576Z I0902 03:01:33.486276       1 cache.go:39] Caches are synced for LocalAvailability controller
+2026-09-02T03:01:33.486376792Z I0902 03:01:33.486351       1 shared_informer.go:510] "Caches are synced" controller="ipallocator-repair-controller"
+2026-09-02T03:01:33.648947775Z I0902 03:01:33.648864       1 controller.go:667] quota admission added evaluator for: leases.coordination.k8s.io
+2026-09-02T03:01:34.384964876Z I0902 03:01:34.384823       1 storage_scheduling.go:189] created PriorityClass system-node-critical with value 2000001000
+2026-09-02T03:01:34.387247893Z I0902 03:01:34.387136       1 storage_scheduling.go:189] created PriorityClass system-cluster-critical with value 2000000000
+2026-09-02T03:01:34.387256728Z I0902 03:01:34.387150       1 storage_scheduling.go:205] all system priority classes are created successfully or already exist.
+2026-09-02T03:01:34.536585654Z I0902 03:01:34.536509       1 controller.go:667] quota admission added evaluator for: roles.rbac.authorization.k8s.io
+2026-09-02T03:01:34.547012213Z I0902 03:01:34.546941       1 controller.go:667] quota admission added evaluator for: rolebindings.rbac.authorization.k8s.io
+2026-09-02T03:01:34.584605175Z I0902 03:01:34.584530       1 alloc.go:329] "allocated clusterIPs" service="default/kubernetes" clusterIPs={"IPv4":"10.96.0.1"}
+2026-09-02T03:01:34.585960974Z W0902 03:01:34.585917       1 lease.go:270] Resetting endpoints for master service "kubernetes" to [172.18.0.3]
+2026-09-02T03:01:34.586242626Z I0902 03:01:34.586191       1 controller.go:667] quota admission added evaluator for: endpoints
+2026-09-02T03:01:34.587237015Z I0902 03:01:34.587194       1 controller.go:667] quota admission added evaluator for: endpointslices.discovery.k8s.io
+2026-09-02T03:01:35.806669371Z I0902 03:01:35.806555       1 controller.go:667] quota admission added evaluator for: serviceaccounts
+2026-09-02T03:01:35.809288759Z I0902 03:01:35.809225       1 controller.go:667] quota admission added evaluator for: deployments.apps
+2026-09-02T03:01:35.813217090Z I0902 03:01:35.813049       1 alloc.go:329] "allocated clusterIPs" service="kube-system/kube-dns" clusterIPs={"IPv4":"10.96.0.10"}
+2026-09-02T03:01:35.816136787Z I0902 03:01:35.816053       1 controller.go:667] quota admission added evaluator for: daemonsets.apps
+2026-09-02T03:01:42.659134486Z I0902 03:01:42.659004       1 controller.go:667] quota admission added evaluator for: controllerrevisions.apps
+2026-09-02T03:01:42.757923447Z I0902 03:01:42.757822       1 controller.go:667] quota admission added evaluator for: replicasets.apps
+2026-09-02T03:01:42.960448866Z I0902 03:01:42.960337       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T03:01:42.962994920Z I0902 03:01:42.962841       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T03:06:46.166924747Z I0902 03:06:46.166655       1 alloc.go:329] "allocated clusterIPs" service="payments/payments-gateway" clusterIPs={"IPv4":"10.96.139.55"}
+2026-09-02T03:09:12.131753419Z I0902 03:09:12.131634       1 controller.go:667] quota admission added evaluator for: namespaces
+2026-09-02T03:10:15.542884458Z I0902 03:10:15.542738       1 alloc.go:329] "allocated clusterIPs" service="payments/payments-gateway" clusterIPs={"IPv4":"10.96.191.39"}
+2026-09-02T03:44:12.083091724Z I0902 03:44:12.082824       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T03:54:12.083244097Z I0902 03:54:12.082865       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T04:02:50.903187296Z E0902 04:02:50.902916       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T04:02:51.005856815Z E0902 04:02:51.005589       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T04:03:28.563573110Z E0902 04:03:28.563271       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T04:04:12.083478134Z I0902 04:04:12.083332       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T04:14:12.084913111Z I0902 04:14:12.084684       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T04:32:57.566390924Z I0902 04:32:57.566156       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T06:22:31.423062398Z E0902 06:22:31.422735       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T06:22:31.589892493Z E0902 06:22:31.589683       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T07:42:13.196753266Z E0902 07:42:13.196595       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T07:42:13.333361456Z E0902 07:42:13.333223       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T09:26:10.826718949Z E0902 09:26:10.826369       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T09:26:11.031433293Z E0902 09:26:11.031288       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T11:27:40.953873998Z I0902 11:27:40.953614       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T11:27:50.148517099Z E0902 11:27:50.148438       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T11:27:50.347494693Z E0902 11:27:50.347360       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T12:28:34.197068383Z E0902 12:28:34.196738       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T13:15:10.286815625Z E0902 13:15:10.286650       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T13:15:10.500221129Z E0902 13:15:10.500073       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T14:46:23.097748119Z E0902 14:46:23.097574       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T14:46:23.314749978Z E0902 14:46:23.314481       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T15:00:20.987035333Z E0902 15:00:20.986836       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T15:01:52.577055566Z I0902 15:01:52.576578       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T15:11:52.578135760Z I0902 15:11:52.577607       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T15:21:52.578689042Z I0902 15:21:52.578317       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T15:31:52.579810190Z I0902 15:31:52.579580       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T15:41:52.580233282Z I0902 15:41:52.579718       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T15:54:01.211603746Z I0902 15:54:01.211462       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T16:04:01.213344375Z I0902 16:04:01.212839       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T16:51:30.888105810Z E0902 16:51:30.887930       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T16:51:31.110900597Z E0902 16:51:31.110693       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T17:46:46.230329439Z I0902 17:46:46.230059       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T17:49:29.693779715Z E0902 17:49:29.693480       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T17:56:46.128553684Z I0902 17:56:46.128102       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T18:08:10.590083612Z I0902 18:08:10.589829       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-02T19:10:37.930196880Z E0902 19:10:37.927865       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T19:10:38.062884608Z E0902 19:10:38.062773       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T20:55:02.717476019Z E0902 20:55:02.717340       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T21:41:59.177072155Z E0902 21:41:59.176860       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T21:41:59.306273681Z E0902 21:41:59.306105       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T23:21:56.510738720Z E0902 23:21:56.510540       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T23:21:56.627503885Z E0902 23:21:56.627354       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-02T23:51:13.752086553Z I0902 23:51:13.751523       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T01:10:51.919390733Z E0903 01:10:51.919134       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T01:10:52.004786303Z E0903 01:10:52.004637       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T02:56:46.867521639Z E0903 02:56:46.867254       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T02:56:46.933200250Z E0903 02:56:46.933114       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T03:47:10.904367462Z E0903 03:47:10.904118       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T03:50:46.016683773Z I0903 03:50:46.016324       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T04:00:46.018668574Z I0903 04:00:46.017738       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T04:05:56.624287129Z E0903 04:05:56.624212       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T04:05:56.652190914Z E0903 04:05:56.652115       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T04:10:46.018497173Z I0903 04:10:46.018080       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T04:20:46.018691414Z I0903 04:20:46.018355       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T04:48:37.085835721Z I0903 04:48:37.085699       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T05:06:37.911115983Z I0903 05:06:37.910814       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T05:07:48.800911049Z E0903 05:07:48.800734       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T05:07:48.800946058Z E0903 05:07:48.800735       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T05:16:37.912023533Z I0903 05:16:37.911699       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T05:26:37.912884684Z I0903 05:26:37.912557       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T05:36:37.912870503Z I0903 05:36:37.912585       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T05:53:41.376049387Z I0903 05:53:41.375670       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T06:03:41.376388913Z I0903 06:03:41.375817       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T06:18:46.711422818Z I0903 06:18:46.711185       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T07:09:56.999815272Z E0903 07:09:56.999513       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T07:09:56.999869980Z E0903 07:09:56.999520       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T07:10:02.557717886Z E0903 07:10:02.557453       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T08:44:18.504295942Z E0903 08:44:18.504135       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T08:44:18.504343385Z E0903 08:44:18.504161       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T08:48:11.149190146Z I0903 08:48:11.148997       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T08:48:21.654359453Z E0903 08:48:21.654229       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T09:06:06.167219218Z I0903 09:06:06.167029       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T09:16:06.167732816Z I0903 09:16:06.167545       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T09:26:06.168560870Z I0903 09:26:06.168032       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T09:36:06.169058809Z I0903 09:36:06.168544       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T09:46:06.169695626Z I0903 09:46:06.169471       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T09:56:06.170694759Z I0903 09:56:06.170318       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T10:06:06.170744684Z I0903 10:06:06.170422       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T10:17:39.916591988Z I0903 10:17:39.916246       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T10:27:39.917207100Z I0903 10:27:39.916631       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T10:37:39.917712293Z I0903 10:37:39.917608       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T10:47:39.919103848Z I0903 10:47:39.918991       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T10:57:39.919823437Z I0903 10:57:39.919532       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T11:07:39.919827486Z I0903 11:07:39.919586       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T11:17:39.920876226Z I0903 11:17:39.920732       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T11:27:39.921944360Z I0903 11:27:39.921537       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T12:21:55.881511266Z E0903 12:21:55.881284       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T12:21:55.881551539Z E0903 12:21:55.881285       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T12:42:28.864446503Z I0903 12:42:28.864000       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T12:43:11.801937883Z E0903 12:43:11.801605       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T13:15:04.572445929Z I0903 13:15:04.571835       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T13:23:29.730276444Z E0903 13:23:29.729774       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T13:23:29.730355056Z E0903 13:23:29.729775       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T13:25:16.320679328Z I0903 13:25:16.320189       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T13:35:16.321769870Z I0903 13:35:16.321303       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T13:45:16.322634587Z I0903 13:45:16.322332       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T13:58:24.925329407Z E0903 13:58:24.925171       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T15:10:11.506078493Z E0903 15:10:11.505769       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T15:10:11.506149593Z E0903 15:10:11.505769       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T16:33:36.304721170Z I0903 16:33:36.304480       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T16:50:36.688270958Z E0903 16:50:36.688122       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T16:50:36.688683170Z E0903 16:50:36.688580       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T17:00:30.614432798Z E0903 17:00:30.614261       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T18:01:24.854166462Z E0903 18:01:24.853936       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T18:01:24.854214581Z E0903 18:01:24.853959       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T19:02:25.353216830Z E0903 19:02:25.353011       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T19:05:22.652925774Z I0903 19:05:22.652635       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T19:19:16.159523309Z E0903 19:19:16.159145       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T19:19:16.159606711Z E0903 19:19:16.159145       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T20:29:10.896622357Z E0903 20:29:10.896395       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T20:29:10.896694075Z E0903 20:29:10.896479       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T21:38:11.068350633Z I0903 21:38:11.068172       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-03T22:10:36.395377015Z E0903 22:10:36.394992       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-03T22:10:36.395438308Z E0903 22:10:36.395058       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T00:00:48.731450293Z E0904 00:00:48.731231       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T00:00:48.731635776Z E0904 00:00:48.731231       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T01:06:53.787891302Z E0904 01:06:53.787658       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T01:06:57.638142035Z E0904 01:06:57.637663       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T01:06:57.638228704Z E0904 01:06:57.637770       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T01:22:32.070972031Z I0904 01:22:32.070531       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T01:54:48.621959912Z I0904 01:54:48.621467       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T02:19:33.393799024Z E0904 02:19:33.392607       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T02:19:33.395309438Z E0904 02:19:33.392607       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T03:59:01.403743173Z E0904 03:59:01.403534       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T03:59:14.235799024Z E0904 03:59:14.235431       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T03:59:14.235865834Z E0904 03:59:14.235503       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T03:59:29.817489356Z I0904 03:59:29.817212       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T04:09:29.818460421Z I0904 04:09:29.818246       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T04:23:59.101651092Z I0904 04:23:59.100903       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T04:46:58.814954485Z I0904 04:46:58.814554       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T05:00:51.463912546Z E0904 05:00:51.463361       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T05:00:51.463973226Z E0904 05:00:51.463361       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T05:10:47.155915633Z E0904 05:10:47.155631       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T05:16:07.933794054Z I0904 05:16:07.933144       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T05:26:07.525193197Z I0904 05:26:07.524528       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T05:36:07.324037077Z I0904 05:36:07.323705       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T05:46:07.224838145Z I0904 05:46:07.224536       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T05:56:07.124472600Z I0904 05:56:07.124129       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T06:06:07.125913281Z I0904 06:06:07.125661       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T06:26:38.864575004Z I0904 06:26:38.864283       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T07:01:17.048391938Z E0904 07:01:17.048269       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T07:01:17.048428482Z E0904 07:01:17.048299       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T07:02:01.500195289Z I0904 07:02:01.500031       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T07:07:02.642811832Z E0904 07:07:02.642672       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T07:21:48.926669299Z I0904 07:21:48.926443       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T07:53:32.771264015Z I0904 07:53:32.771028       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T08:02:48.561527804Z E0904 08:02:48.561363       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T08:02:48.561568509Z E0904 08:02:48.561386       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T08:03:32.771969864Z I0904 08:03:32.771670       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T08:08:38.456432843Z E0904 08:08:38.456211       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T08:13:32.773210298Z I0904 08:13:32.772767       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T08:25:27.250782120Z I0904 08:25:27.250549       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T08:35:27.250921828Z I0904 08:35:27.250731       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T08:45:27.251830374Z I0904 08:45:27.251462       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T09:05:38.123327737Z E0904 09:05:38.123073       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T09:05:38.123402096Z E0904 09:05:38.123073       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T09:10:51.925125545Z I0904 09:10:51.924852       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T09:20:51.926319666Z I0904 09:20:51.926085       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T09:30:51.926639731Z I0904 09:30:51.926446       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T09:40:51.927517805Z I0904 09:40:51.926834       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T09:50:51.928381200Z I0904 09:50:51.927878       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T10:03:30.338917036Z I0904 10:03:30.338667       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T11:18:15.781567863Z E0904 11:18:15.781418       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T11:18:15.781762559Z E0904 11:18:15.781444       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T12:05:34.380143154Z I0904 12:05:34.379952       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T12:15:34.381500524Z I0904 12:15:34.380871       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T12:25:34.381961130Z I0904 12:25:34.381802       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T12:35:34.282862775Z I0904 12:35:34.282448       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T12:37:51.494286288Z E0904 12:37:51.494050       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T12:37:51.494499785Z E0904 12:37:51.494051       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-09-04T12:41:25.459440179Z I0904 12:41:25.459330       1 alloc.go:329] "allocated clusterIPs" service="platform-metrics/metrics-collector" clusterIPs={"IPv4":"10.96.93.61"}
+2026-09-04T12:41:25.477901935Z I0904 12:41:25.477772       1 alloc.go:329] "allocated clusterIPs" service="log-aggregation/log-shipper" clusterIPs={"IPv4":"10.96.115.207"}
+2026-09-04T12:41:25.489756303Z I0904 12:41:25.489681       1 alloc.go:329] "allocated clusterIPs" service="message-broker/queue-server" clusterIPs={"IPv4":"10.96.203.26"}
+2026-09-04T12:41:25.503189437Z I0904 12:41:25.503047       1 alloc.go:329] "allocated clusterIPs" service="user-profiles/profile-api" clusterIPs={"IPv4":"10.96.38.106"}
+2026-09-04T12:41:25.513803006Z I0904 12:41:25.513722       1 alloc.go:329] "allocated clusterIPs" service="cdn-edge/edge-cache" clusterIPs={"IPv4":"10.96.157.15"}
+2026-09-04T12:41:25.527905455Z I0904 12:41:25.527815       1 alloc.go:329] "allocated clusterIPs" service="ab-testing/experiment-api" clusterIPs={"IPv4":"10.96.221.189"}
+2026-09-04T12:41:25.539110041Z I0904 12:41:25.539047       1 alloc.go:329] "allocated clusterIPs" service="email-delivery/smtp-relay" clusterIPs={"IPv4":"10.96.3.34"}
+2026-09-04T12:41:25.550337450Z I0904 12:41:25.550267       1 alloc.go:329] "allocated clusterIPs" service="session-store/session-cache" clusterIPs={"IPv4":"10.96.190.196"}
+2026-09-04T12:41:25.576571887Z I0904 12:41:25.576489       1 alloc.go:329] "allocated clusterIPs" service="feature-flags/flag-server" clusterIPs={"IPv4":"10.96.142.172"}
+2026-09-04T12:41:25.587557076Z I0904 12:41:25.587449       1 alloc.go:329] "allocated clusterIPs" service="geo-routing/geoip-api" clusterIPs={"IPv4":"10.96.224.208"}
+2026-09-04T12:41:25.598552967Z I0904 12:41:25.598489       1 alloc.go:329] "allocated clusterIPs" service="push-notifications/push-dispatcher" clusterIPs={"IPv4":"10.96.35.176"}
+2026-09-04T12:41:25.612502237Z I0904 12:41:25.612421       1 alloc.go:329] "allocated clusterIPs" service="asset-pipeline/thumbnailer" clusterIPs={"IPv4":"10.96.216.40"}
+2026-09-04T12:41:25.623773500Z I0904 12:41:25.623636       1 alloc.go:329] "allocated clusterIPs" service="distributed-tracing/span-collector" clusterIPs={"IPv4":"10.96.130.161"}
+2026-09-04T12:41:25.635751977Z I0904 12:41:25.635674       1 alloc.go:329] "allocated clusterIPs" service="internal-dns/dns-forwarder" clusterIPs={"IPv4":"10.96.46.149"}
+2026-09-04T12:41:25.650153412Z I0904 12:41:25.650071       1 alloc.go:329] "allocated clusterIPs" service="loyalty-points/points-engine" clusterIPs={"IPv4":"10.96.218.194"}
+2026-09-04T12:41:25.667202241Z I0904 12:41:25.667113       1 alloc.go:329] "allocated clusterIPs" service="pricing-sync/price-worker" clusterIPs={"IPv4":"10.96.114.67"}
+2026-09-04T12:41:25.682061671Z I0904 12:41:25.681906       1 alloc.go:329] "allocated clusterIPs" service="media-transcode/transcode-worker" clusterIPs={"IPv4":"10.96.112.74"}
+2026-09-04T12:41:25.693405942Z I0904 12:41:25.693338       1 alloc.go:329] "allocated clusterIPs" service="partner-api/partner-gateway" clusterIPs={"IPv4":"10.96.245.186"}
+2026-09-04T12:41:25.707308317Z I0904 12:41:25.707215       1 alloc.go:329] "allocated clusterIPs" service="webhooks/webhook-relay" clusterIPs={"IPv4":"10.96.80.110"}
+2026-09-04T12:41:25.718628558Z I0904 12:41:25.718556       1 alloc.go:329] "allocated clusterIPs" service="currency-rates/rates-fetcher" clusterIPs={"IPv4":"10.96.38.164"}
+2026-09-04T12:41:25.729215390Z I0904 12:41:25.729146       1 controller.go:667] quota admission added evaluator for: cronjobs.batch
+2026-09-04T12:41:31.551427047Z I0904 12:41:31.551281       1 alloc.go:329] "allocated clusterIPs" service="payments/payments-gateway" clusterIPs={"IPv4":"10.96.116.165"}
+2026-09-04T12:42:00.112679467Z I0904 12:42:00.112529       1 controller.go:667] quota admission added evaluator for: jobs.batch
+2026-09-04T12:45:34.283006851Z I0904 12:45:34.282538       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-09-04T12:46:48.212007159Z I0904 12:46:48.211909       1 alloc.go:329] "allocated clusterIPs" service="platform-metrics/metrics-collector" clusterIPs={"IPv4":"10.96.66.158"}
+2026-09-04T12:46:48.228494716Z I0904 12:46:48.228339       1 alloc.go:329] "allocated clusterIPs" service="log-aggregation/log-shipper" clusterIPs={"IPv4":"10.96.113.139"}
+2026-09-04T12:46:48.242208020Z I0904 12:46:48.242082       1 alloc.go:329] "allocated clusterIPs" service="message-broker/queue-server" clusterIPs={"IPv4":"10.96.62.155"}
+2026-09-04T12:46:48.255434673Z I0904 12:46:48.255230       1 alloc.go:329] "allocated clusterIPs" service="user-profiles/profile-api" clusterIPs={"IPv4":"10.96.167.254"}
+2026-09-04T12:46:48.268155548Z I0904 12:46:48.267866       1 alloc.go:329] "allocated clusterIPs" service="cdn-edge/edge-cache" clusterIPs={"IPv4":"10.96.61.230"}
+2026-09-04T12:46:48.279633294Z I0904 12:46:48.279551       1 alloc.go:329] "allocated clusterIPs" service="ab-testing/experiment-api" clusterIPs={"IPv4":"10.96.194.131"}
+2026-09-04T12:46:48.291235827Z I0904 12:46:48.291158       1 alloc.go:329] "allocated clusterIPs" service="email-delivery/smtp-relay" clusterIPs={"IPv4":"10.96.160.195"}
+2026-09-04T12:46:48.302559786Z I0904 12:46:48.302481       1 alloc.go:329] "allocated clusterIPs" service="session-store/session-cache" clusterIPs={"IPv4":"10.96.136.239"}
+2026-09-04T12:46:48.316857865Z I0904 12:46:48.316789       1 alloc.go:329] "allocated clusterIPs" service="feature-flags/flag-server" clusterIPs={"IPv4":"10.96.237.19"}
+2026-09-04T12:46:48.336829569Z I0904 12:46:48.336720       1 alloc.go:329] "allocated clusterIPs" service="geo-routing/geoip-api" clusterIPs={"IPv4":"10.96.49.221"}
+2026-09-04T12:46:48.349927350Z I0904 12:46:48.349780       1 alloc.go:329] "allocated clusterIPs" service="push-notifications/push-dispatcher" clusterIPs={"IPv4":"10.96.240.56"}
+2026-09-04T12:46:48.364833078Z I0904 12:46:48.364726       1 alloc.go:329] "allocated clusterIPs" service="asset-pipeline/thumbnailer" clusterIPs={"IPv4":"10.96.56.21"}
+2026-09-04T12:46:48.382059654Z I0904 12:46:48.381975       1 alloc.go:329] "allocated clusterIPs" service="distributed-tracing/span-collector" clusterIPs={"IPv4":"10.96.197.205"}
+2026-09-04T12:46:48.393735769Z I0904 12:46:48.393492       1 alloc.go:329] "allocated clusterIPs" service="internal-dns/dns-forwarder" clusterIPs={"IPv4":"10.96.27.61"}
+2026-09-04T12:46:48.404953647Z I0904 12:46:48.404755       1 alloc.go:329] "allocated clusterIPs" service="loyalty-points/points-engine" clusterIPs={"IPv4":"10.96.89.19"}
+2026-09-04T12:46:48.419396555Z I0904 12:46:48.419318       1 alloc.go:329] "allocated clusterIPs" service="pricing-sync/price-worker" clusterIPs={"IPv4":"10.96.149.195"}
+2026-09-04T12:46:48.434581775Z I0904 12:46:48.434493       1 alloc.go:329] "allocated clusterIPs" service="media-transcode/transcode-worker" clusterIPs={"IPv4":"10.96.91.118"}
+2026-09-04T12:46:48.450325353Z I0904 12:46:48.450160       1 alloc.go:329] "allocated clusterIPs" service="partner-api/partner-gateway" clusterIPs={"IPv4":"10.96.53.130"}
+2026-09-04T12:46:48.461689810Z I0904 12:46:48.461595       1 alloc.go:329] "allocated clusterIPs" service="webhooks/webhook-relay" clusterIPs={"IPv4":"10.96.10.235"}
+2026-09-04T12:46:48.474508641Z I0904 12:46:48.474276       1 alloc.go:329] "allocated clusterIPs" service="currency-rates/rates-fetcher" clusterIPs={"IPv4":"10.96.205.44"}
+2026-09-04T12:46:54.404058482Z I0904 12:46:54.403976       1 alloc.go:329] "allocated clusterIPs" service="payments/payments-gateway" clusterIPs={"IPv4":"10.96.215.202"}

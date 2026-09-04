@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-crossns-decoys",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "payments",
+    "name": "payments-gateway"
+  },
+  "mechanism": "Service payments/payments-gateway has .spec.selector.app = \"payments-gateway\" while the pods of Deployment payments/payments-gateway-api are labelled app=payments-gateway-api, so no pod matches and Endpoints payments/payments-gateway holds no addresses; its ClusterIP 10.96.215.202 therefore has no backend and TCP connects to port 8080 are answered \"Connection refused\" instead of reaching the gateway. The selector should read app=payments-gateway-api to match the pod template labels.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

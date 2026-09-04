@@ -1,0 +1,20 @@
+Name:         geoip-api-config
+Namespace:    geo-routing
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+database_path:
+----
+/data/geoip.mmdb
+
+reload_hours:
+----
+24
+
+
+BinaryData
+====
+
+Events:  <none>

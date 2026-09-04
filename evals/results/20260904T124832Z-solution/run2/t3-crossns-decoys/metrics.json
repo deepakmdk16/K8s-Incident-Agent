@@ -1,0 +1,23 @@
+{
+  "case_id": "t3-crossns-decoys",
+  "arm": "solution",
+  "run_id": "34ea173ce896",
+  "model": "claude-opus-5",
+  "input_tokens": 66240,
+  "output_tokens": 4141,
+  "cost_usd": 0.155962,
+  "uncached_input_tokens": 12,
+  "cache_read_tokens": 62878,
+  "cache_write_tokens": 3350,
+  "duration_s": 54.07,
+  "turns": 6,
+  "tool_calls": 10,
+  "submit_attempts": 1,
+  "verdict_proposed": "confirmed",
+  "verdict_final": "confirmed",
+  "salvaged": false,
+  "evidence_items": 9,
+  "ruled_out_items": 4,
+  "verification_present": 3,
+  "verification_total": 3
+}

@@ -1,0 +1,24 @@
+Name:         edge-cache-config
+Namespace:    cdn-edge
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+cache_ttl_seconds:
+----
+600
+
+gzip_enabled:
+----
+true
+
+origin_host:
+----
+assets.internal
+
+
+BinaryData
+====
+
+Events:  <none>

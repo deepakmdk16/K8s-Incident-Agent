@@ -1,0 +1,54 @@
+Name:             nightly-export-29808767
+Namespace:        report-exports
+Selector:         batch.kubernetes.io/controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+Labels:           batch.kubernetes.io/controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+                  batch.kubernetes.io/job-name=nightly-export-29808767
+                  controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+                  job-name=nightly-export-29808767
+Annotations:      batch.kubernetes.io/cronjob-scheduled-timestamp: 2026-09-04T12:47:00Z
+Controlled By:    CronJob/nightly-export
+Parallelism:      1
+Completions:      1
+Completion Mode:  NonIndexed
+Suspend:          false
+Backoff Limit:    1
+Start Time:       Fri, 04 Sep 2026 18:17:00 +0530
+Pods Statuses:    0 Active (0 Ready) / 0 Succeeded / 2 Failed
+Pod Template:
+  Labels:  batch.kubernetes.io/controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+           batch.kubernetes.io/job-name=nightly-export-29808767
+           controller-uid=61b030de-bcc2-4dc5-bd20-0cbb73c67819
+           job-name=nightly-export-29808767
+  Containers:
+   exporter:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      if [ ! -f /export/destination.conf ]; then
+        echo "nightly-export: /export/destination.conf is missing"
+        exit 1
+      fi
+      echo "nightly-export: uploading to $(cat /export/destination.conf)"
+      
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /export from export-target (rw)
+  Volumes:
+   export-target:
+    Type:          EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:        
+    SizeLimit:     <unset>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type     Reason                Age   From            Message
+  ----     ------                ----  ----            -------
+  Normal   SuccessfulCreate      48s   job-controller  Created pod: nightly-export-29808767-5sr6q
+  Normal   SuccessfulCreate      38s   job-controller  Created pod: nightly-export-29808767-9vm8b
+  Warning  BackoffLimitExceeded  35s   job-controller  Job has reached the specified backoff limit

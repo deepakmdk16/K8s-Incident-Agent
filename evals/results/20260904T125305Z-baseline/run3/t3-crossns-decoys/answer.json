@@ -1,0 +1,6 @@
+{
+  "case_id": "t3-crossns-decoys",
+  "failing_resource": {"kind": "Service", "namespace": "payments", "name": "payments-gateway"},
+  "mechanism": "The Service payments/payments-gateway selects pods with label app=payments-gateway, but the backing workload's pods are labelled app=payments-gateway-api, so the Service has an empty endpoint set and kube-proxy refuses every connection to ClusterIP 10.96.215.202. storefront/checkout-api aliases that Service via an ExternalName and only writes its /tmp/ready readiness file after a successful gateway health check, so both replicas stay unready, the Deployment reports 0/2 available and takes no traffic, and order submissions fail.",
+  "verdict": "confirmed"
+}

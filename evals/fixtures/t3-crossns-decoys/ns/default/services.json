@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-09-02T03:01:34Z",
+        "labels": {
+          "component": "apiserver",
+          "provider": "kubernetes"
+        },
+        "name": "kubernetes",
+        "namespace": "default",
+        "resourceVersion": "251",
+        "uid": "5207f8f4-11fd-46e2-88f2-e0c1e0369ef3"
+      },
+      "spec": {
+        "clusterIP": "10.96.0.1",
+        "clusterIPs": [
+          "10.96.0.1"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "https",
+            "port": 443,
+            "protocol": "TCP",
+            "targetPort": 6443
+          }
+        ],
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

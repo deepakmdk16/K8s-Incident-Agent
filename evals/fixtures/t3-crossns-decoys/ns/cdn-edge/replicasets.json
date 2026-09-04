@@ -1,0 +1,92 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "ReplicaSet",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/desired-replicas": "1",
+          "deployment.kubernetes.io/max-replicas": "2",
+          "deployment.kubernetes.io/revision": "1"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "generation": 1,
+        "labels": {
+          "app": "edge-cache",
+          "pod-template-hash": "778d9548d7"
+        },
+        "name": "edge-cache-778d9548d7",
+        "namespace": "cdn-edge",
+        "ownerReferences": [
+          {
+            "apiVersion": "apps/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Deployment",
+            "name": "edge-cache",
+            "uid": "7a313ed5-6da3-495a-a1a5-8edf887fe0c1"
+          }
+        ],
+        "resourceVersion": "74785",
+        "uid": "db843b94-1d05-4548-9ccf-5b32faebc2af"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "edge-cache",
+            "pod-template-hash": "778d9548d7"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "edge-cache",
+              "pod-template-hash": "778d9548d7"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "-c",
+                  "echo 'edge-cache started'; exec sleep 2147483647"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "cache",
+                "resources": {
+                  "requests": {
+                    "cpu": "10m",
+                    "memory": "16Mi"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File"
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      },
+      "status": {
+        "availableReplicas": 1,
+        "fullyLabeledReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

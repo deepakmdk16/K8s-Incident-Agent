@@ -1,0 +1,60 @@
+Name:             metrics-collector-5d66786b84-5m2ft
+Namespace:        platform-metrics
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.3
+Start Time:       Fri, 04 Sep 2026 18:16:48 +0530
+Labels:           app=metrics-collector
+                  pod-template-hash=5d66786b84
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.46
+IPs:
+  IP:           10.244.0.46
+Controlled By:  ReplicaSet/metrics-collector-5d66786b84
+Containers:
+  collector:
+    Container ID:  containerd://a6b8c13c91ef270518172b7cbae66473812bc5454690f46a8b51b7e4bb8b0c42
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'metrics-collector started'; exec sleep 2147483647
+    State:          Running
+      Started:      Fri, 04 Sep 2026 18:16:48 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pc8cx (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-pc8cx:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  53s   default-scheduler  Successfully assigned platform-metrics/metrics-collector-5d66786b84-5m2ft to incident-lab-control-plane
+  Normal  Pulled     53s   kubelet            spec.containers{collector}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    53s   kubelet            spec.containers{collector}: Container created
+  Normal  Started    53s   kubelet            spec.containers{collector}: Container started

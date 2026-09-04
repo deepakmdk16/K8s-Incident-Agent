@@ -1,0 +1,513 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "creationTimestamp": "2026-09-04T12:47:00Z",
+        "generateName": "nightly-export-29808767-",
+        "generation": 1,
+        "labels": {
+          "batch.kubernetes.io/controller-uid": "61b030de-bcc2-4dc5-bd20-0cbb73c67819",
+          "batch.kubernetes.io/job-name": "nightly-export-29808767",
+          "controller-uid": "61b030de-bcc2-4dc5-bd20-0cbb73c67819",
+          "job-name": "nightly-export-29808767"
+        },
+        "name": "nightly-export-29808767-5sr6q",
+        "namespace": "report-exports",
+        "ownerReferences": [
+          {
+            "apiVersion": "batch/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Job",
+            "name": "nightly-export-29808767",
+            "uid": "61b030de-bcc2-4dc5-bd20-0cbb73c67819"
+          }
+        ],
+        "resourceVersion": "75183",
+        "uid": "3c824de7-6ad4-485b-875b-4f18956cff34"
+      },
+      "spec": {
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "if [ ! -f /export/destination.conf ]; then\n  echo \"nightly-export: /export/destination.conf is missing\"\n  exit 1\nfi\necho \"nightly-export: uploading to $(cat /export/destination.conf)\"\n"
+            ],
+            "image": "busybox:1.36",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "exporter",
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/export",
+                "name": "export-target"
+              },
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-gcddw",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "incident-lab-control-plane",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Never",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "export-target"
+          },
+          {
+            "name": "kube-api-access-gcddw",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "allocatedResources": {
+          "cpu": "10m",
+          "memory": "16Mi"
+        },
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:02Z",
+            "message": "pod sandbox is not ready",
+            "observedGeneration": 1,
+            "reason": "PodSandboxNotReady",
+            "status": "False",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:00Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:01Z",
+            "observedGeneration": 1,
+            "reason": "PodFailed",
+            "status": "False",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:01Z",
+            "observedGeneration": 1,
+            "reason": "PodFailed",
+            "status": "False",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:00Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "allocatedResources": {
+              "cpu": "10m",
+              "memory": "16Mi"
+            },
+            "containerID": "containerd://6606af557584f873f6263fb33dfe4db4cd2cd80389c6285f32779deebba2d228",
+            "image": "docker.io/library/busybox:1.36",
+            "imageID": "sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0",
+            "lastState": {},
+            "name": "exporter",
+            "ready": false,
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              }
+            },
+            "restartCount": 0,
+            "started": false,
+            "state": {
+              "terminated": {
+                "containerID": "containerd://6606af557584f873f6263fb33dfe4db4cd2cd80389c6285f32779deebba2d228",
+                "exitCode": 1,
+                "finishedAt": "2026-09-04T12:47:00Z",
+                "reason": "Error",
+                "startedAt": "2026-09-04T12:47:00Z"
+              }
+            },
+            "user": {
+              "linux": {
+                "gid": 0,
+                "supplementalGroups": [
+                  0,
+                  10
+                ],
+                "uid": 0
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/export",
+                "name": "export-target"
+              },
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-gcddw",
+                "readOnly": true,
+                "recursiveReadOnly": "Disabled"
+              }
+            ]
+          }
+        ],
+        "hostIP": "172.18.0.3",
+        "hostIPs": [
+          {
+            "ip": "172.18.0.3"
+          }
+        ],
+        "observedGeneration": 1,
+        "phase": "Failed",
+        "podIP": "10.244.0.71",
+        "podIPs": [
+          {
+            "ip": "10.244.0.71"
+          }
+        ],
+        "qosClass": "Burstable",
+        "resources": {
+          "requests": {
+            "memory": "16Mi"
+          }
+        },
+        "startTime": "2026-09-04T12:47:00Z"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "creationTimestamp": "2026-09-04T12:47:10Z",
+        "generateName": "nightly-export-29808767-",
+        "generation": 1,
+        "labels": {
+          "batch.kubernetes.io/controller-uid": "61b030de-bcc2-4dc5-bd20-0cbb73c67819",
+          "batch.kubernetes.io/job-name": "nightly-export-29808767",
+          "controller-uid": "61b030de-bcc2-4dc5-bd20-0cbb73c67819",
+          "job-name": "nightly-export-29808767"
+        },
+        "name": "nightly-export-29808767-9vm8b",
+        "namespace": "report-exports",
+        "ownerReferences": [
+          {
+            "apiVersion": "batch/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Job",
+            "name": "nightly-export-29808767",
+            "uid": "61b030de-bcc2-4dc5-bd20-0cbb73c67819"
+          }
+        ],
+        "resourceVersion": "75231",
+        "uid": "aabcafee-4251-4da4-8834-5486ee4bb40b"
+      },
+      "spec": {
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "if [ ! -f /export/destination.conf ]; then\n  echo \"nightly-export: /export/destination.conf is missing\"\n  exit 1\nfi\necho \"nightly-export: uploading to $(cat /export/destination.conf)\"\n"
+            ],
+            "image": "busybox:1.36",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "exporter",
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/export",
+                "name": "export-target"
+              },
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-c9pcl",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "incident-lab-control-plane",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Never",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "export-target"
+          },
+          {
+            "name": "kube-api-access-c9pcl",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "allocatedResources": {
+          "cpu": "10m",
+          "memory": "16Mi"
+        },
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:12Z",
+            "message": "pod sandbox is not ready",
+            "observedGeneration": 1,
+            "reason": "PodSandboxNotReady",
+            "status": "False",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:10Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:11Z",
+            "observedGeneration": 1,
+            "reason": "PodFailed",
+            "status": "False",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:11Z",
+            "observedGeneration": 1,
+            "reason": "PodFailed",
+            "status": "False",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-04T12:47:10Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "allocatedResources": {
+              "cpu": "10m",
+              "memory": "16Mi"
+            },
+            "containerID": "containerd://435c35a386b6d303f70202fc9581845f2f4f19d68429c7d16ec855bcfadbddae",
+            "image": "docker.io/library/busybox:1.36",
+            "imageID": "sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0",
+            "lastState": {},
+            "name": "exporter",
+            "ready": false,
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              }
+            },
+            "restartCount": 0,
+            "started": false,
+            "state": {
+              "terminated": {
+                "containerID": "containerd://435c35a386b6d303f70202fc9581845f2f4f19d68429c7d16ec855bcfadbddae",
+                "exitCode": 1,
+                "finishedAt": "2026-09-04T12:47:10Z",
+                "reason": "Error",
+                "startedAt": "2026-09-04T12:47:10Z"
+              }
+            },
+            "user": {
+              "linux": {
+                "gid": 0,
+                "supplementalGroups": [
+                  0,
+                  10
+                ],
+                "uid": 0
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/export",
+                "name": "export-target"
+              },
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-c9pcl",
+                "readOnly": true,
+                "recursiveReadOnly": "Disabled"
+              }
+            ]
+          }
+        ],
+        "hostIP": "172.18.0.3",
+        "hostIPs": [
+          {
+            "ip": "172.18.0.3"
+          }
+        ],
+        "observedGeneration": 1,
+        "phase": "Failed",
+        "podIP": "10.244.0.72",
+        "podIPs": [
+          {
+            "ip": "10.244.0.72"
+          }
+        ],
+        "qosClass": "Burstable",
+        "resources": {
+          "requests": {
+            "memory": "16Mi"
+          }
+        },
+        "startTime": "2026-09-04T12:47:10Z"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

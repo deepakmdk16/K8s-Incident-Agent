@@ -1,0 +1,19 @@
+Name:         flag-server-9knkd
+Namespace:    feature-flags
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=flag-server
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-09-04T12:46:48Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.54
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/flag-server-546bfb8f8-mchb4
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

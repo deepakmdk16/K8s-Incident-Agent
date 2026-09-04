@@ -1,0 +1,13 @@
+Name:         metrics-collector
+Namespace:    platform-metrics
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  <none>
+Subsets:
+  Addresses:          10.244.0.46
+  NotReadyAddresses:  <none>
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

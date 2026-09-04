@@ -1,0 +1,107 @@
+Name:               incident-lab-control-plane
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=arm64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=arm64
+                    kubernetes.io/hostname=incident-lab-control-plane
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/control-plane=
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Wed, 02 Sep 2026 08:31:33 +0530
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  incident-lab-control-plane
+  AcquireTime:     <unset>
+  RenewTime:       Fri, 04 Sep 2026 18:17:02 +0530
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Fri, 04 Sep 2026 18:16:31 +0530   Wed, 02 Sep 2026 08:31:33 +0530   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Fri, 04 Sep 2026 18:16:31 +0530   Wed, 02 Sep 2026 08:31:33 +0530   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Fri, 04 Sep 2026 18:16:31 +0530   Wed, 02 Sep 2026 08:31:33 +0530   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Fri, 04 Sep 2026 18:16:31 +0530   Wed, 02 Sep 2026 08:31:53 +0530   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.3
+  Hostname:    incident-lab-control-plane
+Capacity:
+  cpu:                6
+  ephemeral-storage:  20955348992
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  hugepages-32Mi:     0
+  hugepages-64Ki:     0
+  memory:             12220316Ki
+  pods:               110
+Allocatable:
+  cpu:                6
+  ephemeral-storage:  20955348992
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  hugepages-32Mi:     0
+  hugepages-64Ki:     0
+  memory:             12220316Ki
+  pods:               110
+System Info:
+  Machine ID:                 193fa6efb45c453c8a5007398a14cb03
+  System UUID:                62c13cea-d76e-4880-a03e-43e076cb6996
+  Boot ID:                    4ddb36dc-01a0-4313-b980-35e6df831de3
+  Kernel Version:             6.8.0-117-generic
+  OS Image:                   Debian GNU/Linux 13 (trixie)
+  Operating System:           linux
+  Architecture:               arm64
+  Container Runtime Version:  containerd://2.3.4
+  Kubelet Version:            v1.37.0
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+ProviderID:                   kind://docker/incident-lab/incident-lab-control-plane
+Non-terminated Pods:          (34 in total)
+  Namespace                   Name                                                  CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                  ------------  ----------  ---------------  -------------  ---
+  ab-testing                  experiment-api-787dddcc77-r25jz                       10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  asset-pipeline              thumbnailer-85d4959957-98ckz                          10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         16s
+  cdn-edge                    edge-cache-778d9548d7-79v2h                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  currency-rates              rates-fetcher-64c66dfb56-2b6pn                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         14s
+  distributed-tracing         span-collector-98dd7779b-ztlbh                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         16s
+  email-delivery              smtp-relay-558df49878-fcqvq                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  feature-flags               flag-server-546bfb8f8-mchb4                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  geo-routing                 geoip-api-779d7f574c-82dlh                            10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         16s
+  internal-dns                dns-forwarder-66fc5c9dd9-fqmvw                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         16s
+  kube-system                 coredns-559f6c778d-9lrfg                              100m (1%)     0 (0%)      70Mi (0%)        170Mi (1%)     2d9h
+  kube-system                 coredns-559f6c778d-jsqvf                              100m (1%)     0 (0%)      70Mi (0%)        170Mi (1%)     2d9h
+  kube-system                 etcd-incident-lab-control-plane                       100m (1%)     0 (0%)      100Mi (0%)       0 (0%)         2d9h
+  kube-system                 kindnet-d6vmg                                         100m (1%)     0 (0%)      50Mi (0%)        0 (0%)         2d9h
+  kube-system                 kube-apiserver-incident-lab-control-plane             250m (4%)     0 (0%)      0 (0%)           0 (0%)         2d9h
+  kube-system                 kube-controller-manager-incident-lab-control-plane    200m (3%)     0 (0%)      0 (0%)           0 (0%)         2d9h
+  kube-system                 kube-proxy-4bpcr                                      0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d9h
+  kube-system                 kube-scheduler-incident-lab-control-plane             100m (1%)     0 (0%)      0 (0%)           0 (0%)         2d9h
+  local-path-storage          local-path-provisioner-75f7fc7dc5-bgp5f               0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d9h
+  log-aggregation             log-shipper-598b9c9858-cbp79                          10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  loyalty-points              points-engine-84666f6c5f-p65dh                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         15s
+  media-transcode             transcode-worker-d7bbb9c-kl5k4                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         15s
+  message-broker              queue-server-5c879fdf4-cbs48                          10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  partner-api                 partner-gateway-cbdcb8f65-qzqxx                       10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         15s
+  payments                    payments-gateway-api-9c78bc7b-qcwwf                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         11s
+  payments                    payments-gateway-api-9c78bc7b-twfm4                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         11s
+  platform-metrics            metrics-collector-5d66786b84-5m2ft                    10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  pricing-sync                price-worker-55864d8565-vj2tw                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         15s
+  push-notifications          push-dispatcher-657b86bd4d-t2562                      10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         16s
+  release-canary              canary-runner-54bdcc6cc-dc9f2                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         14s
+  session-store               session-cache-5f875fd7c7-459xl                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  storefront                  checkout-api-7db48f7c7b-6fb2v                         0 (0%)        0 (0%)      0 (0%)           0 (0%)         11s
+  storefront                  checkout-api-7db48f7c7b-g7299                         0 (0%)        0 (0%)      0 (0%)           0 (0%)         11s
+  user-profiles               profile-api-78bcbb5655-bsp87                          10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         17s
+  webhooks                    webhook-relay-5449d69858-vqmz5                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         15s
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                1160m (19%)  0 (0%)
+  memory             626Mi (5%)   340Mi (2%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+  hugepages-32Mi     0 (0%)       0 (0%)
+  hugepages-64Ki     0 (0%)       0 (0%)
+Events:              <none>

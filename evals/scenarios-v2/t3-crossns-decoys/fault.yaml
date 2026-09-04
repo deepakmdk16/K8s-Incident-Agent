@@ -1,0 +1,160 @@
+# t3-crossns-decoys — the T3 controlled variant of
+# t2-crossns-externalname-selector. The Kubernetes objects below are
+# COPIED VERBATIM from that case: the only difference between the two
+# fixtures is the noise pack (evals/scenarios-v2/_noise/, which adds three
+# genuinely-broken irrelevant workloads). Any score difference between
+# them is therefore attributable to the decoys and nothing else.
+#
+# t2-crossns-externalname-selector — T2, cross-namespace attribution.
+#
+# Atom: service-selector-mismatch, one namespace away from the page.
+#
+# Mechanism: storefront/checkout-api gates its own readiness on the payment
+#   gateway answering. It reaches the gateway through storefront/payments-
+#   gateway, an ExternalName alias whose target is the payments namespace.
+#   There, service/payments-gateway selects app=payments-gateway while the
+#   gateway pods carry app=payments-gateway-api, so its Endpoints object stays
+#   empty and every checkout probe fails. The payments pods stay Ready
+#   throughout: the workload is healthy, the Service in front of it is not.
+#
+# Wait condition (wait.sh): Endpoints payments/payments-gateway has no
+#   addresses AND both payments pods are Ready AND checkout-api has logged the
+#   UNREACHABLE line.
+#
+# Gold failing resource: service/payments-gateway in namespace *payments* —
+#   deliberately outside the paged namespace (storefront). Correcting the
+#   selector populates Endpoints, the probe succeeds, checkout goes Ready
+#   (counterfactual entrypoint, authoring contract rule 1).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: storefront
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: payments
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: checkout-scripts
+  namespace: storefront
+data:
+  run.sh: |
+    set -u
+    UPSTREAM="http://payments-gateway:8080/health"
+    echo "checkout-api starting; payment gateway endpoint ${UPSTREAM}"
+    while :; do
+      if wget -q -T 3 -O /dev/null "${UPSTREAM}"; then
+        touch /tmp/ready
+        echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') payment gateway reachable - accepting checkout submissions"
+      else
+        rm -f /tmp/ready
+        echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') payment gateway UNREACHABLE at ${UPSTREAM} - holding checkout submissions"
+      fi
+      sleep 5
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-api
+  namespace: storefront
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: checkout-api
+  template:
+    metadata:
+      labels:
+        app: checkout-api
+    spec:
+      containers:
+        - name: checkout-api
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "/app/run.sh"]
+          volumeMounts:
+            - name: scripts
+              mountPath: /app
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "test -f /tmp/ready"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 2
+      volumes:
+        - name: scripts
+          configMap:
+            name: checkout-scripts
+---
+# The alias the storefront team calls. Correct: it names the payments Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-gateway
+  namespace: storefront
+spec:
+  type: ExternalName
+  externalName: payments-gateway.payments.svc.cluster.local
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-content
+  namespace: payments
+data:
+  health: |
+    ok
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-gateway-api
+  namespace: payments
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payments-gateway-api
+  template:
+    metadata:
+      labels:
+        app: payments-gateway-api
+    spec:
+      containers:
+        - name: gateway
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["httpd", "-f", "-p", "8080", "-h", "/www"]
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: content
+              mountPath: /www
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: content
+          configMap:
+            name: gateway-content
+---
+# THE FAULT: selects app=payments-gateway; the pods above carry
+# app=payments-gateway-api. Endpoints stays empty.
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-gateway
+  namespace: payments
+spec:
+  selector:
+    app: payments-gateway
+  ports:
+    - port: 8080
+      targetPort: 8080

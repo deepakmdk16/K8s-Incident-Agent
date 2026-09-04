@@ -83,7 +83,11 @@ done
 # --- T3 scenarios run against the noise pack (README: capture protocol)
 case "$ID" in
   t3-*)
-    NOISE="$ROOT/evals/scenarios/_noise"
+    # A scenario root brings its own noise pack if it ships one; the frozen
+    # pack is the fallback, so t3-* cases under evals/scenarios/ are unaffected.
+    NOISE="$ROOT/$SCEN_ROOT/_noise"
+    [ -s "$NOISE/noise.yaml" ] || NOISE="$ROOT/evals/scenarios/_noise"
+    echo "inject: noise pack $NOISE"
     [ -s "$NOISE/noise.yaml" ] || die "T3 scenario but $NOISE/noise.yaml missing"
     [ -s "$NOISE/namespaces.txt" ] || die "T3 scenario but $NOISE/namespaces.txt missing"
     echo "inject: applying noise pack"

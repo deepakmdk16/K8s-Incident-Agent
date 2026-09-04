@@ -1,0 +1,7 @@
+[PAGE] SEV1 CheckoutUnavailable — storefront
+Customers cannot complete purchases: the cart page loads, but submitting an
+order returns an error and completed-order volume has been flat at zero for
+25 minutes. Deployment storefront/checkout-api reports 0 of 2 replicas Ready
+and is taking no traffic. The storefront team shipped no release today.
+Alert source: order-volume monitor. Find the root cause and propose a
+remediation.

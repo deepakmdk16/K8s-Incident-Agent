@@ -1,0 +1,11 @@
+{
+  "case_id": "t3-crossns-decoys",
+  "failing_resource": {
+    "kind": "Service",
+    "namespace": "payments",
+    "name": "payments-gateway"
+  },
+  "mechanism": "Service payments/payments-gateway has .spec.selector set to {app: payments-gateway}, while the pods that serve the gateway are labelled app=payments-gateway-api by Deployment payments/payments-gateway-api, so no pod matches; Endpoints payments/payments-gateway is created with no subsets (\"endpointAddresses=0\") and kube-proxy has nothing to forward to, so TCP connections to its clusterIP 10.96.215.202 on port 8080 are answered with \"Connection refused\".",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

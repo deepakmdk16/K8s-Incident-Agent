@@ -1,0 +1,40 @@
+Name:                   model-trainer
+Namespace:              batch-compute
+CreationTimestamp:      Fri, 04 Sep 2026 18:16:48 +0530
+Labels:                 app=model-trainer
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=model-trainer
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=model-trainer
+  Containers:
+   trainer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'model-trainer started'; exec sleep 2147483647
+    Requests:
+      cpu:         512
+      memory:      64Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   model-trainer-7bd699964d (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  17s   deployment-controller  Scaled up replica set model-trainer-7bd699964d from 0 to 1

@@ -1,0 +1,42 @@
+Name:           local-path-provisioner-75f7fc7dc5
+Namespace:      local-path-storage
+Selector:       app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+Labels:         app=local-path-provisioner
+                pod-template-hash=75f7fc7dc5
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/local-path-provisioner
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=local-path-provisioner
+                    pod-template-hash=75f7fc7dc5
+  Service Account:  local-path-provisioner-service-account
+  Containers:
+   local-path-provisioner:
+    Image:      docker.io/kindest/local-path-provisioner:v20260820-69b56db7
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      local-path-provisioner
+      --debug
+      start
+      --helper-image
+      docker.io/kindest/local-path-helper:v20260131-7181c60a
+      --config
+      /etc/config/config.json
+    Environment:
+      POD_NAMESPACE:       (v1:metadata.namespace)
+      CONFIG_MOUNT_PATH:  /etc/config/
+    Mounts:
+      /etc/config/ from config-volume (rw)
+  Volumes:
+   config-volume:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          local-path-config
+    Optional:      false
+  Node-Selectors:  kubernetes.io/os=linux
+  Tolerations:     node-role.kubernetes.io/control-plane:NoSchedule
+                   node-role.kubernetes.io/master:NoSchedule
+Events:            <none>

@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.65"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "rates-fetcher-64c66dfb56-2b6pn",
+            "namespace": "currency-rates",
+            "uid": "d23eaee5-b967-4788-bc06-697e6777250d"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-09-04T12:46:51Z"
+        },
+        "creationTimestamp": "2026-09-04T12:46:48Z",
+        "generateName": "rates-fetcher-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "rates-fetcher"
+        },
+        "name": "rates-fetcher-2j2ms",
+        "namespace": "currency-rates",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "rates-fetcher",
+            "uid": "8660aed8-e981-4879-b637-3c41dfc41f9a"
+          }
+        ],
+        "resourceVersion": "75018",
+        "uid": "c79a2343-8c8f-4c1a-bd06-26985f0fe1f4"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}
