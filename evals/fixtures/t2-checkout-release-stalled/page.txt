@@ -1,0 +1,6 @@
+[PAGE] SEV2 CheckoutReleaseStalled — checkout
+The checkout-api release that began 25 minutes ago has not completed: the new
+version has reached 0 of 3 replicas, and deployment checkout/checkout-api is
+serving on 2 replicas instead of 3, so checkout p95 latency is elevated. The
+checkout team changed only the version number, and no other team shipped today.
+Alert source: release watchdog. Find the root cause and propose a remediation.

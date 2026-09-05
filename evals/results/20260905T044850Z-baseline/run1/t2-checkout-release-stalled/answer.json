@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "failing_resource": {"kind": "ValidatingWebhookConfiguration", "namespace": "", "name": "policy-guard (webhook validate.policy-guard.platform.internal; confirm exact object name via kubectl get validatingwebhookconfigurations)"},
+  "mechanism": "The ValidatingWebhookConfiguration validate.policy-guard.platform.internal intercepts pod CREATE calls but its backing Service platform-policy/policy-guard no longer exists, so the API server cannot reach it and, under a Fail failure policy, rejects every pod creation with 'Internal error occurred: failed calling webhook'. The checkout-api ReplicaSet controller therefore cannot create any replacement pod, leaving the release at 0 new replicas and the deployment serving 2 of 3 with elevated p95 latency. Deleting or scoping down this webhook configuration restores pod admission and the stalled rollout completes on its own.",
+  "verdict": "confirmed"
+}

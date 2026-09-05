@@ -1,0 +1,54 @@
+{
+  "arm": "rules",
+  "runs": 1,
+  "started_utc": "20260905T044845Z",
+  "scorer": "evals.scoring_v2",
+  "model_pinned": null,
+  "sampling": "deterministic: no model is called",
+  "pooled": {
+    "overall": {
+      "correct": 0,
+      "cases": 1
+    },
+    "by_tier": {
+      "T2": {
+        "correct": 0,
+        "cases": 1
+      }
+    },
+    "by_verdict": {
+      "confirmed": {
+        "correct": 0,
+        "cases": 1
+      }
+    },
+    "confirmed_wrong": 1
+  },
+  "per_run": {
+    "1": {
+      "overall": {
+        "correct": 0,
+        "cases": 1
+      },
+      "by_tier": {
+        "T2": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "by_verdict": {
+        "confirmed": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 1
+    }
+  },
+  "totals": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0.0,
+    "cases_without_measured_cost": 0
+  }
+}

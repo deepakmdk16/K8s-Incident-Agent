@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "failing_resource": {"kind": "ValidatingWebhookConfiguration", "namespace": "", "name": "policy-guard (cluster-scoped object containing webhook validate.policy-guard.platform.internal)"},
+  "mechanism": "A cluster-scoped validating admission webhook, validate.policy-guard.platform.internal, points its clientConfig at Service platform-policy/policy-guard, which does not exist, and its failure policy is Fail, so the API server rejects every pod CREATE in the checkout namespace with 'Internal error occurred: failed calling webhook'. The new ReplicaSet checkout-api-64fb54b496 therefore reached 0 of 3 pods (0 Running / 0 Waiting), and because the rollout uses maxUnavailable:1 with maxSurge:0 an old pod was already retired to make room, leaving the deployment serving 2 of 3 replicas and driving p95 latency up. Removing the orphaned webhook configuration or setting its failurePolicy to Ignore restores pod admission and lets the rollout finish.",
+  "verdict": "confirmed"
+}

@@ -7,12 +7,14 @@ from pathlib import Path
 
 import pytest
 
+from evals import scoring, scoring_v2
 from evals.run_eval import (
     FROZEN_ROOT,
     SCENARIO_ROOTS,
     ArmFn,
     Case,
     InfrastructureError,
+    aggregate,
     discover_cases,
     find_gold,
     run_case,
@@ -154,3 +156,83 @@ def test_an_additive_root_is_discovered_separately() -> None:
 def test_find_gold_locates_a_case_in_either_root() -> None:
     assert find_gold("t1-crashloop-missing-env") == GOLD
     assert find_gold("no-such-case") is None
+
+
+# --- scorer selection by root (2026-09-04) ------------------------------------
+
+
+def test_each_root_is_scored_by_its_own_scorer() -> None:
+    """The frozen set is never scored by anything but the frozen module."""
+    for case in discover_cases():
+        assert isinstance(case.gold, scoring.Gold)
+        assert case.scorer == "evals.scoring"
+    for case in discover_cases(root="evals/scenarios-v2"):
+        assert isinstance(case.gold, scoring_v2.Gold)
+        assert case.scorer == "evals.scoring_v2"
+
+
+def test_aggregate_matches_the_frozen_aggregate_on_frozen_rows() -> None:
+    def row(tier: str, verdict: str, ok: bool) -> scoring.CaseScore:
+        return scoring.CaseScore(
+            case_id=f"c-{tier}-{verdict}-{ok}",
+            tier=tier,
+            verdict=verdict,
+            resource_correct=ok,
+            matched_classes=frozenset(),
+            class_correct=ok,
+        )
+
+    rows = [
+        row("T1", "confirmed", ok=True),
+        row("T1", "confirmed", ok=False),
+        row("T2", "probable", ok=True),
+        row("T3", "inconclusive", ok=False),
+    ]
+    ours, frozen = aggregate(list(rows)), scoring.aggregate(rows)
+    assert (ours.overall.cases, ours.overall.correct) == (
+        frozen.overall.cases,
+        frozen.overall.correct,
+    )
+    assert {t: (c.cases, c.correct) for t, c in ours.by_tier.items()} == {
+        t: (c.cases, c.correct) for t, c in frozen.by_tier.items()
+    }
+    assert {v: (c.cases, c.correct) for v, c in ours.by_verdict.items()} == {
+        v: (c.cases, c.correct) for v, c in frozen.by_verdict.items()
+    }
+    assert ours.confirmed_wrong == frozen.confirmed_wrong == 1
+
+
+def test_a_v2_case_scores_a_cluster_scoped_answer_through_the_v2_scorer(tmp_path: Path) -> None:
+    gold = scoring_v2.Gold(
+        case_id="t9-webhook",
+        tier="T2",
+        failing_resource=scoring.FailingResource(
+            "validatingwebhookconfiguration", "", "workload-standards"
+        ),
+        fault_class=scoring_v2.FaultClass.WEBHOOK_ADMISSION_BLOCK,
+        mechanism_summary="x",
+        decisive_evidence="y",
+        remediation_summary="z",
+    )
+    case = Case(case_id="t9-webhook", fixture=GOLD.parent, gold=gold)
+    answer = {
+        "case_id": "t9-webhook",
+        "failing_resource": {
+            "kind": "ValidatingWebhookConfiguration",
+            "namespace": "cluster-scoped",
+            "name": "workload-standards",
+        },
+        "mechanism": (
+            "The validating webhook's service does not exist, so with failurePolicy Fail the "
+            "API server refuses every pod create with 'failed calling webhook'."
+        ),
+        "verdict": "probable",
+    }
+    outcome = run_case(_arm_writing(answer, REPORT), case, 1, tmp_path / "w")
+    assert outcome.error is None
+    assert outcome.score is not None and outcome.score.root_cause_correct
+    assert outcome.row()["matched_classes"] == ["webhook-admission-block"]
+    write_outputs(tmp_path, "rules", 1, [outcome], "20260904T000000Z", "evals.scoring_v2")
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    assert summary["scorer"] == "evals.scoring_v2"
+    assert "- scorer: evals.scoring_v2" in (tmp_path / "summary.md").read_text()

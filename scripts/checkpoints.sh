@@ -76,6 +76,16 @@ if [ -d "$TARGET/evals/fixtures" ]; then
     1) ok "fixtures free of k8s credential material" ;;
     *) fail "fixture credential scan ERRORED (grep rc>=2) — cannot certify" ;;
   esac
+  # Pipeline metadata (2026-09-04): inject.sh labels cluster-scoped scenario
+  # objects incident-lab.dev/scenario=<id> so the reset can delete them, and
+  # capture.sh scrubs that label out by construction. Left in, it would tell
+  # every arm which object the scenario planted — an answer key in a label.
+  grep -rIn 'incident-lab\.dev/' "$TARGET/evals/fixtures" >/dev/null 2>&1
+  case $? in
+    0) fail "pipeline label incident-lab.dev/ present in evals/fixtures/ — capture.sh scrub failed" ;;
+    1) ok "fixtures free of pipeline metadata" ;;
+    *) fail "fixture pipeline-label scan ERRORED (grep rc>=2) — cannot certify" ;;
+  esac
 else
   skip "no evals/fixtures/ — k8s fixture scan inactive"
 fi
@@ -137,6 +147,15 @@ if [ -d "$TARGET/evals/fixtures" ]; then
     for req in cluster/get-all.txt cluster/events.json cluster/nodes.json cluster/version.json; do
       [ -s "$FIX/$req" ] || MISS="$MISS $req"
     done
+    # capture schema 2 (evals/capture.sh) added the admission webhook
+    # configurations to the cluster roster; a schema-2 fixture without them
+    # was captured by a script that drifted from solution/fixture.py's roster.
+    SCHEMA="$(sed -nE 's/^schema: *([0-9]+) *$/\1/p' "$FIX/scenario.yaml" 2>/dev/null | head -n 1)"
+    if [ "${SCHEMA:-1}" -ge 2 ]; then
+      for req in cluster/validatingwebhookconfigurations.json cluster/mutatingwebhookconfigurations.json; do
+        [ -s "$FIX/$req" ] || MISS="$MISS $req"
+      done
+    fi
     find "$FIX" -name 'pods.json' -size +1c 2>/dev/null | grep -q . || MISS="$MISS ns/*/pods.json"
     find "$FIX" -path '*/describe/*' -name '*.txt' -size +1c 2>/dev/null | grep -q . || MISS="$MISS describes"
     [ -n "$MISS" ] && BADFIX="$BADFIX

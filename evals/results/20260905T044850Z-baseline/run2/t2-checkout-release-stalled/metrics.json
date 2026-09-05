@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "arm": "baseline",
+  "run_id": "c728ffeb3cb4",
+  "model": "claude-opus-5",
+  "input_tokens": 4426,
+  "output_tokens": 4524,
+  "cost_usd": 0.13523,
+  "duration_s": 57.99,
+  "prompt_chars": 9536,
+  "prompt_sections": 2
+}

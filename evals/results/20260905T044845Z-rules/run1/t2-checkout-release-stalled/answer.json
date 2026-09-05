@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "checkout",
+    "name": "checkout-api"
+  },
+  "mechanism": "The Deployment rollout is not progressing; the new ReplicaSet cannot reach its desired replica count.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

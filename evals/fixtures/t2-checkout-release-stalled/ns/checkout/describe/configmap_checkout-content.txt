@@ -1,0 +1,22 @@
+Name:         checkout-content
+Namespace:    checkout
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+health:
+----
+ok
+
+
+index.html:
+----
+checkout
+
+
+
+BinaryData
+====
+
+Events:  <none>

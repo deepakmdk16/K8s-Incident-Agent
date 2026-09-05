@@ -140,6 +140,31 @@ disclosed, is the method.
    tools + verify-before-assert loop. Anything later must pass one test:
    "moves a number more than an hour of hardening would?".
 
+## Addendum 2026-09-04 — a 13th fault class, in an additive scorer only
+
+**Condition that fired:** the frozen 12-case set is saturated (solution 36/36,
+CHANGELOG [8]) and two pre-registered attempts to create headroom without new
+fault machinery failed informatively ([13], [14]): difficulty that is only
+presentational does not bite. The next case class has to make the cause
+structurally absent from what an arm can read, and the deterministic roster
+above (design requirement 3) has no such atom.
+
+**What changes:** one class, `webhook-admission-block` (an admission webhook
+the API server cannot call, `failurePolicy: Fail`, refusing the create it
+intercepts; the failing resource is the cluster-scoped webhook configuration),
+defined in `evals/scoring_v2.py` and scored only for cases under
+`evals/scenarios-v2/`. The frozen roster, the frozen rubric (`evals/scoring.py`),
+the frozen 12-case set and the primary metric are untouched; the v2 scorer
+re-keys the frozen tables by value and a parity test requires identical results
+on every frozen phrasing. A cluster-scoped gold writes `"namespace": ""` and the
+v2 scorer treats every "no namespace" spelling as equal for a cluster-scoped
+kind. The v2 enum is under the same never-in-agent-code invariant as the frozen
+one (`tests/test_scoring_v2.py`).
+
+**Method:** per-arm predictions and the adopt/next rule are written before the
+scored run in `docs/experiments/2026-09-04-webhook-outage.md`. No v2 bar block
+is added to `evals/reported.json` on this case's evidence.
+
 ## Kill conditions (→ abandon or harden, per item — none fired)
 
 1. First checkpoint: snapshot harness + **≥2 recorded scenarios** + scored

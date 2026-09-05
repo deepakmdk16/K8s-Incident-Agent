@@ -19,13 +19,42 @@ RBAC = FIXTURES / "t2-rbac-sync-forbidden"
 
 
 def test_every_fixture_has_the_same_captured_kinds() -> None:
-    """The tool surface is uniform: a kind that resolves on one case resolves on all."""
+    """The tool surface is uniform: a kind that resolves on one case resolves on all.
+
+    Cluster kinds are checked against what the fixture's capture schema
+    guarantees: the frozen schema-1 snapshots are byte-identical forever and
+    cannot gain the kinds capture schema 2 added, so on them those kinds read as
+    "not captured" (in-band error) rather than as present-and-empty.
+    """
     for case in sorted(p for p in FIXTURES.iterdir() if p.is_dir()):
         for ns in fx.namespaces(case):
             present = {p.stem for p in (case / "ns" / ns).glob("*.json")}
             assert present == set(fx.NAMESPACED_KINDS), f"{case.name}/{ns}"
         cluster = {p.stem for p in (case / "cluster").glob("*.json")}
-        assert set(fx.CLUSTER_KINDS) <= cluster, case.name
+        assert fx.expected_cluster_kinds(case) <= cluster, case.name
+
+
+def test_capture_schema_is_read_from_the_ledger() -> None:
+    assert fx.capture_schema(RBAC) == 1
+
+
+def test_capture_schema_missing_line_is_an_error_not_schema_one(tmp_path: Path) -> None:
+    broken = tmp_path / "broken"
+    broken.mkdir()
+    (broken / "scenario.yaml").write_text("id: broken\nmode: captured\n", encoding="utf-8")
+    with pytest.raises(fx.FixtureError, match="no capture schema"):
+        fx.capture_schema(broken)
+
+
+def test_schema_two_kinds_resolve_and_read_as_not_captured_on_a_frozen_fixture() -> None:
+    """The lockstep pair moved together: the reader knows the kind, the frozen
+    snapshot honestly does not have it."""
+    assert fx.normalize_kind("ValidatingWebhookConfiguration") == "validatingwebhookconfigurations"
+    assert fx.normalize_kind("mutatingwebhookconfigurations") == "mutatingwebhookconfigurations"
+    assert fx.CLUSTER_KINDS_SINCE_SCHEMA_2.issubset(fx.CLUSTER_KINDS)
+    assert fx.expected_cluster_kinds(RBAC).isdisjoint(fx.CLUSTER_KINDS_SINCE_SCHEMA_2)
+    with pytest.raises(fx.FixtureError, match="not captured in this snapshot"):
+        fx.load_kind(RBAC, "validatingwebhookconfigurations")
 
 
 @pytest.mark.parametrize(
