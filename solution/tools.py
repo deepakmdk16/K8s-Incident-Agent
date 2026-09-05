@@ -253,10 +253,20 @@ def _project(kind: str, item: dict[str, Any]) -> dict[str, Any]:
     return projected
 
 
+def serves_kind(kind: str) -> bool:
+    """True iff get_object can list and read objects of this kind.
+
+    The validator lists the names present for a kind only when this is true:
+    for a kind no read tool serves, "Present: <names>" would hand the agent a
+    fact it cannot otherwise reach (docs/failure-modes.md 2026-09-05).
+    """
+    return fx.normalize_kind(kind) in fx.NAMESPACED_KINDS
+
+
 def render_object(fixture: Path, namespace: str | None, kind: str, name: str | None) -> str:
     resolved = fx.normalize_kind(kind)
-    if resolved in fx.CLUSTER_KINDS:
-        raise fx.FixtureError(
+    if not serves_kind(resolved):
+        raise fx.NotServedError(
             f"{resolved} is cluster-scoped and not served here; "
             "use list_namespaces, cluster_capacity or get_events"
         )
@@ -366,6 +376,15 @@ def _externalname_aliases(fixture: Path, namespace: str, name: str) -> list[str]
 
 def render_consumers(fixture: Path, namespace: str, kind: str, name: str) -> str:
     resolved = fx.normalize_kind(kind)
+    if not serves_kind(resolved):
+        # The trailer below lists the objects of the kind that exist; for a
+        # cluster-scoped kind load_kind would read the cluster file regardless
+        # of namespace and enumerate names no read tool serves (review,
+        # 2026-09-05: the third oracle).
+        raise fx.NotServedError(
+            f"{resolved} is cluster-scoped and not served here; "
+            "find_consumers reads namespaced kinds only"
+        )
     lines: list[str] = []
     for label, workload in _pod_templates(fixture, namespace):
         spec = _obj(workload, "spec", "template", "spec")
@@ -482,16 +501,64 @@ def namespaces_touched(name: str, arguments: Mapping[str, object]) -> frozenset[
     return frozenset({namespace}) if isinstance(namespace, str) and namespace else frozenset({""})
 
 
+NOT_SERVED_PREFIX = "ERROR (not served by this snapshot; says nothing about the cluster): "
+
+
+def is_not_served(output: str) -> bool:
+    """True for a tool result that reports a limit of the tools, not cluster state."""
+    return output.startswith(NOT_SERVED_PREFIX)
+
+
+def is_error(output: str) -> bool:
+    """True for any tool result that is an error, served or not (the model's is_error flag)."""
+    return output.startswith("ERROR")
+
+
+# The renderers' "nothing here" shapes. They echo the caller's arguments — a
+# name the agent typed comes straight back — so such an output can never
+# anchor a claim ABOUT that object (review, 2026-09-05).
+_EMPTY_RESULT_PREFIXES: tuple[str, ...] = ("0 ", "no workload in ")
+
+
+def is_evidence(output: str) -> bool:
+    """True iff a tool result shows cluster state rather than an error or an empty echo."""
+    return (
+        bool(output.strip())
+        and not is_error(output)
+        and not output.startswith(_EMPTY_RESULT_PREFIXES)
+    )
+
+
+def _reject_unknown_arguments(name: str, arguments: Mapping[str, object]) -> None:
+    """An argument no tool consumes must not ride along in the recorded call.
+
+    dispatch used to ignore keys a tool does not declare, so a call could carry
+    `name=<object>` on get_events or list_namespaces, re-execute to real cluster
+    state, and be read by the validator as a call ABOUT that object
+    (red-team, 2026-09-05). Unknown keys are refused as not-served: the tool
+    cannot do what was asked, and the result is evidence of nothing.
+    """
+    unknown = sorted(set(arguments) - _DECLARED_ARGUMENTS.get(name, frozenset()))
+    if unknown:
+        accepted = ", ".join(sorted(_DECLARED_ARGUMENTS.get(name, frozenset()))) or "nothing"
+        raise fx.NotServedError(
+            f"{name} takes no argument {', '.join(unknown)}; it accepts: {accepted}"
+        )
+
+
 def dispatch(fixture: Path, name: str, arguments: Mapping[str, object]) -> str:
     """Execute one read tool against the snapshot. Returns text for a tool_result.
 
     A FixtureError — bad kind, unknown namespace, absent log channel — comes back
     as `ERROR: <message>` rather than raising: a wrong argument is information the
-    agent can act on, and the absence of a log is itself evidence. Anything else
-    propagates untouched so that real bugs and the harness's billing abort both
-    stay visible.
+    agent can act on, and the absence of a log is itself evidence. A NotServedError
+    error carries a distinct prefix, because it is NOT evidence: the snapshot has
+    no view of what was asked, and the validator must not let that string stand
+    in for a fact about the cluster. Anything else propagates untouched so that
+    real bugs and the harness's billing abort both stay visible.
     """
     try:
+        _reject_unknown_arguments(name, arguments)
         if name == "list_namespaces":
             return truncate(render_namespace_list(fixture))
         if name == "namespace_overview":
@@ -546,6 +613,8 @@ def dispatch(fixture: Path, name: str, arguments: Mapping[str, object]) -> str:
             )
         if name == "cluster_capacity":
             return truncate(render_cluster_capacity(fixture))
+    except fx.NotServedError as exc:
+        return f"{NOT_SERVED_PREFIX}{exc}"
     except fx.FixtureError as exc:
         return f"ERROR: {exc}"
     return f"ERROR: no tool named {name!r}"
@@ -844,3 +913,10 @@ TOOL_SPECS: tuple[ToolSpec, ...] = (
 READ_TOOL_NAMES: frozenset[str] = frozenset(
     spec.name for spec in TOOL_SPECS if spec.name != SUBMIT_ANSWER
 )
+
+# The argument keys each read tool declares — the only keys dispatch accepts.
+_DECLARED_ARGUMENTS: dict[str, frozenset[str]] = {
+    spec.name: frozenset(cast(dict[str, object], spec.input_schema.get("properties", {})))
+    for spec in TOOL_SPECS
+    if spec.name != SUBMIT_ANSWER
+}

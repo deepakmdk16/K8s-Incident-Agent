@@ -20,6 +20,7 @@ QUIET = FIXTURES / "t3-quiet-selector-loud-crashloop"
 INIT = FIXTURES / "t2-init-wait-for-migrations"
 OVERLAP = FIXTURES / "t3-overlapping-config-and-oom"
 CROSSNS = FIXTURES / "t2-crossns-externalname-selector"
+POD = "inventory-sync-5cf949f7f9-czxsq"
 
 
 def test_overview_shows_a_ready_pod_and_its_rbac_object_counts() -> None:
@@ -100,7 +101,125 @@ def test_events_are_projected_not_dumped() -> None:
 def test_cluster_scoped_rbac_is_unreachable() -> None:
     """150 KB in every fixture, needed by no case: one unguarded call could end a run."""
     out = tl.dispatch(RBAC, "get_object", {"namespace": "inventory", "kind": "clusterroles"})
-    assert out.startswith("ERROR:")
+    assert out.startswith("ERROR")
+    assert tl.is_not_served(out)
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments"),
+    [
+        # every shape the 2026-09-05 review found could stand in for a read of an
+        # object no tool serves (docs/failure-modes.md)
+        ("get_object", {"namespace": "x", "kind": "validatingwebhookconfigurations", "name": "y"}),
+        ("describe", {"namespace": "x", "kind": "validatingwebhookconfiguration", "name": "y"}),
+        ("describe", {"namespace": "inventory", "kind": "clusterrole", "name": "y"}),
+        ("get_object", {"namespace": "inventory", "kind": "widgets"}),
+        # the third oracle: find_consumers' "kinds that exist" trailer read the
+        # cluster file for a cluster-scoped kind (review, 2026-09-05)
+        (
+            "find_consumers",
+            {"namespace": "inventory", "kind": "validatingwebhookconfigurations", "name": "y"},
+        ),
+        ("find_consumers", {"namespace": "inventory", "kind": "clusterroles", "name": "y"}),
+    ],
+    ids=[
+        "get_object-cluster-kind",
+        "describe-webhook",
+        "describe-clusterrole",
+        "unknown-kind",
+        "find_consumers-webhook",
+        "find_consumers-clusterrole",
+    ],
+)
+def test_tool_limits_are_marked_not_served(name: str, arguments: dict[str, object]) -> None:
+    out = tl.dispatch(RBAC, name, arguments)
+    assert tl.is_not_served(out), out
+    assert tl.is_error(out) and not tl.is_evidence(out)
+    assert "no describe captured" not in out
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments", "prefix"),
+    [
+        ("get_events", {"namespace": "inventory", "involved_name": "nothing-here"}, "0 events"),
+        (
+            "get_logs",
+            {"namespace": "inventory", "pod": "inventory-sync-5cf949f7f9-czxsq", "contains": "zzz"},
+            "0 log",
+        ),
+        (
+            "find_consumers",
+            {"namespace": "inventory", "kind": "configmap", "name": "zzz"},
+            "no workload",
+        ),
+        ("get_object", {"namespace": "inventory", "kind": "networkpolicies"}, "0 objects"),
+    ],
+    ids=["events", "logs", "consumers", "objects"],
+)
+def test_empty_results_echo_arguments_and_are_not_evidence(
+    name: str, arguments: dict[str, object], prefix: str
+) -> None:
+    """An empty result repeats the name the caller typed; it shows nothing about it."""
+    out = tl.dispatch(RBAC, name, arguments)
+    assert out.startswith(prefix), out
+    assert not tl.is_error(out) and not tl.is_evidence(out)
+
+
+def test_real_results_are_evidence() -> None:
+    assert tl.is_evidence(tl.dispatch(QUIET, "get_events", {"namespace": "analytics-batch"}))
+    assert tl.is_evidence(
+        tl.dispatch(RBAC, "get_object", {"namespace": "inventory", "kind": "rolebindings"})
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments"),
+    [
+        ("get_object", {"namespace": "inventory", "kind": "configmaps", "name": "nope"}),
+        ("namespace_overview", {"namespace": "platform-policy"}),
+        ("get_object", {"namespace": "no-such-ns", "kind": "services"}),
+    ],
+    ids=["object-absent", "namespace-absent-overview", "namespace-absent-list"],
+)
+def test_cluster_state_errors_stay_ordinary_errors(name: str, arguments: dict[str, object]) -> None:
+    """A missing referent is evidence — often the defect itself — and stays citable."""
+    out = tl.dispatch(RBAC, name, arguments)
+    assert out.startswith("ERROR: ")
+    assert not tl.is_not_served(out)
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments"),
+    [
+        ("get_events", {"namespace": "inventory", "name": "workload-standards"}),
+        ("list_namespaces", {"name": "workload-standards"}),
+        ("cluster_capacity", {"object": "workload-standards"}),
+        ("namespace_overview", {"namespace": "inventory", "kind": "vwc", "name": "x"}),
+        ("get_logs", {"namespace": "inventory", "pod": POD, "configuration": "x"}),
+    ],
+    ids=["events", "list_namespaces", "cluster_capacity", "overview", "logs"],
+)
+def test_an_argument_no_tool_declares_is_refused_not_ignored(
+    name: str, arguments: dict[str, object]
+) -> None:
+    """Red-team 2026-09-05: an ignored key carrying an object's name rode along in the
+    recorded call and made a real result read as a read of that object."""
+    out = tl.dispatch(RBAC, name, arguments)
+    assert tl.is_not_served(out), out
+    assert "takes no argument" in out
+
+
+def test_declared_arguments_are_still_accepted() -> None:
+    out = tl.dispatch(RBAC, "get_events", {"namespace": "inventory", "warnings_only": False})
+    assert not tl.is_error(out)
+    out = tl.dispatch(RBAC, "get_logs", {"namespace": "inventory", "pod": POD, "tail": 5})
+    assert not tl.is_error(out)
+
+
+def test_serves_kind_is_the_namespaced_roster_today() -> None:
+    assert tl.serves_kind("deployments") and tl.serves_kind("ConfigMap")
+    assert not tl.serves_kind("validatingwebhookconfigurations")
+    assert not tl.serves_kind("clusterroles")
 
 
 def test_configmap_values_are_never_served_only_keys() -> None:

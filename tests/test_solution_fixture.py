@@ -53,8 +53,17 @@ def test_schema_two_kinds_resolve_and_read_as_not_captured_on_a_frozen_fixture()
     assert fx.normalize_kind("mutatingwebhookconfigurations") == "mutatingwebhookconfigurations"
     assert fx.CLUSTER_KINDS_SINCE_SCHEMA_2.issubset(fx.CLUSTER_KINDS)
     assert fx.expected_cluster_kinds(RBAC).isdisjoint(fx.CLUSTER_KINDS_SINCE_SCHEMA_2)
-    with pytest.raises(fx.FixtureError, match="not captured in this snapshot"):
+    with pytest.raises(fx.NotServedError, match="not captured in this snapshot"):
         fx.load_kind(RBAC, "validatingwebhookconfigurations")
+
+
+def test_describe_of_a_cluster_scoped_kind_is_not_served_rather_than_absent() -> None:
+    """Before 2026-09-05 this fell through to the namespaced glob and reported the object
+    as 'no describe captured … in namespace X' — a string that named it."""
+    with pytest.raises(fx.NotServedError, match="cluster-scoped"):
+        fx.describe(RBAC, "clusterrole", "admin", "inventory")
+    with pytest.raises(fx.NotServedError, match="unknown or uncaptured kind"):
+        fx.normalize_kind("widgets")
 
 
 @pytest.mark.parametrize(
