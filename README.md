@@ -416,3 +416,7 @@ that makes it); outcomes are reported as measured — a check that did not
 demonstrably pass is inconclusive, never a pass; every diagnosed-and-fixed
 issue ships its prevention in the same commit; and capability claims ride on
 frozen, pre-registered evaluation cases, never on cases tuned after the fact.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
