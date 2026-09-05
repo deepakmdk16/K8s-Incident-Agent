@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "failing_resource": {
+    "kind": "ValidatingWebhookConfiguration",
+    "namespace": "cluster-scoped",
+    "name": "workload-standards"
+  },
+  "mechanism": "ValidatingWebhookConfiguration workload-standards intercepts pod CREATE through its webhook \"validate.policy-guard.platform.internal\", whose clientConfig.service names Service policy-guard in namespace platform-policy - a namespace that does not exist - so the API server call fails with `failed to call webhook: Post \"https://policy-guard.platform-policy.svc:443/validate?timeout=10s\": service \"policy-guard\" not found`. Because that webhook's failurePolicy is Fail rather than Ignore, the unreachable backend is turned into a rejection: each pod create attempt is denied with `Error creating: Internal error occurred`, repeated on every controller retry (x15 in two minutes), so no replacement pod is ever admitted.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

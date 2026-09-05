@@ -18,7 +18,9 @@
 # Fixture layout (the contract the replay tools consume):
 #   scenario.yaml                 metadata + capture policy + log-channel ledger
 #   page.txt                      the symptom-first page the agent starts from
-#   cluster/                      cluster-scoped state (nodes, events, PV, RBAC)
+#   cluster/                      cluster-scoped state (nodes, events, PV, RBAC,
+#                                 admission webhook configurations since schema 2)
+#   cluster/describe/             per-object describe of the webhook configurations
 #   ns/<namespace>/<kind>.json    scrubbed `kubectl get -o json` per kind
 #   ns/<namespace>/describe/      per-object `kubectl describe`
 #   ns/<namespace>/logs/          <pod>__<container>.log / .previous.log
@@ -70,14 +72,32 @@ ERRD="$(mktemp -d)"
 mkdir -p "$TMPD/cluster" || die "cannot create $TMPD"
 
 # Scrub applied to every captured JSON document (list or single object).
+# Pipeline metadata never enters a fixture: the incident-lab.dev/ label the
+# reset deletes cluster-scoped scenario objects by would tell an agent which
+# object the scenario planted. Removed from labels and annotations of every
+# object, and an emptied map is dropped the way kubectl omits an absent one.
+# A webhook caBundle is a base64 PEM block, which the credential scan bans;
+# redacted here so a future scenario cannot trip the gate by carrying one.
 JQ_SCRUB='
+def drop_pipeline_keys:
+  with_entries(select(.key | startswith("incident-lab.dev/") | not));
 def scrub_one:
   (if (.metadata? // null) != null then
      .metadata |= (del(.managedFields)
        | if (.annotations? // null) != null then
-           .annotations |= del(."kubectl.kubernetes.io/last-applied-configuration")
+           .annotations |= (del(."kubectl.kubernetes.io/last-applied-configuration")
+                            | drop_pipeline_keys)
+           | if .annotations == {} then del(.annotations) else . end
+         else . end
+       | if (.labels? // null) != null then
+           .labels |= drop_pipeline_keys
+           | if .labels == {} then del(.labels) else . end
          else . end)
    else . end)
+  | (if (.webhooks? // null) != null then
+       .webhooks |= map(if (.clientConfig.caBundle? // null) != null
+                        then .clientConfig.caBundle = "REDACTED-BY-CAPTURE" else . end)
+     else . end)
   | (if .kind == "Secret" then
        .data = ((.data // {}) | with_entries(.value = "REDACTED-BY-CAPTURE"))
        | (if (.stringData? // null) != null then
@@ -122,6 +142,20 @@ cap_json "$TMPD/cluster/pv.json" pv
 cap_json "$TMPD/cluster/storageclasses.json" storageclasses
 cap_json "$TMPD/cluster/clusterroles.json" clusterroles
 cap_json "$TMPD/cluster/clusterrolebindings.json" clusterrolebindings
+# Schema 2 (2026-09-04): admission webhook configurations. Cluster-scoped, so
+# they were absent from every earlier capture, which made an admission fault
+# undiagnosable from any fixture — the roster here and solution/fixture.py
+# CLUSTER_KINDS move together (the documented lockstep pair).
+WEBHOOK_KINDS="validatingwebhookconfigurations mutatingwebhookconfigurations"
+mkdir -p "$TMPD/cluster/describe"
+for KIND in $WEBHOOK_KINDS; do
+  cap_json "$TMPD/cluster/$KIND.json" "$KIND"
+  K get "$KIND" -o name 2>/dev/null | while read -r NAME; do
+    [ -n "$NAME" ] || continue
+    SAFE="$(printf '%s' "$NAME" | tr '/' '_')"
+    K describe "$NAME" >"$TMPD/cluster/describe/$SAFE.txt" 2>/dev/null
+  done
+done
 
 # --- namespaced state: per-kind JSON, per-object describe, per-container logs
 NAMESPACES="$(K get namespaces -o jsonpath='{.items[*].metadata.name}')"
@@ -174,7 +208,10 @@ CLIV="$(jq -r '.clientVersion.gitVersion // "unknown"' "$TMPD/cluster/version.js
 NODEINFO="$(jq -r '.items[0].status.nodeInfo
   | "kubelet=\(.kubeletVersion) runtime=\(.containerRuntimeVersion) os=\(.osImage)"' \
   "$TMPD/cluster/nodes.json" 2>/dev/null || echo unknown)"
-{ echo "schema: 1"
+# schema 2 = the cluster roster includes the admission webhook configurations.
+# A schema-1 fixture (the frozen set) never has them; readers treat the kind
+# as "not captured in this snapshot" there rather than as an empty list.
+{ echo "schema: 2"
   echo "id: $ID"
   echo "mode: captured"
   echo "captured_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -196,16 +233,22 @@ rm -f "$TMPD/.channels"
 # ConfigMap legitimately embeds the PUBLIC cluster CA — public or not, the
 # checkpoints scan cannot tell base64'd PEM apart, so redact by construction
 # rather than teaching the gate to allowlist (gates are fixed; code bends).
+# The last rule drops the pipeline label from describe text (`Labels:` blocks
+# list one label per line, alphabetically, so the incident-lab.dev/ entry is
+# always a continuation line and its removal leaves the block well-formed).
 find "$TMPD" -type f -print0 | xargs -0 perl -pi -e '
   s{eyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}(\.[A-Za-z0-9_-]+)?}{REDACTED-JWT}g;
   s{((?:certificate-authority|client-certificate|client-key)-data:\s*)[A-Za-z0-9+/=]{16,}}{${1}REDACTED-BY-CAPTURE}g;
   s{/(Users|home)/[A-Za-z0-9._-]+}{/REDACTED-HOME}g;
+  s{^[ \t]+incident-lab\.dev/[^\n]*\n}{}mg;
 '
 
 # --- self-check: an incomplete or leaky fixture must never land -------------
 BAD=0
 for req in scenario.yaml page.txt cluster/get-all.txt cluster/events.json \
-           cluster/nodes.json cluster/version.json; do
+           cluster/nodes.json cluster/version.json \
+           cluster/validatingwebhookconfigurations.json \
+           cluster/mutatingwebhookconfigurations.json; do
   [ -s "$TMPD/$req" ] || { echo "capture: SELF-CHECK missing $req" >&2; BAD=1; }
 done
 ls "$TMPD"/ns/*/pods.json >/dev/null 2>&1 \
@@ -216,6 +259,11 @@ find "$TMPD" -path '*/describe/*' -name '*.txt' | grep -q . \
 # drift here would install a "frozen" fixture that then fails the commit gate.
 if grep -RqE '(eyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}|LS0tLS1CRUdJTi|(certificate-authority|client-certificate|client-key)-data: *[A-Za-z0-9+/=]{16,}|token: *[A-Za-z0-9._-]{24,})' "$TMPD"; then
   echo "capture: SELF-CHECK credential-pattern hit survived scrubbing" >&2; BAD=1
+fi
+# Same rule as the checkpoints.sh fixture scan: pipeline metadata that
+# survived the scrub would name the planted object to every arm.
+if grep -Rq 'incident-lab\.dev/' "$TMPD"; then
+  echo "capture: SELF-CHECK pipeline label incident-lab.dev/ survived scrubbing" >&2; BAD=1
 fi
 if [ "$BAD" -ne 0 ]; then
   die "self-check failed — partial capture left at $TMPD for inspection, NOT installed"

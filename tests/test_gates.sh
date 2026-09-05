@@ -118,6 +118,57 @@ fixture "$TMP/kz"; k8sfix "$TMP/kz"; : > "$TMP/kz/evals/fixtures/t0-selftest/ns/
 # 18b. fixture without its gold.json fails (scoring spec: unscoreable fixture)
 fixture "$TMP/kg"; k8sfix "$TMP/kg"; rm "$TMP/kg/evals/scenarios/t0-selftest/gold.json"
                                                              check "fixture without gold.json caught" 1 "$TMP/kg"
+# 18b2. the pipeline label inject.sh puts on scenario-owned cluster objects must
+# never survive into a fixture (it names the planted object to every arm)
+fixture "$TMP/kpl"; k8sfix "$TMP/kpl"
+echo '{"items":[{"metadata":{"name":"x","labels":{"incident-lab.dev/scenario":"t9"}}}]}' \
+  > "$TMP/kpl/evals/fixtures/t0-selftest/cluster/validatingwebhookconfigurations.json"
+                                                             check "pipeline label in fixture caught" 1 "$TMP/kpl"
+# 18c. capture schema 2 (2026-09-04) requires the admission webhook rosters: a
+# schema-2 fixture without them was captured by a script that drifted from
+# solution/fixture.py CLUSTER_KINDS — the lockstep pair, enforced mechanically
+fixture "$TMP/kw"; k8sfix "$TMP/kw"
+sed -i.bak 's/^schema: 1$/schema: 2/' "$TMP/kw/evals/fixtures/t0-selftest/scenario.yaml"; rm -f "$TMP/kw/evals/fixtures/t0-selftest/scenario.yaml.bak"
+                                                             check "schema-2 fixture without webhook rosters caught" 1 "$TMP/kw"
+# 18d. the same schema-2 fixture passes once both rosters are present
+echo '{"items":[]}' > "$TMP/kw/evals/fixtures/t0-selftest/cluster/validatingwebhookconfigurations.json"
+echo '{"items":[]}' > "$TMP/kw/evals/fixtures/t0-selftest/cluster/mutatingwebhookconfigurations.json"
+                                                             check "schema-2 fixture with webhook rosters passes" 0 "$TMP/kw"
+# --- inject.sh refusals (2026-09-04): every check below runs BEFORE the
+# cluster is contacted, so a bogus --context proves which branch fired. A
+# scenario that passes the checks dies later on "unreachable" instead.
+inj() { # name, expected stderr substring, scratch repo root, scenario root, id
+  local err; err="$(INJECT_REPO_ROOT="$3" bash "$ROOT/evals/inject.sh" --id "$5" --root "$4" --context no-such-ctx 2>&1 >/dev/null)"
+  if printf '%s' "$err" | grep -q -- "$2"; then PASS=$((PASS+1)); printf 'ok   %s\n' "$1"
+  else FAILED=$((FAILED+1)); printf 'FAIL %s (wanted %q in: %s)\n' "$1" "$2" "$err"; fi
+}
+scen() { # dir — a minimal scenario directory under $1 named $2, fault body from stdin
+  mkdir -p "$1/$2"; cat > "$1/$2/fault.yaml"; echo '[PAGE] SEV1 X — ns' > "$1/$2/page.txt"
+  printf '#!/bin/sh\nexit 0\n' > "$1/$2/wait.sh"; chmod +x "$1/$2/wait.sh"
+}
+WH='apiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingWebhookConfiguration\nmetadata:\n  name: x\n  labels:\n    incident-lab.dev/scenario: %s\n'
+# 18e. a ClusterRole is refused in any root
+printf 'kind: ClusterRole\n' | scen "$TMP/inj-a/evals/scenarios-v2" t9-a
+inj "inject: ClusterRole refused everywhere" "cluster-scoped objects" "$TMP/inj-a" evals/scenarios-v2 t9-a
+# 18f. a webhook configuration is refused in the frozen root even when labelled
+printf "$WH" t9-b | scen "$TMP/inj-b/evals/scenarios" t9-b
+inj "inject: webhook refused in frozen root"  "frozen root stays namespaced" "$TMP/inj-b" evals/scenarios t9-b
+# 18g. an UNLABELLED webhook configuration is refused in the additive root
+printf 'kind: ValidatingWebhookConfiguration\nmetadata:\n  name: x\n' | scen "$TMP/inj-c/evals/scenarios-v2" t9-c
+inj "inject: unlabelled webhook refused"      "carry the label" "$TMP/inj-c" evals/scenarios-v2 t9-c
+# 18h. a labelled webhook configuration in the additive root passes the checks
+printf "$WH" t9-d | scen "$TMP/inj-d/evals/scenarios-v2" t9-d
+inj "inject: labelled webhook in v2 root passes" "unreachable" "$TMP/inj-d" evals/scenarios-v2 t9-d
+# 18i. a webhook that intercepts anything but pod CREATE is refused (it could refuse the reset)
+{ printf "$WH" t9-e; printf 'webhooks:\n  - rules:\n      - operations: ["CREATE", "DELETE"]\n        resources: ["namespaces"]\n'; } \
+  | scen "$TMP/inj-e/evals/scenarios-v2" t9-e
+inj "inject: webhook on namespace DELETE refused" "must be exactly operations" "$TMP/inj-e" evals/scenarios-v2 t9-e
+# 18j. the lint is scoped to webhook documents: a Deployment's container
+# `resources:` block in the same file is not a webhook rule (regression,
+# 2026-09-05 — the first form of the lint refused the real scenario)
+{ printf "$WH" t9-f; printf 'webhooks:\n  - rules:\n      - operations: ["CREATE"]\n        resources: ["pods"]\n---\nkind: Deployment\nspec:\n  template:\n    spec:\n      containers:\n        - name: api\n          resources:\n            requests:\n              cpu: 10m\n'; } \
+  | scen "$TMP/inj-f/evals/scenarios-v2" t9-f
+inj "inject: container resources block is not a webhook rule" "unreachable" "$TMP/inj-f" evals/scenarios-v2 t9-f
 # 19. STATUS.md with completed [x] items fails (open-items-only; history is git log)
 fixture "$TMP/sx"; printf '# STATUS\n- [x] something already done\n- [ ] open item\n' > "$TMP/sx/STATUS.md"
                                                              check "stale [x] in STATUS.md caught"   1 "$TMP/sx"

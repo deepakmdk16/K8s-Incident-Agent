@@ -1,0 +1,17 @@
+Name:         kubernetes
+Namespace:    default
+Labels:       kubernetes.io/service-name=kubernetes
+Annotations:  <none>
+AddressType:  IPv4
+Ports:
+  Name   Port  Protocol
+  ----   ----  --------
+  https  6443  TCP
+Endpoints:
+  - Addresses:  172.18.0.3
+    Conditions:
+      Ready:   true
+    Hostname:  <unset>
+    NodeName:  <unset>
+    Zone:      <unset>
+Events:        <none>

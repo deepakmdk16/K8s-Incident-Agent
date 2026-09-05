@@ -14,6 +14,43 @@ self-improving loop): a solved issue must not be solvable twice.
 **Lesson for reliable agents:** …
 -->
 
+## 2026-09-05 — a validator's helpful rejection message was an oracle for the answer
+
+**What happened:** the first case whose failing object no tool can read
+(CHANGELOG [15]) scored the solution `resource_correct` 3/3. Not one of the 25
+tool calls across the three runs returned the object's name. The name came from
+the validator: the agent guessed a plausible name, V4 EXISTS rejected it with
+"no ValidatingWebhookConfiguration named 'policy-guard' … **Present:
+workload-standards**", and the next submission named the object correctly. A
+message written to help the agent fix a typo enumerated, for a kind the tool
+layer refuses to serve, exactly the fact the case was built to withhold.
+A second oracle of the same shape was found in review before the run and
+pre-registered: `describe` on the object returns "no describe captured for
+<kind>/<name>", a tool-limitation error that names the object and re-verifies
+under V1, so it could serve as a V7 defect quote. The verdict gate held anyway
+(confirmed-wrong 0), because V7 also demands a PRESENT verification check about
+the object and none existed.
+
+**Evidence:** `transcript.jsonl` of every run in
+[evals/results/20260905T044853Z-solution/](../evals/results/20260905T044853Z-solution/summary.md)
+— the first occurrence of `workload-standards` is inside a `rejections` entry
+in all three; pre-registration in
+[docs/experiments/2026-09-04-webhook-outage.md](experiments/2026-09-04-webhook-outage.md).
+
+**Prevention now in place:** the leak was pre-registered as a leak before the
+run, with the rule that a row reached through it does not count as capability
+— so it was reported as what it is instead of as a 3/3. Closing it is the
+first task of the next slice, and it is the validator that changes: V4 stops
+listing names for kinds no read tool serves, and V6/V7 stop accepting
+tool-limitation errors as evidence, while cluster-state errors ("no configmap
+named X") stay citable because a missing referent IS the defect.
+
+**Lesson for reliable agents:** every message a gate sends back to the agent is
+also an information channel. A rejection that enumerates what *would* have been
+accepted is a search oracle, and an agent under a reject cap will use it. Design
+rejections to name the unmet condition, never the missing value; and never let
+"this tool cannot serve that" read as evidence about the world.
+
 ## 2026-09-04 — RECURRENCE: an arm-score gap read as capability when it was vocabulary
 
 **What happened:** the first scored run of the v2 cross-namespace case returned

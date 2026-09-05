@@ -1,0 +1,30 @@
+Name:         cluster-info
+Namespace:    kube-public
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+jws-kubeconfig-abcdef:
+----
+eyJhbGciOiJIUzI1NiIsImtpZCI6ImFiY2RlZiJ9..2unuiaGzhgTsPOV7BbEZRzk-bNF8147hCHFCDPz-EzU
+
+kubeconfig:
+----
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: REDACTED-BY-CAPTURE
+    server: https://incident-lab-control-plane:6443
+  name: ""
+contexts: null
+current-context: ""
+kind: Config
+users: null
+
+
+
+BinaryData
+====
+
+Events:  <none>

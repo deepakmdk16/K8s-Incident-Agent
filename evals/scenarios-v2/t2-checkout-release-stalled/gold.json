@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-checkout-release-stalled",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "validatingwebhookconfiguration",
+    "namespace": "",
+    "name": "workload-standards"
+  },
+  "fault_class": "webhook-admission-block",
+  "mechanism_summary": "The ValidatingWebhookConfiguration workload-standards is orphaned: its .webhooks[0].clientConfig.service names Service policy-guard in namespace platform-policy, and neither that namespace nor that Service exists, so with .webhooks[0].failurePolicy set to Fail the API server refuses every pod create it intercepts with 'failed calling webhook \"validate.policy-guard.platform.internal\" ... service \"policy-guard\" not found', and the checkout-api ReplicaSet for the new release cannot create a single pod.",
+  "decisive_evidence": "ReplicaSet FailedCreate events in namespace checkout with message 'Error creating: Internal error occurred: failed calling webhook \"validate.policy-guard.platform.internal\": failed to call webhook: Post \"https://policy-guard.platform-policy.svc:443/validate?timeout=10s\": service \"policy-guard\" not found' (also carried on the Deployment's ReplicaFailure condition); validatingwebhookconfiguration/workload-standards showing clientConfig.service {namespace: platform-policy, name: policy-guard} and failurePolicy: Fail while the namespace list contains no platform-policy; deployment checkout/checkout-api at 2/3 ready, 0 updated, Progressing=False ProgressDeadlineExceeded.",
+  "remediation_summary": "Delete the orphaned configuration - kubectl delete validatingwebhookconfiguration workload-standards - after which the new ReplicaSet creates its pods and the rollout completes to 3 of 3 updated with no change to any object in namespace checkout; setting .webhooks[0].failurePolicy to Ignore on the same object is the interim mitigation if the platform team wants to keep the configuration for a reinstall."
+}

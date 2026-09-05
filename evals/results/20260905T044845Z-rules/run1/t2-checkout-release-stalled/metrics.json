@@ -1,0 +1,22 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "arm": "rules",
+  "run_id": "7c308dd2c999",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0012,
+  "paged_namespace": "checkout",
+  "findings": [
+    {
+      "analyzer": "rollout",
+      "kind": "deployment",
+      "namespace": "checkout",
+      "name": "checkout-api",
+      "mechanism": "The Deployment rollout is not progressing; the new ReplicaSet cannot reach its desired replica count.",
+      "evidence": "deployment checkout-api has Progressing=False, reason ProgressDeadlineExceeded"
+    }
+  ],
+  "analyzers_fired": 1
+}

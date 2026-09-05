@@ -1,8 +1,10 @@
 """Scored-run harness: one arm x the case set x N replicate runs.
 
 Discovers cases (a scenario with gold.json + its recorded fixture), invokes the
-arm offline against the fixture, parses and scores every answer with the frozen
-evals/scoring.py, and writes the evidence bundle into evals/results/<run>/:
+arm offline against the fixture, parses and scores every answer with the
+scenario root's scorer — the frozen evals/scoring.py for the frozen set, the
+additive evals/scoring_v2.py for evals/scenarios-v2 — and writes the evidence
+bundle into evals/results/<run>/:
 per-case artifacts (prompt where the arm builds one, report, answer, metrics),
 rows.jsonl (per-case
 score rows incl. matched_classes for audit), summary.json and summary.md. The
@@ -26,7 +28,7 @@ from ablation.rules import diagnose as rules_diagnose
 from baseline.diagnose import diagnose as baseline_diagnose
 from common.llm import PINNED_MODEL, load_env_file
 from common.runlog import get_logger, new_run_id
-from evals import scoring
+from evals import scoring, scoring_v2
 from solution.agent import diagnose as solution_diagnose
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,11 +59,33 @@ ARMS: dict[str, ArmFn] = {
 NO_MODEL_ARMS = frozenset({"rules"})
 
 
+Gold = scoring.Gold | scoring_v2.Gold
+CaseScore = scoring.CaseScore | scoring_v2.CaseScore
+
+
 @dataclass(frozen=True)
 class Case:
+    """One scorable case. The gold's type says which scorer produced it, and
+    that same scorer parses and scores the case's answers — the frozen set is
+    never scored by anything but the frozen module."""
+
     case_id: str
     fixture: Path
-    gold: scoring.Gold
+    gold: Gold
+
+    @property
+    def scorer(self) -> str:
+        return scoring_v2.__name__ if isinstance(self.gold, scoring_v2.Gold) else scoring.__name__
+
+    def parse_answer(self, raw: str) -> scoring.Answer:
+        if isinstance(self.gold, scoring_v2.Gold):
+            return scoring_v2.parse_answer(raw)
+        return scoring.parse_answer(raw)
+
+    def score(self, answer: scoring.Answer) -> CaseScore:
+        if isinstance(self.gold, scoring_v2.Gold):
+            return scoring_v2.score_case(answer, self.gold)
+        return scoring.score_case(answer, self.gold)
 
 
 @dataclass(frozen=True)
@@ -71,7 +95,7 @@ class Outcome:
     run: int
     case_id: str
     tier: str
-    score: scoring.CaseScore | None
+    score: CaseScore | None
     error: str | None
     contract_violations: tuple[str, ...]
     metrics: dict[str, object]
@@ -106,6 +130,13 @@ FROZEN_ROOT = "evals/scenarios"
 SCENARIO_ROOTS = (FROZEN_ROOT, "evals/scenarios-v2")
 
 
+def load_gold(root: str, path: Path) -> Gold:
+    """The root's own scorer validates its gold: frozen module for the frozen root."""
+    if root == FROZEN_ROOT:
+        return scoring.load_gold(path)
+    return scoring_v2.load_gold(path)
+
+
 def find_gold(case_id: str) -> Path | None:
     """The gold.json for a case, in whichever scenario root defines it."""
     for root in SCENARIO_ROOTS:
@@ -137,7 +168,7 @@ def discover_cases(only: set[str] | None = None, root: str = FROZEN_ROOT) -> lis
                 file=sys.stderr,
             )
             continue
-        cases.append(Case(case_id=case_id, fixture=fixture, gold=scoring.load_gold(gold_path)))
+        cases.append(Case(case_id=case_id, fixture=fixture, gold=load_gold(root, gold_path)))
     if not cases:
         raise FileNotFoundError(f"no scorable cases found under {root}/")
     return cases
@@ -145,14 +176,14 @@ def discover_cases(only: set[str] | None = None, root: str = FROZEN_ROOT) -> lis
 
 def run_case(arm: ArmFn, case: Case, run_idx: int, case_dir: Path) -> Outcome:
     """Invoke the arm, then score its artifacts. Failures score wrong, loudly."""
-    score: scoring.CaseScore | None = None
+    score: CaseScore | None = None
     error: str | None = None
     violations: tuple[str, ...] = ()
     metrics: dict[str, object] = {}
     try:
         arm(case.fixture, case.case_id, case_dir)
-        answer = scoring.parse_answer((case_dir / "answer.json").read_text(encoding="utf-8"))
-        score = scoring.score_case(answer, case.gold)
+        answer = case.parse_answer((case_dir / "answer.json").read_text(encoding="utf-8"))
+        score = case.score(answer)
         violations = tuple(
             scoring.report_contract_violations((case_dir / "report.md").read_text(encoding="utf-8"))
         )
@@ -179,9 +210,31 @@ def run_case(arm: ArmFn, case: Case, run_idx: int, case_dir: Path) -> Outcome:
     )
 
 
+def aggregate(scores: list[CaseScore]) -> scoring.Summary:
+    """The frozen scorer's aggregation, over rows from either scorer.
+
+    Same arithmetic as scoring.aggregate (tests pin the parity); it lives here
+    because the frozen function's signature admits only frozen rows, and a v2
+    bundle's rows carry v2 classes.
+    """
+    summary = scoring.Summary()
+    for score in scores:
+        cells = (
+            summary.overall,
+            summary.by_tier.setdefault(score.tier, scoring.RateCell()),
+            summary.by_verdict.setdefault(score.verdict, scoring.RateCell()),
+        )
+        for cell in cells:
+            cell.cases += 1
+            cell.correct += int(score.root_cause_correct)
+        if score.verdict == "confirmed" and not score.root_cause_correct:
+            summary.confirmed_wrong += 1
+    return summary
+
+
 def summarize(outcomes: list[Outcome]) -> scoring.Summary:
-    """Frozen-scorer aggregation, with invalid (unscorable) cases folded in as wrong."""
-    summary = scoring.aggregate([o.score for o in outcomes if o.score is not None])
+    """Aggregation with invalid (unscorable) cases folded in as wrong."""
+    summary = aggregate([o.score for o in outcomes if o.score is not None])
     for outcome in outcomes:
         if outcome.score is None:
             for cell in (
@@ -213,7 +266,12 @@ def _summary_dict(summary: scoring.Summary) -> dict[str, object]:
 
 
 def write_outputs(
-    out_dir: Path, arm_name: str, runs: int, outcomes: list[Outcome], started_utc: str
+    out_dir: Path,
+    arm_name: str,
+    runs: int,
+    outcomes: list[Outcome],
+    started_utc: str,
+    scorer: str = scoring.__name__,
 ) -> None:
     with (out_dir / "rows.jsonl").open("w", encoding="utf-8") as fh:
         for outcome in outcomes:
@@ -241,6 +299,7 @@ def write_outputs(
         "arm": arm_name,
         "runs": runs,
         "started_utc": started_utc,
+        "scorer": scorer,
         "model_pinned": None if arm_name in NO_MODEL_ARMS else PINNED_MODEL,
         "sampling": (
             "deterministic: no model is called"
@@ -264,6 +323,7 @@ def write_outputs(
         f"# Scored run — arm: {arm_name}",
         "",
         f"- started: {started_utc}  |  runs: {runs}  |  cases/run: {len(outcomes) // runs}",
+        f"- scorer: {scorer}",
         (
             "- model: none — deterministic rules engine, no API call"
             if arm_name in NO_MODEL_ARMS
@@ -341,7 +401,8 @@ def main() -> None:
         aborted = str(exc)
         log.error("RUN ABORTED, no further API calls made: %s", aborted)
 
-    write_outputs(out_dir, args.arm, args.runs, outcomes, started_utc)
+    scorer = scoring.__name__ if args.scenarios_root == FROZEN_ROOT else scoring_v2.__name__
+    write_outputs(out_dir, args.arm, args.runs, outcomes, started_utc, scorer)
     log.info("wrote %s", out_dir / "summary.md")
     print((out_dir / "summary.md").read_text(encoding="utf-8"))
     if aborted:

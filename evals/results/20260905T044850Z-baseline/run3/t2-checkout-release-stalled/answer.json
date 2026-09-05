@@ -1,0 +1,6 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "failing_resource": {"kind": "ValidatingWebhookConfiguration", "namespace": "", "name": "policy-guard"},
+  "mechanism": "The ValidatingWebhookConfiguration webhook 'validate.policy-guard.platform.internal' intercepts pod CREATE with failurePolicy Fail, but its backing Service policy-guard.platform-policy.svc does not exist, so the API server hard-rejects every pod creation in the checkout namespace with 'failed calling webhook ... service \"policy-guard\" not found'. The new ReplicaSet therefore reports FailedCreate and reaches 0 of its desired replicas, leaving the rollout at ProgressDeadlineExceeded. Because the rollout strategy has maxSurge 0 and maxUnavailable 1, one old replica was terminated to make room for a pod that can never be admitted, dropping serving capacity to 2 of 3 and raising p95 latency.",
+  "verdict": "confirmed"
+}

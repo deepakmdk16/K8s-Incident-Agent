@@ -44,6 +44,15 @@ FAULT_TYPE_PHRASES = (
     "unbound",
     "storageclass typo",
     "bad rollout",
+    # v2 (2026-09-04): phrases that name the admission fault, not the kind —
+    # "webhook" alone is a queryable kind's stem and stays allowed.
+    "failed calling webhook",
+    "admission webhook",
+    "admission-webhook",
+    "webhook admission",
+    "webhook-admission",
+    "admission block",
+    "webhook block",
     "missing env",
     "dangling reference",
     "fault class",

@@ -15,6 +15,87 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [15] The first case whose cause is outside every arm's reach — and the gate that held — 2026-09-05, 05:45 UTC
+
+**Change:** roadmap 1.3, pre-registered as the escalation in [14].
+`evals/scenarios-v2/t2-checkout-release-stalled/`: a release of
+`checkout/checkout-api` stalls at 0 updated / 2 ready because an **orphaned,
+cluster-scoped** `ValidatingWebhookConfiguration` (`workload-standards`, a
+Helm leftover whose Service and namespace are gone, `failurePolicy: Fail`)
+makes the API server refuse every pod create with `failed calling webhook …
+service "policy-guard" not found`. Nothing in `checkout` is wrong, and a
+rollback does not recover (rehearsed live; the old ReplicaSet is refused the
+same way). To make the case scorable at all, five things moved together, each
+with its test or gate: **capture schema 2** adds both webhook kinds to
+`capture.sh`'s cluster roster and `solution/fixture.py`'s `CLUSTER_KINDS`
+(schema-aware uniformity test; the frozen schema-1 fixtures stay byte-identical
+and read the kinds as "not captured"); `inject.sh` admits labelled webhook
+configurations in the additive root only, deletes them first on reset, refuses
+strays, and lints their rules to `CREATE` on `pods` so a scenario can never
+refuse its own reset (six offline refusal tests); `capture.sh` scrubs the
+pipeline label out of every fixture and `checkpoints.sh` gates on it — left in,
+the label would have named the planted object to every arm; a **v2 scorer**
+(`evals/scoring_v2.py`) re-keys the frozen tables by value, adds
+`webhook-admission-block` (red-teamed on a 40-sentence corpus against
+rbac-denial's "denied/cannot" group, quota's "reject/block" group, rollout-stuck
+and pod-unschedulable, both of which it dominates) and one convention for
+cluster-scoped gold (`"namespace": ""`, every "no namespace" spelling equal);
+`run_eval` scores each root with its own scorer and records which in
+`summary.json`. `evals/scoring.py` and the frozen roots are untouched; the
+class is disclosed as a dated addendum in
+[docs/decisions/problem-selection.md](docs/decisions/problem-selection.md).
+
+**Why:** [13] and [14] showed that presentational difficulty — distance,
+noise, another namespace — does not bite: one arm follows references and is
+never distracted, the other is handed the whole cluster. The only headroom left
+is a cause that is *structurally* absent from what an arm can read. Webhook
+configurations were absent from the captured universe entirely, the baseline's
+dump policy never includes cluster-scoped objects, and the solution's
+`get_object` refuses them by design. The case makes the fixture carry the
+object, so the ceiling being measured is the arms', not the benchmark's.
+
+**Evidence after:** predictions and decision rule were written before any
+scored run
+([docs/experiments/2026-09-04-webhook-outage.md](docs/experiments/2026-09-04-webhook-outage.md));
+three lenses of design review plus a live probe changed the case before capture
+(a token-disjoint configuration name, the label scrub, an env-value release
+instead of an image tag). Bundles:
+[rules](evals/results/20260905T044845Z-rules/summary.md),
+[baseline](evals/results/20260905T044850Z-baseline/summary.md),
+[solution](evals/results/20260905T044853Z-solution/summary.md).
+
+| arm | pooled | resource_correct | class_correct | confirmed-wrong |
+|---|---|---|---|---|
+| rules | 0/1 | 0/1 | 0/1 | 1 |
+| baseline | 0/3 | 0/3 | 3/3 | **3** |
+| solution (unchanged) | 1/3 | 3/3 | 1/3 | **0** |
+
+Read per CLAUDE.md's rule, the rows say three things the pooled column cannot.
+*The baseline* named the kind and the mechanism in every run and could not name
+the object — it wrote the Service name from the error message, once with
+"confirm exact object name via kubectl" inside the name field — and said
+`confirmed` three times. *The solution's* `resource_correct` 3/3 is the
+pre-registered **V4 leak**, not capability: in every run the name first appears
+in a rejection message (`V4 EXISTS: … Present: workload-standards`) after the
+same `policy-guard` guess; across 25 tool calls there is not one successful read
+of the object. *The verdict gate held*: every run was refused `confirmed` with
+the unmet condition named, two exited through the salvage path as labelled
+`inconclusive`, one submitted `probable` — **confirmed-wrong 0 against 3** on
+the same unreadable object, which is the calibration claim this arm exists to
+make, measured on the first case where it costs something. The `class_correct`
+1/3 is the salvage sentence classifying to nothing, by design. Cost per case
+rose to $0.61 (four submit attempts every run). Suite 252 → **332 passed**,
+gate self-tests 30 → 40, `bash scripts/checkpoints.sh` **0 failure(s)** at 15
+fixtures. Spend $2.23 (cumulative v2: $4.57).
+
+**Next decision it drove:** the headroom is real and structural, and two slices
+follow in a fixed order: first close the validator leaks (V4 must not list names
+for a kind no read tool serves; V6/V7 must not take a tool-limitation error as
+evidence) and re-score, predicted `resource_correct` 0/3 with confirmed-wrong
+0; then serve the two webhook kinds through `get_object`/`describe` plus a
+webhook → Service edge and re-score, predicted 3/3 `confirmed`. No v2 bar block,
+as pre-registered.
+
 ## [14] Decoys in the noise pack: the giveaway was not what either arm relied on — 2026-09-04, 13:00 UTC
 
 **Change:** roadmap 1.1. A v2 noise pack

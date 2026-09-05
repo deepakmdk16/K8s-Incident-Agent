@@ -1,0 +1,42 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "172.18.0.3"
+          ],
+          "conditions": {
+            "ready": true
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "creationTimestamp": "2026-09-02T03:01:34Z",
+        "generation": 1,
+        "labels": {
+          "kubernetes.io/service-name": "kubernetes"
+        },
+        "name": "kubernetes",
+        "namespace": "default",
+        "resourceVersion": "254",
+        "uid": "ed5bd302-6c49-4dc7-ab7a-7a7fde5257a0"
+      },
+      "ports": [
+        {
+          "name": "https",
+          "port": 6443,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

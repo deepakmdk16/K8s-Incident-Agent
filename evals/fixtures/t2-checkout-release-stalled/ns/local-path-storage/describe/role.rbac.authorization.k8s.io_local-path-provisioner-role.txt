@@ -1,0 +1,7 @@
+Name:         local-path-provisioner-role
+Labels:       <none>
+Annotations:  <none>
+PolicyRule:
+  Resources  Non-Resource URLs  Resource Names  Verbs
+  ---------  -----------------  --------------  -----
+  pods       []                 []              [get list watch create patch update delete]

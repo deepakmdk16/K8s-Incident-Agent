@@ -1,0 +1,47 @@
+Name:         workload-standards
+Namespace:    
+Labels:       app.kubernetes.io/managed-by=Helm
+Annotations:  meta.helm.sh/release-name: workload-standards
+              meta.helm.sh/release-namespace: platform-policy
+API Version:  admissionregistration.k8s.io/v1
+Kind:         ValidatingWebhookConfiguration
+Metadata:
+  Creation Timestamp:  2026-09-05T04:45:46Z
+  Generation:          1
+  Resource Version:    94950
+  UID:                 94f0ca1b-c50b-4470-bf18-1567d47cbd72
+Webhooks:
+  Admission Review Versions:
+    v1
+  Client Config:
+    Service:
+      Name:        policy-guard
+      Namespace:   platform-policy
+      Path:        /validate
+      Port:        443
+  Failure Policy:  Fail
+  Match Policy:    Equivalent
+  Name:            validate.policy-guard.platform.internal
+  Namespace Selector:
+    Match Expressions:
+      Key:       kubernetes.io/metadata.name
+      Operator:  NotIn
+      Values:
+        kube-system
+        kube-public
+        kube-node-lease
+        local-path-storage
+  Object Selector:
+  Rules:
+    API Groups:
+      
+    API Versions:
+      v1
+    Operations:
+      CREATE
+    Resources:
+      pods
+    Scope:          *
+  Side Effects:     None
+  Timeout Seconds:  10
+Events:             <none>

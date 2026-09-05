@@ -1,0 +1,53 @@
+Name:                   checkout-api
+Namespace:              checkout
+CreationTimestamp:      Sat, 05 Sep 2026 10:15:40 +0530
+Labels:                 app=checkout-api
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=checkout-api
+Replicas:               3 desired | 0 updated | 2 total | 2 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  1 max unavailable, 0 max surge
+Pod Template:
+  Labels:  app=checkout-api
+  Containers:
+   api:
+    Image:      busybox:1.36
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Command:
+      httpd
+      -f
+      -p
+      8080
+      -h
+      /www
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      APP_VERSION:  2026.09.04
+    Mounts:
+      /www from content (rw)
+  Volumes:
+   content:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          checkout-content
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type             Status  Reason
+  ----             ------  ------
+  Available        True    MinimumReplicasAvailable
+  ReplicaFailure   True    FailedCreate
+  Progressing      False   ProgressDeadlineExceeded
+OldReplicaSets:    checkout-api-8587489575 (2/2 replicas created)
+NewReplicaSet:     checkout-api-64fb54b496 (0/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m10s  deployment-controller  Scaled up replica set checkout-api-8587489575 from 0 to 3
+  Normal  ScalingReplicaSet  2m4s   deployment-controller  Scaled down replica set checkout-api-8587489575 from 3 to 2
+  Normal  ScalingReplicaSet  2m4s   deployment-controller  Scaled up replica set checkout-api-64fb54b496 from 0 to 1

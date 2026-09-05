@@ -52,10 +52,20 @@ CLUSTER_KINDS: tuple[str, ...] = (
     "clusterrolebindings",
     "clusterroles",
     "events",
+    "mutatingwebhookconfigurations",
     "namespaces",
     "nodes",
     "pv",
     "storageclasses",
+    "validatingwebhookconfigurations",
+)
+
+# Kinds the capture roster gained after the frozen set was recorded (capture
+# schema 2, 2026-09-04). A schema-1 fixture cannot contain them and never will:
+# frozen fixtures are byte-identical forever, so reading one of these kinds
+# from a frozen snapshot reports "not captured" rather than an empty list.
+CLUSTER_KINDS_SINCE_SCHEMA_2: frozenset[str] = frozenset(
+    {"mutatingwebhookconfigurations", "validatingwebhookconfigurations"}
 )
 
 # kubectl's own singulars and short names, so the model's natural phrasing
@@ -155,6 +165,33 @@ def namespaces_named_in(text: str, known: set[str]) -> set[str]:
 def page(fixture: Path) -> str:
     """The alert the on-call engineer was paged with."""
     return (fixture / "page.txt").read_text(encoding="utf-8")
+
+
+_SCHEMA_LINE = re.compile(r"^schema:\s*(\d+)\s*$", re.MULTILINE)
+
+
+def capture_schema(fixture: Path) -> int:
+    """The capture-layout version recorded in scenario.yaml by evals/capture.sh.
+
+    Decides which cluster kinds a snapshot can be expected to hold: schema 1 is
+    the frozen set's layout, schema 2 added the admission webhook
+    configurations. A ledger without the line is a broken fixture, not schema 1.
+    """
+    ledger = fixture / "scenario.yaml"
+    if not ledger.is_file():
+        raise FixtureError(f"{fixture.name}: no scenario.yaml capture ledger")
+    match = _SCHEMA_LINE.search(ledger.read_text(encoding="utf-8"))
+    if match is None:
+        raise FixtureError(f"{fixture.name}: scenario.yaml records no capture schema")
+    return int(match.group(1))
+
+
+def expected_cluster_kinds(fixture: Path) -> frozenset[str]:
+    """The cluster kinds this snapshot's capture schema guarantees are present."""
+    kinds = frozenset(CLUSTER_KINDS)
+    if capture_schema(fixture) < 2:
+        kinds -= CLUSTER_KINDS_SINCE_SCHEMA_2
+    return kinds
 
 
 def get_all(fixture: Path) -> str:

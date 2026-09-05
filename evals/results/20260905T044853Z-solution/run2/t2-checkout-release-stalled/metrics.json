@@ -1,0 +1,23 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "arm": "solution",
+  "run_id": "b464f5c4927d",
+  "model": "claude-opus-5",
+  "input_tokens": 139389,
+  "output_tokens": 15967,
+  "cost_usd": 0.683684,
+  "uncached_input_tokens": 18,
+  "cache_read_tokens": 102026,
+  "cache_write_tokens": 37345,
+  "duration_s": 174.63,
+  "turns": 9,
+  "tool_calls": 9,
+  "submit_attempts": 4,
+  "verdict_proposed": "inconclusive",
+  "verdict_final": "inconclusive",
+  "salvaged": true,
+  "evidence_items": 0,
+  "ruled_out_items": 0,
+  "verification_present": 0,
+  "verification_total": 0
+}

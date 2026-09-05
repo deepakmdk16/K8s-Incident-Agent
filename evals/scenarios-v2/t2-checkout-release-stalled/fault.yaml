@@ -1,0 +1,134 @@
+# t2-checkout-release-stalled — T2, the cause is a cluster-scoped object that
+# lives in no namespace at all.
+#
+# Atom: webhook-admission-block (v2 class). An ORPHANED
+#   ValidatingWebhookConfiguration: the platform team's policy component was
+#   removed together with its namespace, but its configuration was left
+#   behind. Its .webhooks[0].clientConfig.service names Service policy-guard in
+#   namespace platform-policy — neither exists — and failurePolicy is Fail, so
+#   the API server refuses every pod CREATE it intercepts with
+#     Internal error occurred: failed calling webhook
+#     "validate.policy-guard.platform.internal": failed to call webhook:
+#     Post "https://policy-guard.platform-policy.svc:443/validate?timeout=10s":
+#     service "policy-guard" not found
+#   (exact text observed on kube-apiserver v1.37.0).
+#
+# Mechanism: the checkout team ships a release (the Deployment below is
+#   setup.yaml's with a new APP_VERSION). The rollout retires one old pod
+#   (maxUnavailable 1), then the new ReplicaSet tries to create its first pod
+#   and is refused, forever: FailedCreate events on the ReplicaSet, the
+#   Deployment at 2/3 ready and 0 updated, Progressing=False after 120s.
+#   Nothing in namespace checkout is wrong. Rolling back does NOT recover —
+#   the old ReplicaSet would then have to create a pod, and is refused too.
+#
+# Wait condition (wait.sh): a ReplicaSet FailedCreate event in checkout whose
+#   message carries the webhook name AND 'service "policy-guard" not found',
+#   with the Deployment at 0 updated / 2 ready / ProgressDeadlineExceeded.
+#
+# Gold failing resource: validatingwebhookconfiguration/workload-standards
+#   (cluster-scoped). Remediation: delete it (or set failurePolicy: Ignore on
+#   it); the ReplicaSet then creates its pods and the rollout completes.
+#
+# Naming: the configuration's metadata.name shares no token with the webhook
+#   name, the Service or its namespace — all three of which the error message
+#   prints — so no arm can derive the object's name from the event text; it has
+#   to read the object. Its Helm metadata is what a chart's orphan really
+#   carries: the release-namespace annotation names the namespace that is gone.
+#
+# Ordering matters: the configuration precedes the Deployment so that it is
+#   registered before the rollout's first pod create. Kind-cluster reset: the
+#   configuration carries the scenario label evals/inject.sh deletes by;
+#   capture.sh scrubs that label out of the fixture so it is never agent-visible.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: workload-standards
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    incident-lab.dev/scenario: t2-checkout-release-stalled
+  annotations:
+    meta.helm.sh/release-name: workload-standards
+    meta.helm.sh/release-namespace: platform-policy
+webhooks:
+  - name: validate.policy-guard.platform.internal
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    failurePolicy: Fail
+    matchPolicy: Equivalent
+    timeoutSeconds: 10
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kube-system
+            - kube-public
+            - kube-node-lease
+            - local-path-storage
+    clientConfig:
+      service:
+        namespace: platform-policy
+        name: policy-guard
+        path: /validate
+        port: 443
+---
+# The release: setup.yaml's Deployment with a new APP_VERSION and nothing else.
+# Deliberately an env value, not the image: an image change would put "image"
+# or "tag" into every arm's mechanism sentence, which co-matches a frozen
+# class's vocabulary ("image/tag" + "not found") for reasons unrelated to the
+# diagnosis.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-api
+  namespace: checkout
+  labels:
+    app: checkout-api
+spec:
+  replicas: 3
+  progressDeadlineSeconds: 120
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: checkout-api
+  template:
+    metadata:
+      labels:
+        app: checkout-api
+    spec:
+      containers:
+        - name: api
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["httpd", "-f", "-p", "8080", "-h", "/www"]
+          env:
+            - name: APP_VERSION
+              value: "2026.09.04"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: content
+              mountPath: /www
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: content
+          configMap:
+            name: checkout-content
