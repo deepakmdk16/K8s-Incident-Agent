@@ -5,7 +5,8 @@
 > loop, and must cite — and re-execute — the evidence chain behind its root-cause
 > verdict before it may assert one. Three arms over a frozen 12-case set:
 > rules-only 27/36, one-prompt baseline 30/36, the agent **36/36** — every number
-> re-derivable offline with `make verify`.
+> re-derivable offline with `make verify`. An additive second case set then
+> measures where that ceiling actually is (see *Beyond the frozen set*).
 
 ## The problem
 
@@ -56,7 +57,11 @@ cluster.
   decision tree do this?" as a measurement rather than an argument. See
   [ablation/README.md](ablation/README.md).
 - `evals/` — the harness that scores all three arms from recorded fixtures with
-  one frozen scorer. See [evals/README.md](evals/README.md).
+  one frozen scorer (`evals/scenarios/`, `evals/scoring.py`), plus an additive
+  case root (`evals/scenarios-v2/`) scored by an additive scorer
+  (`evals/scoring_v2.py`) so new, harder cases never move a frozen number. See
+  [evals/README.md](evals/README.md) and
+  [evals/scenarios-v2/README.md](evals/scenarios-v2/README.md).
 - `common/` — the shared kernel (structured logging, the pinned model call
   shape).
 - [CHANGELOG.md](CHANGELOG.md) — the improvement narrative, each entry tied to
@@ -181,6 +186,56 @@ evidence — including one it gets right only because of the order chosen for it
 Full analysis, pre-registered before the arm was written:
 [docs/experiments/2026-08-29-rules-ablation.md](docs/experiments/2026-08-29-rules-ablation.md).
 
+## Beyond the frozen set: the ceiling, measured
+
+36/36 says the frozen set is saturated; it does not say what the agent cannot
+do. Three additive cases under `evals/scenarios-v2/` were built to find out,
+each pre-registered with per-arm predictions before it was scored
+([docs/experiments/](docs/experiments/)), and each read from the per-row
+sub-scores (`resource_correct`, `class_correct`, verdict) rather than the pooled
+number — because twice a pooled gap turned out to be the rubric's vocabulary,
+not capability ([CHANGELOG [13], [14]](CHANGELOG.md)).
+
+| case | what it adds | result |
+|---|---|---|
+| `t2-crossns-externalname-selector` | cause one namespace away from the page | both model arms name the right object 3/3; it tests citation discipline, not search |
+| `t3-crossns-decoys` | the same objects under a noise pack with three broken-but-irrelevant decoys | neither arm is misled; the agent never even reads the decoys |
+| `t2-checkout-release-stalled` | cause is a **cluster-scoped** orphaned admission webhook configuration, an object no arm's tools can read | **the ceiling** — table below |
+
+The third case is the one that bit. An orphaned `ValidatingWebhookConfiguration`
+with `failurePolicy: Fail` makes the API server refuse every pod create; the
+paged release stalls; nothing in the paged namespace is wrong. The fixture
+carries the object (the capture roster grew to include the kind), but the
+baseline's dump policy never includes cluster-scoped objects and the agent's
+`get_object` refuses them by design. Scored 2026-09-05, three runs per model arm
+([bundles](evals/results/)):
+
+| arm | pooled | resource_correct | class_correct | confirmed-wrong |
+|---|---|---|---|---|
+| rules-only | 0/1 | 0/1 | 0/1 | 1 |
+| baseline | 0/3 | 0/3 | 3/3 | **3** |
+| agent (unchanged) | 1/3 | 3/3 | 1/3 | **0** |
+
+Read carefully, that table says three things. The baseline named the kind and
+the mechanism every time, could not name the object, and said `confirmed` three
+times. The agent's 3/3 on the object was **not** capability: in every run the
+name first appears in a validator rejection message ("Present:
+workload-standards") after the same guess the baseline made — a leak in the
+gate, pre-registered as one before the run. And the verdict gate held:
+`confirmed-wrong` 0 against 3, on the same unreadable object.
+
+The leak, and three more found when the fix was reviewed and then attacked,
+are closed in [CHANGELOG [16]](CHANGELOG.md): the gate no longer lists names for
+kinds no tool serves, no longer accepts a tool's "I cannot serve that" as
+evidence, anchors a defect only on a real result about the failing kind, and
+refuses argument keys a tool never consumed. A standing test replays all 36
+frozen accepted submissions through the current gate and requires every one to
+still earn `confirmed`, so hardening the gate cannot silently move the headline.
+The pre-registered re-score under the hardened gate (prediction: the agent names
+nothing it cannot read, `confirmed-wrong` stays 0) and the slice that then serves
+the webhook kinds are the next two steps; both are written down before they run
+([docs/experiments/2026-09-04-webhook-outage.md](docs/experiments/2026-09-04-webhook-outage.md)).
+
 ## Reproducing the numbers
 
 Written for a clean environment, from a fresh clone.
@@ -236,13 +291,22 @@ case-run `report.md`, `answer.json`, `metrics.json` — plus `prompt.txt` for th
 two model arms (the rules arm builds no prompt), and `system.txt` and
 `transcript.jsonl` for the solution arm.
 
-**Required data:** none to obtain — the 12 recorded cluster snapshots ship in the
-repo under `evals/fixtures/` (~25 MB). They were captured by
-`evals/capture.sh` from disposable local `kind` clusters built by
-`evals/inject.sh`; they contain no third-party, personal, or production data, and
-Secret values are replaced with `REDACTED-BY-CAPTURE` at capture time. The
-evaluation replays entirely offline from those files: **no Kubernetes cluster is
-needed to reproduce any number here.**
+**Required data:** none to obtain — the 15 recorded cluster snapshots (the
+frozen 12 plus the three additive cases) ship in the repo under
+`evals/fixtures/` (~34 MB). They were captured by `evals/capture.sh` from
+disposable local `kind` clusters built by `evals/inject.sh`; they contain no
+third-party, personal, or production data, and Secret values are replaced with
+`REDACTED-BY-CAPTURE` at capture time. The evaluation replays entirely offline
+from those files: **no Kubernetes cluster is needed to reproduce any number
+here.**
+
+The additive cases run the same way, scored by the additive scorer:
+
+```sh
+uv run python -m evals.run_eval --arm rules --runs 1 --scenarios-root evals/scenarios-v2
+uv run python -m evals.run_eval --arm solution --runs 3 --scenarios-root evals/scenarios-v2 \
+  --cases t2-checkout-release-stalled
+```
 
 **Approximate runtime:** ~25 min per arm for the full 12x3 matrix (~42 s per
 case-run, both model arms), on a laptop with no cluster.
@@ -315,10 +379,13 @@ details and rationale in [solution/README.md](solution/README.md).
   generalisation guarantee. New
   capability claims require new frozen cases, scored before any tuning against
   them.
-- **Cluster-scoped role objects are invisible to the tools.** ClusterRoles and
-  ClusterRoleBindings (~200 KB in every fixture) are not reachable by any tool;
-  no case in the set needs them, and the omission is a deliberate context
-  guard — but a fault living there would be undiagnosable today.
+- **Cluster-scoped objects are invisible to the tools — and now measured.**
+  ClusterRoles, ClusterRoleBindings and admission webhook configurations are
+  captured (the last two kinds since capture schema 2) but not served by any
+  read tool; the agent's tools return an explicit "not served by this
+  snapshot" for them, which the gate refuses to accept as evidence. The
+  additive webhook case above is exactly a fault living there, and the agent
+  cannot read its cause today. Serving those kinds is the next slice.
 - **Replay-only.** Every number was produced against recorded fixtures, not a
   live cluster. The live-kubectl adapter is a bounded swap behind
   [solution/fixture.py](solution/fixture.py), but it has not been built or
@@ -337,7 +404,7 @@ types, secret scan, evidence checks); it is also the pre-push hook. The
 language gates it runs, individually:
 
 ```sh
-uv run pytest -q              # 228 tests: offline, deterministic, no live LLM calls
+uv run pytest -q              # 402 tests: offline, deterministic, no live LLM calls
 uv run ruff check .           # lint (config in pyproject.toml)
 uv run ruff format --check .  # formatting
 uv run pyright                # type check — strict mode, whole tree
