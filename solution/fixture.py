@@ -105,6 +105,18 @@ class FixtureError(RuntimeError):
     """A tool asked the snapshot for something it cannot serve."""
 
 
+class NotServedError(FixtureError):
+    """The snapshot has no view of what was asked: a limit of the tools, not a fact
+    about the cluster.
+
+    Distinct from a cluster-state error ("no namespace 'x'", "no configmap named
+    'y'"), which IS evidence — a missing referent is often the defect. A
+    NotServedError result says nothing about the cluster, so the validator refuses
+    to accept it as a quote, a defect, or a PRESENT check (found the hard way:
+    docs/failure-modes.md 2026-09-05).
+    """
+
+
 def _known_kinds() -> dict[str, str]:
     kinds = {kind: kind for kind in NAMESPACED_KINDS + CLUSTER_KINDS}
     kinds |= {kind.rstrip("s"): kind for kind in NAMESPACED_KINDS + CLUSTER_KINDS}
@@ -120,7 +132,7 @@ def normalize_kind(kind: str) -> str:
     """Resolve any kubectl spelling of a kind to its captured file stem."""
     resolved = _KINDS.get(kind.strip().lower())
     if resolved is None:
-        raise FixtureError(
+        raise NotServedError(
             f"unknown or uncaptured kind {kind!r}; captured kinds are: "
             + ", ".join(sorted(set(NAMESPACED_KINDS + CLUSTER_KINDS)))
         )
@@ -201,10 +213,10 @@ def get_all(fixture: Path) -> str:
 
 def _read_items(path: Path, what: str) -> list[dict[str, Any]]:
     if not path.is_file():
-        raise FixtureError(f"{what} was not captured in this snapshot")
+        raise NotServedError(f"{what} was not captured in this snapshot")
     document = cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
     if document.get("capture_error"):
-        raise FixtureError(f"{what} failed to capture: {document.get('error', 'unknown error')}")
+        raise NotServedError(f"{what} failed to capture: {document.get('error', 'unknown error')}")
     return cast(list[dict[str, Any]], document.get("items", []))
 
 
@@ -234,6 +246,12 @@ def describe(fixture: Path, kind: str, name: str, namespace: str | None = None) 
     safe_name = _safe(name, "name")
     if resolved == "nodes":
         return (fixture / "cluster" / "nodes.describe.txt").read_text(encoding="utf-8")
+    if resolved in CLUSTER_KINDS:
+        # Without this branch a cluster-scoped kind fell through to the
+        # namespaced glob and reported "no describe captured for <kind>/<name>
+        # in namespace <ns>" — a deterministic string naming the object, which
+        # the validator then accepted as a quote about it (2026-09-05).
+        raise NotServedError(f"describe of cluster-scoped {resolved} is not served here")
     if namespace is None:
         raise FixtureError(f"describe of namespaced kind {kind!r} requires a namespace")
     ns = _safe(namespace, "namespace")

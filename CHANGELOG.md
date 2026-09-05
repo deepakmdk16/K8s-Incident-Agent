@@ -15,6 +15,67 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [16] The gate had four oracles; a red team found them, a replay of 36 frozen rows proves the fix moved nothing — 2026-09-05, 08:40 UTC
+
+**Change:** `solution/validate.py`, `solution/tools.py`, `solution/fixture.py`,
+`solution/agent.py` — the verify-before-assert gate, no new reach. [15] showed
+the solution naming an object it could not read because V4's rejection listed
+the names present. Closing that, and having the closure reviewed and then
+attacked, found three more ways to earn `confirmed` on an unreadable object,
+each reproduced end to end against the webhook fixture before it was closed:
+
+1. **V4 listed names** for a kind no tool serves → it now lists names only for
+   kinds `get_object` can list (`tools.serves_kind`).
+2. **Tool-limitation errors were evidence.** `get_object`/`describe` on a
+   cluster-scoped kind, an unknown kind, an uncaptured kind — and, found in
+   review, `find_consumers`, whose "kinds that exist" trailer read the cluster
+   file and enumerated every webhook configuration by name — all returned
+   strings that re-verified under V1 and named the object. They now raise
+   `fixture.NotServedError`, render with a distinct prefix the model sees
+   ("not served by this snapshot; says nothing about the cluster"), are flagged
+   `is_error`, and are refused as quotes (V1), as defects (V7) and as PRESENT
+   checks (V6). Cluster-state errors — `no namespace 'platform-policy'`, `no
+   configmap named x` — stay citable: a missing referent is often the defect.
+3. **V7 anchored on the name alone.** A served tool asked about a *different*
+   kind carrying the failing object's name ("describe configmap/<name>",
+   `get_events involved_name=<name>` → "0 events matched") counted as a read of
+   it. The two anchoring rules now require a real result (not an error, not an
+   empty echo of the arguments) about the failing kind — with exactly one
+   relationship allowed besides same-kind, a pod read anchoring its controller,
+   because that is what three frozen accepted submissions rely on.
+4. **An undeclared argument key rode along.** Found by the second, adversarial
+   pass on the fix: `dispatch` ignored keys a tool does not declare, so
+   `get_events {…, name: workload-standards}` — or even `list_namespaces {name:
+   …}` — re-executed to real cluster state while "naming" the object; eight
+   variants earned `confirmed` with zero violations. `dispatch` now refuses
+   undeclared keys as not-served, and the anchoring test reads only the keys
+   that identify an object (`name`, `pod`, `involved_name`).
+
+**Why:** [15]'s calibration claim ("confirmed-wrong 0 on an unreadable
+object") rested on the agent not having tried these paths, not on the gate
+refusing them. A gate that can be satisfied by an error string, an empty result
+or a typed-in argument is not measuring what it says.
+
+**Evidence after:** [tests/test_frozen_replay.py](tests/test_frozen_replay.py)
+rebuilds each of the **36 frozen accepted submissions**' ledgers from their
+transcripts by re-executing the same calls, feeds them through today's gate, and
+requires `confirmed` with zero violations — all 36 pass, so no headline row could
+have moved (the first draft of rule 3 failed three of them, which is how the
+pod→controller allowance was found rather than guessed). Twelve regression
+tests pin the four closures on the webhook fixture, one per attack shape.
+Review and red-team scripts reproduced every hole before the fix and none
+after. Suite 332 → **402 passed**; `bash scripts/checkpoints.sh` **0
+failure(s)**. Failure mode logged: [docs/failure-modes.md](docs/failure-modes.md)
+2026-09-05, extended.
+
+**Next decision it drove:** the pre-registered stage-1 re-score (solution, 3
+runs, prediction `resource_correct` 0/3, confirmed-wrong 0;
+[docs/experiments/2026-09-04-webhook-outage.md](docs/experiments/2026-09-04-webhook-outage.md))
+is **blocked on API credits** — the first attempt aborted mid-run on
+"credit balance is too low" and its partial bundle is disclosed-partial and not
+committed. It runs as soon as credits exist; stage 2 (serving the kinds) waits
+on its result.
+
 ## [15] The first case whose cause is outside every arm's reach — and the gate that held — 2026-09-05, 05:45 UTC
 
 **Change:** roadmap 1.3, pre-registered as the escalation in [14].

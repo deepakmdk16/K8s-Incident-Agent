@@ -27,9 +27,13 @@ layer refuses to serve, exactly the fact the case was built to withhold.
 A second oracle of the same shape was found in review before the run and
 pre-registered: `describe` on the object returns "no describe captured for
 <kind>/<name>", a tool-limitation error that names the object and re-verifies
-under V1, so it could serve as a V7 defect quote. The verdict gate held anyway
-(confirmed-wrong 0), because V7 also demands a PRESENT verification check about
-the object and none existed.
+under V1, so it could serve as a V7 defect quote. The verdict gate held in those
+three runs (confirmed-wrong 0) — but the review of the fix found that it held
+because the agent did not try hard enough, not because the rule was airtight:
+`find_consumers` still enumerated the kind's names, and V7 anchored on the name
+alone, so a served tool asked about a *different* kind with that name ("0
+events matched" for `get_events involved_name=<name>`; "no describe captured for
+configmap/<name>") would have earned `confirmed`.
 
 **Evidence:** `transcript.jsonl` of every run in
 [evals/results/20260905T044853Z-solution/](../evals/results/20260905T044853Z-solution/summary.md)
@@ -45,11 +49,22 @@ listing names for kinds no read tool serves, and V6/V7 stop accepting
 tool-limitation errors as evidence, while cluster-state errors ("no configmap
 named X") stay citable because a missing referent IS the defect.
 
+A second red-team pass on the fix found the same family one layer down: the
+tool layer silently ignored argument keys a tool does not declare, and the
+gate's "is this call about the object" test scanned every string argument. An
+extra key `name=<object>` on `get_events` or even `list_namespaces` therefore
+re-executed to real cluster state under V1 while "naming" the object for V7 —
+`confirmed` with zero violations, reproduced eight ways. Now `dispatch` refuses
+undeclared keys as not-served, and the anchoring test reads only the keys that
+identify an object (`name`, `pod`, `involved_name`).
+
 **Lesson for reliable agents:** every message a gate sends back to the agent is
 also an information channel. A rejection that enumerates what *would* have been
 accepted is a search oracle, and an agent under a reject cap will use it. Design
-rejections to name the unmet condition, never the missing value; and never let
-"this tool cannot serve that" read as evidence about the world.
+rejections to name the unmet condition, never the missing value; never let
+"this tool cannot serve that" read as evidence about the world; and never let a
+gate trust an argument the tool did not consume — what a call was *about* is
+decided by what the tool did with it, not by what was typed next to it.
 
 ## 2026-09-04 — RECURRENCE: an arm-score gap read as capability when it was vocabulary
 

@@ -598,6 +598,407 @@ def test_v2_does_not_gate_a_ruled_out_citation() -> None:
     assert not [v for v in result.violations if v.startswith("V2")]
 
 
+# --- the oracles the webhook case exposed (docs/failure-modes.md 2026-09-05) ------
+
+WEBHOOK = ROOT / "evals" / "fixtures" / "t2-checkout-release-stalled"
+
+
+def _webhook_ledger() -> tl.ToolLedger:
+    """The reads the unchanged arm actually made on the webhook case, replayed."""
+    ledger = tl.ToolLedger()
+    ledger.record(tl.ToolInvocation("page", "page", {}, fx.page(WEBHOOK), frozenset({""})))
+    ledger.record(
+        tl.ToolInvocation(
+            "overview",
+            "overview",
+            {},
+            tl.render_namespace_overview(WEBHOOK, "checkout"),
+            frozenset({"checkout"}),
+        )
+    )
+    reads: list[tuple[str, str, dict[str, object]]] = [
+        ("c1", "get_events", {"namespace": "checkout", "warnings_only": True}),
+        (
+            "c2",
+            "get_object",
+            {
+                "namespace": "cluster-scoped",
+                "kind": "validatingwebhookconfigurations",
+                "name": "workload-standards",
+            },
+        ),
+        (
+            "c3",
+            "describe",
+            {
+                "namespace": "cluster-scoped",
+                "kind": "validatingwebhookconfiguration",
+                "name": "workload-standards",
+            },
+        ),
+        ("c4", "namespace_overview", {"namespace": "platform-policy"}),
+    ]
+    for call_id, name, arguments in reads:
+        ledger.record(
+            tl.ToolInvocation(
+                call_id,
+                name,
+                arguments,
+                tl.dispatch(WEBHOOK, name, arguments),
+                tl.namespaces_touched(name, arguments),
+            )
+        )
+    return ledger
+
+
+def _webhook_submission(**overrides: object) -> va.Submission:
+    """The shape the unchanged arm converged on: the right object, named without a read."""
+    ref = {
+        "kind": "ValidatingWebhookConfiguration",
+        "namespace": "cluster-scoped",
+        "name": "workload-standards",
+    }
+    arguments: dict[str, object] = {
+        "failing_resource": ref,
+        "remediation": ref
+        | {
+            "field_path": ".webhooks[0].failurePolicy",
+            "current_value": "Fail",
+            "required_value": "Ignore",
+        },
+        "root_cause_statement": "An orphaned webhook configuration refuses every pod create.",
+        "mechanism": (
+            "ValidatingWebhookConfiguration workload-standards fails every pod create because "
+            'the API server cannot call its webhook: `service "policy-guard" not found`.'
+        ),
+        "evidence": [
+            {
+                "role": "symptom",
+                "claim": "The release has not completed.",
+                "tool_call_id": "page",
+                "quote": "the new\nversion has reached 0 of 3 replicas",
+            },
+            {
+                "role": "link",
+                "claim": "The ReplicaSet cannot create pods.",
+                "tool_call_id": "c1",
+                "quote": "failed calling webhook",
+            },
+            {
+                "role": "defect",
+                "claim": "The configuration is the object named.",
+                "tool_call_id": "c3",
+                "quote": "validatingwebhookconfiguration",
+            },
+        ],
+        "ruled_out": [
+            {
+                "alternative": "The Deployment template is wrong.",
+                "entity_names": ["checkout-api"],
+                "ruling_claim": "The old ReplicaSet serves fine.",
+                "tool_call_id": "overview",
+                "quote": "checkout-api",
+            }
+        ],
+        "verification": [
+            {
+                "command": "kubectl describe validatingwebhookconfiguration workload-standards",
+                "tool": "describe",
+                "arguments": {
+                    "namespace": "cluster-scoped",
+                    "kind": "validatingwebhookconfiguration",
+                    "name": "workload-standards",
+                },
+                "must_contain": "workload-standards",
+            },
+            {
+                "command": "kubectl get events -n checkout",
+                "tool": "get_events",
+                "arguments": {"namespace": "checkout", "warnings_only": True},
+                "must_contain": "failed calling webhook",
+            },
+        ],
+        "verdict": "confirmed",
+        "missing_evidence": "",
+    }
+    arguments.update(overrides)
+    return va.parse_submission(arguments)
+
+
+def _validate_webhook(submission: va.Submission) -> va.ValidationResult:
+    return va.validate(
+        submission,
+        _webhook_ledger(),
+        WEBHOOK,
+        "t2-checkout-release-stalled",
+        "checkout",
+        fx.page(WEBHOOK),
+        submission.mechanism,
+    )
+
+
+def test_v4_does_not_list_names_for_a_kind_no_tool_serves() -> None:
+    """The unchanged arm learned the object's name from this very message, 3 runs of 3."""
+    ref = {
+        "kind": "ValidatingWebhookConfiguration",
+        "namespace": "cluster-scoped",
+        "name": "policy-guard",
+    }
+    guessed = _webhook_submission(
+        failing_resource=ref,
+        remediation=ref
+        | {"field_path": ".webhooks[0].failurePolicy", "current_value": "a", "required_value": "b"},
+    )
+    v4 = [v for v in _validate_webhook(guessed).violations if v.startswith("V4 EXISTS")]
+    assert v4, "a wrong name must still be rejected"
+    assert "workload-standards" not in v4[0]
+    assert "Present:" not in v4[0]
+
+
+def test_v4_still_lists_names_for_a_kind_the_agent_could_have_listed() -> None:
+    bad = _submission(
+        failing_resource={"kind": "rolebinding", "namespace": "inventory", "name": "imagined"},
+        remediation={
+            "kind": "rolebinding",
+            "namespace": "inventory",
+            "name": "imagined",
+            "field_path": ".subjects[0].name",
+            "current_value": "a",
+            "required_value": "b",
+        },
+    )
+    v4 = [v for v in _validate(bad).violations if v.startswith("V4 EXISTS")]
+    assert v4 and "Present: inventory-reader-binding" in v4[0]
+
+
+def test_a_not_served_result_is_neither_a_quote_nor_a_defect_nor_a_present_check() -> None:
+    """Every no-read path to `confirmed` the review found, closed at once: the
+    describe error names the object and re-verifies literally, yet counts for nothing."""
+    result = _validate_webhook(_webhook_submission())
+    assert any("V1 QUOTE: evidence[2]" in v and "no view" in v for v in result.violations)
+    assert result.verification_results[0][1] is False, "describe of an unserved kind is ABSENT"
+    assert result.verification_results[1][1] is True
+    assert result.verdict_allowed != "confirmed"
+
+
+@pytest.mark.parametrize(
+    ("call", "quote", "must_contain"),
+    [
+        # a served tool, a different kind, the failing object's name: an empty echo
+        (
+            ("get_events", {"namespace": "checkout", "involved_name": "workload-standards"}),
+            "0 events matched",
+            "0 events matched",
+        ),
+        (
+            (
+                "describe",
+                {"namespace": "checkout", "kind": "configmap", "name": "workload-standards"},
+            ),
+            "no describe captured for configmap/workload-standards",
+            "workload-standards",
+        ),
+        (
+            (
+                "find_consumers",
+                {"namespace": "checkout", "kind": "configmap", "name": "workload-standards"},
+            ),
+            "no workload in checkout references configmap/workload-standards",
+            "workload-standards",
+        ),
+    ],
+    ids=["events-echo", "describe-other-kind", "consumers-echo"],
+)
+def test_v7_is_not_anchored_by_an_echo_of_the_name_from_another_kind(
+    call: tuple[str, dict[str, object]], quote: str, must_contain: str
+) -> None:
+    """Review of the first closure (2026-09-05): V7 keyed on the name alone, so any served
+    tool asked about a same-named object of another kind earned `confirmed`."""
+    ledger = _webhook_ledger()
+    name, arguments = call
+    ledger.record(
+        tl.ToolInvocation(
+            "c9",
+            name,
+            arguments,
+            tl.dispatch(WEBHOOK, name, arguments),
+            tl.namespaces_touched(name, arguments),
+        )
+    )
+    submission = _webhook_submission(
+        evidence=[
+            {
+                "role": "symptom",
+                "claim": "The release has not completed.",
+                "tool_call_id": "page",
+                "quote": "0 of 3 replicas",
+            },
+            {
+                "role": "link",
+                "claim": "The ReplicaSet cannot create pods.",
+                "tool_call_id": "c1",
+                "quote": "failed calling webhook",
+            },
+            {"role": "defect", "claim": "About the object.", "tool_call_id": "c9", "quote": quote},
+        ],
+        verification=[
+            {
+                "command": "kubectl something",
+                "tool": name,
+                "arguments": arguments,
+                "must_contain": must_contain,
+            },
+            {
+                "command": "kubectl get events -n checkout",
+                "tool": "get_events",
+                "arguments": {"namespace": "checkout", "warnings_only": True},
+                "must_contain": "failed calling webhook",
+            },
+        ],
+    )
+    result = va.validate(
+        submission,
+        ledger,
+        WEBHOOK,
+        "t2-checkout-release-stalled",
+        "checkout",
+        fx.page(WEBHOOK),
+        submission.mechanism,
+    )
+    assert result.verdict_allowed != "confirmed"
+    assert any("is not earned yet" in v and "defect" in v for v in result.violations)
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments", "quote"),
+    [
+        # the single root cause the red-team found: an undeclared key carrying the name
+        (
+            "get_events",
+            {"namespace": "checkout", "warnings_only": True, "name": "workload-standards"},
+            "failed calling webhook",
+        ),
+        ("list_namespaces", {"name": "workload-standards"}, "checkout workloads="),
+        (
+            "get_events",
+            {
+                "warnings_only": True,
+                "involved_name": "checkout-api",
+                "object": "workload-standards",
+            },
+            "failed calling webhook",
+        ),
+        # a declared key that scopes rather than identifies must not anchor either
+        (
+            "get_logs",
+            {
+                "namespace": "kube-system",
+                "pod": "kube-apiserver-incident-lab-control-plane",
+                "contains": "workload-standards",
+            },
+            "0 log lines contain",
+        ),
+    ],
+    ids=["events-extra-name", "list-namespaces-extra-name", "events-extra-object", "logs-contains"],
+)
+def test_v7_is_not_anchored_by_an_argument_the_tool_never_consumed(
+    name: str, arguments: dict[str, object], quote: str
+) -> None:
+    ledger = _webhook_ledger()
+    ledger.record(
+        tl.ToolInvocation(
+            "c9",
+            name,
+            arguments,
+            tl.dispatch(WEBHOOK, name, arguments),
+            tl.namespaces_touched(name, arguments),
+        )
+    )
+    submission = _webhook_submission(
+        evidence=[
+            {
+                "role": "symptom",
+                "claim": "The release has not completed.",
+                "tool_call_id": "page",
+                "quote": "0 of 3 replicas",
+            },
+            {
+                "role": "link",
+                "claim": "The ReplicaSet cannot create pods.",
+                "tool_call_id": "c1",
+                "quote": "failed calling webhook",
+            },
+            {"role": "defect", "claim": "About the object.", "tool_call_id": "c9", "quote": quote},
+        ],
+        verification=[
+            {"command": "kubectl x", "tool": name, "arguments": arguments, "must_contain": quote},
+            {
+                "command": "kubectl get events -n checkout",
+                "tool": "get_events",
+                "arguments": {"namespace": "checkout", "warnings_only": True},
+                "must_contain": "failed calling webhook",
+            },
+        ],
+    )
+    result = va.validate(
+        submission,
+        ledger,
+        WEBHOOK,
+        "t2-checkout-release-stalled",
+        "checkout",
+        fx.page(WEBHOOK),
+        submission.mechanism,
+    )
+    assert result.verdict_allowed != "confirmed", result.violations
+
+
+def test_a_cluster_state_error_stays_citable() -> None:
+    """`no namespace 'platform-policy'` IS evidence: the orphan's namespace is gone."""
+    honest = _webhook_submission(
+        verdict="probable",
+        evidence=[
+            {
+                "role": "symptom",
+                "claim": "The release has not completed.",
+                "tool_call_id": "page",
+                "quote": "0 of 3 replicas",
+            },
+            {
+                "role": "link",
+                "claim": "The ReplicaSet cannot create pods.",
+                "tool_call_id": "c1",
+                "quote": "failed calling webhook",
+            },
+        ],
+        ruled_out=[
+            {
+                "alternative": "The webhook's namespace still exists; the Service is merely down.",
+                "entity_names": ["platform-policy"],
+                "ruling_claim": "The namespace is gone.",
+                "tool_call_id": "c4",
+                "quote": "no namespace 'platform-policy' in this snapshot",
+            }
+        ],
+        verification=[
+            {
+                "command": "kubectl get events -n checkout",
+                "tool": "get_events",
+                "arguments": {"namespace": "checkout", "warnings_only": True},
+                "must_contain": "failed calling webhook",
+            },
+            {
+                "command": "kubectl get ns platform-policy",
+                "tool": "namespace_overview",
+                "arguments": {"namespace": "platform-policy"},
+                "must_contain": "no namespace 'platform-policy'",
+            },
+        ],
+    )
+    result = _validate_webhook(honest)
+    assert not any(v.startswith("V1 QUOTE") for v in result.violations), result.violations
+    assert result.verification_results[1][1] is True
+
+
 def test_v5e_never_bans_the_failing_resources_own_name() -> None:
     """A Service and the Deployment behind it share a name; banning it is unwritable.
 

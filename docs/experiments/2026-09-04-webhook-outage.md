@@ -180,3 +180,46 @@ that names it did so through a validator message. Two slices follow, in order:
    `confirmed`, turns and cost back near the frozen-set means.
 
 No v2 bar block is added on this evidence, as pre-registered.
+
+## Stage 1 — validator oracles closed, capability unchanged (pre-registered 2026-09-05, before the run)
+
+**Change under test:** the gate and the error surface it reads, no new reach.
+`solution/fixture.py` gains `NotServedError` for what the snapshot has no view
+of (cluster-scoped kinds through `get_object`, `describe` or `find_consumers`;
+unknown kinds; kinds not captured); `solution/tools.py` renders it with a
+distinct prefix the model sees ("not served by this snapshot; says nothing
+about the cluster") and `solution/agent.py` flags it `is_error` like any other
+error. `solution/validate.py`: V4 no longer lists the names present for a kind
+no read tool serves; V1 refuses a citation whose re-executed result is
+not-served; V6 marks such a check ABSENT; and V7's two object-anchoring rules
+(the defect item, the PRESENT check that names the object) now require a real
+result about the failing object — not an error, not an empty echo of the
+arguments ("0 events matched", "no workload in … references"), and, when the
+call names a kind, the failing object's kind — because a served tool asked
+about a *different* kind with the same name used to count as a read of it
+(review of this slice, 2026-09-05). Cluster-state errors (`no namespace
+'platform-policy'`, `no configmap named x`) stay citable as evidence. A replay
+of all 36 accepted frozen-set submissions through the new gate is a standing
+test: every one is still accepted as `confirmed`, so no frozen row could have
+moved. No tool serves anything new.
+
+**Predictions, per run, 3 runs:** `resource_correct` **0/3** — the agent will
+guess `policy-guard` again (it is the only name the error message offers) and
+now learns nothing from the rejection; verdicts `inconclusive` or `probable`,
+**confirmed-wrong 0**; `class_correct` 0–3 depending on how many runs exit via
+the salvage path (its sentence classifies to nothing). Turns and submit
+attempts stay high (the agent still has nowhere to read). If any run names
+`workload-standards`, the transcript is searched for how; a fourth path would
+be a new finding, and the run would not count as capability either.
+
+**Decision rule:** 0/3 with confirmed-wrong 0 confirms the ceiling is the tool
+layer's, and stage 2 (serving the kinds) proceeds unchanged. Anything else
+stops stage 2 until the new path is understood.
+
+**Amendment before the run (2026-09-05, 08:40 UTC):** the closure under test
+grew after review and a red-team pass found three more oracles (CHANGELOG
+[16]: `find_consumers` enumeration, V7 anchoring on the name alone, undeclared
+argument keys). The predictions above are unchanged; they now apply to the
+gate as it stands in [16]. A first re-score attempt against the *partial*
+closure aborted on API credits during run 2 and is not evidence (its bundle is
+outside the tree). **Result: not yet run — blocked on API credits.**

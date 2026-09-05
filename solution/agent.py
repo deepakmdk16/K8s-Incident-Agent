@@ -275,7 +275,7 @@ def diagnose(
                 )
             )
             ledger_names[citation_id] = render.source_label(call.name, call.arguments)
-            results.append(_tool_result(call.id, output, output.startswith("ERROR:"), citation_id))
+            results.append(_tool_result(call.id, output, tl.is_error(output), citation_id))
 
         turn_record["rejections"] = [r for r in rejections if r["turn"] == turns]
         turn_record["results"] = [

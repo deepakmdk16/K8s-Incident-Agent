@@ -319,9 +319,62 @@ def _sentence_count(text: str) -> int:
     return len([part for part in re.split(r"[.!?]+(?=\s|$)", text) if part.strip()])
 
 
+# The argument keys that identify the object a read is about. `namespace`,
+# `contains` and `container` are deliberately absent: a name appearing there
+# scopes or filters a read, it does not make the read about that object.
+_OBJECT_ARGUMENT_KEYS: tuple[str, ...] = ("name", "pod", "involved_name")
+
+
 def _arguments_name(arguments: Mapping[str, object], name: str) -> bool:
     lowered = name.lower()
-    return any(isinstance(v, str) and lowered in v.lower() for v in arguments.values())
+    return any(
+        isinstance(value := arguments.get(key), str) and lowered in value.lower()
+        for key in _OBJECT_ARGUMENT_KEYS
+    )
+
+
+# A pod is the product of its controller: reading the pod (describe, logs) is
+# reading the controller's behaviour, and pod names carry the controller's name.
+# That relationship, and same-kind, are the only two the anchoring rule accepts.
+_CONTROLLER_KINDS: frozenset[str] = frozenset(
+    {"cronjobs", "daemonsets", "deployments", "jobs", "replicasets", "statefulsets"}
+)
+
+
+def _same_kind(arguments: Mapping[str, object], reference: ResourceRef) -> bool:
+    """A call with a kind argument is about the failing object only if the kinds agree,
+    or the call reads a pod and the failing object is the controller that produced it.
+
+    Without this, asking a served tool about a DIFFERENT kind that happens to
+    carry the failing object's name ("describe configmap/<name>") counted as a
+    read of the object (review, 2026-09-05). The pod→controller allowance is what
+    the frozen bundle's accepted submissions rely on (tests/test_frozen_replay.py).
+    """
+    kind = arguments.get("kind")
+    if not isinstance(kind, str):
+        return True
+    try:
+        called, failing = fx.normalize_kind(kind), fx.normalize_kind(reference.kind)
+    except fx.FixtureError:
+        return False
+    return called == failing or (called == "pods" and failing in _CONTROLLER_KINDS)
+
+
+def _about_failing_object(
+    output: str, quote: str, arguments: Mapping[str, object], reference: ResourceRef
+) -> bool:
+    """Does this verified citation actually show the failing object?
+
+    Two ways: the quote names it, or the call's arguments name it and the call was
+    about its kind. Either way the result has to be real cluster state — an error
+    or an empty echo of the arguments shows nothing about any object, however
+    literally it re-verifies.
+    """
+    if not tl.is_evidence(output):
+        return False
+    if reference.name.lower() in quote.lower():
+        return True
+    return _same_kind(arguments, reference) and _arguments_name(arguments, reference.name)
 
 
 def _check_mechanism(submission: Submission, report_preview: str) -> list[str]:
@@ -412,6 +465,7 @@ def validate(
         for i, item in enumerate(submission.ruled_out)
     ]
     verified_by_label: dict[str, bool] = {}
+    fresh_by_label: dict[str, str] = {}
     for label, call_id, quote in cited:
         invocation = ledger.get(call_id)
         if invocation is None:
@@ -422,6 +476,18 @@ def validate(
             verified_by_label[label] = False
             continue
         fresh = _reexecute(invocation, fixture)
+        if tl.is_not_served(fresh):
+            # A "not served" result is a limit of the tools. It re-verifies
+            # literally, and it may even name the object — which is exactly why
+            # it must not count: it says nothing about the cluster
+            # (docs/failure-modes.md 2026-09-05).
+            violations.append(
+                f"V1 QUOTE: {label} cites a {invocation.name} result that says the snapshot "
+                "has no view of what was asked. That is a limit of the tools, not evidence "
+                "about the cluster — cite cluster state, or drop the item"
+            )
+            verified_by_label[label] = False
+            continue
         if _normalize(quote) not in _normalize(fresh):
             violations.append(
                 f"V1 QUOTE: {label}'s quote is not present in the output of "
@@ -430,6 +496,7 @@ def validate(
             verified_by_label[label] = False
             continue
         verified_by_label[label] = True
+        fresh_by_label[label] = fresh
         verified_quotes.append(quote)
         # Admissibility gates what a conclusion RESTS ON, never what it
         # eliminates: ruling out a red herring necessarily means citing the red
@@ -469,10 +536,21 @@ def validate(
             for item in present
         }
         if reference.name.lower() not in names:
-            listed = ", ".join(sorted(n for n in names if n)) or "none"
+            # The names present are listed only for a kind the agent could have
+            # listed itself. For any other kind the list would be an oracle: the
+            # snapshot holds the object, no tool serves it, and this message was
+            # how the agent learned its name (docs/failure-modes.md 2026-09-05).
+            if tl.serves_kind(reference.kind):
+                listed = ", ".join(sorted(n for n in names if n)) or "none"
+                detail = f"Present: {listed}"
+            else:
+                detail = (
+                    f"No read tool serves {reference.kind}, so its names cannot be listed "
+                    "here; name only an object you have read"
+                )
             violations.append(
                 f"V4 EXISTS: no {reference.kind} named '{reference.name}' in namespace "
-                f"'{reference.namespace}'. Present: {listed}"
+                f"'{reference.namespace}'. {detail}"
             )
     except fx.FixtureError as exc:
         violations.append(f"V4 EXISTS: failing_resource does not resolve — {exc}")
@@ -482,19 +560,26 @@ def validate(
 
     # V6 VERIFICATION EXECUTED
     verification_results: list[tuple[str, bool]] = []
+    check_outputs: list[str] = []
     if not 2 <= len(submission.verification) <= 3:
         violations.append("V6 VERIFICATION: give 2-3 checks a human could run")
     for check in submission.verification:
         if check.tool not in tl.READ_TOOL_NAMES:
             verification_results.append((check.command, False))
+            check_outputs.append("")
             violations.append(
                 f"V6 VERIFICATION: '{check.tool}' is not one of the tools you can run "
                 f"({', '.join(sorted(tl.READ_TOOL_NAMES))})"
             )
             continue
         output = tl.dispatch(fixture, check.tool, check.arguments)
-        present_now = _normalize(check.must_contain).lower() in _normalize(output).lower()
+        # A check whose command the snapshot cannot serve has not been run; it
+        # is ABSENT even if its error text happens to contain must_contain.
+        present_now = not tl.is_not_served(output) and (
+            _normalize(check.must_contain).lower() in _normalize(output).lower()
+        )
         verification_results.append((check.command, present_now))
+        check_outputs.append(output)
 
     # V7 VERDICT CRITERIA — mechanical, never numeric
     unmet: list[str] = []
@@ -509,14 +594,12 @@ def validate(
         unmet.append("one verified item with role 'symptom'")
     defect_on_target = any(
         item.role == "defect"
-        and (
-            reference.name.lower() in item.quote.lower()
-            or (
-                (invocation := ledger.get(item.tool_call_id)) is not None
-                and _arguments_name(invocation.arguments, reference.name)
-            )
+        and (invocation := ledger.get(item.tool_call_id)) is not None
+        and _about_failing_object(
+            fresh_by_label[f"evidence[{i}]"], item.quote, invocation.arguments, reference
         )
-        for item in verified_evidence
+        for i, item in enumerate(submission.evidence)
+        if verified_by_label.get(f"evidence[{i}]", False)
     )
     if not defect_on_target:
         unmet.append(
@@ -530,8 +613,10 @@ def validate(
     if len(verification_results) < 2 or len(present_checks) != len(verification_results):
         unmet.append("2-3 verification checks that are all PRESENT")
     elif not any(
-        _arguments_name(check.arguments, reference.name)
-        for check, (_, ok) in zip(submission.verification, verification_results, strict=True)
+        _about_failing_object(output, check.must_contain, check.arguments, reference)
+        for check, (_, ok), output in zip(
+            submission.verification, verification_results, check_outputs, strict=True
+        )
         if ok
     ):
         unmet.append(f"one PRESENT verification check that names {reference.name}")
