@@ -7,11 +7,15 @@ about the run that gets scored.
 
 from __future__ import annotations
 
+import json
 import re
+import shutil
 from pathlib import Path
+from typing import cast
 
 import pytest
 
+from solution import fixture as fx
 from solution import tools as tl
 
 FIXTURES = Path(__file__).resolve().parents[1] / "evals" / "fixtures"
@@ -20,6 +24,7 @@ QUIET = FIXTURES / "t3-quiet-selector-loud-crashloop"
 INIT = FIXTURES / "t2-init-wait-for-migrations"
 OVERLAP = FIXTURES / "t3-overlapping-config-and-oom"
 CROSSNS = FIXTURES / "t2-crossns-externalname-selector"
+WEBHOOK = FIXTURES / "t2-checkout-release-stalled"
 POD = "inventory-sync-5cf949f7f9-czxsq"
 
 
@@ -41,8 +46,6 @@ def test_overview_puts_service_selector_next_to_endpoint_count() -> None:
 
 def test_overview_never_filters_on_readiness() -> None:
     """Readiness filtering is the baseline's structural blind spot; it must not reappear here."""
-    from solution import fixture as fx
-
     out = tl.render_namespace_overview(RBAC, "inventory")
     for pod in fx.load_kind(RBAC, "pods", "inventory"):
         assert pod["metadata"]["name"] in out
@@ -110,9 +113,12 @@ def test_cluster_scoped_rbac_is_unreachable() -> None:
     [
         # every shape the 2026-09-05 review found could stand in for a read of an
         # object no tool serves (docs/failure-modes.md)
-        ("get_object", {"namespace": "x", "kind": "validatingwebhookconfigurations", "name": "y"}),
-        ("describe", {"namespace": "x", "kind": "validatingwebhookconfiguration", "name": "y"}),
+        ("get_object", {"namespace": "inventory", "kind": "clusterroles", "name": "y"}),
         ("describe", {"namespace": "inventory", "kind": "clusterrole", "name": "y"}),
+        # the webhook kinds are served since 2026-11-07, but this is a schema-1
+        # (frozen) fixture that never captured them: not captured, not empty
+        ("get_object", {"kind": "validatingwebhookconfigurations"}),
+        ("describe", {"kind": "validatingwebhookconfiguration", "name": "y"}),
         ("get_object", {"namespace": "inventory", "kind": "widgets"}),
         # the third oracle: find_consumers' "kinds that exist" trailer read the
         # cluster file for a cluster-scoped kind (review, 2026-09-05)
@@ -124,8 +130,9 @@ def test_cluster_scoped_rbac_is_unreachable() -> None:
     ],
     ids=[
         "get_object-cluster-kind",
-        "describe-webhook",
         "describe-clusterrole",
+        "get_object-webhook-uncaptured",
+        "describe-webhook-uncaptured",
         "unknown-kind",
         "find_consumers-webhook",
         "find_consumers-clusterrole",
@@ -216,10 +223,12 @@ def test_declared_arguments_are_still_accepted() -> None:
     assert not tl.is_error(out)
 
 
-def test_serves_kind_is_the_namespaced_roster_today() -> None:
+def test_serves_kind_is_the_namespaced_roster_plus_the_two_webhook_kinds() -> None:
     assert tl.serves_kind("deployments") and tl.serves_kind("ConfigMap")
-    assert not tl.serves_kind("validatingwebhookconfigurations")
-    assert not tl.serves_kind("clusterroles")
+    assert tl.serves_kind("validatingwebhookconfigurations")
+    assert tl.serves_kind("MutatingWebhookConfiguration")
+    for kind in fx.CLUSTER_KINDS:
+        assert tl.serves_kind(kind) == (kind in tl.SERVED_CLUSTER_KINDS), kind
 
 
 def test_configmap_values_are_never_served_only_keys() -> None:
@@ -316,3 +325,170 @@ def test_a_service_nothing_aliases_reports_no_cross_namespace_consumer() -> None
     """The edge must not fire on every Service that happens to share a name."""
     out = tl.render_consumers(CROSSNS, "storefront", "services", "payments-gateway")
     assert "aliases this Service" not in out
+
+
+# --- the webhook kinds, served since 2026-11-07 (Stage 2 of the webhook experiment) ---
+
+
+def test_webhook_kinds_are_listed_and_read_without_a_namespace() -> None:
+    listed = tl.dispatch(WEBHOOK, "get_object", {"kind": "validatingwebhookconfigurations"})
+    assert tl.is_evidence(listed) and "workload-standards" in listed
+    empty = tl.dispatch(WEBHOOK, "get_object", {"kind": "mutatingwebhookconfigurations"})
+    assert empty == "0 objects of kind mutatingwebhookconfigurations cluster-wide"
+    assert not tl.is_error(empty) and not tl.is_evidence(empty)
+
+
+def test_a_single_webhook_read_keeps_what_a_diagnoser_needs_and_drops_the_rest() -> None:
+    out = tl.dispatch(
+        WEBHOOK,
+        "get_object",
+        {"kind": "ValidatingWebhookConfiguration", "name": "workload-standards"},
+    )
+    assert tl.is_evidence(out)
+    for needed in (
+        '"name": "validate.policy-guard.platform.internal"',
+        '"name": "policy-guard"',
+        '"namespace": "platform-policy"',
+        '"path": "/validate"',
+        '"port": 443',
+        '"failurePolicy": "Fail"',
+        '"matchPolicy": "Equivalent"',
+        '"sideEffects": "None"',
+        '"timeoutSeconds": 10',
+        '"rules"',
+        '"namespaceSelector"',
+        '"objectSelector"',
+    ):
+        assert needed in out, needed
+    assert "admissionReviewVersions" not in out
+    assert "managedFields" not in out
+
+
+def test_describe_serves_the_captured_webhook_configuration() -> None:
+    out = tl.dispatch(
+        WEBHOOK,
+        "describe",
+        {"kind": "validatingwebhookconfiguration", "name": "workload-standards"},
+    )
+    assert tl.is_evidence(out)
+    assert "Failure Policy:  Fail" in out
+    assert "Name:        policy-guard" in out
+
+
+@pytest.mark.parametrize("name", ["get_object", "describe"])
+def test_a_webhook_object_absent_from_the_snapshot_is_a_cluster_state_error(name: str) -> None:
+    """The name every arm guessed: now an ordinary miss that lists what IS there,
+    legitimately, because get_object can list the kind."""
+    out = tl.dispatch(
+        WEBHOOK, name, {"kind": "validatingwebhookconfiguration", "name": "policy-guard"}
+    )
+    assert out.startswith("ERROR: no validatingwebhookconfiguration named 'policy-guard'"), out
+    assert not tl.is_not_served(out)
+    assert "present: workload-standards" in out
+
+
+@pytest.mark.parametrize("kind", sorted(tl.SERVED_CLUSTER_KINDS))
+def test_webhook_kinds_read_as_not_captured_on_a_frozen_fixture(kind: str) -> None:
+    """Schema 1 never held them; an empty list would claim the cluster has none."""
+    listed = tl.dispatch(RBAC, "get_object", {"kind": kind})
+    described = tl.dispatch(RBAC, "describe", {"kind": kind, "name": "workload-standards"})
+    for out in (listed, described):
+        assert tl.is_not_served(out), out
+        assert "not captured" in out
+
+
+@pytest.mark.parametrize("name", ["get_object", "describe"])
+def test_a_namespace_on_a_cluster_scoped_kind_is_refused(name: str) -> None:
+    """Refused rather than ignored, so the recorded call is tagged cluster-wide."""
+    out = tl.dispatch(
+        WEBHOOK,
+        name,
+        {"namespace": "checkout", "kind": "validatingwebhookconfigurations", "name": "x"},
+    )
+    assert out.startswith("ERROR: ") and "omit 'namespace'" in out
+    assert not tl.is_not_served(out)
+
+
+def test_namespaces_touched_tags_a_webhook_read_with_the_empty_string() -> None:
+    for name in ("get_object", "describe"):
+        arguments = {"kind": "validatingwebhookconfigurations", "name": "workload-standards"}
+        assert tl.namespaces_touched(name, arguments) == frozenset({""})
+
+
+@pytest.mark.parametrize(
+    ("name", "arguments"),
+    [
+        ("get_object", {"kind": "clusterroles"}),
+        ("get_object", {"kind": "clusterrolebindings", "name": "cluster-admin"}),
+        ("describe", {"kind": "clusterrole", "name": "cluster-admin"}),
+        (
+            "find_consumers",
+            {
+                "namespace": "checkout",
+                "kind": "validatingwebhookconfigurations",
+                "name": "workload-standards",
+            },
+        ),
+    ],
+    ids=["clusterroles", "clusterrolebindings", "describe-clusterrole", "consumers-of-webhook"],
+)
+def test_no_other_cluster_kind_became_served(name: str, arguments: dict[str, object]) -> None:
+    """This fixture holds every cluster kind; only the two webhook kinds may come out,
+    and only through get_object/describe — find_consumers still takes no cluster subject."""
+    out = tl.dispatch(WEBHOOK, name, arguments)
+    assert tl.is_not_served(out), out
+
+
+def _graft_namespace(tmp_path: Path, namespace: str, services: list[str]) -> Path:
+    """The webhook fixture's cluster files plus one synthetic namespace.
+
+    The real capture has no namespace a webhook points at — that absence IS the
+    case — so the edge from a Service that exists is exercised on a grafted one.
+    """
+    fixture = tmp_path / "grafted"
+    (fixture / "cluster").mkdir(parents=True)
+    for kind in tl.SERVED_CLUSTER_KINDS:
+        shutil.copy(WEBHOOK / "cluster" / f"{kind}.json", fixture / "cluster")
+    shutil.copy(WEBHOOK / "scenario.yaml", fixture)
+    ns = fixture / "ns" / namespace
+    ns.mkdir(parents=True)
+    for kind in ("deployments", "statefulsets", "daemonsets"):
+        (ns / f"{kind}.json").write_text(json.dumps({"items": []}), encoding="utf-8")
+    items = [{"metadata": {"name": service}} for service in services]
+    (ns / "services.json").write_text(json.dumps({"items": items}), encoding="utf-8")
+    return fixture
+
+
+def test_find_consumers_reports_the_webhook_that_calls_a_service(tmp_path: Path) -> None:
+    fixture = _graft_namespace(tmp_path, "platform-policy", ["policy-guard", "other"])
+    out = tl.dispatch(
+        fixture,
+        "find_consumers",
+        {"namespace": "platform-policy", "kind": "service", "name": "policy-guard"},
+    )
+    assert tl.is_evidence(out)
+    assert "validatingwebhookconfiguration/workload-standards (cluster-scoped) calls this" in out
+    assert "webhooks[validate.policy-guard.platform.internal].clientConfig.service" in out
+    assert "failurePolicy=Fail" in out
+    other = tl.render_consumers(fixture, "platform-policy", "service", "other")
+    assert "calls this Service" not in other
+
+
+def test_the_webhook_edge_needs_the_namespace_to_match_too(tmp_path: Path) -> None:
+    fixture = _graft_namespace(tmp_path, "elsewhere", ["policy-guard"])
+    assert "calls this Service" not in tl.render_consumers(
+        fixture, "elsewhere", "service", "policy-guard"
+    )
+    assert "calls this Service" not in tl.render_consumers(
+        WEBHOOK, "kube-system", "svc", "kube-dns"
+    )
+
+
+def test_read_tool_descriptions_name_the_served_webhook_kinds() -> None:
+    specs = {spec.name: spec for spec in tl.TOOL_SPECS}
+    for name in ("get_object", "describe", "find_consumers"):
+        assert "validatingwebhookconfiguration" in specs[name].description, name
+        assert "mutatingwebhookconfiguration" in specs[name].description, name
+    for name in ("get_object", "describe"):
+        required = cast(list[str], specs[name].input_schema["required"])
+        assert "namespace" not in required, name

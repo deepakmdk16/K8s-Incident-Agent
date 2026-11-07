@@ -223,3 +223,60 @@ argument keys). The predictions above are unchanged; they now apply to the
 gate as it stands in [16]. A first re-score attempt against the *partial*
 closure aborted on API credits during run 2 and is not evidence (its bundle is
 outside the tree). **Result: not yet run — blocked on API credits.**
+
+## Stage 2 — the webhook kinds served (pre-registered 2026-11-07, before the run)
+
+**Change under test:** reach, not the gate. `solution/tools.py` serves
+`validatingwebhookconfigurations` and `mutatingwebhookconfigurations` through
+`get_object` (list and single read) and `describe`. They are cluster-scoped, so
+the call takes no `namespace` (one given is refused, not ignored) and the
+recorded invocation is tagged namespace `""` like events and
+`cluster_capacity`, which makes the read V2-admissible by construction
+(solution/README.md disclosures 5 and 7). The projection keeps each webhook's
+name, `clientConfig` target (service namespace/name/path/port, or url),
+`failurePolicy`, `matchPolicy`, `sideEffects`, `timeoutSeconds`, `rules`,
+`namespaceSelector` and `objectSelector`; `describe` reads the per-object
+capture under `cluster/describe/`. `find_consumers` on a Service gains the
+webhook → Service edge: every configuration whose `clientConfig.service` names
+it. `serves_kind` is true for exactly these two cluster kinds, so V4 may again
+list the names present for them — legitimately now, since `get_object` lists
+them — and for no other cluster-scoped kind: clusterroles stay unreachable, and
+a standing test holds every other cluster kind not-served on this very
+fixture. A schema-1 (frozen) fixture reports the kinds as not captured, never
+as an empty list, and the 36-row frozen replay is unchanged. The tool
+descriptions name the two kinds; the anti-leak nets
+(`tests/test_solution_prompts.py`) stay green. Offline evidence that the path
+is open: an honest submission whose defect item cites a real `get_object` read
+of `workload-standards` passes the gate as `confirmed` with zero violations
+(`tests/test_solution_validate.py::test_a_real_read_of_the_configuration_earns_confirmed_honestly`).
+
+**Scored invocation (not run by this slice; about $1.8):**
+
+    uv run python -m evals.run_eval --arm solution --runs 3 \
+      --scenarios-root evals/scenarios-v2 --cases t2-checkout-release-stalled
+
+**Predictions, per run, 3 runs:** pooled **3/3**; `resource_correct` **3/3**
+with the name taken from a tool result — the first occurrence of
+`workload-standards` in each `transcript.jsonl` is inside a `get_object` or
+`describe` result, never inside a `rejections` entry; verdicts `confirmed` x3,
+**confirmed-wrong 0**; `class_correct` 3/3 (the mechanism sentence now
+describes an object the run read). Turns and cost back near the frozen means:
+about 7 turns and $0.18 per case, against this case's 8–9 turns and $0.61
+before the slice, with at most one submit rejection per run. One rejection
+shape is anticipated and does not count against the prediction: a
+`namespace_overview platform-policy` read cited as *evidence* fails V2,
+because a namespace absent from the snapshot can never become admissible;
+cited as a ruled-out alternative it is accepted (the gate's existing
+behaviour, `tests/test_solution_validate.py::test_a_cluster_state_error_stays_citable`).
+
+**Decision rule:** 3/3 with confirmed-wrong 0 and every name traced to a tool
+result confirms the ceiling was the tool layer's and closes roadmap 1.3's
+tool-layer change; the case then counts as scored in the additive set. 2/3 or
+less is read per row from `rows.jsonl` sub-scores before anything is
+concluded: a row that names the object from a rejection message is a new leak
+and stops here; a `confirmed` row with the wrong resource is examined before
+any pooled number is quoted; a row lost to the turn or cost budget is a
+loop-budget finding, not a capability one. No v2 bar block is added to
+`evals/reported.json` on a single case either way.
+
+**Result: not yet run.**

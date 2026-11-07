@@ -123,9 +123,23 @@ find nothing they were not told.
    which prices all four rates correctly.
 4. **This arm costs more per case than the baseline.** It buys reach and
    calibration with tokens; it is not a cheaper way to get the same answer.
-5. **Cluster-scoped role objects are not reachable by any tool.** They are ~200 KB
-   in every fixture and no case in the set needs them; the omission is a context
-   guard, and it is disclosed rather than silent.
+5. **Cluster-scoped reach is deliberately narrow.** `get_object` and `describe`
+   serve exactly two cluster-scoped kinds, `validatingwebhookconfigurations` and
+   `mutatingwebhookconfigurations` (since 2026-11-07, Stage 2 of
+   `docs/experiments/2026-09-04-webhook-outage.md`): the call takes no
+   namespace, the read is tagged namespace `""`, and the projection keeps each
+   webhook's name, `clientConfig` target, `failurePolicy`, `matchPolicy`,
+   `sideEffects`, `timeoutSeconds`, `rules` and selectors. `find_consumers` on
+   a Service also reports the configurations whose `clientConfig.service` names
+   it. Everything else cluster-scoped is reachable only as a summary or not at
+   all: namespaces through `list_namespaces`, nodes and StorageClasses through
+   `cluster_capacity` (and the whole-cluster node describe through `describe`),
+   events through `get_events`; ClusterRoles and ClusterRoleBindings (~200 KB in
+   every fixture, needed by no case) and PersistentVolumes through nothing. A
+   frozen (schema-1) fixture never captured the webhook kinds, so reading them
+   there reports "not captured" as a not-served error, never an empty list, and
+   `find_consumers` has no webhook edge to report on such a fixture. The
+   omission is a context guard, and it is disclosed rather than silent.
 6. **The mechanism-writing examples reuse strings from our own cases.** The
    formatting examples in the system prompt — "PersistentVolumeClaim
    analytics/data-metrics-db-0", "ConfigMap orders/orders-config",
@@ -140,19 +154,21 @@ find nothing they were not told.
    string in a report must re-verify against tool output produced in *that*
    run, so a quote the cluster never printed fails the gate.
 7. **Namespace admissibility (V2) binds namespaced reads, and event citations
-   by the namespaces their quoted lines name.** Other cluster-scoped reads
-   (nodes, PVs, capacity — tools that tag namespace `""`) are admissible by
-   construction. That is a scoping decision, not an oversight: V2's job is to
-   stop *namespace-hopping evidence*, not cluster-level observation. Events
-   were the exception worth closing: a cluster-wide event read is one call, but
-   every line it returns names the namespace it happened in, so since
-   2026-11-07 an event citation rests on the namespaces its quoted text names
-   (`fixture.namespaces_named_in`, exact DNS-label tokens). A line from an
-   unlinked namespace is refused until something links it; a line from the
-   paged or a linked namespace, or a quote that names no namespace at all,
-   keeps the read's own tag and stays admissible. Cluster events remain how
-   Kubernetes announces cross-namespace causes — quoting the whole line, with
-   its namespace prefix, is what brings the other namespace into the story.
+   by the namespaces their quoted lines name.** Other cluster-scoped reads —
+   `cluster_capacity`, the whole-cluster node describe, and the two webhook
+   configuration kinds through `get_object`/`describe`: every call that tags
+   namespace `""` — are admissible by construction. That is a scoping decision,
+   not an oversight: V2's job is to stop *namespace-hopping evidence*, not
+   cluster-level observation. Events were the exception worth closing: a
+   cluster-wide event read is one call, but every line it returns names the
+   namespace it happened in, so since 2026-11-07 an event citation rests on the
+   namespaces its quoted text names (`fixture.namespaces_named_in`, exact
+   DNS-label tokens). A line from an unlinked namespace is refused until
+   something links it; a line from the paged or a linked namespace, or a quote
+   that names no namespace at all, keeps the read's own tag and stays
+   admissible. Cluster events remain how Kubernetes announces cross-namespace
+   causes — quoting the whole line, with its namespace prefix, is what brings
+   the other namespace into the story.
 
 ## Loop budgets
 
