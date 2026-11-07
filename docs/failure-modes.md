@@ -14,6 +14,59 @@ self-improving loop): a solved issue must not be solvable twice.
 **Lesson for reliable agents:** …
 -->
 
+## 2026-11-07 — the gate's first adversarial sweep found two more oracles: a namesake read, and V4's "Present:" list one step shorter
+
+**What happened:** before anything optimizes against the validator, a generator
+attacked it on every fixture (15 cases × gold and a wrong target) using only
+the cheap channels — error strings as quotes, empty results as evidence,
+undeclared argument keys, same-name different-kind reads, and its own
+rejection text fed back — and checked every rejection for an object name the
+agent had never reached. Of 786 attempts, two shapes got through, both
+reproduced end to end before the fix (first run: 34 passed, 42 failed):
+
+1. **A real read of a namesake of another kind anchored V7.** `describe
+   deployment/catalog` says `Name: catalog` on its first line; cited as the
+   defect for `service/catalog`, with the same call as the verification check,
+   it earned `confirmed` with zero violations — the Service was never read.
+   Fifteen attempts across nine fixture/target pairs, every Service ↔
+   Deployment/Endpoints pair that shares a name (catalog, search,
+   payments-gateway, orders-api, metrics-db, postgres-primary). The 2026-09-05
+   closure said the anchoring rules require a real result "about the failing
+   kind"; the quote branch (`reference.name in quote`) never checked the kind,
+   and a namesake's output repeats the name on every line.
+2. **V4 still enumerated names the agent had not read.** A guessed
+   `rolebinding/inventory-reader-binding-v2` got back `Present:
+   inventory-reader-binding`; `resourcequota/checkout-quota-v2` got `Present:
+   checkout-quota`. Neither name was in the page, the overview or any call —
+   the 2026-09-05 fix exempted served kinds because the agent "could have
+   listed them", but it had not, and a rejection that corrects a guess is a
+   search oracle however reachable the fact is.
+
+**Evidence:**
+[tests/test_solution_validate_adversarial.py](../tests/test_solution_validate_adversarial.py)
+— the generator (every attempt must be refused by a named property, and no
+rejection may name a case object absent from the ledger's outputs, its
+arguments and the submission), plus one pinned regression test per hole. After
+the fix the suite passes in about a second and
+[tests/test_frozen_replay.py](../tests/test_frozen_replay.py) still accepts all
+36 frozen rows unchanged — the namesake pattern occurred in those rows only as
+a secondary verification check beside a same-kind read.
+
+**Prevention now in place:** `_asked_for_a_namesake` in
+[solution/validate.py](../solution/validate.py): a call that asked by exact
+name for an object of another kind anchors nothing, whatever its output says
+(the pod → controller allowance is untouched). V4 lists only names that a read
+already in the ledger has returned, and otherwise says to list the kind first.
+The adversarial suite runs in the pytest gate, so the next shape of either
+oracle fails a test before it reaches a run.
+
+**Lesson for reliable agents:** a gate that keys on a *name* has to know what
+kind of thing produced it — real output that repeats a name is not a sighting
+of every object that shares it. And "the agent could have reached this fact" is
+not "the agent reached it": a rejection may correct what the agent has already
+seen, never supply what it has not. Attack the reward with a generator over
+every case, not with the handful of shapes the last incident suggested.
+
 ## 2026-09-05 — a validator's helpful rejection message was an oracle for the answer
 
 **What happened:** the first case whose failing object no tool can read
