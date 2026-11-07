@@ -492,6 +492,8 @@ def test_read_tool_descriptions_name_the_served_webhook_kinds() -> None:
     for name in ("get_object", "describe"):
         required = cast(list[str], specs[name].input_schema["required"])
         assert "namespace" not in required, name
+
+
 def test_name_listings_keep_capture_order_rather_than_re_sorting(tmp_path: Path) -> None:
     """The API already returns a kind in name order. Re-sorting here made every
     listing a function of how the names are spelled, which a consistent rename of
