@@ -74,7 +74,12 @@ dotted numeric segments to indexes (`containers.0.image` →
 `containers[0].image`), `[name:api]` → `[name=api]`, `.[` → `[`, and the
 whole-object spellings (`<object>`, `(object)`, `object`, `whole object`,
 `entire object`, `the object`, empty) → `<object>`. Then exact match against
-the normalized accepted set. No JSONPath filters, no schema knowledge.
+the normalized accepted set — since v3.1 (2026-11-07) through every *reading*
+of the path: a bracket that is neither a numeric index nor `key=value`
+(`containers[api]`, `spec.hard[pods]`) is read both as `[name=api]` and as
+`.api`, and the path matches if any reading is in the set (`path_readings`;
+decision and evidence in `docs/experiments/2026-11-07-scoring-v3.md`, "v3.1").
+No JSONPath filters, no schema knowledge.
 
 Values are normalized by lowercasing and removing quotes, backticks, braces
 and whitespace, with `=` folded into `:` — so `{"app": "catalog"}`,

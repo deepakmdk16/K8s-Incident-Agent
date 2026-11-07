@@ -224,6 +224,21 @@ gate as it stands in [16]. A first re-score attempt against the *partial*
 closure aborted on API credits during run 2 and is not evidence (its bundle is
 outside the tree). **Result: not yet run — blocked on API credits.**
 
+**Decision (2026-11-07, STATUS 1.1): Stage 1 is retired un-run.** Once CHANGELOG
+[19] merges the tree serves the webhook kinds, so "closed gate, no reach" can
+only be run from a checkout before that commit (`main@53f2c24` plus the gate
+fix of PR #7). Its one informative outcome — a run that names
+`workload-standards` through a path no test knows — is now hunted directly,
+offline and over every fixture, by the adversarial sweep ([21]: every attempt
+refused by a named property, every rejection checked against the oracle
+property) and, on the live run itself, by Stage 2's tracing clause (the first
+occurrence of the name in each transcript must be inside a tool result). Three
+live runs at about $1.8, predicted 0/3, add no evidence those two do not already
+give. The Stage-1 prediction stays on record as pre-registered and unfalsified;
+the aborted run-1 observation (`inconclusive`, `resource_correct` False) is
+consistent with it and remains not evidence. Alternative rejected: running from
+the pre-reach checkout — possible and auditable, but dominated by the sweep.
+
 ## Stage 2 — the webhook kinds served (pre-registered 2026-11-07, before the run)
 
 **Change under test:** reach, not the gate. `solution/tools.py` serves

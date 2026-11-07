@@ -441,18 +441,36 @@ def _asked_for_a_namesake(arguments: Mapping[str, object], reference: ResourceRe
     )
 
 
+# Tools whose `kind` argument IS the kind of the object their output describes.
+# find_consumers is the exception: its kind names the referent, and its output
+# lists the consumers — objects of other kinds — so it is judged by its text.
+_OBJECT_READS: frozenset[str] = frozenset({"get_object", "describe"})
+
+
 def _about_failing_object(
-    output: str, quote: str, arguments: Mapping[str, object], reference: ResourceRef
+    tool: str,
+    output: str,
+    quote: str,
+    arguments: Mapping[str, object],
+    reference: ResourceRef,
 ) -> bool:
     """Does this verified citation actually show the failing object?
 
     Two ways: the quote names it, or the call's arguments name it and the call was
     about its kind. Either way the result has to be real cluster state — an error
     or an empty echo of the arguments shows nothing about any object, however
-    literally it re-verifies — and a read of a same-named object of another kind
-    shows nothing about this one, however often its output repeats the name.
+    literally it re-verifies — and a read of another kind shows nothing about this
+    one, however often its output repeats the name: not a same-named object
+    (`describe service/<name>` for deployment/<name>), and not a different object
+    whose labels, selectors or pod names embed it (`describe pod/<name>-abc12` or
+    `describe deployment/<name>-worker` for service/<name>; review of PR #8,
+    2026-11-07). get_logs reads a pod, so it anchors only what a pod read may.
     """
     if not tl.is_evidence(output) or _asked_for_a_namesake(arguments, reference):
+        return False
+    if tool in _OBJECT_READS and not _same_kind(arguments, reference):
+        return False
+    if tool == "get_logs" and not _same_kind({"kind": "pods"}, reference):
         return False
     if reference.name.lower() in quote.lower():
         return True
@@ -691,7 +709,11 @@ def validate(
         item.role == "defect"
         and (invocation := ledger.get(item.tool_call_id)) is not None
         and _about_failing_object(
-            fresh_by_label[f"evidence[{i}]"], item.quote, invocation.arguments, reference
+            invocation.name,
+            fresh_by_label[f"evidence[{i}]"],
+            item.quote,
+            invocation.arguments,
+            reference,
         )
         for i, item in enumerate(submission.evidence)
         if verified_by_label.get(f"evidence[{i}]", False)
@@ -705,14 +727,18 @@ def validate(
     ):
         unmet.append("one ruled-out alternative with a verified quote")
     present_checks = [command for command, ok in verification_results if ok]
-    if len(verification_results) < 2 or len(present_checks) != len(verification_results):
-        unmet.append("2-3 verification checks that are all PRESENT")
-    elif not any(
-        _about_failing_object(output, check.must_contain, check.arguments, reference)
+    present_outputs = [
+        (check, output)
         for check, (_, ok), output in zip(
             submission.verification, verification_results, check_outputs, strict=True
         )
         if ok
+    ]
+    if len(verification_results) < 2 or len(present_checks) != len(verification_results):
+        unmet.append("2-3 verification checks that are all PRESENT")
+    elif not any(
+        _about_failing_object(check.tool, output, check.must_contain, check.arguments, reference)
+        for check, output in present_outputs
     ):
         unmet.append(f"one PRESENT verification check that names {reference.name}")
     # The pod→controller allowance in _same_kind holds only once the controller
@@ -725,13 +751,7 @@ def validate(
         (invocation.arguments, fresh_by_label[label])
         for label, call_id, _ in cited
         if label in fresh_by_label and (invocation := ledger.get(call_id)) is not None
-    ] + [
-        (check.arguments, output)
-        for check, (_, ok), output in zip(
-            submission.verification, verification_results, check_outputs, strict=True
-        )
-        if ok
-    ]
+    ] + [(check.arguments, output) for check, output in present_outputs]
     if _is_controller(reference) and not any(
         _reads_object(output, arguments, reference) for arguments, output in verified_reads
     ):

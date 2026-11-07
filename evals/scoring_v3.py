@@ -45,6 +45,9 @@ OBJECT_PATH = "<object>"
 _OBJECT_SPELLINGS: frozenset[str] = frozenset(
     {"", "object", "wholeobject", "entireobject", "theobject"}
 )
+# A bracket that is neither a numeric index nor `key=value`: `[storefront]`,
+# `[wait-for-db]`, `[pods]`. Read two ways by path_readings (v3.1).
+_BARE_BRACKET = re.compile(r"\[(?!\d+\])(?!\w+=)([^\[\]=]+)\]")
 
 STATUS_SCORED = "scored"
 STATUS_NO_SUBMISSION = "no_accepted_submission"
@@ -63,7 +66,8 @@ def normalize_field_path(raw: str) -> str:
     segment becomes an index (`containers.0.image` -> `containers[0].image`);
     `[name:api]` becomes `[name=api]`; `.[` becomes `[`; the whole-object
     spellings become `<object>`. Nothing else — the gold lists the name-form
-    aliases explicitly, so no fixture lookup happens here.
+    aliases explicitly, so no fixture lookup happens here. The root selectors
+    (`$`, `.`, `/`) normalize to the empty spelling and so to `<object>`.
     """
     text = re.sub(r"\s+", "", raw.replace("`", "")).lower()
     text = text.replace("/", ".").lstrip("$.")
@@ -72,6 +76,24 @@ def normalize_field_path(raw: str) -> str:
     text = re.sub(r"\[(\w+):", r"[\1=", text)
     text = text.replace(".[", "[")
     return OBJECT_PATH if text.strip("()<>") in _OBJECT_SPELLINGS else text
+
+
+def path_readings(normalized: str) -> frozenset[str]:
+    """Every reading of a normalized path's bare brackets (v3.1, 2026-11-07).
+
+    `containers[storefront].image` is `containers[name=storefront].image` when
+    the parent is a list of named elements and `spec.hard[pods]` is
+    `spec.hard.pods` when it is a map. The scorer has no schema, so a path with
+    k bare brackets yields 2**k readings and the submission matches if any one
+    is an accepted gold form. Numeric indexes and `[key=value]` brackets are not
+    bare and stay as written. Decision and disclosure:
+    docs/experiments/2026-11-07-scoring-v3.md, "v3.1".
+    """
+    match = _BARE_BRACKET.search(normalized)
+    if match is None:
+        return frozenset({normalized})
+    head, key, tail = normalized[: match.start()], match.group(1), normalized[match.end() :]
+    return path_readings(f"{head}[name={key}]{tail}") | path_readings(f"{head}.{key}{tail}")
 
 
 def normalize_value(raw: str) -> str:
@@ -256,7 +278,7 @@ def score_submission(
         status = STATUS_SCORED
         field_path = str(remediation.get("field_path", ""))
         required_value = str(remediation.get("required_value", ""))
-        path_ok = normalize_field_path(field_path) in gold.path_forms()
+        path_ok = bool(path_readings(normalize_field_path(field_path)) & gold.path_forms())
         value_ok = None if value_forms is None else normalize_value(required_value) in value_forms
         miss = _miss_kind(path_ok, value_ok)
     return FixRow(
@@ -264,7 +286,7 @@ def score_submission(
         case_id=str(row["case_id"]),
         tier=str(row["tier"]),
         root_cause_correct=bool(row["root_cause_correct"]),
-        class_correct=bool(row["class_correct"]),
+        class_correct=_class_correct(row),
         status=status,
         field_path=field_path,
         required_value=required_value,
@@ -275,13 +297,24 @@ def score_submission(
     )
 
 
+def _class_correct(row: dict[str, object]) -> bool:
+    """`class_correct` as rows.jsonl records it; False for an errored row, which
+    evals/run_eval.py writes without a score (Outcome.row). Any other row
+    missing the key is malformed and says so."""
+    if "class_correct" in row:
+        return bool(row["class_correct"])
+    if row.get("error") is not None:
+        return False
+    raise KeyError(f"row run{row.get('run')}/{row.get('case_id')}: no class_correct and no error")
+
+
 def _not_emitted(row: dict[str, object]) -> FixRow:
     return FixRow(
         run=int(cast(int, row["run"])),
         case_id=str(row["case_id"]),
         tier=str(row["tier"]),
         root_cause_correct=bool(row["root_cause_correct"]),
-        class_correct=bool(row["class_correct"]),
+        class_correct=_class_correct(row),
         status=STATUS_NOT_EMITTED,
         field_path=None,
         required_value=None,
@@ -305,7 +338,9 @@ def accepted_remediation(bundle: Path, row: dict[str, object]) -> dict[str, obje
         return None
     transcript = bundle / f"run{row['run']}" / str(row["case_id"]) / "transcript.jsonl"
     if not transcript.is_file():
-        return None
+        raise FileNotFoundError(
+            f"{transcript}: no transcript for an accepted row — not a complete solution bundle"
+        )
     last: dict[str, object] | None = None
     for line in transcript.read_text(encoding="utf-8").splitlines():
         if not line.strip():

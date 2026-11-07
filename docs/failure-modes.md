@@ -14,6 +14,38 @@ self-improving loop): a solved issue must not be solvable twice.
 **Lesson for reliable agents:** …
 -->
 
+## 2026-11-07 — RECURRENCE x3: a quote carrying the failing object's name anchored V7 again, this time through a pod of another kind
+
+**What happened:** the review of PR #8 read V7's anchoring rule after [21]'s
+namesake fix and found the quote branch still open: `describe
+pod/catalog-65498fccb-g52gl` — a real read, in the right namespace — carries
+`catalog` on its Name line, so cited as the defect it earned `confirmed` for
+`service/catalog`, which no read had opened. The 786-attempt sweep had no
+attack of this shape: its sibling family reads other kinds under the target's
+*exact* name, which is precisely what the namesake fix closed, and nothing read
+an object whose name merely *embeds* the target's.
+
+**Why it is a recurrence.** The 2026-09-05 review closed "a served tool asked
+about a different kind with the same name"; [21] closed "exact name, another
+kind" after the sweep reproduced it. Both patched a call shape and left the
+rule — "the quote names it" — intact. Third time: the quote branch is the
+oracle, not any one call.
+
+**Prevention now in place:** (1) the rule, not the call: for `get_object` and
+`describe` the kind argument is the kind the output is about, so a read of
+another kind anchors nothing under V7 whatever its text repeats, and `get_logs`
+is a pod read and anchors only what a pod read may
+(`solution/validate.py`, `_about_failing_object`); frozen replay 36/36 and
+perturbed replay 36/36 unchanged. (2) The sweep gains the *family*,
+`_cross_kind_pod_attacks` (describe and logs of a pod named after a
+non-controller target), so the shape runs over every fixture (792 attempts);
+the pinned case is
+`test_a_real_read_of_a_pod_named_after_the_service_does_not_anchor_v7`
+([tests/test_solution_validate_adversarial.py](../tests/test_solution_validate_adversarial.py)).
+
+**Lesson for reliable agents:** the third instance of one rule's leak is fixed
+at the rule's shape, and the sweep gains the family, not the case.
+
 ## 2026-11-07 — the gate's first adversarial sweep found two more oracles: a namesake read, and V4's "Present:" list one step shorter
 
 **What happened:** before anything optimizes against the validator, a generator

@@ -5,10 +5,10 @@
   "overall": {
     "rows": 36,
     "root_cause_correct": 36,
-    "path_correct": 16,
+    "path_correct": 36,
     "value_scorable": 21,
     "value_correct": 21,
-    "both_correct": 12,
+    "both_correct": 21,
     "no_submission": 0,
     "value_open": 15
   },
@@ -16,7 +16,7 @@
     "T1": {
       "rows": 15,
       "root_cause_correct": 15,
-      "path_correct": 5,
+      "path_correct": 15,
       "value_scorable": 3,
       "value_correct": 3,
       "both_correct": 3,
@@ -26,20 +26,20 @@
     "T2": {
       "rows": 15,
       "root_cause_correct": 15,
-      "path_correct": 8,
+      "path_correct": 15,
       "value_scorable": 12,
       "value_correct": 12,
-      "both_correct": 6,
+      "both_correct": 12,
       "no_submission": 0,
       "value_open": 3
     },
     "T3": {
       "rows": 6,
       "root_cause_correct": 6,
-      "path_correct": 3,
+      "path_correct": 6,
       "value_scorable": 6,
       "value_correct": 6,
-      "both_correct": 3,
+      "both_correct": 6,
       "no_submission": 0,
       "value_open": 0
     }
@@ -68,10 +68,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[storefront].image",
       "required_value": "an image reference that resolves in the registry \u2014 the tag actually published for this release (e.g. registry.k8s.io/retail/storefront:<published tag>) instead of the non-existent 2.4.1",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 1,
@@ -82,10 +82,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[server].resources.limits.memory",
       "required_value": "256Mi (headroom above the ~200Mi cache warm-up allocation; raise requests to match, e.g. 256Mi)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 1,
@@ -110,10 +110,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[scorer].resources.requests.cpu",
       "required_value": "512m",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 1,
@@ -124,10 +124,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value",
       "required_value": "postgres-primary",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 1,
@@ -166,10 +166,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[api].readinessProbe.httpGet.port",
       "required_value": "8080",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 1,
@@ -194,10 +194,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key",
       "required_value": "database_url",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 1,
@@ -222,10 +222,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[worker].env",
       "required_value": "env entry name: AMQP_URL with the queue connection string as its value (e.g. env: [{name: AMQP_URL, value: \"amqp://<queue-host>:5672\"}]), supplied literally or via a valueFrom reference to an object that exists in namespace payments",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 2,
@@ -236,10 +236,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[storefront].image",
       "required_value": "an image reference that actually resolves in the registry (e.g. the last known-good storefront image, or a public shell image such as busybox:1.36 for this nc-based container)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 2,
@@ -250,10 +250,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[server].resources.limits.memory",
       "required_value": "256Mi (covers the 200 MiB warmup cache plus shell overhead; raise requests.memory to match, e.g. 256Mi)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 2,
@@ -292,10 +292,10 @@
       "status": "scored",
       "field_path": ".spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value",
       "required_value": "postgres-primary",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 2,
@@ -306,10 +306,10 @@
       "status": "scored",
       "field_path": "spec.hard[pods]",
       "required_value": "6 (or higher, at least the desired replica count of deployment/checkout-api)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 2,
@@ -334,10 +334,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[api].readinessProbe.httpGet.port",
       "required_value": "8080",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 2,
@@ -362,10 +362,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key",
       "required_value": "database_url",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 2,
@@ -390,10 +390,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[worker].env",
       "required_value": "env entry name: AMQP_URL with the queue connection string as its value (e.g. - name: AMQP_URL, value: amqp://<user>:<pass>@<rabbitmq-host>:5672/)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 3,
@@ -404,10 +404,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[storefront].image",
       "required_value": "an image reference that actually resolves in the registry (the last known-good storefront tag, e.g. a pullable image such as busybox:1.36 for this sh/nc workload)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 3,
@@ -418,10 +418,10 @@
       "status": "scored",
       "field_path": ".spec.template.spec.containers[server].resources.limits.memory",
       "required_value": "256Mi (at least above the ~200Mi the warmup allocates; raise requests to match, e.g. 256Mi)",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 3,
@@ -446,10 +446,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[scorer].resources.requests.cpu",
       "required_value": "512m",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": null,
       "fix_both_correct": null,
-      "miss": "path"
+      "miss": null
     },
     {
       "run": 3,
@@ -460,10 +460,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.initContainers[wait-for-db].env[DB_HOST].value",
       "required_value": "postgres-primary",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 3,
@@ -502,10 +502,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[api].readinessProbe.httpGet.port",
       "required_value": "8080",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 3,
@@ -530,10 +530,10 @@
       "status": "scored",
       "field_path": "spec.template.spec.containers[api].env[DATABASE_URL].valueFrom.configMapKeyRef.key",
       "required_value": "database_url",
-      "fix_path_correct": false,
+      "fix_path_correct": true,
       "fix_value_correct": true,
-      "fix_both_correct": false,
-      "miss": "path"
+      "fix_both_correct": true,
+      "miss": null
     },
     {
       "run": 3,

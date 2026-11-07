@@ -254,13 +254,15 @@ def _describe_cluster_object(fixture: Path, resolved: str, safe_name: str) -> st
     present = sorted(
         str(cast(dict[str, Any], item.get("metadata", {})).get("name", "")) for item in items
     )
-    if safe_name not in present:
+    # Case-insensitive, as render_object matches the same kinds (review of PR #8).
+    canonical = next((n for n in present if n.lower() == safe_name.lower()), None)
+    if canonical is None:
         listed = ", ".join(present) or "none"
         raise FixtureError(f"no {singular} named {safe_name!r} cluster-wide; present: {listed}")
-    matches = sorted((fixture / "cluster" / "describe").glob(f"{singular}*_{safe_name}.txt"))
+    matches = sorted((fixture / "cluster" / "describe").glob(f"{singular}*_{canonical}.txt"))
     if not matches:
         raise NotServedError(
-            f"describe of {singular}/{safe_name} was not captured in this snapshot"
+            f"describe of {singular}/{canonical} was not captured in this snapshot"
         )
     return matches[0].read_text(encoding="utf-8")
 
