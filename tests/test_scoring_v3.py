@@ -56,7 +56,8 @@ def test_field_path_spellings_canonicalize_to_the_dotted_indexed_form(raw: str) 
         ("containers[name='api'].image", "containers[name=api].image"),
         ("containers[name:api].image", "containers[name=api].image"),
         ('spec.selector["app"]', "spec.selector[app]"),
-        # The bare-name bracket form is deliberately NOT mapped (README "Matching").
+        # The bare-name bracket form is left as written here; path_readings reads
+        # it both ways at match time (v3.1, README "Matching").
         ("containers[api].image", "containers[api].image"),
     ],
 )
@@ -70,6 +71,32 @@ WHOLE_OBJECT_SPELLINGS = ("", ".", "<object>", "(object)", "object", "whole obje
 @pytest.mark.parametrize("raw", [*WHOLE_OBJECT_SPELLINGS, "Entire object"])
 def test_whole_object_spellings_canonicalize(raw: str) -> None:
     assert v3.normalize_field_path(raw) == v3.OBJECT_PATH
+
+
+@pytest.mark.parametrize(
+    ("normalized", "expected"),
+    [
+        ("containers[0].image", {"containers[0].image"}),
+        ("containers[name=api].image", {"containers[name=api].image"}),
+        ("containers[api].image", {"containers[name=api].image", "containers.api.image"}),
+        ("spec.hard[pods]", {"spec.hard[name=pods]", "spec.hard.pods"}),
+        (
+            "initcontainers[wait-for-db].env[db_host].value",
+            {
+                "initcontainers[name=wait-for-db].env[name=db_host].value",
+                "initcontainers[name=wait-for-db].env.db_host.value",
+                "initcontainers.wait-for-db.env[name=db_host].value",
+                "initcontainers.wait-for-db.env.db_host.value",
+            },
+        ),
+    ],
+)
+def test_path_readings_expand_bare_brackets_and_nothing_else(
+    normalized: str, expected: set[str]
+) -> None:
+    """v3.1 (2026-11-07): a bare bracket is a list element's name or a map key; the
+    scorer has no schema, so both readings are tried. Indexes and key=value stay."""
+    assert set(v3.path_readings(normalized)) == expected
 
 
 def test_a_field_named_object_dot_something_is_not_the_whole_object() -> None:
@@ -132,7 +159,7 @@ def test_both_correct_via_the_name_alias_and_a_quoted_value() -> None:
 
 def test_path_wrong_value_right_is_a_path_miss() -> None:
     row = v3.score_submission(
-        ROW, _node("spec.template.spec.containers[api].image", "nginx:1.27"), _gold("nginx:1.27")
+        ROW, _node("spec.template.spec.containers[0].command", "nginx:1.27"), _gold("nginx:1.27")
     )
     assert (row.fix_path_correct, row.fix_value_correct, row.fix_both_correct) == (
         False,
@@ -181,6 +208,31 @@ def test_no_accepted_submission_is_a_miss_not_an_na() -> None:
     assert row.miss == "no_submission"
     open_row = v3.score_submission(ROW, None, _gold(None))
     assert open_row.fix_value_correct is None and open_row.miss == "no_submission"
+
+
+def test_an_errored_row_scores_without_class_correct_and_a_malformed_row_says_so() -> None:
+    """run_eval writes an errored row with no score block (Outcome.row): the column
+    reads it as a no-submission miss instead of crashing on the missing key, and a
+    row that lacks the key for any other reason is refused (review of PR #8)."""
+    errored: dict[str, object] = {
+        "run": 1,
+        "case_id": "x",
+        "tier": "T1",
+        "error": "boom",
+        "verdict": "invalid",
+        "root_cause_correct": False,
+    }
+    row = v3.score_submission(errored, None, _gold("nginx:1.27"))
+    assert row.class_correct is False and row.status == v3.STATUS_NO_SUBMISSION
+    malformed = {k: v for k, v in errored.items() if k != "error"}
+    with pytest.raises(KeyError, match="no class_correct and no error"):
+        v3.score_submission(malformed, None, _gold("nginx:1.27"))
+
+
+def test_a_missing_transcript_for_an_accepted_row_is_an_error_not_a_miss(tmp_path: Path) -> None:
+    row: dict[str, object] = {"run": 1, "case_id": "c", "error": None, "metrics": {}}
+    with pytest.raises(FileNotFoundError, match="no transcript for an accepted row"):
+        v3.accepted_remediation(tmp_path, row)
 
 
 def test_accepted_submission_is_the_last_submit_unless_salvaged(tmp_path: Path) -> None:
@@ -306,42 +358,55 @@ def test_frozen_bundle_replays_the_recorded_v3_numbers() -> None:
     result = v3.score_bundle(FROZEN_BUNDLE)
     assert result.emits_fix_fields and result.arm == "solution"
     # (rows, path_correct, value_scorable, value_correct, both_correct, no_submission, value_open)
-    assert _cells(result.by_tier["T1"]) == (15, 5, 3, 3, 3, 0, 12)
-    assert _cells(result.by_tier["T2"]) == (15, 8, 12, 12, 6, 0, 3)
-    assert _cells(result.by_tier["T3"]) == (6, 3, 6, 6, 3, 0, 0)
-    assert _cells(result.overall) == (36, 16, 21, 21, 12, 0, 15)
+    # v3.1 numbers (2026-11-07); v3.0 measured (15, 5, …), (15, 8, …), (6, 3, …),
+    # (36, 16, 21, 21, 12, 0, 15) — docs/experiments/2026-11-07-scoring-v3.md.
+    assert _cells(result.by_tier["T1"]) == (15, 15, 3, 3, 3, 0, 12)
+    assert _cells(result.by_tier["T2"]) == (15, 15, 12, 12, 12, 0, 3)
+    assert _cells(result.by_tier["T3"]) == (6, 6, 6, 6, 6, 0, 0)
+    assert _cells(result.overall) == (36, 36, 21, 21, 21, 0, 15)
     assert result.overall.root_cause_correct == 36
 
 
-def test_every_frozen_bundle_miss_is_a_path_miss_in_the_bare_bracket_name_spelling() -> None:
-    misses = v3.score_bundle(FROZEN_BUNDLE).misses()
-    assert len(misses) == 20
-    assert {m.miss for m in misses} == {"path"}
-    assert {(m.run, m.case_id) for m in misses} == {
-        (1, "t1-imagepull-bogus-tag"),
-        (1, "t1-oom-cache-warmup"),
-        (1, "t1-unschedulable-cpu-requests"),
-        (1, "t2-init-wait-for-migrations"),
-        (1, "t2-readiness-wrong-port"),
-        (1, "t3-overlapping-config-and-oom"),
-        (2, "t1-crashloop-missing-env"),
-        (2, "t1-imagepull-bogus-tag"),
-        (2, "t1-oom-cache-warmup"),
-        (2, "t2-init-wait-for-migrations"),
-        (2, "t2-quota-blocks-scale"),
-        (2, "t2-readiness-wrong-port"),
-        (2, "t3-overlapping-config-and-oom"),
-        (3, "t1-crashloop-missing-env"),
-        (3, "t1-imagepull-bogus-tag"),
-        (3, "t1-oom-cache-warmup"),
-        (3, "t1-unschedulable-cpu-requests"),
-        (3, "t2-init-wait-for-migrations"),
-        (3, "t2-readiness-wrong-port"),
-        (3, "t3-overlapping-config-and-oom"),
-    }
-    for m in misses:
-        assert m.field_path is not None
-        assert BARE_BRACKET_NAME.search(v3.normalize_field_path(m.field_path)), m.field_path
+V3_0_PATH_MISSES = {
+    (1, "t1-imagepull-bogus-tag"),
+    (1, "t1-oom-cache-warmup"),
+    (1, "t1-unschedulable-cpu-requests"),
+    (1, "t2-init-wait-for-migrations"),
+    (1, "t2-readiness-wrong-port"),
+    (1, "t3-overlapping-config-and-oom"),
+    (2, "t1-crashloop-missing-env"),
+    (2, "t1-imagepull-bogus-tag"),
+    (2, "t1-oom-cache-warmup"),
+    (2, "t2-init-wait-for-migrations"),
+    (2, "t2-quota-blocks-scale"),
+    (2, "t2-readiness-wrong-port"),
+    (2, "t3-overlapping-config-and-oom"),
+    (3, "t1-crashloop-missing-env"),
+    (3, "t1-imagepull-bogus-tag"),
+    (3, "t1-oom-cache-warmup"),
+    (3, "t1-unschedulable-cpu-requests"),
+    (3, "t2-init-wait-for-migrations"),
+    (3, "t2-readiness-wrong-port"),
+    (3, "t3-overlapping-config-and-oom"),
+}
+
+
+def test_the_twenty_v3_0_misses_are_path_correct_only_through_a_v3_1_reading() -> None:
+    """The regression corpus for the v3.1 rule: every row v3.0 refused spells a list
+    element or map key as a bare name in brackets. Each still fails the literal
+    match (so the rule, not a gold edit, is what changed) and passes through one of
+    its readings; the frozen bundle has no miss left."""
+    result = v3.score_bundle(FROZEN_BUNDLE)
+    assert result.misses() == []
+    rows = {(r.run, r.case_id): r for r in result.rows}
+    for key in V3_0_PATH_MISSES:
+        row = rows[key]
+        assert row.field_path is not None and row.fix_path_correct, key
+        normalized = v3.normalize_field_path(row.field_path)
+        assert BARE_BRACKET_NAME.search(normalized), row.field_path
+        forms = v3.load_gold(REPO / "evals" / "gold-v3" / f"{row.case_id}.json").path_forms()
+        assert normalized not in forms, (key, normalized)
+        assert v3.path_readings(normalized) & forms, (key, normalized)
 
 
 def test_later_bundles_replay_the_recorded_v3_numbers() -> None:

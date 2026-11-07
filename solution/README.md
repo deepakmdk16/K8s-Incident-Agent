@@ -46,7 +46,10 @@ its 6 lost rows are two distinct problems, not one:
 Never a percentage, never a feeling. `confirmed` is allowed only when all of:
 every cited quote re-verified against a re-executed tool call; at least three
 verified evidence items; one with role `symptom`; one with role `defect` whose
-citation is about the failing resource; at least one alternative ruled out with a
+citation is about the failing resource — a real result, from a read of its kind
+when the call names one (a pod read stands for its controller, and for nothing
+else), never a read of another object whose text happens to repeat the name;
+at least one alternative ruled out with a
 verified quote; 2–3 verification checks that were all re-run and found
 present, at least one of which names the failing resource; and, when the
 failing resource is a controller (Deployment, StatefulSet, DaemonSet, Job,

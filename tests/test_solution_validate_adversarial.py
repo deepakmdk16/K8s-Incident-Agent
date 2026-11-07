@@ -560,6 +560,36 @@ def _rejection_feedback_attacks(seed: Seed, target: va.ResourceRef) -> list[Atte
     return [first, second, third, fourth]
 
 
+# The kinds whose pods a read of may stand for (validate._same_kind's allowance).
+CONTROLLER_KINDS = frozenset(
+    {"cronjobs", "daemonsets", "deployments", "jobs", "replicasets", "statefulsets"}
+)
+
+
+def _cross_kind_pod_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
+    """A REAL read of a pod whose name carries the target's — describe, logs — cited
+    as the defect for a target that is not the pod's controller (a Service named
+    like its workload). Every line of the describe repeats the name, so the quote
+    rule alone anchored it (review of PR #8, 2026-11-07)."""
+    try:
+        own = fx.normalize_kind(target.kind)
+    except fx.FixtureError:
+        return []
+    if own in CONTROLLER_KINDS or own == "pods":
+        return []
+    ns, name = _call_namespace(seed, target), target.name
+    pods = [pod for pod in _pods(seed, ns, name) if pod.startswith(f"{name}-")]
+    if not pods:
+        return []
+    describe = Call("describe", {"namespace": ns, "kind": "pod", "name": pods[0]})
+    logs = Call("get_logs", {"namespace": ns, "pod": pods[0]})
+    attempts = [_single(seed, target, "e-describe-pod-named-after-target", describe)]
+    # A pod that logged nothing yields an empty read, which cites nothing.
+    if tl.dispatch(seed.fixture, logs.name, logs.arguments).strip():
+        attempts.append(_single(seed, target, "e-logs-of-pod-named-after-target", logs))
+    return attempts
+
+
 @functools.cache
 def _attempts(fixture: Path, which: str) -> tuple[Attempt, ...]:
     seed, target = _seed(fixture), _target(fixture, which)
@@ -568,6 +598,7 @@ def _attempts(fixture: Path, which: str) -> tuple[Attempt, ...]:
         *_empty_result_attacks(seed, target),
         *_undeclared_key_attacks(seed, target),
         *_sibling_attacks(seed, target),
+        *_cross_kind_pod_attacks(seed, target),
         *_rejection_feedback_attacks(seed, target),
     )
 
@@ -734,6 +765,24 @@ def test_a_real_read_of_a_namesake_of_another_kind_does_not_anchor_v7() -> None:
     checks = [_check(own, "catalog", "kubectl get svc catalog")] * 2
     earned = _run(seed, _arguments(seed, service, ("c1", '"name": "catalog"'), checks), ledger)
     assert earned.accepted and earned.verdict_allowed == "confirmed", earned.violations
+
+
+def test_a_real_read_of_a_pod_named_after_the_service_does_not_anchor_v7() -> None:
+    """`describe pod/catalog-…` is a real read in the right namespace whose name line
+    says 'catalog'; before the fix it earned `confirmed` for service/catalog (review
+    of PR #8, 2026-11-07). A pod anchors its controller — that allowance stands,
+    tests/test_frozen_replay.py — and nothing of another kind."""
+    seed, service = _seed(DRIFT), va.ResourceRef("service", "shop", "catalog")
+    pod = _pods(seed, "shop", "catalog")[0]
+    assert pod.startswith("catalog-")
+    read = Call("describe", {"namespace": "shop", "kind": "pod", "name": pod})
+    ledger = _ledger(seed, [read])
+    quote = _first_line(_output(ledger, "c1"))
+    assert quote.startswith("Name:") and "catalog" in quote
+    checks = [_check(read, "catalog", f"kubectl describe pod {pod}")] * 2
+    refused = _run(seed, _arguments(seed, service, ("c1", quote), checks), ledger)
+    assert refused.verdict_allowed != "confirmed"
+    assert any("whose citation is about catalog" in v for v in refused.violations)
 
 
 def test_v4_lists_only_names_a_read_of_the_agents_own_has_returned() -> None:

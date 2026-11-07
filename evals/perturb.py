@@ -199,6 +199,37 @@ def _layout_runs(fixture: Path, namespaces: Sequence[str]) -> set[str]:
         runs.update(_RUN.findall(path.relative_to(fixture).as_posix().lower()))
     for node in _item_names(fixture / "cluster" / "nodes.json"):
         runs.update(_RUN.findall(node.lower()))
+    # The snapshot's own vocabulary inside the files outside the user
+    # namespaces: every JSON key (`webhooks`, `spec`, `data`, …) and every
+    # describe label (`Labels:`, `Failure Policy:`). A user name equal to one
+    # would otherwise be renamed as text and take the key or label with it, so
+    # tools reading the copy would silently find nothing (review of PR #8,
+    # 2026-11-07). User-namespace files are excluded on purpose: there a
+    # describe's section headers and a ConfigMap's data keys ARE user names
+    # (`storefront:` for a container), and must stay renamable.
+    for path in _files(fixture):
+        if any(parent in user_dirs for parent in path.parents):
+            continue
+        if path.suffix == ".json":
+            runs.update(_json_key_runs(_load(path)))
+        elif path.suffix == ".txt" and "describe" in path.relative_to(fixture).as_posix():
+            for label in _DESCRIBE_LABEL.findall(path.read_text(encoding="utf-8")):
+                runs.update(_RUN.findall(label.lower()))
+    return runs
+
+
+_DESCRIBE_LABEL = re.compile(r"^\s*([A-Za-z][A-Za-z0-9 ./-]*?):(?:\s|$)", re.MULTILINE)
+
+
+def _json_key_runs(value: object) -> set[str]:
+    runs: set[str] = set()
+    if isinstance(value, dict):
+        for key, inner in cast(dict[str, object], value).items():
+            runs.update(_RUN.findall(key.lower()))
+            runs.update(_json_key_runs(inner))
+    elif isinstance(value, list):
+        for inner in cast(list[object], value):
+            runs.update(_json_key_runs(inner))
     return runs
 
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -236,6 +237,24 @@ def test_nothing_was_written_under_evals(
     out, _, before, after = perturbed
     assert (ROOT / "evals").resolve() not in out.resolve().parents
     assert after == before
+
+
+def test_a_user_name_equal_to_a_json_key_or_describe_label_is_kept(tmp_path: Path) -> None:
+    """Renamed as text, a namespace called `webhooks` would rewrite the `"webhooks"`
+    key of every copied configuration and one called `policy` the `Failure Policy:`
+    label of every describe, so tools reading the copy would silently find nothing.
+    Such names are kept and reported (review of PR #8, 2026-11-07)."""
+    case = "t2-checkout-release-stalled"
+    fixture = tmp_path / "fixture"
+    shutil.copytree(FIXTURES / case, fixture)
+    for namespace in ("webhooks", "policy"):
+        (fixture / "ns" / namespace).mkdir()
+        (fixture / "ns" / namespace / "pods.json").write_text('{"items": []}\n', encoding="utf-8")
+    rename_map = perturb.build_rename_map(
+        fixture, ROOT / "evals" / "scenarios-v2" / case / "gold.json", SEED
+    )
+    assert {"webhooks", "policy"} <= set(rename_map.kept)
+    assert not {"webhooks", "policy"} & set(rename_map.namespaces)
 
 
 def test_refuses_to_write_in_place_or_over_a_non_empty_directory(tmp_path: Path) -> None:

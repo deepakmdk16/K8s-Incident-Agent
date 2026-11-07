@@ -375,6 +375,16 @@ def test_describe_serves_the_captured_webhook_configuration() -> None:
     assert "Name:        policy-guard" in out
 
 
+def test_describe_matches_the_configuration_name_case_insensitively_like_get_object() -> None:
+    """get_object matched `Workload-Standards`; describe with the same arguments said no
+    such object existed — a cluster-state-shaped error about an object that is there
+    (review of PR #8, 2026-11-07)."""
+    kind = "validatingwebhookconfiguration"
+    lower = tl.dispatch(WEBHOOK, "describe", {"kind": kind, "name": "workload-standards"})
+    mixed = tl.dispatch(WEBHOOK, "describe", {"kind": kind, "name": "Workload-Standards"})
+    assert tl.is_evidence(mixed) and mixed == lower
+
+
 @pytest.mark.parametrize("name", ["get_object", "describe"])
 def test_a_webhook_object_absent_from_the_snapshot_is_a_cluster_state_error(name: str) -> None:
     """The name every arm guessed: now an ordinary miss that lists what IS there,

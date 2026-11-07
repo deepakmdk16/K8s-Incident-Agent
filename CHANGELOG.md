@@ -15,6 +15,97 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [24] scoring_v3 → v3.1: the bare-bracket reading rule, decided for the instrument and disclosed — 2026-11-07, 18:11 UTC
+
+**Change:** `evals/scoring_v3.py` gains `path_readings`: after normalization, a
+bracket that is neither a numeric index nor `key=value` is read both as
+`[name=x]` (a list element's name) and as `.x` (a map key), and a submitted path
+matches if any of its 2^k readings is an accepted gold form. The gold tree is
+unchanged; `solution/prompts.py` is unchanged — the instrument moved, not the
+agent, and not both. The four committed `scoring_v3.json` files are regenerated
+from v3.1; the twenty v3.0 misses stay in
+[tests/test_scoring_v3.py](tests/test_scoring_v3.py) as the regression corpus
+(each must still fail the literal match and pass through a reading, so the
+change is the rule and not a gold edit). Decision, reasons, the alternative
+rejected and the post-hoc caveat:
+[docs/experiments/2026-11-07-scoring-v3.md](docs/experiments/2026-11-07-scoring-v3.md),
+"v3.1"; [evals/gold-v3/README.md](evals/gold-v3/README.md) "Matching" updated.
+In the same round
+[docs/experiments/2026-09-04-webhook-outage.md](docs/experiments/2026-09-04-webhook-outage.md)
+records the STATUS 1.1 decision: Stage 1 is retired un-run, because the oracle
+its three live runs could have detected is now hunted offline over every
+fixture by the sweep ([21], [23]) and on the live run by Stage 2's tracing
+clause.
+
+**Why:** STATUS 2.4, from [20]: 20 of 20 path misses were one spelling.
+Kubernetes itself spells list elements by index and merges them by `name`;
+`[name=x]` is this gold tree's convention, so a scorer recognizing only it
+measured the convention. The agent-side fix would have been a rubric-shaped
+spelling rule derived from the instrument's own misses (solution/README.md,
+disclosure 1) and would need a paid run to verify.
+
+**Evidence after:** frozen bundle `fix_path_correct` **36/36** (v3.0: 16/36),
+`both_correct` **21/21** (v3.0: 12/21), `fix_value_correct` 21/21 unchanged —
+post-hoc on this bundle by construction, the number having been known from
+[20]'s sensitivity reading before the rule was written. Later bundles
+unchanged: crossns 3/3, decoys 3/3, webhook 0/3 (run 3 is a gold alias
+followed by prose, which no reading rule touches).
+`test_the_twenty_v3_0_misses_are_path_correct_only_through_a_v3_1_reading`;
+`test_committed_scoring_v3_json_matches_a_fresh_run` on all four bundles.
+
+**Next decision it drove:** v3.1 is the pre-registered instrument for the Stage
+2 webhook run and for the held-out set (STATUS 3.2); a v3.1 miss there is a
+real miss. No v3 number enters `evals/reported.json`.
+
+## [23] Review round on the integration branch: V7 anchoring closed at the rule, four fix-ups, three findings declined — 2026-11-07, 18:11 UTC
+
+**Change:** from a code review of PR #8 (nine findings, two reproduced as
+crashes). Adopted: (1) `solution/validate.py` — for `get_object` and `describe`
+the kind argument is the kind the output is about, so a read of another kind
+never anchors V7's defect item or its PRESENT check, whatever its text repeats;
+`get_logs` is a pod read and anchors only what a pod read may (the
+pod→controller allowance stands). [21]'s namesake rule is now a special case of
+this. (2) `evals/perturb.py` — the layout vocabulary a rename must not touch
+now includes every JSON key and describe label in the files outside the user
+namespaces (`webhooks`, `spec`, `Failure Policy:`), so a user name equal to one
+is kept and reported instead of renamed as text, which would have taken the key
+with it. (3) `solution/fixture.py` — `describe` matches a webhook
+configuration's name case-insensitively, as `get_object` already did. (4)
+`evals/scoring_v3.py` — an errored bundle row (no `class_correct`, by
+`Outcome.row`'s design) scores as a no-submission miss instead of crashing the
+column; a missing transcript for an accepted row is an error, not an honest
+miss. Plus one duplicated zip in V7 computed once. Declined, with reasons in the
+review notes: reading `.`, `/`, `$` as not the whole object (they are the
+JSONPath and JSON-pointer roots, and the pre-registered rule says empty →
+`<object>`); guarding `find_consumers` against a fixture with no capture ledger
+(a ledger-less fixture is broken by `capture_schema`'s contract, `capture.sh`
+always writes one, every committed fixture has one); an O(n²) regex build in
+`perturb` (fixtures hold tens of names).
+
+**Why:** STATUS 0.2 asks for review before merge; this was the first
+independent read of the six slices as one tree, and the anchoring finding is
+the third instance of one leak (docs/failure-modes.md, 2026-11-07, "RECURRENCE
+x3").
+
+**Evidence after:** [tests/test_frozen_replay.py](tests/test_frozen_replay.py)
+**36/36** and [tests/test_perturb_replay.py](tests/test_perturb_replay.py)
+**36/36** unchanged under the tightened rule — no frozen row moved. The sweep
+gains the family `_cross_kind_pod_attacks` (**786 → 792** attempts, all
+refused) and the pinned case
+`test_a_real_read_of_a_pod_named_after_the_service_does_not_anchor_v7`, which
+earns `confirmed` on the pre-review tree. A regression test per fix-up in
+[tests/test_perturb.py](tests/test_perturb.py),
+[tests/test_solution_tools.py](tests/test_solution_tools.py) and
+[tests/test_scoring_v3.py](tests/test_scoring_v3.py). Gate on the branch:
+`622 passed in 4.97s`, ruff and format clean, pyright strict 0 errors, evals
+re-derived 36/36 vs 30/36 vs 27/36, `== checkpoints: 0 failure(s)`.
+
+**Next decision it drove:** the anchoring rule is now stated per tool rather
+than per quote; the remaining quote-branch tools (`get_events`,
+`namespace_overview`, `find_consumers`, `cluster_capacity`) carry no kind and
+are judged by their text — the next sweep family, if one is needed, is a text
+that embeds the name through one of those.
+
 ## [22] Isomorphic perturbation: the gate accepts all 36 frozen rows under a consistent rename — 2026-11-07, 14:50 UTC
 
 **Change:** `evals/perturb.py` renames every user namespace and object name in a
