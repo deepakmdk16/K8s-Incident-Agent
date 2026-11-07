@@ -1,0 +1,17 @@
+{
+  "case_id": "t2-init-wait-for-migrations",
+  "field_path": "spec.template.spec.initContainers[0].env[0].value",
+  "accepted_field_paths": [
+    "spec.template.spec.initContainers[name=wait-for-db].env[0].value",
+    "spec.template.spec.initContainers[0].env[name=DB_HOST].value",
+    "spec.template.spec.initContainers[name=wait-for-db].env[name=DB_HOST].value"
+  ],
+  "required_value": "postgres-primary",
+  "accepted_required_values": [
+    "postgres-primary",
+    "postgres-primary.billing",
+    "postgres-primary.billing.svc",
+    "postgres-primary.billing.svc.cluster.local"
+  ],
+  "source": "fault.yaml L109-114: the single init container 'wait-for-db' (index 0) has one env entry DB_HOST (index 0) with value db-primary; the healthy Service is postgres-primary in the same namespace (L61-64). gold.json remediation_summary: JSON patch path /spec/template/spec/initContainers/0/env/0/value, value postgres-primary. notes.md L30. Value PINNED: the Service name; its in-cluster DNS forms resolve to the same Service and are accepted."
+}

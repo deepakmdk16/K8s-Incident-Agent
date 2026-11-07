@@ -1,0 +1,15 @@
+{
+  "case_id": "t3-quiet-selector-loud-crashloop",
+  "field_path": "spec.selector.app",
+  "accepted_field_paths": [
+    "spec.selector",
+    "spec.selector[app]"
+  ],
+  "required_value": "search",
+  "accepted_required_values": [
+    "search",
+    "app=search",
+    "{\"app\":\"search\"}"
+  ],
+  "source": "fault.yaml L73: Service search/search selects app=search-api while the search pods carry app=search (matchLabels L40, template labels L44). gold.json remediation_summary: patch {\"spec\":{\"selector\":{\"app\":\"search\"}}}. notes.md L28, L55 (Deployment selectors are immutable, so gold is the Service). Value PINNED: the pod label value."
+}

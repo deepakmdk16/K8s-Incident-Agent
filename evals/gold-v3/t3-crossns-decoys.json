@@ -1,0 +1,15 @@
+{
+  "case_id": "t3-crossns-decoys",
+  "field_path": "spec.selector.app",
+  "accepted_field_paths": [
+    "spec.selector",
+    "spec.selector[app]"
+  ],
+  "required_value": "payments-gateway-api",
+  "accepted_required_values": [
+    "payments-gateway-api",
+    "app=payments-gateway-api",
+    "{\"app\":\"payments-gateway-api\"}"
+  ],
+  "source": "fault.yaml L148-159 ('THE FAULT'; objects copied verbatim from t2-crossns-externalname-selector, only the noise pack differs): Service payments/payments-gateway selects app=payments-gateway while the gateway pods carry app=payments-gateway-api (L121, L125). gold.json remediation_summary: patch {\"spec\":{\"selector\":{\"app\":\"payments-gateway-api\"}}}. Value PINNED: the pod label value."
+}

@@ -1,0 +1,14 @@
+{
+  "case_id": "t3-overlapping-config-and-oom",
+  "field_path": "spec.template.spec.containers[0].env[0].valueFrom.configMapKeyRef.key",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=api].env[0].valueFrom.configMapKeyRef.key",
+    "spec.template.spec.containers[0].env[name=DATABASE_URL].valueFrom.configMapKeyRef.key",
+    "spec.template.spec.containers[name=api].env[name=DATABASE_URL].valueFrom.configMapKeyRef.key"
+  ],
+  "required_value": "database_url",
+  "accepted_required_values": [
+    "database_url"
+  ],
+  "source": "fault.yaml L113-121: orders-api's single container 'api' (index 0) has one env entry DATABASE_URL (index 0) whose configMapKeyRef.key is db_url; ConfigMap orders-config carries only database_url (L28). gold.json remediation_summary: 'in the DATABASE_URL env var, change valueFrom.configMapKeyRef.key from db_url to database_url ... Do not rename the ConfigMap key back'. notes.md L30, L86. Value PINNED: the one key that exists."
+}

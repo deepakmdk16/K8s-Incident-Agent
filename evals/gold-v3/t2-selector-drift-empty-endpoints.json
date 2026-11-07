@@ -1,0 +1,15 @@
+{
+  "case_id": "t2-selector-drift-empty-endpoints",
+  "field_path": "spec.selector.app",
+  "accepted_field_paths": [
+    "spec.selector",
+    "spec.selector[app]"
+  ],
+  "required_value": "catalog",
+  "accepted_required_values": [
+    "catalog",
+    "app=catalog",
+    "{\"app\":\"catalog\"}"
+  ],
+  "source": "fault.yaml L72: Service shop/catalog selects app=catalog-api while the catalog pods carry app=catalog (matchLabels L39, template labels L43). gold.json remediation_summary: patch {\"spec\":{\"selector\":{\"app\":\"catalog\"}}}. notes.md L23, L43-44 (the Service patch is the defensible fix; Deployment selectors are immutable), L49. Value PINNED: the pod label value; the whole-selector spellings normalize to the same form (see README)."
+}

@@ -1,0 +1,12 @@
+{
+  "case_id": "t1-pvc-storageclass-typo",
+  "field_path": "spec.volumeClaimTemplates[0].spec.storageClassName",
+  "accepted_field_paths": [
+    "spec.volumeClaimTemplates[name=data].spec.storageClassName"
+  ],
+  "required_value": "standard",
+  "accepted_required_values": [
+    "standard"
+  ],
+  "source": "fault.yaml L55-60: the single volumeClaimTemplate 'data' (index 0) names storageClassName fast-ssd. gold.json remediation_summary: 're-apply the StatefulSet with storageClassName standard'. notes.md L17, L21 (storageclasses lists only 'standard'), L23-26 (recreate, don't edit: the template is immutable, but the field that must differ in the re-applied object is this one). Value PINNED: 'standard' is the only StorageClass on the cluster."
+}

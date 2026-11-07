@@ -1,0 +1,16 @@
+{
+  "case_id": "t1-crashloop-missing-env",
+  "field_path": "spec.template.spec.containers[0].env",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=worker].env",
+    "spec.template.spec.containers[0].env[0].value",
+    "spec.template.spec.containers[name=worker].env[0].value",
+    "spec.template.spec.containers[0].env[name=AMQP_URL]",
+    "spec.template.spec.containers[name=worker].env[name=AMQP_URL]",
+    "spec.template.spec.containers[0].env[name=AMQP_URL].value",
+    "spec.template.spec.containers[name=worker].env[name=AMQP_URL].value"
+  ],
+  "required_value": null,
+  "accepted_required_values": [],
+  "source": "fault.yaml L35-43: the single container 'worker' (index 0) has no env list and its command exits unless AMQP_URL is non-empty (L41). gold.json remediation_summary: 'Set AMQP_URL on the checkout-worker deployment (direct env or ConfigMap/Secret ref) to the queue endpoint'. notes.md L27, L45. Value is OPEN: the guard tests non-emptiness only and no queue URL is pinned anywhere in the scenario, so no single required_value exists; the path is scored, the value is n/a. The env list does not exist yet, so the new entry's index form ([0]) and name form ([name=AMQP_URL]) are both accepted."
+}

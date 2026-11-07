@@ -1,0 +1,10 @@
+{
+  "case_id": "t1-unschedulable-cpu-requests",
+  "field_path": "spec.template.spec.containers[0].resources.requests.cpu",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=scorer].resources.requests.cpu"
+  ],
+  "required_value": null,
+  "accepted_required_values": [],
+  "source": "fault.yaml L34-47: the single container 'scorer' (index 0) requests cpu \"512\". gold.json remediation_summary: 'Lower the scorer container's cpu request ... to a value a node can satisfy - e.g. ... --requests=cpu=250m'. notes.md L25. Value is OPEN: gold says 'e.g.' and any request a node can satisfy recovers, so the value is n/a."
+}
