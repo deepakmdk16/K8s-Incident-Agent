@@ -1017,3 +1017,259 @@ def test_v5e_never_bans_the_failing_resources_own_name() -> None:
         ]
     )
     assert not [v for v in _validate(submission).violations if v.startswith("V5e")]
+
+
+# --- the two documented soft spots (STATUS 2.2, 2026-11-07) ------------------------
+
+CRASHLOOP = ROOT / "evals" / "fixtures" / "t1-crashloop-missing-env"
+WORKER_POD = "checkout-worker-66bfcdfc47-d9gdj"
+DECOYS = ROOT / "evals" / "fixtures" / "t3-crossns-decoys"
+
+
+def _recorded(
+    fixture: Path, namespace: str, reads: list[tuple[str, str, dict[str, object]]]
+) -> tl.ToolLedger:
+    """A ledger seeded the way the agent seeds it, plus the given real reads."""
+    ledger = tl.ToolLedger()
+    ledger.record(tl.ToolInvocation("page", "page", {}, fx.page(fixture), frozenset({""})))
+    ledger.record(
+        tl.ToolInvocation(
+            "overview",
+            "overview",
+            {},
+            tl.render_namespace_overview(fixture, namespace),
+            frozenset({namespace}),
+        )
+    )
+    for call_id, name, arguments in reads:
+        ledger.record(
+            tl.ToolInvocation(
+                call_id,
+                name,
+                arguments,
+                tl.dispatch(fixture, name, arguments),
+                tl.namespaces_touched(name, arguments),
+            )
+        )
+    return ledger
+
+
+def _pod_only_ledger() -> tl.ToolLedger:
+    """The Deployment's pod was read two ways; c3 reads the Deployment itself but
+    nothing cites it unless a test says so."""
+    return _recorded(
+        CRASHLOOP,
+        "payments",
+        [
+            ("c1", "get_logs", {"namespace": "payments", "pod": WORKER_POD, "previous": True}),
+            ("c2", "describe", {"namespace": "payments", "kind": "pod", "name": WORKER_POD}),
+            (
+                "c3",
+                "get_object",
+                {"namespace": "payments", "kind": "deployment", "name": "checkout-worker"},
+            ),
+        ],
+    )
+
+
+def _pod_only_submission(**overrides: object) -> va.Submission:
+    """A Deployment named as the failing object, evidenced through its pod alone."""
+    ref = {"kind": "Deployment", "namespace": "payments", "name": "checkout-worker"}
+    arguments: dict[str, object] = {
+        "failing_resource": ref,
+        "remediation": ref
+        | {
+            "field_path": ".spec.template.spec.containers[0].env",
+            "current_value": "no AMQP_URL entry",
+            "required_value": "AMQP_URL set from the queue Secret",
+        },
+        "root_cause_statement": "The worker's pod template sets no AMQP_URL.",
+        "mechanism": (
+            "Deployment checkout-worker's .spec.template.spec.containers[0].env has no AMQP_URL "
+            "entry, so the worker exits with `FATAL: AMQP_URL not set` on every start."
+        ),
+        "evidence": [
+            {
+                "role": "symptom",
+                "claim": "The worker is not ready.",
+                "tool_call_id": "overview",
+                "quote": "worker(ready=False,restarts=5",
+            },
+            {
+                "role": "link",
+                "claim": "The process exits at startup.",
+                "tool_call_id": "c1",
+                "quote": "FATAL: AMQP_URL not set",
+            },
+            {
+                "role": "defect",
+                "claim": "The container has no environment.",
+                "tool_call_id": "c2",
+                "quote": "Environment:    <none>",
+            },
+        ],
+        "ruled_out": [
+            {
+                "alternative": "The node cannot run the pod.",
+                "entity_names": ["incident-lab-control-plane"],
+                "ruling_claim": "The pod is scheduled and running.",
+                "tool_call_id": "overview",
+                "quote": "phase=Running",
+            }
+        ],
+        "verification": [
+            {
+                "command": f"kubectl -n payments logs {WORKER_POD} --previous",
+                "tool": "get_logs",
+                "arguments": {"namespace": "payments", "pod": WORKER_POD, "previous": True},
+                "must_contain": "FATAL: AMQP_URL not set",
+            },
+            {
+                "command": f"kubectl -n payments describe pod {WORKER_POD}",
+                "tool": "describe",
+                "arguments": {"namespace": "payments", "kind": "pod", "name": WORKER_POD},
+                "must_contain": "Environment:    <none>",
+            },
+        ],
+        "verdict": "confirmed",
+        "missing_evidence": "",
+    }
+    arguments.update(overrides)
+    return va.parse_submission(arguments)
+
+
+def _validate_pod_only(submission: va.Submission) -> va.ValidationResult:
+    return va.validate(
+        submission,
+        _pod_only_ledger(),
+        CRASHLOOP,
+        "t1-crashloop-missing-env",
+        "payments",
+        fx.page(CRASHLOOP),
+        submission.mechanism,
+    )
+
+
+def test_v7_a_controller_anchored_only_through_its_pod_is_not_confirmed() -> None:
+    """Soft spot (a): the pod→controller allowance let `confirmed` be earned for a
+    Deployment whose own spec no citation and no check ever read. The allowance now
+    holds only once the controller itself was read."""
+    result = _validate_pod_only(_pod_only_submission())
+    assert result.verdict_allowed != "confirmed"
+    assert any(
+        "is not earned yet" in v and "checkout-worker itself" in v for v in result.violations
+    ), result.violations
+
+
+_CONTROLLER_READ_CHECK: dict[str, object] = {
+    "command": "kubectl -n payments get deployment checkout-worker -o yaml",
+    "tool": "get_object",
+    "arguments": {"namespace": "payments", "kind": "deployment", "name": "checkout-worker"},
+    "must_contain": "AMQP_URL not set",
+}
+_CONTROLLER_READ_EVIDENCE: dict[str, object] = {
+    "role": "link",
+    "claim": "The template's only container is the worker.",
+    "tool_call_id": "c3",
+    "quote": '"image": "busybox:1.36"',
+}
+
+
+@pytest.mark.parametrize("via", ["evidence", "verification"])
+def test_v7_a_pod_read_anchors_its_controller_once_the_controller_was_read(via: str) -> None:
+    """The allowance the frozen bundle relies on survives: with the Deployment read
+    either as a cited quote or as a PRESENT check (two frozen rows supply it only the
+    second way), the pod describe still anchors the defect and `confirmed` is earned."""
+    base = _pod_only_submission()
+    if via == "evidence":
+        evidence = [
+            {"role": i.role, "claim": i.claim, "tool_call_id": i.tool_call_id, "quote": i.quote}
+            for i in base.evidence
+        ] + [_CONTROLLER_READ_EVIDENCE]
+        submission = _pod_only_submission(evidence=evidence)
+    else:
+        verification = [
+            {
+                "command": c.command,
+                "tool": c.tool,
+                "arguments": c.arguments,
+                "must_contain": c.must_contain,
+            }
+            for c in base.verification
+        ] + [_CONTROLLER_READ_CHECK]
+        submission = _pod_only_submission(verification=verification)
+    result = _validate_pod_only(submission)
+    assert result.violations == (), result.violations
+    assert result.verdict_allowed == "confirmed"
+
+
+def _decoys_submission(event_quote: str) -> va.Submission:
+    """A link citation taken from a cluster-wide event read on the 30-namespace fixture."""
+    ref = {"kind": "Deployment", "namespace": "storefront", "name": "checkout-api"}
+    return va.parse_submission(
+        {
+            "failing_resource": ref,
+            "remediation": ref
+            | {"field_path": ".spec.template", "current_value": "a", "required_value": "b"},
+            "root_cause_statement": "placeholder",
+            "mechanism": "Deployment checkout-api .spec.template fails.",
+            "evidence": [
+                {
+                    "role": "symptom",
+                    "claim": "Orders have stopped.",
+                    "tool_call_id": "page",
+                    "quote": "completed-order volume has been flat at zero",
+                },
+                {
+                    "role": "link",
+                    "claim": "An event line.",
+                    "tool_call_id": "c1",
+                    "quote": event_quote,
+                },
+                {
+                    "role": "defect",
+                    "claim": "The Deployment is not ready.",
+                    "tool_call_id": "overview",
+                    "quote": "deployment/checkout-api ready=0/2",
+                },
+            ],
+            "ruled_out": [],
+            "verification": [],
+            "verdict": "probable",
+            "missing_evidence": "",
+        }
+    )
+
+
+@pytest.mark.parametrize(
+    ("event_quote", "refused"),
+    [
+        ("release-canary Warning BackOff pod/canary-runner-54bdcc6cc-dc9f2", True),
+        ("Failed to create endpoint for service platform-metrics/metrics-collector", True),
+        ("storefront Warning Unhealthy pod/checkout-api-7db48f7c7b-6fb2v", False),
+        ("Readiness probe failed:", False),
+    ],
+    ids=["unlinked-line", "unlinked-in-message", "paged-line", "names-no-namespace"],
+)
+def test_v2_tags_an_event_citation_with_the_namespaces_its_quote_names(
+    event_quote: str, refused: bool
+) -> None:
+    """Soft spot (b): a cluster-wide event read is tagged namespace "" and so was
+    admissible whatever line of it was quoted. An event citation now rests on the
+    namespaces its quoted text names; a quote naming none keeps the read's own tag."""
+    ledger = _recorded(DECOYS, "storefront", [("c1", "get_events", {})])
+    result = va.validate(
+        _decoys_submission(event_quote),
+        ledger,
+        DECOYS,
+        "t3-crossns-decoys",
+        "storefront",
+        fx.page(DECOYS),
+        "",
+    )
+    assert not any(v.startswith("V1") for v in result.violations), result.violations
+    v2 = [v for v in result.violations if v.startswith("V2 ADMISSIBILITY: evidence[1]")]
+    if refused:
+        assert v2 and ("release-canary" in v2[0] or "platform-metrics" in v2[0]), v2
+    else:
+        assert v2 == []

@@ -47,12 +47,19 @@ Never a percentage, never a feeling. `confirmed` is allowed only when all of:
 every cited quote re-verified against a re-executed tool call; at least three
 verified evidence items; one with role `symptom`; one with role `defect` whose
 citation is about the failing resource; at least one alternative ruled out with a
-verified quote; and 2–3 verification checks that were all re-run and found
-present, at least one of which names the failing resource. If the agent proposes
-a stronger verdict than it earned, the submission is **rejected with the unmet
-condition named** and it submits again. A weaker verdict than earned is accepted
-as offered. Report and answer are rendered from the same accepted submission, so
-they can never disagree.
+verified quote; 2–3 verification checks that were all re-run and found
+present, at least one of which names the failing resource; and, when the
+failing resource is a controller (Deployment, StatefulSet, DaemonSet, Job,
+CronJob, ReplicaSet), one verified read of the object itself — `get_object` or
+`describe` of that kind and name, cited as evidence or run as a PRESENT check.
+A pod's describe or logs may stand in for its controller in the other
+conditions, but only once the controller's own spec was opened: pod names carry
+the controller's name, so without this `confirmed` could be earned for an
+object nobody read (`tests/test_solution_validate.py`, soft spot (a)). If the
+agent proposes a stronger verdict than it earned, the submission is **rejected
+with the unmet condition named** and it submits again. A weaker verdict than
+earned is accepted as offered. Report and answer are rendered from the same
+accepted submission, so they can never disagree.
 
 ## Disclosures
 
@@ -132,12 +139,20 @@ find nothing they were not told.
    example states a cause. And V1 makes borrowed text worthless: every quoted
    string in a report must re-verify against tool output produced in *that*
    run, so a quote the cluster never printed fails the gate.
-7. **Namespace admissibility (V2) binds namespaced reads only.** Cluster-scoped
-   reads (events, nodes, PVs — tools that tag namespace `""`) are admissible by
-   construction. That is a scoping decision, not an oversight: cluster events
-   are how Kubernetes announces cross-namespace causes, and V2's job is to stop
-   *namespace-hopping evidence*, not cluster-level observation. A future
-   tightening would tag event citations with the namespaces they quote.
+7. **Namespace admissibility (V2) binds namespaced reads, and event citations
+   by the namespaces their quoted lines name.** Other cluster-scoped reads
+   (nodes, PVs, capacity — tools that tag namespace `""`) are admissible by
+   construction. That is a scoping decision, not an oversight: V2's job is to
+   stop *namespace-hopping evidence*, not cluster-level observation. Events
+   were the exception worth closing: a cluster-wide event read is one call, but
+   every line it returns names the namespace it happened in, so since
+   2026-11-07 an event citation rests on the namespaces its quoted text names
+   (`fixture.namespaces_named_in`, exact DNS-label tokens). A line from an
+   unlinked namespace is refused until something links it; a line from the
+   paged or a linked namespace, or a quote that names no namespace at all,
+   keeps the read's own tag and stays admissible. Cluster events remain how
+   Kubernetes announces cross-namespace causes — quoting the whole line, with
+   its namespace prefix, is what brings the other namespace into the story.
 
 ## Loop budgets
 

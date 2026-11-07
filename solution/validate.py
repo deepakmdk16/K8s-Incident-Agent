@@ -335,7 +335,8 @@ def _arguments_name(arguments: Mapping[str, object], name: str) -> bool:
 
 # A pod is the product of its controller: reading the pod (describe, logs) is
 # reading the controller's behaviour, and pod names carry the controller's name.
-# That relationship, and same-kind, are the only two the anchoring rule accepts.
+# That relationship, and same-kind, are the only two the anchoring rule accepts —
+# and the first holds only once the controller itself was read (V7, below).
 _CONTROLLER_KINDS: frozenset[str] = frozenset(
     {"cronjobs", "daemonsets", "deployments", "jobs", "replicasets", "statefulsets"}
 )
@@ -348,7 +349,11 @@ def _same_kind(arguments: Mapping[str, object], reference: ResourceRef) -> bool:
     Without this, asking a served tool about a DIFFERENT kind that happens to
     carry the failing object's name ("describe configmap/<name>") counted as a
     read of the object (review, 2026-09-05). The pod→controller allowance is what
-    the frozen bundle's accepted submissions rely on (tests/test_frozen_replay.py).
+    the frozen bundle's accepted submissions rely on (tests/test_frozen_replay.py);
+    since 2026-11-07 it is conditional — V7 separately requires that a controller
+    named as the failing object was itself read (`_reads_object`), because on its
+    own the allowance let `confirmed` be earned for a Deployment whose spec no
+    citation and no check had opened.
     """
     kind = arguments.get("kind")
     if not isinstance(kind, str):
@@ -358,6 +363,48 @@ def _same_kind(arguments: Mapping[str, object], reference: ResourceRef) -> bool:
     except fx.FixtureError:
         return False
     return called == failing or (called == "pods" and failing in _CONTROLLER_KINDS)
+
+
+def _is_controller(reference: ResourceRef) -> bool:
+    try:
+        return fx.normalize_kind(reference.kind) in _CONTROLLER_KINDS
+    except fx.FixtureError:
+        return False
+
+
+def _reads_object(output: str, arguments: Mapping[str, object], reference: ResourceRef) -> bool:
+    """A real result from a call asked for exactly this kind and name: the object itself.
+
+    Listing a kind, reading a pod the object produced, or a tool that merely
+    mentions the object do not count — only get_object/describe of that kind and
+    name, with cluster state in the result.
+    """
+    kind, name = arguments.get("kind"), arguments.get("name")
+    if not (isinstance(kind, str) and isinstance(name, str) and tl.is_evidence(output)):
+        return False
+    try:
+        same_kind = fx.normalize_kind(kind) == fx.normalize_kind(reference.kind)
+    except fx.FixtureError:
+        return False
+    return same_kind and name.strip().lower() == reference.name.lower()
+
+
+def _citation_namespaces(
+    invocation: tl.ToolInvocation, quote: str, known: set[str]
+) -> frozenset[str]:
+    """The namespaces a citation rests on, for V2.
+
+    A read is tagged with the namespaces it reached into, and a cluster-scoped read
+    with "" — admissible by construction. Events are the exception: the read is
+    cluster-scoped, but every line it returns names the namespace it happened in,
+    so an event citation rests on the namespaces its quoted text names. A quote
+    that names none keeps the read's own tag (solution/README.md, disclosure 7).
+    """
+    if invocation.name == "get_events":
+        quoted = fx.namespaces_named_in(quote, known)
+        if quoted:
+            return frozenset(quoted)
+    return invocation.namespaces_touched
 
 
 def _about_failing_object(
@@ -502,10 +549,11 @@ def validate(
         # eliminates: ruling out a red herring necessarily means citing the red
         # herring, and penalising that would punish the exact discipline this
         # arm exists to enforce.
-        if label.startswith("evidence") and not invocation.namespaces_touched & admissible:
+        rests_on = _citation_namespaces(invocation, quote, known)
+        if label.startswith("evidence") and not rests_on & admissible:
             violations.append(
                 f"V2 ADMISSIBILITY: {label} cites "
-                f"{', '.join(sorted(invocation.namespaces_touched))}, which nothing has yet "
+                f"{', '.join(sorted(rests_on))}, which nothing has yet "
                 "connected to the paged symptom. Cite the reference that links it first"
             )
             continue
@@ -620,6 +668,31 @@ def validate(
         if ok
     ):
         unmet.append(f"one PRESENT verification check that names {reference.name}")
+    # The pod→controller allowance in _same_kind holds only once the controller
+    # itself was read. Pod names carry the controller's name, so without this
+    # every pod describe, log line and event about a pod "named" a controller
+    # whose spec nobody opened, and `confirmed` could be earned without one read
+    # of the object the remediation edits. The read may be a verified citation or
+    # a PRESENT check — two frozen rows supply it only the second way.
+    verified_reads: list[tuple[dict[str, object], str]] = [
+        (invocation.arguments, fresh_by_label[label])
+        for label, call_id, _ in cited
+        if label in fresh_by_label and (invocation := ledger.get(call_id)) is not None
+    ] + [
+        (check.arguments, output)
+        for check, (_, ok), output in zip(
+            submission.verification, verification_results, check_outputs, strict=True
+        )
+        if ok
+    ]
+    if _is_controller(reference) and not any(
+        _reads_object(output, arguments, reference) for arguments, output in verified_reads
+    ):
+        unmet.append(
+            f"one verified read of the {reference.kind} {reference.name} itself — get_object or "
+            "describe of that kind and name, cited as evidence or run as a PRESENT check; a "
+            "pod's describe or logs show what the controller produced, not its spec"
+        )
 
     verdict_allowed = "confirmed" if not violations and not unmet else "probable"
     if violations:
