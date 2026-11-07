@@ -670,7 +670,12 @@ def test_the_scaffold_is_satisfiable(fixture: Path) -> None:
     gold = _gold(fixture)
     if not tl.serves_kind(gold.kind):
         return
-    read = Call("get_object", {"namespace": gold.namespace, "kind": gold.kind, "name": gold.name})
+    # A cluster-scoped kind (the served webhook configurations) takes no namespace
+    # argument; passing one is refused as an ordinary error, not a read.
+    read_args: dict[str, object] = {"kind": gold.kind, "name": gold.name}
+    if fx.is_namespaced(gold.kind):
+        read_args["namespace"] = gold.namespace
+    read = Call("get_object", read_args)
     ledger = _ledger(seed, [read])
     quote = f'"name": "{gold.name}"'
     assert quote in _output(ledger, "c1")
