@@ -5,6 +5,10 @@ the `answer.json` each arm actually produced, re-scores it with the frozen
 scorer against the frozen gold, and checks the result against the declared bar
 in `evals/reported.json`. If a README or CHANGELOG number ever drifts from the
 bundle it cites, or a bundle is edited, this fails.
+
+The hedging section it prints after the table (per-verdict coverage and
+accuracy, inconclusives split by whether the solution's tools read the gold
+kind) is report only: `check_bar` never reads it (evals/hedging.py).
 """
 
 from __future__ import annotations
@@ -16,7 +20,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from evals import scoring
+from evals import hedging, scoring
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "evals" / "results"
@@ -35,6 +39,7 @@ class ArmReport:
     failing_cases: frozenset[str]
     mean_case_usd: float
     mean_case_duration_s: float
+    hedges: hedging.Report
 
 
 def rescore(bundle: str) -> ArmReport:
@@ -43,6 +48,7 @@ def rescore(bundle: str) -> ArmReport:
     if not root.is_dir():
         raise SystemExit(f"reported bundle missing: evals/results/{bundle}")
     scores: list[scoring.CaseScore] = []
+    hedge_rows: list[hedging.Row] = []
     resource_correct = matched_nothing = rows = 0
     per_case: dict[str, list[bool]] = {}
     spend: list[float] = []
@@ -60,6 +66,9 @@ def rescore(bundle: str) -> ArmReport:
             scoring.parse_answer(answer_path.read_text(encoding="utf-8")), gold
         )
         scores.append(score)
+        hedge_rows.append(
+            hedging.Row(score.verdict, score.root_cause_correct, gold.failing_resource.kind)
+        )
         rows += 1
         resource_correct += int(score.resource_correct)
         per_case.setdefault(case_id, []).append(score.root_cause_correct)
@@ -78,12 +87,47 @@ def rescore(bundle: str) -> ArmReport:
         failing,
         sum(spend) / len(spend),
         sum(latency) / len(latency),
+        hedging.Report.from_rows(hedge_rows),
     )
 
 
 def _cell(summary: scoring.Summary, tier: str) -> str:
     cell = summary.by_tier.get(tier)
     return "—" if cell is None else f"{cell.correct}/{cell.cases}"
+
+
+def _coverage(arm: hedging.Report, verdict: str) -> str:
+    cell = arm.by_verdict.get(verdict)
+    return "—" if cell is None else hedging.fraction(cell.cases, arm.rows)
+
+
+def _accuracy(arm: hedging.Report, verdict: str) -> str:
+    cell = arm.by_verdict.get(verdict)
+    return "—" if cell is None else hedging.fraction(cell.correct, cell.cases)
+
+
+def _row(label: str, cells: list[str]) -> tuple[str, str, str, str]:
+    rules, baseline, solution = cells
+    return (label, rules, baseline, solution)
+
+
+def hedging_rows(
+    rules: hedging.Report, baseline: hedging.Report, solution: hedging.Report
+) -> list[tuple[str, str, str, str]]:
+    """The cross-arm hedging table: every verdict any arm reported, priced per
+    arm (coverage, then accuracy), then the inconclusive readability split."""
+    arms = (rules, baseline, solution)
+    rows: list[tuple[str, str, str, str]] = []
+    for verdict in hedging.verdict_order(v for arm in arms for v in arm.by_verdict):
+        rows.append(_row(f"{verdict}: coverage", [_coverage(a, verdict) for a in arms]))
+        rows.append(_row(f"{verdict}: accuracy", [_accuracy(a, verdict) for a in arms]))
+    rows.append(
+        _row("inconclusive on a readable kind", [str(a.inconclusive_readable) for a in arms])
+    )
+    rows.append(
+        _row("inconclusive on an unreadable kind", [str(a.inconclusive_unreadable) for a in arms])
+    )
+    return rows
 
 
 def check_bar(
@@ -222,6 +266,16 @@ def main() -> None:
         "\nrules arm fails in every run on: "
         + (", ".join(sorted(rules.failing_cases)) or "no case")
     )
+
+    print(f"\nHedging — report only, no bar ({hedging.READABILITY}):\n")
+    header: list[tuple[str, str, str, str]] = [
+        ("verdict", "rules", "baseline", "solution"),
+        ("---", "---", "---", "---"),
+    ]
+    for label, left, mid, right in header + hedging_rows(
+        rules.hedges, baseline.hedges, solution.hedges
+    ):
+        print(f"| {label} | {left} | {mid} | {right} |")
 
     failures = check_bar(bar, rules, baseline, solution)
     if failures:

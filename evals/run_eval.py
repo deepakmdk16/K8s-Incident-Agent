@@ -28,7 +28,7 @@ from ablation.rules import diagnose as rules_diagnose
 from baseline.diagnose import diagnose as baseline_diagnose
 from common.llm import PINNED_MODEL, load_env_file
 from common.runlog import get_logger, new_run_id
-from evals import scoring, scoring_v2
+from evals import hedging, scoring, scoring_v2
 from solution.agent import diagnose as solution_diagnose
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -95,10 +95,20 @@ class Outcome:
     run: int
     case_id: str
     tier: str
+    gold_kind: str
     score: CaseScore | None
     error: str | None
     contract_violations: tuple[str, ...]
     metrics: dict[str, object]
+
+    @property
+    def verdict(self) -> str:
+        return "invalid" if self.score is None else self.score.verdict
+
+    def hedge_row(self) -> hedging.Row:
+        return hedging.Row(
+            self.verdict, self.score is not None and self.score.root_cause_correct, self.gold_kind
+        )
 
     def row(self) -> dict[str, object]:
         base: dict[str, object] = {
@@ -118,7 +128,7 @@ class Outcome:
                 "root_cause_correct": self.score.root_cause_correct,
             }
         else:
-            base |= {"verdict": "invalid", "root_cause_correct": False}
+            base |= {"verdict": self.verdict, "root_cause_correct": False}
         return base
 
 
@@ -203,6 +213,7 @@ def run_case(arm: ArmFn, case: Case, run_idx: int, case_dir: Path) -> Outcome:
         run=run_idx,
         case_id=case.case_id,
         tier=case.gold.tier,
+        gold_kind=case.gold.failing_resource.kind,
         score=score,
         error=error,
         contract_violations=violations,
@@ -279,6 +290,7 @@ def write_outputs(
 
     pooled = summarize(outcomes)
     per_run = {r: summarize([o for o in outcomes if o.run == r]) for r in range(1, runs + 1)}
+    hedges = hedging.Report.from_rows(o.hedge_row() for o in outcomes)
     # cost_usd is None for an unpriced model and absent when the arm died before
     # metrics — count those instead of folding them to $0 (masked spend).
     cost, unmeasured, tokens_in, tokens_out = 0.0, 0, 0, 0
@@ -314,6 +326,8 @@ def write_outputs(
             "cost_usd": round(cost, 4),
             "cases_without_measured_cost": unmeasured,
         },
+        # Pooled over every row; report only, no bar (evals/hedging.py).
+        "hedging": hedges.as_dict(),
     }
     (out_dir / "summary.json").write_text(json.dumps(summary_json, indent=2), encoding="utf-8")
 
@@ -351,6 +365,7 @@ def write_outputs(
         + " | ".join(cells)
         + f" | {pooled.confirmed_wrong} |"
     )
+    lines += ["", *hedges.markdown_lines()]
     errors = [o for o in outcomes if o.error is not None]
     if errors:
         lines += ["", "## Failed cases", ""]
