@@ -15,6 +15,167 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [22] Isomorphic perturbation: the gate accepts all 36 frozen rows under a consistent rename — 2026-11-07, 14:50 UTC
+
+**Change:** `evals/perturb.py` renames every user namespace and object name in a
+captured fixture and its gold — consistently across every file and path,
+same-length consonant-only DNS labels, derived names (pods, ReplicaSets, claims,
+a one-letter typo decoy) following their stem, system namespaces, nodes, kinds
+and the capture layout untouched, deterministic per seed, the map written to
+`<out>/rename-map.json`, never in place. `tests/test_perturb_replay.py` replays
+the 36 accepted frozen submissions on a renamed copy of each fixture (the same
+map applied to the recorded tool arguments and the submission) and requires
+`confirmed` from today's validator. `tests/test_perturb.py` holds the round-trip
+properties; `tests/replay_support.py` is the one replay helper both the frozen
+and the perturbed replay now use.
+
+**Why:** STATUS 3.3 — a grader sensitive to the specific names it was tuned on
+is a grader that can be gamed. This is the free, offline half of that test: no
+cluster, no model call.
+
+**Evidence after:** [tests/test_perturb_replay.py](tests/test_perturb_replay.py)
+**36/36** accepted as `confirmed` (37 tests, 3.3 s);
+[tests/test_frozen_replay.py](tests/test_frozen_replay.py) still 36/36 on the
+originals. The first run refused **1/36** (`run3/t3-overlapping-config-and-oom`,
+`V1 QUOTE … not present in the output of find_consumers`): `render_consumers`
+re-sorted a name list the capture already had in API order, so a verbatim quote
+of that trailer depended on how the names were spelled. Fixed in
+`solution/tools.py` — the three name listings keep capture order, no validator
+change (3,539 of 3,539 captured lists were already in name order, so the sort
+did nothing on real data); regression test with a planted out-of-order capture
+in [tests/test_solution_tools.py](tests/test_solution_tools.py); entry in
+[docs/failure-modes.md](docs/failure-modes.md) 2026-11-07. The rule was kept
+through the merge with [19]'s new cluster-wide listing.
+
+**Next decision it drove:** the validator's acceptance is invariant under
+renaming on the frozen set; whether the *agents* are is the live question for
+the held-out set (STATUS 3.2). Anything a renderer computes from names — a
+sort, a dedup, a tie-break — is now a known class of hidden name-dependence to
+check before the next tool is added.
+
+## [21] The validator gets an adversarial sweep over every fixture — and it found two more oracles on its first run — 2026-11-07, 14:48 UTC
+
+**Change:** `tests/test_solution_validate_adversarial.py` (new, inside the pytest
+gate) and two minimal tightenings in `solution/validate.py`. For each of the 15
+fixtures, for the gold failing resource and a plausible wrong object in the paged
+namespace, a generator builds 25–28 attempts per target (**786** in all) that try
+to earn `confirmed` using only error strings as quotes, empty results as
+evidence, undeclared argument keys, same-name different-kind reads, and the
+validator's own rejection text fed back. Each attempt must be refused by a named
+property; two controls prove the same scaffold earns `confirmed` with an honest
+read and `probable` with none. Every rejection is then checked against the oracle
+property: it may contain no case object name absent from the ledger's outputs,
+the arguments typed and the submission (lab furniture present in every fixture is
+excluded mechanically). Fixes: (1) `_asked_for_a_namesake` — a call that asked by
+exact name for an object of another kind anchors nothing under V7, whatever its
+output says; (2) V4 lists only names a read already in the ledger has returned,
+else says so and tells the agent to list the kind first.
+
+**Why:** [16] closed four oracles found by hand and stated that anchoring needs a
+real result "about the failing kind" — but the quote branch never checked the
+kind, so `describe deployment/catalog` ("Name: catalog") earned `confirmed` for
+`service/catalog` without the Service being read: 15 attempts across 9
+fixture/target pairs, every Service↔Deployment/Endpoints pair that shares a name.
+And V4's "Present:" list, kept for served kinds because the agent "could have
+listed them", corrected a guessed `rolebinding` / `resourcequota` name to one the
+ledger had never shown. A reward has to be attacked by a generator over every
+case before anything optimizes against it; the hand-found shapes were not the
+whole family.
+
+**Evidence after:** first run **34 passed / 42 failed**. After the fixes:
+[tests/test_solution_validate_adversarial.py](tests/test_solution_validate_adversarial.py)
+**78 passed in 1.08 s**; [tests/test_frozen_replay.py](tests/test_frozen_replay.py)
+still accepts all **36 frozen rows** (the namesake pattern occurred there only as
+a secondary verification check beside a same-kind read, so no headline row could
+move). Failure mode logged in [docs/failure-modes.md](docs/failure-modes.md)
+2026-11-07. Merging with [19] re-aimed one test: a served webhook kind's names
+are listed by V4 only once a read has returned them, and the honest-read control
+omits the namespace argument for a cluster-scoped kind.
+
+**Next decision it drove:** the gate now has a standing adversarial sweep — new
+attack shapes go into the generator, not into one-off tests. One observation to
+carry, not a leak: a mechanism made only of the V5 rejection messages satisfies
+V5b–d, so any strengthening of V5 must not read the gate's own prose as
+compliance.
+
+## [20] A column that scores the fix, not the sentence — and its first miss was the ruler — 2026-11-07, 14:40 UTC
+
+**Change:** `evals/scoring_v3.py` and `evals/gold-v3/` (15 files plus README): an
+additive, solution-only diagnostic column comparing the submitted
+`remediation.field_path` / `required_value` with a v3 gold authored from each
+case's `fault.yaml`, `notes.md` and `remediation_summary` (source lines cited per
+file), reported beside the frozen class match. Nothing frozen moves: `gold.json`,
+`scoring.py`, `scoring_v2.py`, the case set and every committed bundle file are
+byte-identical; v1's `root_cause_correct` is read from `rows.jsonl`, never
+recomputed. Arms whose contract lacks the fields report `n/a`, never 0. Ten
+cases pin a value; five are open (sizes, counts, image refs, URLs) and score the
+path only. Per-row raw strings land as a new `scoring_v3.json` beside each
+scored bundle.
+
+**Why:** twice (docs/failure-modes.md 2026-08-29, 2026-09-04) a pooled number
+moved for reasons the sentence rubric's vocabulary controlled. The submission
+already names the fix; nothing measured it (STATUS 3.1).
+
+**Evidence after:** pre-registered in
+[docs/experiments/2026-11-07-scoring-v3.md](docs/experiments/2026-11-07-scoring-v3.md)
+(prediction committed before the run, instrument frozen at that commit). Frozen
+bundle `20260829T090941Z-solution`: `fix_path_correct` **16/36** (T1 5/15, T2
+8/15, T3 3/6) against a prediction of ≥ 30/36 — **prediction wrong**;
+`fix_value_correct` **21/21** on value-pinned rows; both 12/21. All 20 misses are
+one spelling: bare element names in brackets (`containers[storefront].image`,
+`spec.hard[pods]`) which the pre-registered normalizer leaves as written; 0 value
+misses, 0 missing submissions. Later bundles: crossns 3/3, decoys 3/3,
+checkout-release-stalled 0/3 (two salvaged rows, one gold alias followed by
+prose). Replay pinned by [tests/test_scoring_v3.py](tests/test_scoring_v3.py)
+(46 tests, including the exact miss set and committed `scoring_v3.json` equal to
+a fresh run).
+
+**Next decision it drove:** the bare-bracket spelling rule is logged as a
+candidate change (post-hoc sensitivity 36/36 if applied) for a later disclosed
+slice, not applied here. Where the scenario pins a value the agent named it
+correctly in 27/27 scored rows; the open-value cases' `required_value` strings
+are prose with examples, which argues for keeping them open rather than
+inventing a pinned number.
+
+## [19] The webhook kinds served: the ceiling moves from the tool layer to the run — 2026-11-07, 14:35 UTC
+
+**Change:** `solution/tools.py`, `solution/fixture.py` — reach, not the gate.
+`get_object` and `describe` serve `validatingwebhookconfigurations` and
+`mutatingwebhookconfigurations` (cluster-scoped: no namespace argument, a
+supplied one refused as an ordinary error; the read tagged namespace `""` so V2
+admits it by construction; `describe` from the per-object capture under
+`cluster/describe/`; the projection keeps each webhook's name, `clientConfig`
+target, `failurePolicy`, `matchPolicy`, `sideEffects`, `timeoutSeconds`, `rules`
+and selectors). `find_consumers` on a Service reports every configuration whose
+`clientConfig.service` names it. `serves_kind` is true for exactly these two
+cluster kinds and for nothing else cluster-scoped; a schema-1 fixture reports
+them as not captured, never as empty. Tool descriptions name the kinds;
+`solution/README.md` disclosures 5 and 7 restated.
+
+**Why:** [15] measured the ceiling (no arm read the object; the solution's 3/3
+`resource_correct` was a validator leak) and [16] closed the leaks without adding
+reach. The experiment's decision rule names this as the next slice: serve the
+kinds, tagged cluster-wide, plus the webhook → Service edge.
+
+**Evidence after:** offline only so far.
+[tests/test_solution_tools.py](tests/test_solution_tools.py) (both kinds listed,
+read and described on `t2-checkout-release-stalled`; not-captured on a frozen
+fixture; namespace argument refused; tag `""`; the Service edge; no other cluster
+kind served on the webhook fixture; descriptions name the kinds),
+[tests/test_solution_validate.py](tests/test_solution_validate.py)
+(`test_a_real_read_of_the_configuration_earns_confirmed_honestly` — an honest
+submission citing a real `get_object` read is accepted as `confirmed` with zero
+violations; the two oracle tests re-aimed at `clusterroles` still hold).
+[tests/test_frozen_replay.py](tests/test_frozen_replay.py): 36/36 frozen rows
+still accepted; namespaced-kind output strings byte-identical.
+
+**Next decision it drove:** the scored re-run, pre-registered as "Stage 2" in
+[docs/experiments/2026-09-04-webhook-outage.md](docs/experiments/2026-09-04-webhook-outage.md):
+3 runs, prediction 3/3 `confirmed`, `resource_correct` 3/3 with the name first
+appearing in a tool result, confirmed-wrong 0, ~7 turns and ~$0.18 per case;
+anything less is read per row from `rows.jsonl` before a number is quoted.
+Result: not yet run (scoring policy, STATUS).
+
 ## [18] Priced the hedging: per-verdict coverage and accuracy, and where `inconclusive` lands — 2026-11-07, 14:25 UTC
 
 **Change:** `evals/hedging.py` (new), `evals/run_eval.py`, `evals/verify_reported.py`.
