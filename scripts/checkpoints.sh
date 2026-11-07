@@ -54,10 +54,12 @@ fi
 # Personal data: home paths are never legitimate anywhere — they leak the
 # operator's username and machine layout. checkpoints.sh and test_gates.sh are
 # excluded: they contain the patterns and the deliberately-planted fixtures.
+# In a git worktree `.git` is a FILE whose `gitdir:` line is an absolute path
+# under the home dir; --exclude-dir=.git never matched it (tests/test_gates.sh 8b).
 grep -rInE '/(Users|home)/[A-Za-z0-9._-]+' \
      --exclude-dir=.git --exclude-dir=.work --exclude-dir=node_modules --exclude-dir=.venv --exclude-dir=dist \
      --exclude='checkpoints.sh' --exclude='test_gates.sh' --exclude='settings.local.json' \
-     --exclude='*.sha256' --exclude='.env' "$TARGET" >/dev/null 2>&1
+     --exclude='*.sha256' --exclude='.env' --exclude='.git' "$TARGET" >/dev/null 2>&1
 case $? in
   0) fail "home path (/Users/... or /home/...) present — scrub before shipping" ;;
   1) ok "no home paths in target" ;;

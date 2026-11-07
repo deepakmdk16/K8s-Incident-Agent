@@ -49,6 +49,11 @@ fixture "$TMP/oai"; echo "k = \"sk-proj-""AbCdEf0123456789_ghijKLmnop\"" > "$TMP
 # 8. Home path anywhere in the tree (a raw transcript carries hundreds of these)
 fixture "$TMP/home"; echo '/Users/somebody/Documents/x' > "$TMP/home/notes.txt"
                                                              check "home path in tree caught"        1 "$TMP/home"
+# 8b. a git worktree's `.git` is a pointer FILE whose gitdir: line is an absolute
+# home path — git's own metadata, never shipped. --exclude-dir=.git skips only the
+# directory form, so every worktree checkout failed the scan (2026-11-07)
+fixture "$TMP/wt"; echo 'gitdir: /Users/somebody/repo/.git/worktrees/x' > "$TMP/wt/.git"
+                                                             check "worktree .git pointer file not a leak" 0 "$TMP/wt"
 # 9. evals/run.sh present but NOT executable must FAIL, never skip as "not present"
 fixture "$TMP/noexec"; printf '#!/bin/sh\nexit 1\n' > "$TMP/noexec/evals/run.sh"; chmod -x "$TMP/noexec/evals/run.sh"
                                                              check "non-executable evals/run.sh caught" 1 "$TMP/noexec"
