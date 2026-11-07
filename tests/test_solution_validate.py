@@ -762,10 +762,12 @@ def _webhook_submission(**overrides: object) -> va.Submission:
     return va.parse_submission(arguments)
 
 
-def _validate_webhook(submission: va.Submission) -> va.ValidationResult:
+def _validate_webhook(
+    submission: va.Submission, ledger: tl.ToolLedger | None = None
+) -> va.ValidationResult:
     return va.validate(
         submission,
-        _webhook_ledger(),
+        ledger if ledger is not None else _webhook_ledger(),
         WEBHOOK,
         "t2-checkout-release-stalled",
         "checkout",
@@ -789,8 +791,10 @@ def test_v4_does_not_list_names_for_a_kind_no_tool_serves() -> None:
     assert real_names and not any(name in v4[0] for name in real_names)
 
 
-def test_v4_lists_names_for_the_webhook_kind_now_that_get_object_serves_it() -> None:
-    """The flip side of the guard: a kind the agent can list may be listed back to it."""
+def test_v4_lists_names_for_the_webhook_kind_only_once_a_read_has_returned_them() -> None:
+    """The flip side of the guard: a kind the agent can list may be listed back to it —
+    but only the names a read of its own has already returned (the adversarial suite
+    found "could have listed" was the same oracle one step shorter, 2026-11-07)."""
     ref = {
         "kind": "ValidatingWebhookConfiguration",
         "namespace": "cluster-scoped",
@@ -801,8 +805,15 @@ def test_v4_lists_names_for_the_webhook_kind_now_that_get_object_serves_it() -> 
         remediation=ref
         | {"field_path": ".webhooks[0].failurePolicy", "current_value": "a", "required_value": "b"},
     )
-    v4 = [v for v in _validate_webhook(guessed).violations if v.startswith("V4 EXISTS")]
-    assert v4 and "Present: workload-standards" in v4[0]
+    unread = [v for v in _validate_webhook(guessed).violations if v.startswith("V4 EXISTS")]
+    assert unread and "workload-standards" not in unread[0]
+    assert "none that a read of yours has returned" in unread[0]
+    read = [
+        v
+        for v in _validate_webhook(guessed, _served_webhook_ledger()).violations
+        if v.startswith("V4 EXISTS")
+    ]
+    assert read and "Present: workload-standards" in read[0]
 
 
 def test_a_real_read_of_the_configuration_earns_confirmed_honestly() -> None:
