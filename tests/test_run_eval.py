@@ -272,9 +272,9 @@ def test_hedging_splits_inconclusives_by_what_the_solution_tools_can_read() -> N
     rows = [
         hedging.Row("inconclusive", False, "deployment"),
         hedging.Row("inconclusive", True, "RoleBinding"),  # kubectl spelling, still read
-        hedging.Row("inconclusive", False, "validatingwebhookconfiguration"),  # cluster-scoped
+        hedging.Row("inconclusive", False, "clusterrole"),  # cluster-scoped, no tool serves it
         hedging.Row("inconclusive", False, "no-such-kind"),
-        hedging.Row("confirmed", False, "validatingwebhookconfiguration"),
+        hedging.Row("confirmed", False, "clusterrole"),
     ]
     report = hedging.Report.from_rows(rows)
     assert (report.inconclusive_readable, report.inconclusive_unreadable) == (2, 2)
