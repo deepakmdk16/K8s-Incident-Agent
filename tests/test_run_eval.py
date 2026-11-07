@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from evals import scoring, scoring_v2
+from evals import hedging, scoring, scoring_v2
 from evals.run_eval import (
     FROZEN_ROOT,
     SCENARIO_ROOTS,
@@ -236,3 +236,105 @@ def test_a_v2_case_scores_a_cluster_scoped_answer_through_the_v2_scorer(tmp_path
     summary = json.loads((tmp_path / "summary.json").read_text())
     assert summary["scorer"] == "evals.scoring_v2"
     assert "- scorer: evals.scoring_v2" in (tmp_path / "summary.md").read_text()
+
+
+# --- hedging report: price every verdict, report only, no bar (STATUS 2.3) ---
+
+
+def test_hedging_prices_each_verdict_with_coverage_and_accuracy() -> None:
+    """Every verdict value present gets its row count, its share of all rows and
+    the root-cause rate among its rows; a row with no verdict lands in an
+    explicit "none" bucket rather than vanishing."""
+    rows = [
+        hedging.Row("confirmed", True, "deployment"),
+        hedging.Row("confirmed", True, "deployment"),
+        hedging.Row("confirmed", False, "deployment"),
+        hedging.Row("probable", False, "service"),  # a verdict with zero correct rows
+        hedging.Row(None, False, "service"),
+    ]
+    report = hedging.Report.from_rows(rows)
+    assert report.rows == 5
+    assert list(report.by_verdict) == ["confirmed", "probable", "none"]
+    cells = {v: (c.cases, c.correct) for v, c in report.by_verdict.items()}
+    assert cells == {"confirmed": (3, 2), "probable": (1, 0), "none": (1, 0)}
+    assert report.as_dict()["by_verdict"] == {
+        "confirmed": {"rows": 3, "correct": 2, "coverage": 0.6, "accuracy": 0.6667},
+        "probable": {"rows": 1, "correct": 0, "coverage": 0.2, "accuracy": 0.0},
+        "none": {"rows": 1, "correct": 0, "coverage": 0.2, "accuracy": 0.0},
+    }
+    assert "| probable | 1/5 (20.0%) | 0/1 (0.0%) |" in report.markdown_lines()
+
+
+def test_hedging_splits_inconclusives_by_what_the_solution_tools_can_read() -> None:
+    """The readability notion is the solution's tool layer (tools.serves_kind) on
+    the gold failing-resource kind, applied to any arm's rows. A kind the layer
+    does not know is unreadable, not a crash; a non-hedge is not counted."""
+    rows = [
+        hedging.Row("inconclusive", False, "deployment"),
+        hedging.Row("inconclusive", True, "RoleBinding"),  # kubectl spelling, still read
+        hedging.Row("inconclusive", False, "validatingwebhookconfiguration"),  # cluster-scoped
+        hedging.Row("inconclusive", False, "no-such-kind"),
+        hedging.Row("confirmed", False, "validatingwebhookconfiguration"),
+    ]
+    report = hedging.Report.from_rows(rows)
+    assert (report.inconclusive_readable, report.inconclusive_unreadable) == (2, 2)
+    payload = report.as_dict()
+    assert payload["inconclusive_on_readable_kind"] == 2
+    assert payload["inconclusive_on_unreadable_kind"] == 2
+    assert "serves_kind" in str(payload["readability"])
+    assert hedging.Report.from_rows([]).as_dict()["by_verdict"] == {}
+
+
+def test_write_outputs_adds_the_hedging_report_beside_the_existing_keys(tmp_path: Path) -> None:
+    """New keys are added; nothing existing is renamed, removed or re-shaped."""
+    hedged_answer = CORRECT_ANSWER | {"verdict": "inconclusive", "missing_evidence": "logs"}
+    good = run_case(_arm_writing(CORRECT_ANSWER, REPORT), _case(), 1, tmp_path / "a")
+    hedged = run_case(_arm_writing(hedged_answer, REPORT), _case(), 1, tmp_path / "b")
+    bad = run_case(_arm_writing({"nope": True}, REPORT), _case(), 1, tmp_path / "c")
+    write_outputs(tmp_path, "baseline", 1, [good, hedged, bad], "20260828T000000Z")
+
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    assert set(summary) == {
+        "arm",
+        "runs",
+        "started_utc",
+        "scorer",
+        "model_pinned",
+        "sampling",
+        "pooled",
+        "per_run",
+        "totals",
+        "hedging",
+    }
+    assert set(summary["pooled"]) == {"overall", "by_tier", "by_verdict", "confirmed_wrong"}
+    assert summary["pooled"]["by_verdict"]["inconclusive"] == {"correct": 1, "cases": 1}
+    assert summary["hedging"]["by_verdict"] == {
+        "confirmed": {"rows": 1, "correct": 1, "coverage": 0.3333, "accuracy": 1.0},
+        "inconclusive": {"rows": 1, "correct": 1, "coverage": 0.3333, "accuracy": 1.0},
+        "invalid": {"rows": 1, "correct": 0, "coverage": 0.3333, "accuracy": 0.0},
+    }
+    # the gold object is a Deployment, which the solution's tools read
+    assert summary["hedging"]["inconclusive_on_readable_kind"] == 1
+    assert summary["hedging"]["inconclusive_on_unreadable_kind"] == 0
+
+    rows = [json.loads(line) for line in (tmp_path / "rows.jsonl").read_text().splitlines()]
+    assert set(rows[0]) == {
+        "run",
+        "case_id",
+        "tier",
+        "error",
+        "contract_violations",
+        "metrics",
+        "verdict",
+        "resource_correct",
+        "matched_classes",
+        "class_correct",
+        "root_cause_correct",
+    }
+    assert rows[2]["verdict"] == "invalid"
+
+    md = (tmp_path / "summary.md").read_text()
+    assert "| pooled | 2/3 |" in md
+    assert "| inconclusive | 1/3 (33.3%) | 1/1 (100.0%) |" in md
+    assert "| invalid | 1/3 (33.3%) | 0/1 (0.0%) |" in md
+    assert "inconclusive on a readable kind: 1; on an unreadable kind: 0" in md
