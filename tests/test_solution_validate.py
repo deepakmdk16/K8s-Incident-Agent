@@ -603,41 +603,9 @@ def test_v2_does_not_gate_a_ruled_out_citation() -> None:
 WEBHOOK = ROOT / "evals" / "fixtures" / "t2-checkout-release-stalled"
 
 
-def _webhook_ledger() -> tl.ToolLedger:
-    """The reads the unchanged arm actually made on the webhook case, replayed."""
-    ledger = tl.ToolLedger()
-    ledger.record(tl.ToolInvocation("page", "page", {}, fx.page(WEBHOOK), frozenset({""})))
-    ledger.record(
-        tl.ToolInvocation(
-            "overview",
-            "overview",
-            {},
-            tl.render_namespace_overview(WEBHOOK, "checkout"),
-            frozenset({"checkout"}),
-        )
-    )
-    reads: list[tuple[str, str, dict[str, object]]] = [
-        ("c1", "get_events", {"namespace": "checkout", "warnings_only": True}),
-        (
-            "c2",
-            "get_object",
-            {
-                "namespace": "cluster-scoped",
-                "kind": "validatingwebhookconfigurations",
-                "name": "workload-standards",
-            },
-        ),
-        (
-            "c3",
-            "describe",
-            {
-                "namespace": "cluster-scoped",
-                "kind": "validatingwebhookconfiguration",
-                "name": "workload-standards",
-            },
-        ),
-        ("c4", "namespace_overview", {"namespace": "platform-policy"}),
-    ]
+def _record_reads(
+    ledger: tl.ToolLedger, reads: list[tuple[str, str, dict[str, object]]]
+) -> tl.ToolLedger:
     for call_id, name, arguments in reads:
         ledger.record(
             tl.ToolInvocation(
@@ -649,6 +617,75 @@ def _webhook_ledger() -> tl.ToolLedger:
             )
         )
     return ledger
+
+
+def _seeded_webhook_ledger() -> tl.ToolLedger:
+    ledger = tl.ToolLedger()
+    ledger.record(tl.ToolInvocation("page", "page", {}, fx.page(WEBHOOK), frozenset({""})))
+    ledger.record(
+        tl.ToolInvocation(
+            "overview",
+            "overview",
+            {},
+            tl.render_namespace_overview(WEBHOOK, "checkout"),
+            frozenset({"checkout"}),
+        )
+    )
+    return ledger
+
+
+def _webhook_ledger() -> tl.ToolLedger:
+    """The reads the unchanged arm actually made on the webhook case, replayed — with
+    its two reads of the configuration re-aimed at clusterroles, a kind that stays
+    unserved after the webhook kinds were served (2026-11-07), so these tests keep
+    exercising a result the snapshot cannot give."""
+    return _record_reads(
+        _seeded_webhook_ledger(),
+        [
+            ("c1", "get_events", {"namespace": "checkout", "warnings_only": True}),
+            (
+                "c2",
+                "get_object",
+                {
+                    "namespace": "cluster-scoped",
+                    "kind": "clusterroles",
+                    "name": "workload-standards",
+                },
+            ),
+            (
+                "c3",
+                "describe",
+                {
+                    "namespace": "cluster-scoped",
+                    "kind": "clusterrole",
+                    "name": "workload-standards",
+                },
+            ),
+            ("c4", "namespace_overview", {"namespace": "platform-policy"}),
+        ],
+    )
+
+
+def _served_webhook_ledger() -> tl.ToolLedger:
+    """The reads the arm can make once the webhook kinds are served: cluster-wide,
+    no namespace argument."""
+    return _record_reads(
+        _seeded_webhook_ledger(),
+        [
+            ("c1", "get_events", {"namespace": "checkout", "warnings_only": True}),
+            (
+                "c2",
+                "get_object",
+                {"kind": "validatingwebhookconfigurations", "name": "workload-standards"},
+            ),
+            (
+                "c3",
+                "describe",
+                {"kind": "validatingwebhookconfiguration", "name": "workload-standards"},
+            ),
+            ("c4", "namespace_overview", {"namespace": "platform-policy"}),
+        ],
+    )
 
 
 def _webhook_submission(**overrides: object) -> va.Submission:
@@ -688,7 +725,7 @@ def _webhook_submission(**overrides: object) -> va.Submission:
                 "role": "defect",
                 "claim": "The configuration is the object named.",
                 "tool_call_id": "c3",
-                "quote": "validatingwebhookconfiguration",
+                "quote": "clusterroles",
             },
         ],
         "ruled_out": [
@@ -702,11 +739,11 @@ def _webhook_submission(**overrides: object) -> va.Submission:
         ],
         "verification": [
             {
-                "command": "kubectl describe validatingwebhookconfiguration workload-standards",
+                "command": "kubectl describe clusterrole workload-standards",
                 "tool": "describe",
                 "arguments": {
                     "namespace": "cluster-scoped",
-                    "kind": "validatingwebhookconfiguration",
+                    "kind": "clusterrole",
                     "name": "workload-standards",
                 },
                 "must_contain": "workload-standards",
@@ -738,7 +775,22 @@ def _validate_webhook(submission: va.Submission) -> va.ValidationResult:
 
 
 def test_v4_does_not_list_names_for_a_kind_no_tool_serves() -> None:
-    """The unchanged arm learned the object's name from this very message, 3 runs of 3."""
+    """The unchanged arm learned the object's name from this very message, 3 runs of 3.
+    The webhook kinds are served since 2026-11-07, so the guard is held on clusterroles."""
+    ref = {"kind": "ClusterRole", "namespace": "cluster-scoped", "name": "imagined"}
+    guessed = _webhook_submission(
+        failing_resource=ref,
+        remediation=ref | {"field_path": ".rules[0]", "current_value": "a", "required_value": "b"},
+    )
+    v4 = [v for v in _validate_webhook(guessed).violations if v.startswith("V4 EXISTS")]
+    assert v4, "a wrong name must still be rejected"
+    assert "Present:" not in v4[0]
+    real_names = {str(item["metadata"]["name"]) for item in fx.load_kind(WEBHOOK, "clusterroles")}
+    assert real_names and not any(name in v4[0] for name in real_names)
+
+
+def test_v4_lists_names_for_the_webhook_kind_now_that_get_object_serves_it() -> None:
+    """The flip side of the guard: a kind the agent can list may be listed back to it."""
     ref = {
         "kind": "ValidatingWebhookConfiguration",
         "namespace": "cluster-scoped",
@@ -750,9 +802,80 @@ def test_v4_does_not_list_names_for_a_kind_no_tool_serves() -> None:
         | {"field_path": ".webhooks[0].failurePolicy", "current_value": "a", "required_value": "b"},
     )
     v4 = [v for v in _validate_webhook(guessed).violations if v.startswith("V4 EXISTS")]
-    assert v4, "a wrong name must still be rejected"
-    assert "workload-standards" not in v4[0]
-    assert "Present:" not in v4[0]
+    assert v4 and "Present: workload-standards" in v4[0]
+
+
+def test_a_real_read_of_the_configuration_earns_confirmed_honestly() -> None:
+    """Stage 2's acceptance path, offline: the defect item cites a real read of the
+    object (tagged cluster-wide, so V2 admits it), and the verdict gate lets
+    `confirmed` through on nothing but tool output."""
+    honest = _webhook_submission(
+        mechanism=(
+            "ValidatingWebhookConfiguration workload-standards points "
+            ".webhooks[0].clientConfig.service at Service policy-guard in namespace "
+            "platform-policy, which does not exist, and sets .webhooks[0].failurePolicy to "
+            "Fail, so the API server refuses every pod create with "
+            '`service "policy-guard" not found`.'
+        ),
+        evidence=[
+            {
+                "role": "symptom",
+                "claim": "The release has not completed.",
+                "tool_call_id": "page",
+                "quote": "the new\nversion has reached 0 of 3 replicas",
+            },
+            {
+                "role": "link",
+                "claim": "The ReplicaSet cannot create pods.",
+                "tool_call_id": "c1",
+                "quote": "failed calling webhook",
+            },
+            {
+                "role": "defect",
+                "claim": "The configuration fails closed on a Service that is not there.",
+                "tool_call_id": "c2",
+                "quote": '"failurePolicy": "Fail"',
+            },
+        ],
+        verification=[
+            {
+                "command": "kubectl get validatingwebhookconfiguration workload-standards -o yaml",
+                "tool": "get_object",
+                "arguments": {
+                    "kind": "validatingwebhookconfigurations",
+                    "name": "workload-standards",
+                },
+                "must_contain": '"failurePolicy": "Fail"',
+            },
+            {
+                "command": "kubectl describe validatingwebhookconfiguration workload-standards",
+                "tool": "describe",
+                "arguments": {
+                    "kind": "validatingwebhookconfiguration",
+                    "name": "workload-standards",
+                },
+                "must_contain": "Name:        policy-guard",
+            },
+            {
+                "command": "kubectl get events -n checkout",
+                "tool": "get_events",
+                "arguments": {"namespace": "checkout", "warnings_only": True},
+                "must_contain": "failed calling webhook",
+            },
+        ],
+    )
+    result = va.validate(
+        honest,
+        _served_webhook_ledger(),
+        WEBHOOK,
+        "t2-checkout-release-stalled",
+        "checkout",
+        fx.page(WEBHOOK),
+        honest.mechanism,
+    )
+    assert result.violations == (), result.violations
+    assert result.verdict_allowed == "confirmed"
+    assert all(ok for _, ok in result.verification_results)
 
 
 def test_v4_still_lists_names_for_a_kind_the_agent_could_have_listed() -> None:

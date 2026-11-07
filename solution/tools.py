@@ -39,6 +39,27 @@ EVENT_MESSAGE_CAP = 200
 _OVERVIEW_KINDS = ("deployments", "statefulsets", "daemonsets", "pods", "services")
 _DERIVED_KINDS = ("replicasets", "endpoints", "endpointslices")
 
+# The only cluster-scoped kinds get_object and describe serve. Everything else
+# cluster-scoped (cluster roles, ~200 KB in every fixture) stays unreachable: a
+# read of these is tagged namespace "" like events and cluster_capacity.
+SERVED_CLUSTER_KINDS: frozenset[str] = frozenset(
+    {"mutatingwebhookconfigurations", "validatingwebhookconfigurations"}
+)
+
+# What a reader of a webhook configuration needs from each `webhooks[]` entry.
+# `clientConfig` is reduced to its target (service or url): the caBundle is a
+# PEM block, and admissionReviewVersions is protocol noise.
+_WEBHOOK_FIELDS: tuple[str, ...] = (
+    "name",
+    "failurePolicy",
+    "matchPolicy",
+    "sideEffects",
+    "timeoutSeconds",
+    "rules",
+    "namespaceSelector",
+    "objectSelector",
+)
+
 
 @dataclass(frozen=True)
 class ToolInvocation:
@@ -230,8 +251,16 @@ def render_events(
     return "\n".join(lines) if lines else "0 events matched"
 
 
+def _project_webhook(hook: dict[str, Any]) -> dict[str, Any]:
+    kept: dict[str, Any] = {key: hook[key] for key in _WEBHOOK_FIELDS if key in hook}
+    client = _obj(hook, "clientConfig")
+    kept["clientConfig"] = {key: client[key] for key in ("service", "url") if key in client}
+    return kept
+
+
 def _project(kind: str, item: dict[str, Any]) -> dict[str, Any]:
-    """Drop the noise kubectl also hides, and never emit ConfigMap values."""
+    """Drop the noise kubectl also hides, never emit ConfigMap values, and keep of
+    a webhook configuration only what a diagnoser reads."""
     metadata = dict(_obj(item, "metadata"))
     metadata.pop("managedFields", None)
     annotations = dict(cast(dict[str, Any], metadata.get("annotations") or {}))
@@ -247,6 +276,9 @@ def _project(kind: str, item: dict[str, Any]) -> dict[str, Any]:
         if kind == "configmaps" and key == "data":
             projected["dataKeys"] = sorted(cast(dict[str, Any], value or {}))
             continue
+        if kind in SERVED_CLUSTER_KINDS and key == "webhooks":
+            projected["webhooks"] = [_project_webhook(hook) for hook in _items(item, "webhooks")]
+            continue
         projected[key] = value
     if kind == "pods":
         projected["status"] = _obj(item, "status")
@@ -260,7 +292,17 @@ def serves_kind(kind: str) -> bool:
     for a kind no read tool serves, "Present: <names>" would hand the agent a
     fact it cannot otherwise reach (docs/failure-modes.md 2026-09-05).
     """
-    return fx.normalize_kind(kind) in fx.NAMESPACED_KINDS
+    resolved = fx.normalize_kind(kind)
+    return resolved in fx.NAMESPACED_KINDS or resolved in SERVED_CLUSTER_KINDS
+
+
+def _check_scope(resolved: str, namespace: str | None) -> str:
+    """Refuse the wrong namespace shape for a served kind; returns the scope phrase."""
+    if resolved in SERVED_CLUSTER_KINDS and namespace is not None:
+        raise fx.FixtureError(f"{resolved} is cluster-scoped — omit 'namespace'")
+    if resolved not in SERVED_CLUSTER_KINDS and namespace is None:
+        raise fx.FixtureError(f"{resolved} is namespaced — a namespace is required")
+    return "cluster-wide" if namespace is None else f"in namespace {namespace}"
 
 
 def render_object(fixture: Path, namespace: str | None, kind: str, name: str | None) -> str:
@@ -270,8 +312,7 @@ def render_object(fixture: Path, namespace: str | None, kind: str, name: str | N
             f"{resolved} is cluster-scoped and not served here; "
             "use list_namespaces, cluster_capacity or get_events"
         )
-    if namespace is None:
-        raise fx.FixtureError(f"{resolved} is namespaced — a namespace is required")
+    where = _check_scope(resolved, namespace)
     items = fx.load_kind(fixture, resolved, namespace)
     if name is not None:
         wanted = name.strip().lower()
@@ -279,20 +320,22 @@ def render_object(fixture: Path, namespace: str | None, kind: str, name: str | N
         if not matches:
             available = ", ".join(sorted(_name(i) for i in items)) or "none"
             raise fx.FixtureError(
-                f"no {resolved[:-1]} named {name!r} in namespace {namespace}; present: {available}"
+                f"no {resolved[:-1]} named {name!r} {where}; present: {available}"
             )
         return json.dumps(_project(resolved, matches[0]), indent=2, sort_keys=True)
     if not items:
-        return f"0 objects of kind {resolved} in namespace {namespace}"
+        return f"0 objects of kind {resolved} {where}"
     if len(items) > 5:
-        return f"{len(items)} {resolved} in {namespace}: " + ", ".join(
-            sorted(_name(i) for i in items)
-        )
+        short = "cluster-wide" if namespace is None else f"in {namespace}"
+        return f"{len(items)} {resolved} {short}: " + ", ".join(sorted(_name(i) for i in items))
     return json.dumps([_project(resolved, i) for i in items], indent=2, sort_keys=True)
 
 
 def render_describe(fixture: Path, namespace: str | None, kind: str, name: str) -> str:
-    return fx.describe(fixture, kind, name, namespace)
+    resolved = fx.normalize_kind(kind)
+    if resolved in SERVED_CLUSTER_KINDS:
+        _check_scope(resolved, namespace)
+    return fx.describe(fixture, resolved, name, namespace)
 
 
 def render_logs(
@@ -374,16 +417,38 @@ def _externalname_aliases(fixture: Path, namespace: str, name: str) -> list[str]
     return hits
 
 
+def _webhook_callers(fixture: Path, namespace: str, name: str) -> list[str]:
+    """Webhook configurations whose clientConfig.service is this Service.
+
+    The second reference edge that crosses a namespace boundary, directional
+    like the alias: the cluster-scoped configuration names the Service, and from
+    inside the namespace nothing shows that the API server calls it. Read only
+    from a snapshot whose capture schema holds the kinds — a schema-1 (frozen)
+    snapshot never captured them, so there the edge has no data.
+    """
+    hits: list[str] = []
+    for kind in sorted(SERVED_CLUSTER_KINDS & fx.expected_cluster_kinds(fixture)):
+        for configuration in fx.load_kind(fixture, kind):
+            for hook in _items(configuration, "webhooks"):
+                service = _obj(hook, "clientConfig", "service")
+                if _text(service, "name") == name and _text(service, "namespace") == namespace:
+                    hits.append(
+                        f"{kind[:-1]}/{_name(configuration)} (cluster-scoped) calls this Service "
+                        f"via webhooks[{_text(hook, 'name')}].clientConfig.service "
+                        f"failurePolicy={_text(hook, 'failurePolicy')}"
+                    )
+    return hits
+
+
 def render_consumers(fixture: Path, namespace: str, kind: str, name: str) -> str:
     resolved = fx.normalize_kind(kind)
-    if not serves_kind(resolved):
-        # The trailer below lists the objects of the kind that exist; for a
-        # cluster-scoped kind load_kind would read the cluster file regardless
-        # of namespace and enumerate names no read tool serves (review,
-        # 2026-09-05: the third oracle).
+    if resolved not in fx.NAMESPACED_KINDS:
+        # A cluster-scoped object is referenced by no pod template, and the
+        # trailer below would read the cluster file regardless of namespace
+        # and enumerate the kind's names under a namespace that means nothing
+        # for it (review, 2026-09-05: the third oracle).
         raise fx.NotServedError(
-            f"{resolved} is cluster-scoped and not served here; "
-            "find_consumers reads namespaced kinds only"
+            f"{resolved} is cluster-scoped; find_consumers reads namespaced kinds only"
         )
     lines: list[str] = []
     for label, workload in _pod_templates(fixture, namespace):
@@ -406,6 +471,7 @@ def render_consumers(fixture: Path, namespace: str, kind: str, name: str) -> str
                 )
     if resolved == "services":
         lines += _externalname_aliases(fixture, namespace, name)
+        lines += _webhook_callers(fixture, namespace, name)
     existing = sorted(_name(i) for i in fx.load_kind(fixture, resolved, namespace))
     if not lines:
         lines.append(f"no workload in {namespace} references {resolved[:-1]}/{name}")
@@ -662,12 +728,17 @@ TOOL_SPECS: tuple[ToolSpec, ...] = (
         name="get_object",
         description=(
             "The projected spec of one object, or the names of every object of a kind when "
-            "'name' is omitted. Namespaced kinds only: pods, deployments, replicasets, "
-            "statefulsets, daemonsets, services, endpoints, endpointslices, configmaps, "
-            "secrets, serviceaccounts, roles, rolebindings, persistentvolumeclaims, "
-            "resourcequotas, networkpolicies, limitranges, poddisruptionbudgets, jobs, "
-            "cronjobs, horizontalpodautoscalers, ingresses. ConfigMap keys are shown, values "
-            "are not; Secret values are redacted in the capture."
+            "'name' is omitted. Namespaced kinds ('namespace' required): pods, deployments, "
+            "replicasets, statefulsets, daemonsets, services, endpoints, endpointslices, "
+            "configmaps, secrets, serviceaccounts, roles, rolebindings, "
+            "persistentvolumeclaims, resourcequotas, networkpolicies, limitranges, "
+            "poddisruptionbudgets, jobs, cronjobs, horizontalpodautoscalers, ingresses. "
+            "Cluster-scoped kinds served (omit 'namespace'): validatingwebhookconfigurations, "
+            "mutatingwebhookconfigurations — each webhook is shown with its name, clientConfig "
+            "(service namespace/name/path/port, or url), failurePolicy, matchPolicy, "
+            "sideEffects, timeoutSeconds, rules, namespaceSelector and objectSelector. No "
+            "other cluster-scoped kind is served. ConfigMap keys are shown, values are not; "
+            "Secret values are redacted in the capture."
         ),
         input_schema={
             "type": "object",
@@ -676,13 +747,17 @@ TOOL_SPECS: tuple[ToolSpec, ...] = (
                 "kind": {"type": "string"},
                 "name": {"type": "string"},
             },
-            "required": ["namespace", "kind"],
+            "required": ["kind"],
             "additionalProperties": False,
         },
     ),
     ToolSpec(
         name="describe",
-        description="kubectl describe for one object, including its per-object event list.",
+        description=(
+            "kubectl describe for one object, including its per-object event list. "
+            "Namespaced kinds need 'namespace'; for validatingwebhookconfigurations and "
+            "mutatingwebhookconfigurations omit it (their describe is captured per object)."
+        ),
         input_schema={
             "type": "object",
             "properties": {
@@ -690,7 +765,7 @@ TOOL_SPECS: tuple[ToolSpec, ...] = (
                 "kind": {"type": "string"},
                 "name": {"type": "string"},
             },
-            "required": ["namespace", "kind", "name"],
+            "required": ["kind", "name"],
             "additionalProperties": False,
         },
     ),
@@ -737,7 +812,9 @@ TOOL_SPECS: tuple[ToolSpec, ...] = (
             "Every workload in the namespace whose pod template references the named object, "
             "with the exact reference path and key it uses and that workload's ready count; "
             "plus the objects of that kind that actually exist in the namespace. For a service "
-            "account, also every RoleBinding subject that names it or fails to."
+            "account, also every RoleBinding subject that names it or fails to. For a Service, "
+            "also every validatingwebhookconfiguration or mutatingwebhookconfiguration "
+            "(cluster-scoped) whose clientConfig.service names it."
         ),
         input_schema={
             "type": "object",

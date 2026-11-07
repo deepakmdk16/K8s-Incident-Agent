@@ -240,12 +240,39 @@ def load_kind(fixture: Path, kind: str, namespace: str | None = None) -> list[di
     return _read_items(fixture / "ns" / ns / f"{resolved}.json", f"{resolved} in {ns}")
 
 
+def _describe_cluster_object(fixture: Path, resolved: str, safe_name: str) -> str:
+    """A per-object describe from `cluster/describe/`, which capture schema 2 writes
+    for the admission webhook configurations (evals/capture.sh).
+
+    Existence is decided by the kind's JSON, not by the describe file: on a
+    schema-1 snapshot the JSON is absent and the kind reads as not captured; an
+    object absent from the JSON is cluster state; an object present without a
+    describe file is a capture gap, which says nothing about the cluster.
+    """
+    items = load_kind(fixture, resolved)
+    singular = resolved.rstrip("s")
+    present = sorted(
+        str(cast(dict[str, Any], item.get("metadata", {})).get("name", "")) for item in items
+    )
+    if safe_name not in present:
+        listed = ", ".join(present) or "none"
+        raise FixtureError(f"no {singular} named {safe_name!r} cluster-wide; present: {listed}")
+    matches = sorted((fixture / "cluster" / "describe").glob(f"{singular}*_{safe_name}.txt"))
+    if not matches:
+        raise NotServedError(
+            f"describe of {singular}/{safe_name} was not captured in this snapshot"
+        )
+    return matches[0].read_text(encoding="utf-8")
+
+
 def describe(fixture: Path, kind: str, name: str, namespace: str | None = None) -> str:
     """`kubectl describe`, matching the api-group-qualified capture filename."""
     resolved = normalize_kind(kind)
     safe_name = _safe(name, "name")
     if resolved == "nodes":
         return (fixture / "cluster" / "nodes.describe.txt").read_text(encoding="utf-8")
+    if resolved in CLUSTER_KINDS_SINCE_SCHEMA_2:
+        return _describe_cluster_object(fixture, resolved, safe_name)
     if resolved in CLUSTER_KINDS:
         # Without this branch a cluster-scoped kind fell through to the
         # namespaced glob and reported "no describe captured for <kind>/<name>
