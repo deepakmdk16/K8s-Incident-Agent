@@ -1,0 +1,71 @@
+{
+  "bundle": "20260905T044853Z-solution",
+  "arm": "solution",
+  "emits_fix_fields": true,
+  "overall": {
+    "rows": 3,
+    "root_cause_correct": 1,
+    "path_correct": 0,
+    "value_scorable": 3,
+    "value_correct": 0,
+    "both_correct": 0,
+    "no_submission": 2,
+    "value_open": 0
+  },
+  "by_tier": {
+    "T2": {
+      "rows": 3,
+      "root_cause_correct": 1,
+      "path_correct": 0,
+      "value_scorable": 3,
+      "value_correct": 0,
+      "both_correct": 0,
+      "no_submission": 2,
+      "value_open": 0
+    }
+  },
+  "rows": [
+    {
+      "run": 1,
+      "case_id": "t2-checkout-release-stalled",
+      "tier": "T2",
+      "root_cause_correct": false,
+      "class_correct": false,
+      "status": "no_accepted_submission",
+      "field_path": null,
+      "required_value": null,
+      "fix_path_correct": false,
+      "fix_value_correct": false,
+      "fix_both_correct": false,
+      "miss": "no_submission"
+    },
+    {
+      "run": 2,
+      "case_id": "t2-checkout-release-stalled",
+      "tier": "T2",
+      "root_cause_correct": false,
+      "class_correct": false,
+      "status": "no_accepted_submission",
+      "field_path": null,
+      "required_value": null,
+      "fix_path_correct": false,
+      "fix_value_correct": false,
+      "fix_both_correct": false,
+      "miss": "no_submission"
+    },
+    {
+      "run": 3,
+      "case_id": "t2-checkout-release-stalled",
+      "tier": "T2",
+      "root_cause_correct": true,
+      "class_correct": true,
+      "status": "scored",
+      "field_path": "webhooks[name=validate.policy-guard.platform.internal].failurePolicy (its clientConfig.service is platform-policy/policy-guard)",
+      "required_value": "Ignore (or remove this webhook entry / restore Service policy-guard in namespace platform-policy) so pod CREATE admission succeeds again",
+      "fix_path_correct": false,
+      "fix_value_correct": false,
+      "fix_both_correct": false,
+      "miss": "path+value"
+    }
+  ]
+}

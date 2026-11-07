@@ -1,0 +1,71 @@
+{
+  "bundle": "20260904T124832Z-solution",
+  "arm": "solution",
+  "emits_fix_fields": true,
+  "overall": {
+    "rows": 3,
+    "root_cause_correct": 3,
+    "path_correct": 3,
+    "value_scorable": 3,
+    "value_correct": 3,
+    "both_correct": 3,
+    "no_submission": 0,
+    "value_open": 0
+  },
+  "by_tier": {
+    "T3": {
+      "rows": 3,
+      "root_cause_correct": 3,
+      "path_correct": 3,
+      "value_scorable": 3,
+      "value_correct": 3,
+      "both_correct": 3,
+      "no_submission": 0,
+      "value_open": 0
+    }
+  },
+  "rows": [
+    {
+      "run": 1,
+      "case_id": "t3-crossns-decoys",
+      "tier": "T3",
+      "root_cause_correct": true,
+      "class_correct": true,
+      "status": "scored",
+      "field_path": ".spec.selector.app",
+      "required_value": "payments-gateway-api",
+      "fix_path_correct": true,
+      "fix_value_correct": true,
+      "fix_both_correct": true,
+      "miss": null
+    },
+    {
+      "run": 2,
+      "case_id": "t3-crossns-decoys",
+      "tier": "T3",
+      "root_cause_correct": true,
+      "class_correct": true,
+      "status": "scored",
+      "field_path": ".spec.selector.app",
+      "required_value": "payments-gateway-api",
+      "fix_path_correct": true,
+      "fix_value_correct": true,
+      "fix_both_correct": true,
+      "miss": null
+    },
+    {
+      "run": 3,
+      "case_id": "t3-crossns-decoys",
+      "tier": "T3",
+      "root_cause_correct": true,
+      "class_correct": true,
+      "status": "scored",
+      "field_path": ".spec.selector.app",
+      "required_value": "payments-gateway-api",
+      "fix_path_correct": true,
+      "fix_value_correct": true,
+      "fix_both_correct": true,
+      "miss": null
+    }
+  ]
+}
