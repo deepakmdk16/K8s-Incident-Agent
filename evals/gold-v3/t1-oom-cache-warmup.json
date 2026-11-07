@@ -1,0 +1,10 @@
+{
+  "case_id": "t1-oom-cache-warmup",
+  "field_path": "spec.template.spec.containers[0].resources.limits.memory",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=server].resources.limits.memory"
+  ],
+  "required_value": null,
+  "accepted_required_values": [],
+  "source": "fault.yaml L34-40: the single container 'server' (index 0) has resources.limits.memory 64Mi under a ~200MiB warmup. gold.json remediation_summary: 'Raise the memory limit ... so the ~200MiB warmup cache fits with headroom: ... --limits=memory=1Gi --requests=memory=256Mi'. notes.md L27-28. Value is OPEN: any limit with headroom over the warmup recovers; gold's 1Gi is one choice, not the only one, so the value is n/a."
+}

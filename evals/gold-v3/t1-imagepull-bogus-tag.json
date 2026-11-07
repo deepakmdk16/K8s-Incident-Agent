@@ -1,0 +1,10 @@
+{
+  "case_id": "t1-imagepull-bogus-tag",
+  "field_path": "spec.template.spec.containers[0].image",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=storefront].image"
+  ],
+  "required_value": null,
+  "accepted_required_values": [],
+  "source": "fault.yaml L37-38: the single container 'storefront' (index 0) pulls registry.k8s.io/retail/storefront:2.4.1, which does not exist. gold.json remediation_summary: 'Update the storefront deployment's container image to a reference that actually exists (... storefront=<existing storefront release reference>)'. notes.md L24-25, L68 (rehearsal used busybox:1.36). Value is OPEN: gold names no concrete reference, so the value is n/a."
+}

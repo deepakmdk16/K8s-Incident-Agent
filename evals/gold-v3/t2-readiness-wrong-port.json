@@ -1,0 +1,13 @@
+{
+  "case_id": "t2-readiness-wrong-port",
+  "field_path": "spec.template.spec.containers[0].readinessProbe.httpGet.port",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=api].readinessProbe.httpGet.port"
+  ],
+  "required_value": "8080",
+  "accepted_required_values": [
+    "8080",
+    "http"
+  ],
+  "source": "fault.yaml L46-55: the single container 'api' (index 0) serves on containerPort 8080 named 'http' (L49-50) while readinessProbe.httpGet.port is 8081 (L55). gold.json remediation_summary: JSON patch path /spec/template/spec/containers/0/readinessProbe/httpGet/port, value 8080. notes.md L27. Value PINNED: 8080; the named port 'http' is the same port by name and is accepted."
+}

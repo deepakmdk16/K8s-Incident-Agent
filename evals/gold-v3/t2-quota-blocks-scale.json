@@ -1,0 +1,10 @@
+{
+  "case_id": "t2-quota-blocks-scale",
+  "field_path": "spec.hard.pods",
+  "accepted_field_paths": [
+    "<object>"
+  ],
+  "required_value": null,
+  "accepted_required_values": [],
+  "source": "fault.yaml L26: ResourceQuota checkout-quota hard-caps pods at \"2\" while the Deployment asks for 6 replicas (L49). gold.json remediation_summary: 'Raise the pods cap ... {\"spec\":{\"hard\":{\"pods\":\"8\"}}} - or delete the quota'. notes.md L25 ('raise (or remove) the pods cap'), L52-53 (the quota, not the deployment's replicas, is the defensible object). Deleting the object is accepted as the whole-object path '<object>'. Value is OPEN: any cap >= 6 recovers and deletion has no value, so the value is n/a."
+}

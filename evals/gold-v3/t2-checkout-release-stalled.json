@@ -1,0 +1,17 @@
+{
+  "case_id": "t2-checkout-release-stalled",
+  "field_path": "<object>",
+  "accepted_field_paths": [
+    "webhooks[0].failurePolicy",
+    "webhooks[name=validate.policy-guard.platform.internal].failurePolicy"
+  ],
+  "required_value": "deleted",
+  "accepted_required_values": [
+    "deleted",
+    "delete",
+    "removed",
+    "absent",
+    "Ignore"
+  ],
+  "source": "fault.yaml L29-30 (comment: 'Remediation: delete it (or set failurePolicy: Ignore on it)'), L53-56: the single webhook (index 0) 'validate.policy-guard.platform.internal' has failurePolicy Fail. gold.json remediation_summary: 'Delete the orphaned configuration ... setting .webhooks[0].failurePolicy to Ignore on the same object is the interim mitigation'. notes.md L72-73 (both act on the same object; delete is canonical), L114. The canonical fix deletes the whole object, so field_path is the whole-object path '<object>' and the value 'deleted'; the mitigation's path/value pair is accepted too. Known limitation of the pooled accepted sets: a submission pairing the mitigation path with the value 'deleted' (or vice versa) would still score both-correct; the per-row output carries the raw strings for a reader to check."
+}

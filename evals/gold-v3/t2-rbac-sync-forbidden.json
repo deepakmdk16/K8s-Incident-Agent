@@ -1,0 +1,14 @@
+{
+  "case_id": "t2-rbac-sync-forbidden",
+  "field_path": "subjects[0].name",
+  "accepted_field_paths": [
+    "subjects[name=inventory-synk].name",
+    "subjects[kind=ServiceAccount].name"
+  ],
+  "required_value": "inventory-sync",
+  "accepted_required_values": [
+    "inventory-sync",
+    "system:serviceaccount:inventory:inventory-sync"
+  ],
+  "source": "fault.yaml L57-59: the RoleBinding's single subject (index 0) names ServiceAccount inventory-synk, which does not exist; the worker's SA is inventory-sync (ServiceAccount L24-27; serviceAccountName L107). gold.json remediation_summary: JSON patch path /subjects/0/name, value inventory-sync. notes.md L24-25 (subjects are mutable), L30 (changing the pod's serviceAccountName is not a defensible alternative). Value PINNED: the one existing ServiceAccount; its RBAC subject spelling is accepted."
+}
