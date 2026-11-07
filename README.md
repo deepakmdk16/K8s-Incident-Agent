@@ -231,9 +231,16 @@ evidence, anchors a defect only on a real result about the failing kind, and
 refuses argument keys a tool never consumed. A standing test replays all 36
 frozen accepted submissions through the current gate and requires every one to
 still earn `confirmed`, so hardening the gate cannot silently move the headline.
-The pre-registered re-score under the hardened gate (prediction: the agent names
-nothing it cannot read, `confirmed-wrong` stays 0) and the slice that then serves
-the webhook kinds are the next two steps; both are written down before they run
+Since then the gate has been tightened twice more without moving a frozen row
+([CHANGELOG [17]](CHANGELOG.md): a controller must itself be read, an event
+citation rests on the namespaces its lines name; [CHANGELOG [21]](CHANGELOG.md):
+a generated sweep of 786 attacks over every fixture, which found and closed a
+namesake-read oracle and a "Present:" list of unread names), proven
+name-invariant under a consistent rename of every fixture ([CHANGELOG
+[22]](CHANGELOG.md)), and the two webhook kinds are now served through
+`get_object` and `describe` ([CHANGELOG [19]](CHANGELOG.md)). The scored re-run
+with that reach is pre-registered — 3/3 `confirmed`, the name first appearing in
+a tool result — and not yet run
 ([docs/experiments/2026-09-04-webhook-outage.md](docs/experiments/2026-09-04-webhook-outage.md)).
 
 ## Reproducing the numbers
