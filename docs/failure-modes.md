@@ -66,6 +66,37 @@ of every object that shares it. And "the agent could have reached this fact" is
 not "the agent reached it": a rejection may correct what the agent has already
 seen, never supply what it has not. Attack the reward with a generator over
 every case, not with the handful of shapes the last incident suggested.
+## 2026-11-07 — a renderer re-sorted names, so a verbatim quote depended on their spelling
+
+**What happened:** the first replay of the 36 accepted frozen submissions on
+consistently renamed fixtures (`evals/perturb.py`, STATUS 3.3) refused 1 of
+36: `run3/t3-overlapping-config-and-oom`, `V1 QUOTE: ruled_out[1]'s quote is
+not present in the output of find_consumers`. The quote was the tool's own
+trailer, `configmaps that exist in orders: kube-root-ca.crt, orders-api-app,
+…`. `render_consumers` built that list with `sorted()`; under the rename the
+user names moved past `kube-root-ca.crt` in sort order, the list came out in a
+different order, and a quote the agent had copied literally no longer matched.
+The validator was right to refuse and the rename was consistent — the
+dependence on the names' spelling was in the tool layer: every captured list is
+already in API (name) order (3,539 of 3,539 lists checked), so the sort did
+nothing on real data except make the rendering a function of the alphabet.
+
+**Evidence:** `tests/test_perturb_replay.py` before the fix (35/36); the diff
+of the two `find_consumers` outputs showed the same five names in two orders.
+
+**Prevention now in place:** `solution/tools.py` lists names in capture order
+in all three places that listed them (`render_object`'s long-list and
+"present:" forms, `render_consumers`' trailer); `tests/test_solution_tools.py`
+plants an out-of-order capture and asserts the order is kept;
+`tests/test_perturb.py` asserts the read tools commute with a rename
+(`σ(tool(fixture)) == tool(σ(fixture))`); `tests/test_perturb_replay.py` holds
+all 36 rows accepted under renaming and runs in the python gate.
+
+**Lesson for reliable agents:** a verbatim-quote gate is only as
+rename-invariant as the text it quotes. Anything a renderer *computes* from
+names — a sort, a dedup, a tie-break — is a hidden dependence on their
+spelling. Render what the snapshot says, in the order it says it; an
+isomorphic perturbation is the cheap way to find out where you did not.
 
 ## 2026-09-05 — a validator's helpful rejection message was an oracle for the answer
 

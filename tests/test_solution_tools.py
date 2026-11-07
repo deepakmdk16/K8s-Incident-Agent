@@ -492,3 +492,27 @@ def test_read_tool_descriptions_name_the_served_webhook_kinds() -> None:
     for name in ("get_object", "describe"):
         required = cast(list[str], specs[name].input_schema["required"])
         assert "namespace" not in required, name
+def test_name_listings_keep_capture_order_rather_than_re_sorting(tmp_path: Path) -> None:
+    """The API already returns a kind in name order. Re-sorting here made every
+    listing a function of how the names are spelled, which a consistent rename of
+    a fixture exposed as a broken verbatim quote (docs/failure-modes.md 2026-11-07).
+    A planted out-of-order capture proves the order now comes from the snapshot.
+    """
+    import json
+
+    from solution import fixture as fx
+
+    namespace = tmp_path / "ns" / "shop"
+    namespace.mkdir(parents=True)
+    names = ["zeta", "kube-root-ca.crt", "alpha", "mid", "beta", "omega"]
+    items = [{"metadata": {"name": name}, "data": {}} for name in names]
+    (namespace / "configmaps.json").write_text(json.dumps({"items": items}), encoding="utf-8")
+    for kind in ("deployments", "statefulsets", "daemonsets"):
+        (namespace / f"{kind}.json").write_text('{"items": []}', encoding="utf-8")
+    listed = ", ".join(names)
+    long_form = tl.render_object(tmp_path, "shop", "configmaps", None)
+    assert long_form == f"6 configmaps in shop: {listed}"
+    with pytest.raises(fx.FixtureError, match=f"present: {listed}"):
+        tl.render_object(tmp_path, "shop", "configmaps", "ghost")
+    trailer = tl.render_consumers(tmp_path, "shop", "configmap", "ghost").splitlines()[-1]
+    assert trailer == f"configmaps that exist in shop: {listed}"

@@ -314,11 +314,16 @@ def render_object(fixture: Path, namespace: str | None, kind: str, name: str | N
         )
     where = _check_scope(resolved, namespace)
     items = fx.load_kind(fixture, resolved, namespace)
+    # Names are listed in capture order, never re-sorted here: the API already
+    # returns a kind in name order, and sorting again made the rendering depend
+    # on how the names are spelled rather than on the snapshot — a consistent
+    # rename of the fixture reordered the list and broke a verbatim quote of it
+    # (tests/test_perturb_replay.py, docs/failure-modes.md 2026-11-07).
     if name is not None:
         wanted = name.strip().lower()
         matches = [i for i in items if _name(i).lower() == wanted]
         if not matches:
-            available = ", ".join(sorted(_name(i) for i in items)) or "none"
+            available = ", ".join(_name(i) for i in items) or "none"
             raise fx.FixtureError(
                 f"no {resolved[:-1]} named {name!r} {where}; present: {available}"
             )
@@ -327,7 +332,8 @@ def render_object(fixture: Path, namespace: str | None, kind: str, name: str | N
         return f"0 objects of kind {resolved} {where}"
     if len(items) > 5:
         short = "cluster-wide" if namespace is None else f"in {namespace}"
-        return f"{len(items)} {resolved} {short}: " + ", ".join(sorted(_name(i) for i in items))
+        # capture order, never re-sorted (docs/failure-modes.md 2026-11-07)
+        return f"{len(items)} {resolved} {short}: " + ", ".join(_name(i) for i in items)
     return json.dumps([_project(resolved, i) for i in items], indent=2, sort_keys=True)
 
 
@@ -472,7 +478,7 @@ def render_consumers(fixture: Path, namespace: str, kind: str, name: str) -> str
     if resolved == "services":
         lines += _externalname_aliases(fixture, namespace, name)
         lines += _webhook_callers(fixture, namespace, name)
-    existing = sorted(_name(i) for i in fx.load_kind(fixture, resolved, namespace))
+    existing = [_name(i) for i in fx.load_kind(fixture, resolved, namespace)]  # capture order
     if not lines:
         lines.append(f"no workload in {namespace} references {resolved[:-1]}/{name}")
     lines.append(f"{resolved} that exist in {namespace}: {', '.join(existing) or 'none'}")
