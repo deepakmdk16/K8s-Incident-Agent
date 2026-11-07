@@ -333,6 +333,22 @@ def _arguments_name(arguments: Mapping[str, object], name: str) -> bool:
     )
 
 
+# Name-shaped tokens, as object names appear in tool output: bare, after a
+# slash, quoted, or in a comma list. A trailing sentence stop is not part of one.
+_NAME_TOKEN = re.compile(r"[a-z0-9][a-z0-9._-]*")
+
+
+def _names_returned(ledger: tl.ToolLedger) -> set[str]:
+    """Every name-shaped token in the outputs the agent has already been shown."""
+    outputs = [
+        invocation.output
+        for call_id in ledger.ids()
+        if (invocation := ledger.get(call_id)) is not None
+    ]
+    tokens = set(_NAME_TOKEN.findall("\n".join(outputs).lower()))
+    return tokens | {token.rstrip("._-") for token in tokens}
+
+
 # A pod is the product of its controller: reading the pod (describe, logs) is
 # reading the controller's behaviour, and pod names carry the controller's name.
 # That relationship, and same-kind, are the only two the anchoring rule accepts —
@@ -407,6 +423,24 @@ def _citation_namespaces(
     return invocation.namespaces_touched
 
 
+def _asked_for_a_namesake(arguments: Mapping[str, object], reference: ResourceRef) -> bool:
+    """Did this call ask, by exact name, for an object of ANOTHER kind that merely
+    shares the failing object's name?
+
+    `describe service/<name>` when the failing object is deployment/<name> is a
+    real read whose output carries <name> on every line — but each is the
+    Service's own name, not a sighting of the Deployment. Without this, a
+    Service, its Endpoints and the Deployment behind it could each stand in for
+    the others under V7 (tests/test_solution_validate_adversarial.py, 2026-11-07).
+    """
+    name = arguments.get("name")
+    return (
+        isinstance(name, str)
+        and name.strip().lower() == reference.name.strip().lower()
+        and not _same_kind(arguments, reference)
+    )
+
+
 def _about_failing_object(
     output: str, quote: str, arguments: Mapping[str, object], reference: ResourceRef
 ) -> bool:
@@ -415,9 +449,10 @@ def _about_failing_object(
     Two ways: the quote names it, or the call's arguments name it and the call was
     about its kind. Either way the result has to be real cluster state — an error
     or an empty echo of the arguments shows nothing about any object, however
-    literally it re-verifies.
+    literally it re-verifies — and a read of a same-named object of another kind
+    shows nothing about this one, however often its output repeats the name.
     """
-    if not tl.is_evidence(output):
+    if not tl.is_evidence(output) or _asked_for_a_namesake(arguments, reference):
         return False
     if reference.name.lower() in quote.lower():
         return True
@@ -585,12 +620,24 @@ def validate(
         }
         if reference.name.lower() not in names:
             # The names present are listed only for a kind the agent could have
-            # listed itself. For any other kind the list would be an oracle: the
+            # listed itself, and only those a read of its own has already
+            # returned. For any other kind the list would be an oracle: the
             # snapshot holds the object, no tool serves it, and this message was
             # how the agent learned its name (docs/failure-modes.md 2026-09-05).
+            # Listing unread names of a served kind was the same oracle one step
+            # shorter — a guessed rolebinding name came back corrected
+            # (docs/failure-modes.md 2026-11-07).
             if tl.serves_kind(reference.kind):
-                listed = ", ".join(sorted(n for n in names if n)) or "none"
-                detail = f"Present: {listed}"
+                returned = _names_returned(ledger)
+                listed = ", ".join(sorted(n for n in names if n and n in returned))
+                detail = (
+                    f"Present: {listed} (only names your reads have returned are listed)"
+                    if listed
+                    else (
+                        "Present: none that a read of yours has returned — list the kind with "
+                        "get_object first"
+                    )
+                )
             else:
                 detail = (
                     f"No read tool serves {reference.kind}, so its names cannot be listed "
