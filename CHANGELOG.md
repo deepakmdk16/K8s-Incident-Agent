@@ -15,6 +15,94 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [18] Priced the hedging: per-verdict coverage and accuracy, and where `inconclusive` lands — 2026-11-07, 14:25 UTC
+
+**Change:** `evals/hedging.py` (new), `evals/run_eval.py`, `evals/verify_reported.py`.
+Every scored run and the offline verify gate now price the arms' self-reported
+calibration instead of pooling it away: for each verdict value present, its row
+count and share of all rows (coverage) and the root-cause rate among those rows
+(accuracy), with rows carrying no verdict in an explicit `none` bucket; and the
+`inconclusive` rows split by whether the solution's tool layer can read the gold
+failing-resource kind (`solution.tools.serves_kind`, applied to every arm's rows,
+so the arms are read on one footing). `summary.json` gains a top-level `hedging`
+key (nothing renamed or removed), `summary.md` a pooled section, and
+`verify_reported` a cross-arm table after the existing one. Report only: no bar,
+`check_bar` and `evals/reported.json` untouched — a bar needs a pre-registered
+threshold and a second scoring. No committed bundle was rewritten; the verify
+step re-derives the numbers from the committed answers.
+
+**Why:** a pooled root-cause rate cannot distinguish an arm that earns its number
+from one that buys it with hedges, and `inconclusive` means something different
+on an object the tools could read than on one no tool serves ([15], [16]).
+
+**Evidence after:** re-derived from the reported bundles by `bash scripts/checkpoints.sh`
+(evals step): rules — `confirmed` 18/36 rows (accuracy 15/18, 83.3%), `probable`
+15/36 (12/15, 80.0%), `inconclusive` 3/36 (0/3), all three on
+`t2-rbac-sync-forbidden`, a RoleBinding the tools read (3 readable, 0 unreadable);
+baseline — `confirmed` 33/36 (30/33, 90.9%), `probable` 3/36 (0/3), no
+`inconclusive`; solution — `confirmed` 36/36 (36/36), no hedge of any kind.
+Tests: [tests/test_run_eval.py](tests/test_run_eval.py) (per-verdict table
+including the `none` bucket and a zero-correct verdict; the readability split on
+readable, cluster-scoped and unknown kinds; existing summary and row keys
+unchanged) and [tests/test_verify_reported.py](tests/test_verify_reported.py)
+(an all-hedged solution still passes `check_bar` unchanged; the reported bundles'
+per-verdict numbers; the cross-arm rows). Gate on the slice: `408 passed`,
+ruff/format/pyright (strict) clean, `== checkpoints: 0 failure(s)`.
+
+**Next decision it drove:** the committed bundles hold no hedge on an unreadable
+kind and the solution reports none at all, so a hedging bar has nothing to
+calibrate against yet; revisit once a v2/v3 scored run produces inconclusives,
+and pre-register the threshold before that run (STATUS 2.3 closes as report-only).
+
+## [17] Two documented soft spots in the gate closed; the frozen replay still accepts 36/36 — 2026-11-07, 14:20 UTC
+
+**Change:** `solution/validate.py` — the verify-before-assert gate, no new reach.
+(a) V7: a controller named as the failing resource (Deployment, StatefulSet,
+DaemonSet, Job, CronJob, ReplicaSet) now needs one verified read of the object
+itself — `get_object` or `describe` of that kind and name, with real cluster state
+in the result — as a cited quote or a PRESENT check. The pod→controller allowance
+from [16] stays, but conditional on it: pod names carry the controller's name, so
+on its own the allowance let `confirmed` be earned for a Deployment whose spec
+nobody opened. (b) V2: an event citation now rests on the namespaces its quoted
+lines name (`fixture.namespaces_named_in`, exact DNS-label tokens); a quote that
+names none keeps the read's own tag. This is the tightening disclosure 7 of
+`solution/README.md` pre-specified; disclosure 7 and "What confirmed mechanically
+requires" now state both rules. Side fix, stated explicitly as a gate change
+(commit `fix(gates): home-path scan skips a worktree's .git pointer file`, PR #7):
+`scripts/checkpoints.sh` excludes the worktree `.git` pointer file by name — its
+single `gitdir:` line is an absolute home path, so the scan and the pre-commit
+hook failed in every git worktree on git's own untracked metadata;
+`tests/test_gates.sh` 8b now plants one and requires a pass.
+
+**Why:** both spots were written down as known ([16]; disclosure 7) and both were
+reproduced before the change: a pod-only Deployment submission on
+`t1-crashloop-missing-env` (defect citation and checks all `describe pod` /
+`get_logs`, the Deployment never read) earned `confirmed` with zero violations,
+and on `t3-crossns-decoys` a cluster-wide event line from `release-canary` was
+admissible under V2 with `storefront` paged. Rules were adopted only because the
+frozen replay held.
+
+**Evidence after:** [tests/test_frozen_replay.py](tests/test_frozen_replay.py)
+**36/36** still `confirmed` with zero violations under both rules. Seven
+regression tests in [tests/test_solution_validate.py](tests/test_solution_validate.py)
+(section "the two documented soft spots"), three of which fail against the
+previous gate. Suite 402 → 409 on the slice; `== checkpoints: 0 failure(s)`.
+Measured and not adopted, as a fact about the frozen bundle rather than a reason
+to change it: removing the pod→controller allowance outright would move **4**
+frozen rows (`run1/t3-overlapping-config-and-oom`, `run2/t1-crashloop-missing-env`,
+`run2/t1-oom-cache-warmup`, `run3/t1-crashloop-missing-env` — defect anchored only
+through a pod read); requiring the controller read among evidence citations
+rather than checks would move **2** (`run2/t1-crashloop-missing-env`,
+`run2/t1-oom-cache-warmup`, which supply it only as a PRESENT check).
+
+**Next decision it drove:** the anchoring rules are now exhausted of the two
+known substitutions (other-kind-same-name, pod-for-controller) without moving the
+headline. The remaining way to earn `confirmed` on an object without reading it
+is a non-controller quote that names it — the RBAC rows rely on `find_consumers`
+output naming the RoleBinding — which is a measured limit, not a next tightening.
+Next: the adversarial suite (STATUS 2.1) makes these refusals a standing property
+of the gate rather than seven hand-written cases.
+
 ## [16] The gate had four oracles; a red team found them, a replay of 36 frozen rows proves the fix moved nothing — 2026-09-05, 08:40 UTC
 
 **Change:** `solution/validate.py`, `solution/tools.py`, `solution/fixture.py`,
