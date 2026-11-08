@@ -1,0 +1,8 @@
+[PAGE] SEV2 CustomsFilingTimeouts — customs-docs
+Border paperwork is not going out: drivers at the Blaine and Sweetgrass
+crossings report that the e-manifest step in the driver app times out, and
+nine loads are being held at the border waiting on filings. The manifest
+submitter logs that its rendering requests are not completing. Deployment
+customs-docs/manifest-renderer reports all pods ready and has not been
+redeployed today. Alert source: PagerDuty, border-filing success-rate
+monitor (< 20% over 15 min). Identify the root cause and the remediation.

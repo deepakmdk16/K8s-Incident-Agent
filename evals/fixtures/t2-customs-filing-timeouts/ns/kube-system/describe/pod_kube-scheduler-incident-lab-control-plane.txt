@@ -1,0 +1,63 @@
+Name:                 kube-scheduler-incident-lab-control-plane
+Namespace:            kube-system
+Priority:             2000001000
+Priority Class Name:  system-node-critical
+Node:                 incident-lab-control-plane/172.18.0.2
+Start Time:           Sat, 07 Nov 2026 23:46:26 +0530
+Labels:               component=kube-scheduler
+                      tier=control-plane
+Annotations:          kubernetes.io/config.hash: 4eec83872dfd28bf86d8bcb3441cd15e
+                      kubernetes.io/config.mirror: 4eec83872dfd28bf86d8bcb3441cd15e
+                      kubernetes.io/config.seen: 2026-11-07T18:16:26.509820770Z
+                      kubernetes.io/config.source: file
+Status:               Running
+SeccompProfile:       RuntimeDefault
+IP:                   172.18.0.2
+IPs:
+  IP:           172.18.0.2
+Controlled By:  Node/incident-lab-control-plane
+Containers:
+  kube-scheduler:
+    Container ID:  containerd://7aea020940e03089e6fddc885f4b36ff2806cf7ebd69bbfcd7b52a602d36a0f9
+    Image:         registry.k8s.io/kube-scheduler:v1.37.0
+    Image ID:      docker.io/library/import-2026-08-26@sha256:2aa78b45454b3df79d15bf6a57b4f9871f11ce16c8b645109ba2310076d228dd
+    Port:          10259/TCP (probe-port)
+    Host Port:     10259/TCP (probe-port)
+    Command:
+      kube-scheduler
+      --authentication-kubeconfig=/etc/kubernetes/scheduler.conf
+      --authorization-kubeconfig=/etc/kubernetes/scheduler.conf
+      --bind-address=127.0.0.1
+      --kubeconfig=/etc/kubernetes/scheduler.conf
+      --leader-elect=true
+    State:          Running
+      Started:      Sat, 07 Nov 2026 23:46:23 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        100m
+    Liveness:     http-get https://127.0.0.1:probe-port/livez delay=10s timeout=15s period=10s successThreshold=1 failureThreshold=8
+    Readiness:    http-get https://127.0.0.1:probe-port/readyz delay=0s timeout=15s period=1s successThreshold=1 failureThreshold=3
+    Startup:      http-get https://127.0.0.1:probe-port/livez delay=10s timeout=15s period=10s successThreshold=1 failureThreshold=24
+    Environment:  <none>
+    Mounts:
+      /etc/kubernetes/scheduler.conf from kubeconfig (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kubeconfig:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/kubernetes/scheduler.conf
+    HostPathType:  FileOrCreate
+QoS Class:         Burstable
+Node-Selectors:    <none>
+Tolerations:       :NoExecute op=Exists
+Events:
+  Type     Reason     Age                From     Message
+  ----     ------     ----               ----     -------
+  Warning  Unhealthy  10h (x2 over 10h)  kubelet  spec.containers{kube-scheduler}: Readiness probe failed: HTTP probe failed with statuscode: 500

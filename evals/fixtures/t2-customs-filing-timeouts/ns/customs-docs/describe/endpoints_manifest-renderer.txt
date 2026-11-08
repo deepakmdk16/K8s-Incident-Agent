@@ -1,0 +1,6 @@
+Name:         manifest-renderer
+Namespace:    customs-docs
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T04:41:34Z
+Subsets:
+Events:  <none>

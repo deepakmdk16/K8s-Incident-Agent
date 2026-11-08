@@ -1,0 +1,85 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:41:34Z",
+        "name": "manifest-renderer",
+        "namespace": "customs-docs",
+        "resourceVersion": "4301",
+        "uid": "738a75ca-1f00-45cf-83f1-894ec18313a6"
+      },
+      "spec": {
+        "clusterIP": "10.96.215.89",
+        "clusterIPs": [
+          "10.96.215.89"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "manifest-render"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:41:34Z",
+        "name": "manifest-submitter",
+        "namespace": "customs-docs",
+        "resourceVersion": "4327",
+        "uid": "135f9efa-401f-4c4a-b7a3-a1812ce2bc76"
+      },
+      "spec": {
+        "clusterIP": "10.96.44.66",
+        "clusterIPs": [
+          "10.96.44.66"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "manifest-submitter"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

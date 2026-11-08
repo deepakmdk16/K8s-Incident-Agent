@@ -1,0 +1,3 @@
+2026-11-08T04:41:35.213414152Z manifest-submitter: accepting filing requests on :8080; renderer http://manifest-renderer.customs-docs.svc:8080/health
+2026-11-08T04:41:36.231283796Z manifest-submitter: renderer http://manifest-renderer.customs-docs.svc:8080/health UNREACHABLE after 3s; filing request failed, load held at border
+2026-11-08T04:41:47.238638382Z manifest-submitter: renderer http://manifest-renderer.customs-docs.svc:8080/health UNREACHABLE after 3s; filing request failed, load held at border
