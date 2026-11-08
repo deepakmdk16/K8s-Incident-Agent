@@ -3,12 +3,13 @@
 The frozen rubric (evals/scoring.py) is a measurement instrument tied to the
 12-case set at tag case-set-freeze, and it does not change. Cases in the
 additive roots need things it lacks: a class for admission-webhook faults, a
-class for Pod Security admission refusals, aliases for a custom kind, and a
-rule for naming a failing resource that has no namespace. This module is that
-instrument's superset. It re-keys the frozen signature, dominance and alias
-tables BY VALUE — never retypes them — so every phrasing the frozen scorer
-classifies scores identically here (tests/test_scoring_v2.py pins the parity),
-and adds exactly two classes and one convention on top.
+class for Pod Security admission refusals, a spelling rule for custom kinds
+the alias table does not know, and a rule for naming a failing resource that
+has no namespace. This module is that instrument's superset. It re-keys the
+frozen signature, dominance and alias tables BY VALUE — never retypes them —
+so every phrasing the frozen scorer classifies scores identically here
+(tests/test_scoring_v2.py pins the parity), and adds exactly two classes and
+two conventions on top.
 
 Frozen-root cases are still scored by evals/scoring.py. evals/run_eval.py picks
 the scorer by scenario root and records which one scored a bundle.
@@ -114,19 +115,28 @@ _WEBHOOK_SIGNATURE: tuple[tuple[str, ...], ...] = (
     ),
 )
 
-# Group 1 is the admission plugin's own name in every spelling an arm writes
-# ("PodSecurity" in the API server's message, "pod-security.kubernetes.io" in
-# the label key, "Pod Security Standards"); no other class's vocabulary
-# contains it, and no frozen phrasing does. Group 2 holds failure words only,
-# the same discipline as the frozen table. "forbidden" is shared with
-# rbac-denial's second group, but that class also needs an rbac noun in the
-# sentence, which a Pod Security sentence has no reason to carry. A refused
-# pod create leaves the ReplicaSet stuck and the rollout blocked, so the
-# rollout bucket is dominated, and a pod refused "before scheduling" co-matches
-# the scheduling bucket, likewise dominated — the two pairs the webhook class
-# already added, for the same reason (docs/experiments/2026-11-07-heldout-set.md).
+# Group 1 is the admission plugin's own name in every spelling an arm writes:
+# "PodSecurity" in the API server's message ('violates PodSecurity
+# "restricted:latest"', the text the yard fixture's events carry),
+# "pod-security.kubernetes.io" in the label key, "Pod Security admission",
+# "Pod Security Standards", and the abbreviation "PSS" — all under one stem
+# plus the abbreviation; no other class's vocabulary contains either, and no
+# frozen phrasing does. Group 2 holds failure words only, the same discipline
+# as the frozen table. "forbidden" is shared with rbac-denial's second group,
+# but that class also needs an rbac noun in the sentence, which a Pod Security
+# sentence has no reason to carry. A refused pod create leaves the ReplicaSet
+# stuck and the rollout blocked, so the rollout bucket is dominated, and a pod
+# refused "before scheduling" co-matches the scheduling bucket, likewise
+# dominated — the two pairs the webhook class already added, for the same
+# reason (docs/experiments/2026-11-07-heldout-set.md).
+#
+# Amended 2026-11-08, before any LLM-arm run (review of PR #9): group 1 also
+# had `security standards?` and group 2 had `\benforc`, neither specific to
+# this plugin, so a webhook that "enforces the company's security standards"
+# co-matched this class and scored class-wrong. Both dropped;
+# tests/test_scoring_v2.py pins that sentence to the webhook class alone.
 _POD_SECURITY_SIGNATURE: tuple[tuple[str, ...], ...] = (
-    (r"pod ?-?security", r"\bpss\b", r"security standards?"),
+    (r"pod[ -]?security", r"\bpss\b"),
     (
         r"violat",
         r"\bforbidden\b",
@@ -135,7 +145,6 @@ _POD_SECURITY_SIGNATURE: tuple[tuple[str, ...], ...] = (
         r"\brefus",
         r"\bblock",
         r"not allowed",
-        r"\benforc",
     ),
 )
 
@@ -167,9 +176,17 @@ _DOMINATED_BY[FaultClass.POD_UNSCHEDULABLE] |= {
 
 # --- cluster-scoped failing resources -----------------------------------------
 
-# Canonical kinds that have no namespace. An answer naming one of these may
-# spell "no namespace" any of the ways below; a namespaced kind gets no such
-# leniency — its namespace is part of the identity being scored.
+# Canonical kinds that have no namespace. For a failing resource of one of
+# these kinds the answer's namespace field is not part of the identity being
+# scored: kind + name decide. A namespaced kind gets no such leniency — its
+# namespace is part of the identity being scored.
+#
+# Amended 2026-11-08, before any LLM-arm run (review of PR #9): until then
+# only a fixed set of "no namespace" spellings ("", "-", "cluster-scoped",
+# "none", …) normalized to empty, so an arm that named the Namespace yard-ops
+# and wrote the paged namespace — yard-ops — in the namespace field scored
+# resource-wrong on the one pod-security case: a trap set by the rubric's
+# vocabulary, not a wrong answer (CLAUDE.md invariant).
 CLUSTER_SCOPED_KINDS: frozenset[str] = frozenset(
     {
         "clusterrole",
@@ -182,26 +199,6 @@ CLUSTER_SCOPED_KINDS: frozenset[str] = frozenset(
         "validatingwebhookconfiguration",
     }
 )
-NO_NAMESPACE_SPELLINGS: frozenset[str] = frozenset(
-    {
-        "",
-        "-",
-        "*",
-        "all",
-        "cluster",
-        "cluster scoped",
-        "cluster-scoped",
-        "cluster-wide",
-        "clusterscoped",
-        "clusterwide",
-        "global",
-        "n/a",
-        "na",
-        "none",
-        "<none>",
-        "(cluster-scoped)",
-    }
-)
 _KIND_ALIASES: dict[str, str] = _FROZEN_KIND_ALIASES | {
     "mutatingwebhookconfigurations": "mutatingwebhookconfiguration",
     "mwc": "mutatingwebhookconfiguration",
@@ -211,12 +208,10 @@ _KIND_ALIASES: dict[str, str] = _FROZEN_KIND_ALIASES | {
     "storageclasses": "storageclass",
     "validatingwebhookconfigurations": "validatingwebhookconfiguration",
     "vwc": "validatingwebhookconfiguration",
-    # The custom kind of the held-out set's CRD case (2026-11-07): the plural
-    # and the group-qualified spellings `kubectl` prints all name one object.
-    "routeprofiles": "routeprofile",
-    "routeprofile.fleet.northbound.io": "routeprofile",
-    "routeprofiles.fleet.northbound.io": "routeprofile",
 }
+# Kinds the table maps TO: known canonical spellings, which the custom-kind
+# rule in canonical_kind must never touch (`endpoints` keeps its trailing s).
+_CANONICAL_KINDS: frozenset[str] = frozenset(_KIND_ALIASES.values())
 
 
 def signature_table() -> dict[FaultClass, tuple[tuple[str, ...], ...]]:
@@ -224,17 +219,33 @@ def signature_table() -> dict[FaultClass, tuple[tuple[str, ...], ...]]:
     return dict(_SIGNATURES)
 
 
+def kind_alias_table() -> dict[str, str]:
+    """The v2 kind aliases, read-only, for tests that pin the custom-kind rule around them."""
+    return dict(_KIND_ALIASES)
+
+
 def canonical_kind(kind: str) -> str:
+    """One spelling per kind. The alias table decides for every kind it knows, as
+    alias or as canonical value. A kind it does not know is a custom kind, and the
+    spellings `kubectl` prints for one collapse by rule — lowercase, the `.group`
+    qualifier dropped (everything from the first dot), a trailing plural `s`
+    dropped — so `RouteProfile`, `routeprofiles` and
+    `routeprofiles.fleet.northbound.io` name one object (2026-11-08, replacing
+    the per-kind aliases). An `-es` plural (`ingressclasses`) is not collapsed; a
+    case that needs one adds its alias to the table.
+    """
     lowered = kind.strip().lower()
-    return _KIND_ALIASES.get(lowered, lowered)
+    if lowered in _KIND_ALIASES:
+        return _KIND_ALIASES[lowered]
+    if lowered in _CANONICAL_KINDS:
+        return lowered
+    return lowered.split(".", 1)[0].removesuffix("s")
 
 
 def normalized_resource(resource: v1.FailingResource) -> tuple[str, str, str]:
-    """(kind, namespace, name) for comparison; cluster-scoped kinds normalize to no namespace."""
+    """(kind, namespace, name) for comparison; a cluster-scoped kind ignores its namespace field."""
     kind = canonical_kind(resource.kind)
-    namespace = resource.namespace.strip().lower()
-    if kind in CLUSTER_SCOPED_KINDS and namespace in NO_NAMESPACE_SPELLINGS:
-        namespace = ""
+    namespace = "" if kind in CLUSTER_SCOPED_KINDS else resource.namespace.strip().lower()
     return (kind, namespace, resource.name.strip().lower())
 
 
