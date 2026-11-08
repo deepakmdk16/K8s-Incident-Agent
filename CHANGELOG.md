@@ -15,6 +15,70 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [26] Review round on the held-out slice: three scorer-instrument amendments, two gate changes, an honest sweep — 2026-11-08, 05:37 UTC
+
+**Change:** nine review findings on PR #9, applied before any LLM arm reads
+the set. Three are **instrument** changes to `evals/scoring_v2.py`, each a
+dated amendment in
+[docs/experiments/2026-11-07-heldout-set.md](docs/experiments/2026-11-07-heldout-set.md):
+(1) for a cluster-scoped kind the answer's namespace field is ignored — kind +
+name decide (`{Namespace, yard-ops, yard-ops}` scored resource-wrong on the
+pod-security case before: the paged namespace in the field, a trap set by the
+rubric's "no namespace" spellings); (2) the `pod-security-violation` signature
+loses `security standards?` and `enforc`, neither specific to the plugin — a
+webhook that "enforces the company's security standards and rejects every pod
+create" co-matched it; (3) a spelling rule for kinds the alias table does not
+know (lowercase, drop `.group`, drop a trailing `s`) replaces the hard-coded
+`routeprofile` aliases. Two **gate** changes in `scripts/checkpoints.sh`,
+stated in their commits: the scenario roots are read from
+`evals.run_eval.SCENARIO_ROOTS` at run time instead of a hand-copied list (the
+Python tests import it too), and the schema-2/3 roster checks require a real
+`.items` list, so `capture.sh`'s in-band `{"capture_error": true}` object no
+longer passes as a roster. The adversarial sweep makes exactly one attempt on
+the CRD gold — the honest control, which must earn V4's "does not resolve"
+refusal — instead of overwriting every attack's expected refusal with that
+string, and its docstring states the coverage (anchoring families on 19
+fixtures plus the 20th's wrong target; V4 control on the CRD gold);
+`test_each_root_is_scored_by_its_own_scorer` no longer skips a missing root.
+`evals/inject.sh` waits for scenario-labelled CRDs to be Established after
+`setup.yaml` and dies on timeout — untested live (the authoring cluster is
+gone); `bash -n` and shellcheck clean. Disclosed, not fixed: the capture scrub
+picks the Secret path by the kind in its own arguments, so a custom resource
+embedding credentials would be captured under the general scrub; the
+`fixtures free of k8s credential material` gate is the control
+(`evals/scenarios-heldout/README.md`, design doc).
+
+**Why:** a code review of the slice. Each scorer finding is the CLAUDE.md
+invariant in miniature — a pooled number that can move for a reason the
+rubric's vocabulary controls rather than the arm's behaviour — and it is
+cheaper to close those before any LLM row exists than to decompose them
+afterwards. The gate findings are error-as-green shapes (docs/failure-modes.md
+2026-08-29): a hand-copied list that drifts silently, a check that accepts an
+error object as evidence.
+
+**Evidence after:** rules bundle
+[evals/results/20261108T050338Z-rules/](evals/results/20261108T050338Z-rules/summary.md)
+re-scored offline through the changed scorer (the committed `answer.json`
+files against the committed gold; the arm was not re-run): **0/5 rows moved**
+— `resource_correct` 2/5, `class_correct` 3/5, `matched_classes` identical on
+every row — so the [25] table stands as recorded. Against the pre-change
+module the three new assertions fail (`resource_correct` False; classes
+`{pod-security-violation, webhook-admission-block}`; canonical kind
+`routeprofile.v1.fleet.northbound.io`). Regression tests:
+`tests/test_scoring_v2.py` (the yard-gold namespace-field test, the webhook
+"security standards" sentence, the alias-table parametrization),
+`tests/test_gates.sh` 18d4 / 18d2b / 18d2c, the sweep's
+`v4-control-unknown-kind`. Gate at the last commit: `743 passed`,
+`== checkpoints: 0 failure(s)`; `test_gates: 50 passed, 0 failed`.
+
+**Next decision it drove:** unchanged from [25] — the first paid read of the
+set waits on V4 learning to tell not-served from absent, and on the operator's
+scoring call — but it now happens through an instrument whose three known
+vocabulary traps are closed before any LLM row exists, so a miss on case 2 or 4
+will be read as the arm's, not the rubric's. The capture scrub learns kinds
+from the CRD roster when a case first needs a credential-bearing custom
+resource; until then the authoring rule in the README holds.
+
 ## [25] Held-out set: five cases nobody tuned on, two causes outside the served universe, the control arm scored — 2026-11-08, 05:05 UTC
 
 **Change:** `evals/scenarios-heldout/`, an additive root under the v2 contract
