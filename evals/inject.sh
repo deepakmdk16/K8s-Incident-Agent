@@ -6,10 +6,11 @@
 #
 # Flow: delete scenario-labelled admission webhook configurations -> wipe
 # non-system namespaces -> apply _noise (T3 ids only) and wait for it to
-# settle -> if the scenario ships setup.yaml, apply it and wait for its
-# deployments to be Available (pre-fault healthy state, e.g. the version a bad
-# rollout replaces) -> apply fault.yaml -> run the scenario's wait.sh ->
-# capture. Frozen-root scenarios create only Namespaces and namespaced
+# settle -> if the scenario ships setup.yaml, apply it, wait for its
+# scenario-labelled CRDs to be Established and for its deployments to be
+# Available (pre-fault healthy state, e.g. the version a bad rollout
+# replaces) -> apply fault.yaml -> run the scenario's wait.sh -> capture.
+# Frozen-root scenarios create only Namespaces and namespaced
 # objects, so the namespace wipe fully resets between them (authoring contract
 # rule 4). An additive root may also create admission webhook configurations
 # (the only way to author an admission fault) and CustomResourceDefinitions
@@ -177,6 +178,17 @@ esac
 if [ -s "$SCEN/setup.yaml" ]; then
   echo "inject: applying $ID/setup.yaml (pre-fault state)"
   K apply -f "$SCEN/setup.yaml" >/dev/null || die "setup apply failed"
+  # A CRD must be Established before fault.yaml creates a custom resource of
+  # it, or that apply races API discovery and fails on the kind (README: "a
+  # CRD belongs in setup.yaml"). Only scenario-owned CRDs are this pipeline's
+  # to wait on; a timeout is loud. Added 2026-11-08 after the captures; the
+  # authoring cluster was deleted by then, so this branch is untested live.
+  SCEN_CRDS="$(K get customresourcedefinitions -l "$SCENARIO_LABEL" -o name 2>/dev/null || true)"
+  if [ -n "$SCEN_CRDS" ]; then
+    echo "inject: waiting for scenario CRDs to be Established:$(printf ' %s' $SCEN_CRDS)"
+    K wait --for=condition=Established --timeout=60s $SCEN_CRDS >/dev/null \
+      || die "$ID: scenario CRD(s) not Established within 60s:$(printf ' %s' $SCEN_CRDS)"
+  fi
   for NS in $(K get namespaces -o jsonpath='{.items[*].metadata.name}'); do
     case " $KEEP_NS " in *" $NS "*) continue ;; esac
     DEPLOYS="$(K get deployments -n "$NS" -o name 2>/dev/null)"

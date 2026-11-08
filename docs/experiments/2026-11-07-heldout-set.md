@@ -384,3 +384,9 @@ its regression test in `tests/test_scoring_v2.py`.
    every canonical value in the table is untouched (parametrized over the
    table). Known limit, stated: an `-es` plural (`ingressclasses`) is not
    collapsed and takes an alias when a case needs one.
+
+Disclosed, not changed: `capture.sh` selects the Secret scrub by the kind in
+its own arguments, so a custom resource embedding credentials would be captured
+under the general scrub; the `fixtures free of k8s credential material` gate in
+`scripts/checkpoints.sh` is the control (`evals/scenarios-heldout/README.md`,
+"Capture — known limitation and its control").
