@@ -1,0 +1,105 @@
+# t2-yard-gate-release-blocked — T2 (two-phase), the cause is the paged
+# namespace's own labels: a cluster-scoped object no tool serves.
+#
+# Atom: pod-security-violation (v2 class, added for this set). The platform
+#   team rolled Pod Security labels across namespaces this morning and set
+#   yard-ops to pod-security.kubernetes.io/enforce=restricted — while the
+#   namespace's warn and audit labels, and its approved-level annotation, say
+#   baseline. Nobody enforces a stricter level than they warn at; the enforce
+#   value is the mistake.
+#
+# Mechanism: nothing happens until something creates a pod. The yard-ops
+#   team's release does (the Deployment below is setup.yaml's with a new
+#   RELEASE_ID and nothing else). The rollout retires one old pod
+#   (maxUnavailable 1), then the new ReplicaSet's first pod create is refused
+#   by the PodSecurity admission plugin, forever:
+#     Error creating: pods "gate-checkin-<hash>-<id>" is forbidden: violates
+#     PodSecurity "restricted:latest": allowPrivilegeEscalation != false
+#     (container "kiosk" must set securityContext.allowPrivilegeEscalation=false),
+#     unrestricted capabilities (container "kiosk" must set
+#     securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or
+#     container "kiosk" must set securityContext.runAsNonRoot=true),
+#     seccompProfile (pod or container "kiosk" must set
+#     securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+#   (exact text observed on kube-apiserver v1.37.0 in a scratch probe,
+#   2026-11-07). FailedCreate events on the ReplicaSet, the Deployment at 2/3
+#   ready and 0 updated, Progressing=False after 120s. The two old pods — the
+#   same template — keep serving: admission is evaluated on create only.
+#
+# Wait condition (wait.sh): a ReplicaSet FailedCreate event in yard-ops whose
+#   message says 'violates PodSecurity "restricted:latest"', with the
+#   Deployment at 0 updated / 2 ready / ProgressDeadlineExceeded.
+#
+# Gold failing resource: namespace/yard-ops (cluster-scoped). Remediation:
+#   kubectl label namespace yard-ops pod-security.kubernetes.io/enforce=baseline
+#   --overwrite; the ReplicaSet then creates its pods and the rollout
+#   completes with no change to the Deployment (counterfactual, rule 1).
+#
+# Ordering matters: the Namespace precedes the Deployment so the label is in
+#   place before the rollout's first pod create.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yard-ops
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: baseline
+    pod-security.kubernetes.io/audit: baseline
+  annotations:
+    security.northbound.example/approved-level: baseline
+---
+# The release: setup.yaml's Deployment with a new RELEASE_ID and nothing else.
+# Deliberately an env value, not the image: an image change would put "image"
+# or "tag" into every arm's mechanism sentence, which co-matches a frozen
+# class's vocabulary for reasons unrelated to the diagnosis.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gate-checkin
+  namespace: yard-ops
+  labels:
+    app: gate-checkin
+spec:
+  replicas: 3
+  progressDeadlineSeconds: 120
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: gate-checkin
+  template:
+    metadata:
+      labels:
+        app: gate-checkin
+    spec:
+      containers:
+        - name: kiosk
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["httpd", "-f", "-p", "8080", "-h", "/www"]
+          env:
+            - name: RELEASE_ID
+              value: "2026.11.07"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: site
+              mountPath: /www
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: site
+          configMap:
+            name: gate-checkin-site

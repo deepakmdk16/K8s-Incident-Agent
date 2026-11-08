@@ -29,10 +29,10 @@ two-phase scenarios, a noise pack per root), with these further deltas:
 
 | id | tier | gold class | gold resource | universe | status |
 |---|---|---|---|---|---|
-| `t1-reefer-telemetry-offline` | T1 | pod-unschedulable | deployment `cold-chain/reefer-monitor` | inside | authored |
-| `t2-route-planning-degraded` | T2 | app-crashloop | routeprofile `dispatch/weekday-routing` (CRD-defined kind) | **outside** — no tool knows the kind | authored |
-| `t2-customs-filing-timeouts` | T2 | service-selector-mismatch | service `customs-docs/manifest-renderer` | inside | authored |
-| `t2-yard-gate-release-blocked` | T2 (two-phase) | pod-security-violation | namespace `yard-ops` (cluster-scoped) | **outside** — captured, served by no tool | authored |
+| `t1-reefer-telemetry-offline` | T1 | pod-unschedulable | deployment `cold-chain/reefer-monitor` | inside | captured 2026-11-08 |
+| `t2-route-planning-degraded` | T2 | app-crashloop | routeprofile `dispatch/weekday-routing` (CRD-defined kind) | **outside** — no tool knows the kind | captured 2026-11-08 |
+| `t2-customs-filing-timeouts` | T2 | service-selector-mismatch | service `customs-docs/manifest-renderer` | inside | captured 2026-11-08 |
+| `t2-yard-gate-release-blocked` | T2 (two-phase) | pod-security-violation | namespace `yard-ops` (cluster-scoped) | **outside** — captured, served by no tool | captured 2026-11-08 |
 | `t3-driver-login-failures` | T3 (noise pack) | rbac-denial | rolebinding `driver-portal/driver-auth-oidc-reader` | inside | authored |
 
 Status moves to `captured <date>` when the fixture lands, and to `scored

@@ -1,0 +1,103 @@
+# t2-yard-gate-release-blocked — setup.yaml: the PRE-FAULT healthy state.
+#
+# inject.sh applies this first and waits until deployment yard-ops/gate-checkin
+# is Available: three replicas of the current build, serving. fault.yaml then
+# ships the platform team's namespace-label change and the next build into
+# this healthy state (two-phase scenario).
+#
+# The namespace already carries Pod Security labels at the team's approved
+# level — warn and audit at baseline, no enforce yet — and an annotation the
+# platform team's change-management tooling stamps with the approved level.
+# The pod template is baseline-compliant (no privilege, no host access) and,
+# like most workloads, not restricted-compliant: no seccompProfile, no
+# runAsNonRoot, no capabilities drop.
+#
+# Rollout shape (kept identical in fault.yaml): maxSurge 0 / maxUnavailable 1,
+# so a rollout first retires one old pod and only then creates one new one.
+# progressDeadlineSeconds 120 makes a rollout that cannot create its first pod
+# report Progressing=False / ProgressDeadlineExceeded inside the wait budget.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yard-ops
+  labels:
+    pod-security.kubernetes.io/warn: baseline
+    pod-security.kubernetes.io/audit: baseline
+  annotations:
+    security.northbound.example/approved-level: baseline
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gate-checkin-site
+  namespace: yard-ops
+data:
+  health: |
+    ok
+  index.html: |
+    gate-checkin: yard gate kiosk check-in
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gate-checkin
+  namespace: yard-ops
+  labels:
+    app: gate-checkin
+spec:
+  replicas: 3
+  progressDeadlineSeconds: 120
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: gate-checkin
+  template:
+    metadata:
+      labels:
+        app: gate-checkin
+    spec:
+      containers:
+        - name: kiosk
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["httpd", "-f", "-p", "8080", "-h", "/www"]
+          env:
+            - name: RELEASE_ID
+              value: "2026.11.03"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: site
+              mountPath: /www
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: site
+          configMap:
+            name: gate-checkin-site
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gate-checkin
+  namespace: yard-ops
+spec:
+  selector:
+    app: gate-checkin
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

@@ -1,0 +1,83 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.30"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "gate-checkin-687f4f859f-v2dqt",
+            "namespace": "yard-ops",
+            "uid": "0a19e230-91da-42ed-8d09-df8a0804fc7e"
+          }
+        },
+        {
+          "addresses": [
+            "10.244.0.29"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "gate-checkin-687f4f859f-lm68x",
+            "namespace": "yard-ops",
+            "uid": "96ce8f56-e543-4627-8f7d-21c79688f350"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T04:49:00Z"
+        },
+        "creationTimestamp": "2026-11-08T04:48:24Z",
+        "generateName": "gate-checkin-",
+        "generation": 9,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "gate-checkin"
+        },
+        "name": "gate-checkin-xfqq7",
+        "namespace": "yard-ops",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "gate-checkin",
+            "uid": "c9b80f66-bd0c-456a-af67-a253572ed374"
+          }
+        ],
+        "resourceVersion": "5535",
+        "uid": "16760fe3-1416-4bcd-909a-80d3b4d80000"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

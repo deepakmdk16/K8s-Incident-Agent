@@ -1,0 +1,70 @@
+Name:             gate-checkin-687f4f859f-v2dqt
+Namespace:        yard-ops
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sun, 08 Nov 2026 10:18:24 +0530
+Labels:           app=gate-checkin
+                  pod-template-hash=687f4f859f
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.30
+IPs:
+  IP:           10.244.0.30
+Controlled By:  ReplicaSet/gate-checkin-687f4f859f
+Containers:
+  kiosk:
+    Container ID:  containerd://ab157a0226b3c462d761d71cab567ed029e6bc0df5c3fbc31c1d38fd19e05f3b
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          8080/TCP (http)
+    Host Port:     0/TCP (http)
+    Command:
+      httpd
+      -f
+      -p
+      8080
+      -h
+      /www
+    State:          Running
+      Started:      Sun, 08 Nov 2026 10:18:25 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      RELEASE_ID:  2026.11.03
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-fc5w2 (ro)
+      /www from site (rw)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  site:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      gate-checkin-site
+    Optional:  false
+  kube-api-access-fc5w2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  2m20s  default-scheduler  Successfully assigned yard-ops/gate-checkin-687f4f859f-v2dqt to incident-lab-control-plane
+  Normal  Pulled     2m19s  kubelet            spec.containers{kiosk}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    2m19s  kubelet            spec.containers{kiosk}: Container created
+  Normal  Started    2m19s  kubelet            spec.containers{kiosk}: Container started

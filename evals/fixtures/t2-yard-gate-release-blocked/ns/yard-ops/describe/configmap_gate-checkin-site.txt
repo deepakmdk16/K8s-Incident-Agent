@@ -1,0 +1,22 @@
+Name:         gate-checkin-site
+Namespace:    yard-ops
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+health:
+----
+ok
+
+
+index.html:
+----
+gate-checkin: yard gate kiosk check-in
+
+
+
+BinaryData
+====
+
+Events:  <none>

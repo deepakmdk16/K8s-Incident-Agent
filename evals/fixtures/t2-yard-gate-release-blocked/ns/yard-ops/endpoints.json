@@ -1,0 +1,56 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:48:24Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "gate-checkin",
+        "namespace": "yard-ops",
+        "resourceVersion": "5468",
+        "uid": "cf150e1a-94ee-43b1-aa0b-ed9ebdb3e6c3"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.29",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "gate-checkin-687f4f859f-lm68x",
+                "namespace": "yard-ops",
+                "uid": "96ce8f56-e543-4627-8f7d-21c79688f350"
+              }
+            },
+            {
+              "ip": "10.244.0.30",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "gate-checkin-687f4f859f-v2dqt",
+                "namespace": "yard-ops",
+                "uid": "0a19e230-91da-42ed-8d09-df8a0804fc7e"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}
