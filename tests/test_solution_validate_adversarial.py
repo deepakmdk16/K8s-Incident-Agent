@@ -286,6 +286,31 @@ def _run(seed: Seed, arguments: dict[str, object], ledger: tl.ToolLedger) -> va.
     )
 
 
+def _known_kind(kind: str) -> bool:
+    """False for a kind no reader knows (the held-out CRD case's gold): every tool
+    refuses it as not served, so a generator that reasons about the target's own
+    kind has no sibling or controller to build on."""
+    try:
+        fx.normalize_kind(kind)
+    except fx.FixtureError:
+        return False
+    return True
+
+
+# What V4 says about a failing resource of a kind no reader knows. It is emitted
+# before any anchoring rule runs, so for such a target it is the only refusal
+# an attack can earn (the held-out CRD case; see test_the_scaffold_is_satisfiable).
+V4_UNRESOLVED = "V4 EXISTS: failing_resource does not resolve"
+
+
+def _unknown_target_kind(arguments: dict[str, object]) -> bool:
+    reference = arguments.get("failing_resource")
+    if not isinstance(reference, dict):
+        return False
+    kind = cast(dict[str, object], reference).get("kind")
+    return isinstance(kind, str) and not _known_kind(kind)
+
+
 def _attempt(
     seed: Seed,
     label: str,
@@ -294,6 +319,8 @@ def _attempt(
     refusal: tuple[str, ...],
     absent_checks: bool = False,
 ) -> Attempt:
+    if _unknown_target_kind(arguments):
+        refusal, absent_checks = (V4_UNRESOLVED,), False
     return Attempt(label, arguments, ledger, _run(seed, arguments, ledger), refusal, absent_checks)
 
 
@@ -506,10 +533,12 @@ def _sibling_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
     """describe/get_object of another kind under the target's name — an error when
     no such sibling exists, a REAL read of the sibling when one does."""
     ns, name = _call_namespace(seed, target), target.name
-    own = fx.normalize_kind(target.kind)
+    # A target of a kind no reader knows has no own kind to skip: every served
+    # sibling is a different kind, and each is a real attack on it.
+    own = fx.normalize_kind(target.kind) if _known_kind(target.kind) else None
     attempts: list[Attempt] = []
     for kind in SIBLING_KINDS:
-        if fx.normalize_kind(kind) == own:
+        if own is not None and fx.normalize_kind(kind) == own:
             continue
         for tool in ("describe", "get_object"):
             call = Call(tool, {"namespace": ns, "kind": kind, "name": name})
@@ -673,7 +702,7 @@ PAIR_IDS = [f"{fixture.name}-{which}" for fixture, which in PAIRS]
 
 
 def test_the_suite_covers_every_fixture_and_channel() -> None:
-    assert len(CASES) == 16, [p.name for p in CASES]  # 12 frozen + 3 v2 + held-out so far
+    assert len(CASES) == 17, [p.name for p in CASES]  # 12 frozen + 3 v2 + held-out so far
     for fixture, which in PAIRS:
         labels = [attempt.label for attempt in _attempts(fixture, which)]
         for channel in CHANNELS:
@@ -697,9 +726,22 @@ def test_the_scaffold_is_satisfiable(fixture: Path) -> None:
         target = _target(fixture, which)
         probable = _arguments(seed, target, None, _legit_checks(seed)) | {"verdict": "probable"}
         result = _run(seed, probable, _ledger(seed, []))
+        if which == "gold" and not _known_kind(target.kind):
+            # The held-out CRD case: V4 reads "unknown kind" as "does not exist"
+            # and refuses the gold object at ANY verdict, so the arm cannot even
+            # say "probably this profile". Pinned here as today's ceiling on that
+            # case, with the direction stated in the design doc's amendment
+            # (docs/experiments/2026-11-07-heldout-set.md); when V4 learns to
+            # tell not-served from absent, this branch is the test that flips.
+            assert not result.accepted
+            assert any(
+                v.startswith("V4 EXISTS: failing_resource does not resolve")
+                for v in result.violations
+            ), result.violations
+            continue
         assert result.accepted, (which, result.violations)
     gold = _gold(fixture)
-    if not tl.serves_kind(gold.kind):
+    if not _known_kind(gold.kind) or not tl.serves_kind(gold.kind):
         return
     # A cluster-scoped kind (the served webhook configurations) takes no namespace
     # argument; passing one is refused as an ordinary error, not a read.

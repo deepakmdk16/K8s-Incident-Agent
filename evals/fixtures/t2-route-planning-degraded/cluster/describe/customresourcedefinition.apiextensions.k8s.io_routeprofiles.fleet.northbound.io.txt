@@ -1,0 +1,78 @@
+Name:         routeprofiles.fleet.northbound.io
+Namespace:    
+Labels:       app.kubernetes.io/part-of=fleet-routing
+Annotations:  <none>
+API Version:  apiextensions.k8s.io/v1
+Kind:         CustomResourceDefinition
+Metadata:
+  Creation Timestamp:  2026-11-08T04:36:13Z
+  Generation:          1
+  Resource Version:    3436
+  UID:                 bcc289cf-ada5-43e2-9e55-28408a728f6e
+Spec:
+  Conversion:
+    Strategy:  None
+  Group:       fleet.northbound.io
+  Names:
+    Kind:       RouteProfile
+    List Kind:  RouteProfileList
+    Plural:     routeprofiles
+    Short Names:
+      rp
+    Singular:  routeprofile
+  Scope:       Namespaced
+  Versions:
+    Additional Printer Columns:
+      Json Path:  .spec.region
+      Name:       Region
+      Type:       string
+      Json Path:  .spec.solverEndpoint
+      Name:       Solver
+      Type:       string
+    Name:         v1
+    Schema:
+      openAPIV3Schema:
+        Properties:
+          Spec:
+            Properties:
+              Departure Window:
+                Description:  Local-time window the planned routes must depart in.
+                Type:         string
+              Max Stops:
+                Description:  Upper bound on stops per planned route.
+                Type:         integer
+              Region:
+                Description:  Dispatch region this profile plans for.
+                Type:         string
+              Solver Endpoint:
+                Description:  host:port of the route solver the optimizer connects to at startup.
+                Type:         string
+            Required:
+              region
+              solverEndpoint
+            Type:  object
+        Type:      object
+    Served:        true
+    Storage:       true
+Status:
+  Accepted Names:
+    Kind:       RouteProfile
+    List Kind:  RouteProfileList
+    Plural:     routeprofiles
+    Short Names:
+      rp
+    Singular:  routeprofile
+  Conditions:
+    Last Transition Time:  2026-11-08T04:36:13Z
+    Message:               no conflicts found
+    Reason:                NoConflicts
+    Status:                True
+    Type:                  NamesAccepted
+    Last Transition Time:  2026-11-08T04:36:13Z
+    Message:               the initial names have been accepted
+    Reason:                InitialNamesAccepted
+    Status:                True
+    Type:                  Established
+  Stored Versions:
+    v1
+Events:  <none>

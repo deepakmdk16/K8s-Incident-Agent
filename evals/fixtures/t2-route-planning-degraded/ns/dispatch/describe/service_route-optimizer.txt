@@ -1,0 +1,16 @@
+Name:                     route-optimizer
+Namespace:                dispatch
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=route-optimizer
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.49.174
+IPs:                      10.96.49.174
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

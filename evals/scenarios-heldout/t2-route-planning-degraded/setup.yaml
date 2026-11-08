@@ -1,0 +1,186 @@
+# t2-route-planning-degraded — setup.yaml: the PRE-FAULT healthy state.
+#
+# inject.sh applies this first and waits until every Deployment here is
+# Available. It carries the CustomResourceDefinition on purpose: a CRD has to
+# be Established before a custom resource of its kind can be created, and the
+# wait on the Deployments below is what guarantees that order when fault.yaml
+# creates the RouteProfile (two-phase scenario).
+#
+# The dispatch team's planning stack: the route solver (a TCP service on
+# :7000) with its Service, and a second, healthy consumer of that Service —
+# eta-publisher — which reaches it fine. That consumer is the asymmetry that
+# makes the Service canonical and the RouteProfile's endpoint the odd one out.
+#
+# The CRD is cluster-scoped and carries the scenario label evals/inject.sh
+# deletes by on reset; capture.sh scrubs that label out of the fixture.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dispatch
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: routeprofiles.fleet.northbound.io
+  labels:
+    app.kubernetes.io/part-of: fleet-routing
+    incident-lab.dev/scenario: t2-route-planning-degraded
+spec:
+  group: fleet.northbound.io
+  scope: Namespaced
+  names:
+    plural: routeprofiles
+    singular: routeprofile
+    kind: RouteProfile
+    shortNames: ["rp"]
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: ["region", "solverEndpoint"]
+              properties:
+                region:
+                  type: string
+                  description: Dispatch region this profile plans for.
+                solverEndpoint:
+                  type: string
+                  description: host:port of the route solver the optimizer connects to at startup.
+                maxStops:
+                  type: integer
+                  description: Upper bound on stops per planned route.
+                departureWindow:
+                  type: string
+                  description: Local-time window the planned routes must depart in.
+      additionalPrinterColumns:
+        - name: Region
+          type: string
+          jsonPath: .spec.region
+        - name: Solver
+          type: string
+          jsonPath: .spec.solverEndpoint
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: route-solver-entrypoint
+  namespace: dispatch
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "route-solver: accepting plan requests on :7000"
+    while true; do echo ready | nc -l -p 7000; done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: route-solver
+  namespace: dispatch
+  labels:
+    app: route-solver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: route-solver
+  template:
+    metadata:
+      labels:
+        app: route-solver
+    spec:
+      containers:
+        - name: solver
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "/app/run.sh"]
+          ports:
+            - name: solver
+              containerPort: 7000
+          volumeMounts:
+            - name: entrypoint
+              mountPath: /app
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: entrypoint
+          configMap:
+            name: route-solver-entrypoint
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: route-solver
+  namespace: dispatch
+spec:
+  selector:
+    app: route-solver
+  ports:
+    - name: solver
+      port: 7000
+      targetPort: 7000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eta-publisher-entrypoint
+  namespace: dispatch
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    echo "eta-publisher: starting; solver ${SOLVER_HOST}:${SOLVER_PORT}"
+    while true; do
+      if nc -z -w 2 "$SOLVER_HOST" "$SOLVER_PORT" 2>/dev/null; then
+        echo "eta-publisher: solver ${SOLVER_HOST}:${SOLVER_PORT} reachable; publishing ETAs"
+      else
+        echo "eta-publisher: solver ${SOLVER_HOST}:${SOLVER_PORT} unreachable; holding last ETAs"
+      fi
+      sleep 20
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eta-publisher
+  namespace: dispatch
+  labels:
+    app: eta-publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eta-publisher
+  template:
+    metadata:
+      labels:
+        app: eta-publisher
+    spec:
+      containers:
+        - name: publisher
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "/app/run.sh"]
+          env:
+            - name: SOLVER_HOST
+              value: route-solver.dispatch.svc
+            - name: SOLVER_PORT
+              value: "7000"
+          volumeMounts:
+            - name: entrypoint
+              mountPath: /app
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: entrypoint
+          configMap:
+            name: eta-publisher-entrypoint

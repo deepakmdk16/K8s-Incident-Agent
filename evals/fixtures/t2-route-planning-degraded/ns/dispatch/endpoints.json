@@ -1,0 +1,96 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "route-optimizer",
+        "namespace": "dispatch",
+        "resourceVersion": "3528",
+        "uid": "cae6f5ff-3419-42f5-87b9-b7882f28d6d3"
+      },
+      "subsets": [
+        {
+          "notReadyAddresses": [
+            {
+              "ip": "10.244.0.14",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "route-optimizer-78fc6747d7-22sfp",
+                "namespace": "dispatch",
+                "uid": "7aadcdce-afe1-4aea-89d0-11a264935639"
+              }
+            },
+            {
+              "ip": "10.244.0.15",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "route-optimizer-78fc6747d7-mqwkc",
+                "namespace": "dispatch",
+                "uid": "3941fdf7-9b5e-44ef-9da0-5b5b2249cfff"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T04:36:13Z"
+        },
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "route-solver",
+        "namespace": "dispatch",
+        "resourceVersion": "3478",
+        "uid": "707d92f5-6d77-4db6-a4a8-87f7f31fb1f0"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.12",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "route-solver-858546fc7b-5gpmh",
+                "namespace": "dispatch",
+                "uid": "c338ffe4-819f-427f-b428-6c8511181144"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "solver",
+              "port": 7000,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

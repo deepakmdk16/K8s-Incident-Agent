@@ -1,0 +1,19 @@
+Name:         route-solver-c9srp
+Namespace:    dispatch
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=route-solver
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T04:36:13Z
+AddressType:  IPv4
+Ports:
+  Name    Port  Protocol
+  ----    ----  --------
+  solver  7000  TCP
+Endpoints:
+  - Addresses:  10.244.0.12
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/route-solver-858546fc7b-5gpmh
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

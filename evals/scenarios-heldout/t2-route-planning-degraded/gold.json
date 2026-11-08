@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-route-planning-degraded",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "routeprofile",
+    "namespace": "dispatch",
+    "name": "weekday-routing"
+  },
+  "fault_class": "app-crashloop",
+  "mechanism_summary": "RouteProfile dispatch/weekday-routing sets spec.solverEndpoint to route-solvr.dispatch.svc:7000, a host that does not exist (the solver Service is route-solver), so route-optimizer's startup connectivity check against the endpoint it loaded from the profile fails, the container exits at startup, and kubelet restarts it in crash-loop backoff on both replicas.",
+  "decisive_evidence": "Both dispatch/route-optimizer pods in CrashLoopBackOff with rising restart counts and 0/2 Ready; the optimizer log lines 'route-optimizer: profile weekday-routing: solverEndpoint=route-solvr.dispatch.svc:7000' and 'route-optimizer: solver route-solvr.dispatch.svc:7000 unreachable (RouteProfile weekday-routing spec.solverEndpoint); cannot plan routes, exiting'; the Deployment's ROUTE_PROFILE env naming weekday-routing and the mounted entrypoint reading /apis/fleet.northbound.io/v1/namespaces/dispatch/routeprofiles/<name>; routeprofile weekday-routing showing spec.solverEndpoint route-solvr.dispatch.svc:7000 while service/route-solver exists with ready endpoints and eta-publisher logs 'solver route-solver.dispatch.svc:7000 reachable'.",
+  "remediation_summary": "Correct the profile, not the workload: kubectl patch routeprofile weekday-routing -n dispatch --type merge -p '{\"spec\":{\"solverEndpoint\":\"route-solver.dispatch.svc:7000\"}}'; on their next restart the optimizer pods read the corrected endpoint, pass the connectivity check and become Ready, with no change to deployment route-optimizer, service route-solver or the solver."
+}

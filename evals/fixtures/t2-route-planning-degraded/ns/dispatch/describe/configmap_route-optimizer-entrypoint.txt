@@ -1,0 +1,42 @@
+Name:         route-optimizer-entrypoint
+Namespace:    dispatch
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+API="https://kubernetes.default.svc"
+URL="$API/apis/fleet.northbound.io/v1/namespaces/${POD_NAMESPACE}/routeprofiles/${ROUTE_PROFILE}"
+echo "route-optimizer: loading RouteProfile ${POD_NAMESPACE}/${ROUTE_PROFILE}"
+if ! BODY="$(wget -T 5 -q -O - --no-check-certificate \
+    --header "Authorization: Bearer $TOKEN" "$URL" 2>&1)"; then
+  echo "route-optimizer: cannot read RouteProfile ${ROUTE_PROFILE}: ${BODY}"
+  exit 1
+fi
+ENDPOINT="$(printf '%s' "$BODY" | tr -d '\n' \
+  | sed -n 's/.*"solverEndpoint": *"\([^"]*\)".*/\1/p')"
+if [ -z "$ENDPOINT" ]; then
+  echo "route-optimizer: RouteProfile ${ROUTE_PROFILE} has no spec.solverEndpoint"
+  exit 1
+fi
+HOST="${ENDPOINT%:*}"; PORT="${ENDPOINT##*:}"
+echo "route-optimizer: profile ${ROUTE_PROFILE}: solverEndpoint=${ENDPOINT}"
+if ! nc -z -w 3 "$HOST" "$PORT" 2>/dev/null; then
+  echo "route-optimizer: solver ${ENDPOINT} unreachable (RouteProfile ${ROUTE_PROFILE} spec.solverEndpoint); cannot plan routes, exiting"
+  exit 1
+fi
+echo "route-optimizer: connected to solver ${ENDPOINT}; serving route plans on :8080"
+mkdir -p /www && echo ok > /www/health
+exec httpd -f -p 8080 -h /www
+
+
+
+BinaryData
+====
+
+Events:  <none>

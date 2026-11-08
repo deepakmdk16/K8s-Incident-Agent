@@ -1,0 +1,68 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\nset -u\necho \"eta-publisher: starting; solver ${SOLVER_HOST}:${SOLVER_PORT}\"\nwhile true; do\n  if nc -z -w 2 \"$SOLVER_HOST\" \"$SOLVER_PORT\" 2>/dev/null; then\n    echo \"eta-publisher: solver ${SOLVER_HOST}:${SOLVER_PORT} reachable; publishing ETAs\"\n  else\n    echo \"eta-publisher: solver ${SOLVER_HOST}:${SOLVER_PORT} unreachable; holding last ETAs\"\n  fi\n  sleep 20\ndone\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher-entrypoint",
+        "namespace": "dispatch",
+        "resourceVersion": "3453",
+        "uid": "8e45bc73-15d4-45f1-bf8f-8106996972ee"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIDBTCCAe2gAwIBAgIIakNwewAqhzgwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczAeFw0yNjExMDcxODExMjFaFw0zNjExMDQxODE2MjFaMBUx\nEzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQC6WQzkTgJb2XHEFawk1eAkGJBs3yKvwGMrgk2YEGe2XVB25Ox1+b339Ndt\nDvV9pdtO97+yf46UNOTH66ZS2YsCig2du6RPOGUV5nwJ0IFz4SWYrYJXsS2SWtPe\nDgsu7HhNBkQs6wReci11xkbNeLhi8GVG5BUIwaCgqjotfBAfonZ5A8t9/oJBel5k\neBcwLccMUN2lE6FzpD5HR2cuVJdCoCrr0PF5CL0FLVYgy/0ddj8bMG0NhpTBSXWa\nAmfU9NU0qtpLT6qxBWKXxbfxQt8cNmVA5Si7Ydk7uc3QxhR+Nbp3RpUjsa3tyqyV\n8ZIHCbXtN+BpRMyu+qfgPFG21csvAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP\nBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQ8gl11usX6X4N1L4NTcGkNaatsLzAV\nBgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQBxHFjbiqmD\nab6w+uhHbmxXRhLRi/Ep4rbJgTjNKHj8D1zAWSiIN1MnNPaZg4kow+jrmdwc8Rlx\nrdTqbHLB9ZADeqSW29uihTInkr03GeQomgtDGxk/MofsP7b2twhqXwpyFnmYE4pu\n9uwChcmJ5LCgjODPD0yS5wT3Zpiv2EuLZrO8XAAnTH59c5h1l1Qj0kzqkEkv1zcA\n+CPfMSXa2FBAuOQlsLK7gB7hit8CUpvc2yBREU1mq9x/OOkguPn4wwdlx1lVKNu5\ndiUwJLGL0yZb3ZFvlBf04wh/1OUhleirEuBM1osP9lfNfIKjE9gjCg3SVYJUadVk\nhex1XESDYdND\n-----END CERTIFICATE-----\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "annotations": {
+          "kubernetes.io/description": "Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters."
+        },
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "kube-root-ca.crt",
+        "namespace": "dispatch",
+        "resourceVersion": "3432",
+        "uid": "cbd1c39b-3463-4fd7-9df5-9208831672a9"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\nset -u\nTOKEN=\"$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)\"\nAPI=\"https://kubernetes.default.svc\"\nURL=\"$API/apis/fleet.northbound.io/v1/namespaces/${POD_NAMESPACE}/routeprofiles/${ROUTE_PROFILE}\"\necho \"route-optimizer: loading RouteProfile ${POD_NAMESPACE}/${ROUTE_PROFILE}\"\nif ! BODY=\"$(wget -T 5 -q -O - --no-check-certificate \\\n    --header \"Authorization: Bearer $TOKEN\" \"$URL\" 2>&1)\"; then\n  echo \"route-optimizer: cannot read RouteProfile ${ROUTE_PROFILE}: ${BODY}\"\n  exit 1\nfi\nENDPOINT=\"$(printf '%s' \"$BODY\" | tr -d '\\n' \\\n  | sed -n 's/.*\"solverEndpoint\": *\"\\([^\"]*\\)\".*/\\1/p')\"\nif [ -z \"$ENDPOINT\" ]; then\n  echo \"route-optimizer: RouteProfile ${ROUTE_PROFILE} has no spec.solverEndpoint\"\n  exit 1\nfi\nHOST=\"${ENDPOINT%:*}\"; PORT=\"${ENDPOINT##*:}\"\necho \"route-optimizer: profile ${ROUTE_PROFILE}: solverEndpoint=${ENDPOINT}\"\nif ! nc -z -w 3 \"$HOST\" \"$PORT\" 2>/dev/null; then\n  echo \"route-optimizer: solver ${ENDPOINT} unreachable (RouteProfile ${ROUTE_PROFILE} spec.solverEndpoint); cannot plan routes, exiting\"\n  exit 1\nfi\necho \"route-optimizer: connected to solver ${ENDPOINT}; serving route plans on :8080\"\nmkdir -p /www && echo ok > /www/health\nexec httpd -f -p 8080 -h /www\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-entrypoint",
+        "namespace": "dispatch",
+        "resourceVersion": "3493",
+        "uid": "6821dd88-0978-4de3-8ff9-c8b0dd62bd19"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "data": {
+        "run.sh": "#!/bin/sh\nset -u\necho \"route-solver: accepting plan requests on :7000\"\nwhile true; do echo ready | nc -l -p 7000; done\n"
+      },
+      "kind": "ConfigMap",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver-entrypoint",
+        "namespace": "dispatch",
+        "resourceVersion": "3437",
+        "uid": "7d82d12c-b4eb-40c3-a0db-9e56fe2472cd"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

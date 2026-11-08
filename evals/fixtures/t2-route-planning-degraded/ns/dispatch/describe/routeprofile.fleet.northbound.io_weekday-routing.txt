@@ -1,0 +1,17 @@
+Name:         weekday-routing
+Namespace:    dispatch
+Labels:       <none>
+Annotations:  <none>
+API Version:  fleet.northbound.io/v1
+Kind:         RouteProfile
+Metadata:
+  Creation Timestamp:  2026-11-08T04:36:15Z
+  Generation:          1
+  Resource Version:    3489
+  UID:                 69cab132-69ad-48c0-be83-746757242549
+Spec:
+  Departure Window:  04:30-06:00
+  Max Stops:         40
+  Region:            pacific-northwest
+  Solver Endpoint:   route-solvr.dispatch.svc:7000
+Events:              <none>

@@ -1,0 +1,27 @@
+Name:         eta-publisher-entrypoint
+Namespace:    dispatch
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "eta-publisher: starting; solver ${SOLVER_HOST}:${SOLVER_PORT}"
+while true; do
+  if nc -z -w 2 "$SOLVER_HOST" "$SOLVER_PORT" 2>/dev/null; then
+    echo "eta-publisher: solver ${SOLVER_HOST}:${SOLVER_PORT} reachable; publishing ETAs"
+  else
+    echo "eta-publisher: solver ${SOLVER_HOST}:${SOLVER_PORT} unreachable; holding last ETAs"
+  fi
+  sleep 20
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

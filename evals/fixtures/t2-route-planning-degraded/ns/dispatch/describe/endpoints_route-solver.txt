@@ -1,0 +1,13 @@
+Name:         route-solver
+Namespace:    dispatch
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T04:36:13Z
+Subsets:
+  Addresses:          10.244.0.12
+  NotReadyAddresses:  <none>
+  Ports:
+    Name    Port  Protocol
+    ----    ----  --------
+    solver  7000  TCP
+
+Events:  <none>

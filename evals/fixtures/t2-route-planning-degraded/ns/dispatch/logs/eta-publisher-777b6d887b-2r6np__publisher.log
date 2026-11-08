@@ -1,0 +1,4 @@
+2026-11-08T04:36:13.792639916Z eta-publisher: starting; solver route-solver.dispatch.svc:7000
+2026-11-08T04:36:14.832193593Z eta-publisher: solver route-solver.dispatch.svc:7000 reachable; publishing ETAs
+2026-11-08T04:36:34.734230348Z eta-publisher: solver route-solver.dispatch.svc:7000 reachable; publishing ETAs
+2026-11-08T04:36:54.632478966Z eta-publisher: solver route-solver.dispatch.svc:7000 reachable; publishing ETAs

@@ -1,0 +1,48 @@
+Name:                   route-optimizer
+Namespace:              dispatch
+CreationTimestamp:      Sun, 08 Nov 2026 10:06:16 +0530
+Labels:                 app=route-optimizer
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=route-optimizer
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=route-optimizer
+  Service Account:  route-optimizer
+  Containers:
+   optimizer:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      ROUTE_PROFILE:  weekday-routing
+      POD_NAMESPACE:   (v1:metadata.namespace)
+    Mounts:
+      /app from entrypoint (rw)
+  Volumes:
+   entrypoint:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          route-optimizer-entrypoint
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   route-optimizer-78fc6747d7 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  48s   deployment-controller  Scaled up replica set route-optimizer-78fc6747d7 from 0 to 2

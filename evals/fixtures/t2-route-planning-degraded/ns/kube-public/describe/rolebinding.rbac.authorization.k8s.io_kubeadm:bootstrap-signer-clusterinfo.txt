@@ -1,0 +1,10 @@
+Name:         kubeadm:bootstrap-signer-clusterinfo
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  Role
+  Name:  kubeadm:bootstrap-signer-clusterinfo
+Subjects:
+  Kind  Name              Namespace
+  ----  ----              ---------
+  User  system:anonymous  

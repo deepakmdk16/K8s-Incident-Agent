@@ -1,0 +1,10 @@
+Name:         route-optimizer-routeprofiles
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  Role
+  Name:  routeprofile-reader
+Subjects:
+  Kind            Name             Namespace
+  ----            ----             ---------
+  ServiceAccount  route-optimizer  dispatch

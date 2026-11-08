@@ -220,6 +220,34 @@ number is quoted (CLAUDE.md invariant; docs/failure-modes.md 2026-08-29,
 No bar block is added to `evals/reported.json` on this set's evidence: a
 held-out set's purpose is to be read, not asserted against.
 
+## Amendment before any scored run (2026-11-08) — case 2's ceiling is lower than designed
+
+Found while wiring the root, before any arm ran: the validator's adversarial
+sweep (`tests/test_solution_validate_adversarial.py`) over the new fixture
+shows that `solution/validate.py` **V4 EXISTS** resolves the submitted
+failing resource through `solution/fixture.load_kind`, which raises
+`unknown or uncaptured kind 'routeprofile'` for a kind the readers do not
+know; V4 reports that as `failing_resource does not resolve` and the
+submission is refused **at every verdict** — `probable` and `inconclusive`
+included. The solution arm therefore cannot submit the gold object on case 2
+at all; it can only name a served object or exit through the salvage path.
+The behaviour is pinned in the suite (`test_the_scaffold_is_satisfiable`,
+the unknown-kind branch) so it stays explicit until it is changed on purpose.
+
+**Revised prediction, solution, case 2:** `resource_correct` **0/3 by
+construction**; `class_correct` 0–3 (a salvaged row's sentence classifies to
+nothing); verdicts `inconclusive` (salvage) or `probable` on a served object;
+the claim stays **confirmed-wrong 0**; turns, submit rejections and cost
+elevated, as on the webhook case before its kinds were served. The baseline
+and rules predictions are unchanged — neither passes through the validator.
+
+**Decision rule, one item added ahead of CRD discovery:** V4 must distinguish
+"no read tool serves this kind" (say so; do not refuse the name) from "the
+kind is served and the object is absent" (refuse), the same not-served
+discipline CHANGELOG [16] gave V1, V6 and V7 — otherwise opening the universe
+(roadmap 2.7) cannot move this row, because the gate refuses the answer
+before any tool is consulted. No arm code changes in this slice.
+
 ## Method
 
 One scoring invocation per arm:

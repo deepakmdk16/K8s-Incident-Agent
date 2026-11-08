@@ -1,0 +1,93 @@
+Name:               incident-lab-control-plane
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=arm64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=arm64
+                    kubernetes.io/hostname=incident-lab-control-plane
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/control-plane=
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 07 Nov 2026 23:46:24 +0530
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  incident-lab-control-plane
+  AcquireTime:     <unset>
+  RenewTime:       Sun, 08 Nov 2026 10:06:54 +0530
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Sun, 08 Nov 2026 10:02:11 +0530   Sat, 07 Nov 2026 23:46:24 +0530   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Sun, 08 Nov 2026 10:02:11 +0530   Sat, 07 Nov 2026 23:46:24 +0530   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Sun, 08 Nov 2026 10:02:11 +0530   Sat, 07 Nov 2026 23:46:24 +0530   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Sun, 08 Nov 2026 10:02:11 +0530   Sat, 07 Nov 2026 23:46:46 +0530   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.2
+  Hostname:    incident-lab-control-plane
+Capacity:
+  cpu:                10
+  ephemeral-storage:  84357689344
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  hugepages-32Mi:     0
+  hugepages-64Ki:     0
+  memory:             24556548Ki
+  pods:               110
+Allocatable:
+  cpu:                10
+  ephemeral-storage:  84357689344
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  hugepages-32Mi:     0
+  hugepages-64Ki:     0
+  memory:             24556548Ki
+  pods:               110
+System Info:
+  Machine ID:                 f6928a50578f4a73809eb21697b032df
+  System UUID:                68e9a105-0e5e-4f65-86dd-8a3844c137ef
+  Boot ID:                    42fc78ba-716e-4200-8d48-12192f8fd889
+  Kernel Version:             6.8.0-117-generic
+  OS Image:                   Debian GNU/Linux 13 (trixie)
+  Operating System:           linux
+  Architecture:               arm64
+  Container Runtime Version:  containerd://2.3.4
+  Kubelet Version:            v1.37.0
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+ProviderID:                   kind://docker/incident-lab/incident-lab-control-plane
+Non-terminated Pods:          (13 in total)
+  Namespace                   Name                                                  CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                  ------------  ----------  ---------------  -------------  ---
+  dispatch                    eta-publisher-777b6d887b-2r6np                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         49s
+  dispatch                    route-optimizer-78fc6747d7-22sfp                      10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         46s
+  dispatch                    route-optimizer-78fc6747d7-mqwkc                      10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         46s
+  dispatch                    route-solver-858546fc7b-5gpmh                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         49s
+  kube-system                 coredns-559f6c778d-6txpq                              100m (1%)     0 (0%)      70Mi (0%)        170Mi (0%)     10h
+  kube-system                 coredns-559f6c778d-kghtn                              100m (1%)     0 (0%)      70Mi (0%)        170Mi (0%)     10h
+  kube-system                 etcd-incident-lab-control-plane                       100m (1%)     0 (0%)      100Mi (0%)       0 (0%)         10h
+  kube-system                 kindnet-v8qj7                                         100m (1%)     0 (0%)      50Mi (0%)        0 (0%)         10h
+  kube-system                 kube-apiserver-incident-lab-control-plane             250m (2%)     0 (0%)      0 (0%)           0 (0%)         10h
+  kube-system                 kube-controller-manager-incident-lab-control-plane    200m (2%)     0 (0%)      0 (0%)           0 (0%)         10h
+  kube-system                 kube-proxy-n2gjp                                      0 (0%)        0 (0%)      0 (0%)           0 (0%)         10h
+  kube-system                 kube-scheduler-incident-lab-control-plane             100m (1%)     0 (0%)      0 (0%)           0 (0%)         10h
+  local-path-storage          local-path-provisioner-75f7fc7dc5-lfntm               0 (0%)        0 (0%)      0 (0%)           0 (0%)         10h
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                990m (9%)   0 (0%)
+  memory             354Mi (1%)  340Mi (1%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-1Gi      0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+  hugepages-32Mi     0 (0%)      0 (0%)
+  hugepages-64Ki     0 (0%)      0 (0%)
+Events:
+  Type    Reason                   Age   From             Message
+  ----    ------                   ----  ----             -------
+  Normal  NodeHasSufficientMemory  10h   kubelet          Node incident-lab-control-plane status is now: NodeHasSufficientMemory
+  Normal  NodeHasNoDiskPressure    10h   kubelet          Node incident-lab-control-plane status is now: NodeHasNoDiskPressure
+  Normal  NodeHasSufficientPID     10h   kubelet          Node incident-lab-control-plane status is now: NodeHasSufficientPID
+  Normal  RegisteredNode           10h   node-controller  Node incident-lab-control-plane event: Registered Node incident-lab-control-plane in Controller
+  Normal  NodeReady                10h   kubelet          Node incident-lab-control-plane status is now: NodeReady

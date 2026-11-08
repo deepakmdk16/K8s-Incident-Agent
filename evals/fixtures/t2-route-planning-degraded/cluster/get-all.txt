@@ -1,0 +1,38 @@
+NAMESPACE            NAME                                                     READY   STATUS             RESTARTS      AGE   IP            NODE                         NOMINATED NODE   READINESS GATES
+dispatch             pod/eta-publisher-777b6d887b-2r6np                       1/1     Running            0             49s   10.244.0.13   incident-lab-control-plane   <none>           <none>
+dispatch             pod/route-optimizer-78fc6747d7-22sfp                     0/1     CrashLoopBackOff   3 (10s ago)   46s   10.244.0.14   incident-lab-control-plane   <none>           <none>
+dispatch             pod/route-optimizer-78fc6747d7-mqwkc                     0/1     CrashLoopBackOff   3 (4s ago)    46s   10.244.0.15   incident-lab-control-plane   <none>           <none>
+dispatch             pod/route-solver-858546fc7b-5gpmh                        1/1     Running            0             49s   10.244.0.12   incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-6txpq                             1/1     Running            0             10h   10.244.0.4    incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-kghtn                             1/1     Running            0             10h   10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running            0             10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-v8qj7                                        1/1     Running            0             10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running            0             10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running            0             10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-n2gjp                                     1/1     Running            0             10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running            0             10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-lfntm              1/1     Running            0             10h   10.244.0.2    incident-lab-control-plane   <none>           <none>
+
+NAMESPACE     NAME                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+default       service/kubernetes        ClusterIP   10.96.0.1      <none>        443/TCP                  10h   <none>
+dispatch      service/route-optimizer   ClusterIP   10.96.49.174   <none>        8080/TCP                 46s   app=route-optimizer
+dispatch      service/route-solver      ClusterIP   10.96.51.66    <none>        7000/TCP                 49s   app=route-solver
+kube-system   service/kube-dns          ClusterIP   10.96.0.10     <none>        53/UDP,53/TCP,9153/TCP   10h   k8s-app=kube-dns
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   10h   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   10h   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+dispatch             deployment.apps/eta-publisher            1/1     1            1           49s   publisher                busybox:1.36                                                  app=eta-publisher
+dispatch             deployment.apps/route-optimizer          0/2     2            0           46s   optimizer                busybox:1.36                                                  app=route-optimizer
+dispatch             deployment.apps/route-solver             1/1     1            1           49s   solver                   busybox:1.36                                                  app=route-solver
+kube-system          deployment.apps/coredns                  2/2     2            2           10h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           10h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+dispatch             replicaset.apps/eta-publisher-777b6d887b            1         1         1       49s   publisher                busybox:1.36                                                  app=eta-publisher,pod-template-hash=777b6d887b
+dispatch             replicaset.apps/route-optimizer-78fc6747d7          2         2         0       46s   optimizer                busybox:1.36                                                  app=route-optimizer,pod-template-hash=78fc6747d7
+dispatch             replicaset.apps/route-solver-858546fc7b             1         1         1       49s   solver                   busybox:1.36                                                  app=route-solver,pod-template-hash=858546fc7b
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       10h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       10h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
