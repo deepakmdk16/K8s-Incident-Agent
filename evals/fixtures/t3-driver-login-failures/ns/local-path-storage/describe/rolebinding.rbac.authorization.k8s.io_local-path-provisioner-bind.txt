@@ -1,0 +1,10 @@
+Name:         local-path-provisioner-bind
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  Role
+  Name:  local-path-provisioner-role
+Subjects:
+  Kind            Name                                    Namespace
+  ----            ----                                    ---------
+  ServiceAccount  local-path-provisioner-service-account  local-path-storage

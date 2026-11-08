@@ -1,0 +1,10 @@
+Name:         driver-auth-oidc-reader
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  Role
+  Name:  oidc-config-reader
+Subjects:
+  Kind            Name             Namespace
+  ----            ----             ---------
+  ServiceAccount  driver-auth-svc  driver-portal

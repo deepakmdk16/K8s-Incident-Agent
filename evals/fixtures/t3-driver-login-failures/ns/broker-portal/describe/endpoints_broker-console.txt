@@ -1,0 +1,13 @@
+Name:         broker-console
+Namespace:    broker-portal
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:12Z
+Subsets:
+  Addresses:          10.244.0.106
+  NotReadyAddresses:  <none>
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

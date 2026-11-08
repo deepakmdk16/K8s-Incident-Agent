@@ -248,6 +248,34 @@ discipline CHANGELOG [16] gave V1, V6 and V7 — otherwise opening the universe
 (roadmap 2.7) cannot move this row, because the gate refuses the answer
 before any tool is consulted. No arm code changes in this slice.
 
+## Amendment before the rules run (2026-11-08) — case 5's decoy and the status string
+
+Found during case 5's injections, before any arm ran: on this kubelet
+(v1.37.0) a container whose process exits within seconds is reported as
+`terminated/Error` through its back-off and may never show
+`waiting: CrashLoopBackOff` (two injections, five minutes each, never showed
+it; the optimizer in case 2, which runs ~3s before exiting, showed it every
+time). The decoy's loudness is therefore not the status string — it is the
+climbing restart count, exit code 1, the `BackOff` Warning event and its own
+log line — and `t3-driver-login-failures/wait.sh` now gates on those. The
+capture records whichever string the kubelet showed at that instant.
+
+**Consequence for the rules prediction on case 5, stated before the run:**
+`ablation/rules.py`'s crashloop analyzer keys on the `CrashLoopBackOff`
+waiting reason. If the capture caught the decoy as `terminated/Error`, that
+analyzer is silent, no analyzer fires (the rbac analyzer finds no binding
+naming the real account either way), and the arm answers `inconclusive` with
+`unknown/unknown` — still wrong, but **not** a confirmed-wrong row. The
+pre-registered rules row for case 5 (confident wrong name, confirmed-wrong 3
+pooled) therefore has two admissible readings, decided by the fixture's
+`ns/driver-portal/pods.json`, not by the arm: `CrashLoopBackOff` → the
+original prediction; `Error` → `inconclusive`, pooled confirmed-wrong **2**.
+The LLM-arm predictions are unchanged: both read restart counts, exit codes
+and events, not the one status string. Logged for the rules arm as a
+signature that depends on a kubelet's status vocabulary rather than on the
+restart evidence — a finding about the control arm, recorded, not fixed here
+(the ablation is frozen with its pre-registration).
+
 ## Method
 
 One scoring invocation per arm:

@@ -1,0 +1,40 @@
+Name:         driver-auth-entrypoint
+Namespace:    driver-portal
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+API="https://kubernetes.default.svc"
+mkdir -p /www && echo ok > /www/health
+httpd -p 8080 -h /www
+echo "driver-auth: starting; serviceaccount=${AUTH_SA}; provider config ${PROVIDER_CONFIG}"
+while true; do
+  if wget -T 5 -q -O /dev/null --no-check-certificate \
+      --header "Authorization: Bearer $TOKEN" "$API/api" 2>/dev/null; then
+    echo "identity=${AUTH_SA} discovery=ok"
+  else
+    echo "identity=${AUTH_SA} discovery=FAILED (token or apiserver unreachable)"
+  fi
+  if MSG="$(wget -T 5 -O /dev/null --no-check-certificate \
+      --header "Authorization: Bearer $TOKEN" \
+      "$API/api/v1/namespaces/driver-portal/configmaps/${PROVIDER_CONFIG}" 2>&1)"; then
+    echo "provider config refreshed from ${PROVIDER_CONFIG}; validating sessions against current signing keys"
+  else
+    echo "provider config fetch error: $(echo "$MSG" | grep -i 'error\|forbidden' | head -n 1)"
+    echo "login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation"
+  fi
+  sleep 10
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

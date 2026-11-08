@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:11Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "quote-builder",
+        "namespace": "rate-quotes",
+        "resourceVersion": "10199",
+        "uid": "8494e85d-6459-4ba4-a915-cdd9b3fb5753"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.95",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "quote-builder-58787dfb76-rwgqz",
+                "namespace": "rate-quotes",
+                "uid": "2711a843-5ce1-4767-a476-07551df502da"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

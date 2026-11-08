@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.99"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "weather-feed-66566f64bf-r4xb5",
+            "namespace": "route-weather",
+            "uid": "993c386d-b26d-4935-9efe-18c0a659e3b7"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:11Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "generateName": "weather-feed-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "weather-feed"
+        },
+        "name": "weather-feed-ntw47",
+        "namespace": "route-weather",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "weather-feed",
+            "uid": "3a208e4d-8ead-4f91-8b71-9a2b728b09b4"
+          }
+        ],
+        "resourceVersion": "10225",
+        "uid": "944c450c-c542-4888-98ef-5d5f6318fca6"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

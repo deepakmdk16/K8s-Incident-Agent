@@ -1,0 +1,19 @@
+Name:         gate-appointments-56qpv
+Namespace:    port-gate
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=gate-appointments
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:12Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.104
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/gate-appointments-686c95f485-hn76c
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

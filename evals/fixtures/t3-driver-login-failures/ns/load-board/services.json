@@ -1,0 +1,47 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "name": "load-matcher",
+        "namespace": "load-board",
+        "resourceVersion": "9879",
+        "uid": "5c98472b-cd47-43d1-b70d-e77e124cc974"
+      },
+      "spec": {
+        "clusterIP": "10.96.132.224",
+        "clusterIPs": [
+          "10.96.132.224"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "load-matcher"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t3-driver-login-failures",
+  "tier": "T3",
+  "failing_resource": {
+    "kind": "rolebinding",
+    "namespace": "driver-portal",
+    "name": "driver-auth-oidc-reader"
+  },
+  "fault_class": "rbac-denial",
+  "mechanism_summary": "RoleBinding driver-portal/driver-auth-oidc-reader binds Role oidc-config-reader to a ServiceAccount named driver-auth-svc, a typo that names no existing account, so the real driver-auth ServiceAccount is never granted the Role's read permission and every API read of its provider configuration returns 403 Forbidden while the pod keeps running; the badge-photo-resizer restarts in the same namespace are unrelated to sign-in.",
+  "decisive_evidence": "driver-auth log lines 'identity=driver-auth discovery=ok' followed by 'provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden' and 'login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation', every 10s, from a pod that is Running and Ready; rolebinding driver-auth-oidc-reader with roleRef oidc-config-reader and subjects[0].name driver-auth-svc while the namespace's ServiceAccounts are default and driver-auth only; the pod spec's serviceAccountName driver-auth. Decoys: deployment driver-portal/badge-photo-resizer in CrashLoopBackOff on 'PHOTO_STORE_URL is not set' (badge photos, not sign-in); trailer-pool/pool-balancer Pending Insufficient cpu; fuel-tax/ifta-filer jobs Failed on a missing jurisdictions file.",
+  "remediation_summary": "Point the binding at the account that exists: kubectl patch rolebinding driver-auth-oidc-reader -n driver-portal --type json -p '[{\"op\":\"replace\",\"path\":\"/subjects/0/name\",\"value\":\"driver-auth\"}]'; within one 10s poll the driver-auth log flips to 'provider config refreshed from oidc-provider-config' with no restart and no change to the Deployment, the Role or the ServiceAccount."
+}

@@ -1,0 +1,60 @@
+Name:             quote-builder-58787dfb76-rwgqz
+Namespace:        rate-quotes
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sun, 08 Nov 2026 10:30:10 +0530
+Labels:           app=quote-builder
+                  pod-template-hash=58787dfb76
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.95
+IPs:
+  IP:           10.244.0.95
+Controlled By:  ReplicaSet/quote-builder-58787dfb76
+Containers:
+  builder:
+    Container ID:  containerd://7ec1b1691200262575c8cd120c0d54fb8299e9a626c6765099fa748a6832409c
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'quote-builder up'; exec sleep 2147483647
+    State:          Running
+      Started:      Sun, 08 Nov 2026 10:30:11 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-7np4s (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-7np4s:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  103s  default-scheduler  Successfully assigned rate-quotes/quote-builder-58787dfb76-rwgqz to incident-lab-control-plane
+  Normal  Pulled     103s  kubelet            spec.containers{builder}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    103s  kubelet            spec.containers{builder}: Container created
+  Normal  Started    102s  kubelet            spec.containers{builder}: Container started

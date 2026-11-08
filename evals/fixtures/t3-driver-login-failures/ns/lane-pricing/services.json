@@ -1,0 +1,47 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "name": "lane-rater",
+        "namespace": "lane-pricing",
+        "resourceVersion": "10050",
+        "uid": "bf632ace-ba9b-4c95-957f-631fea6e6b0f"
+      },
+      "spec": {
+        "clusterIP": "10.96.234.109",
+        "clusterIPs": [
+          "10.96.234.109"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "lane-rater"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

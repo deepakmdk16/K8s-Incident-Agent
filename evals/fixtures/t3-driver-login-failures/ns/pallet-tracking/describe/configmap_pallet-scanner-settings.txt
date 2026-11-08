@@ -1,0 +1,20 @@
+Name:         pallet-scanner-settings
+Namespace:    pallet-tracking
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+scan_dedupe_seconds:
+----
+5
+
+tag_protocol:
+----
+rfid-gen2
+
+
+BinaryData
+====
+
+Events:  <none>

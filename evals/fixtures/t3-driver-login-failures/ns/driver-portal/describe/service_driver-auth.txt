@@ -1,0 +1,16 @@
+Name:                     driver-auth
+Namespace:                driver-portal
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=driver-auth
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.191.111
+IPs:                      10.96.191.111
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.111:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

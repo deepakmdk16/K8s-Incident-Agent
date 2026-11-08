@@ -1,0 +1,47 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "name": "carrier-vetting",
+        "namespace": "carrier-onboarding",
+        "resourceVersion": "9951",
+        "uid": "b335ae79-5941-4312-916b-49dbdea47eec"
+      },
+      "spec": {
+        "clusterIP": "10.96.4.192",
+        "clusterIPs": [
+          "10.96.4.192"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "carrier-vetting"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

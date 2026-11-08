@@ -1,0 +1,20 @@
+Name:         load-matcher-settings
+Namespace:    load-board
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+max_open_loads:
+----
+5000
+
+refresh_seconds:
+----
+20
+
+
+BinaryData
+====
+
+Events:  <none>

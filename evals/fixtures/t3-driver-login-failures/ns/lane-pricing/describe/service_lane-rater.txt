@@ -1,0 +1,16 @@
+Name:                     lane-rater
+Namespace:                lane-pricing
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=lane-rater
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.234.109
+IPs:                      10.96.234.109
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.103:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

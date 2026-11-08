@@ -1,0 +1,20 @@
+Name:         card-authorizer-settings
+Namespace:    fleet-cards
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+daily_fuel_limit_usd:
+----
+1200
+
+pin_required:
+----
+true
+
+
+BinaryData
+====
+
+Events:  <none>

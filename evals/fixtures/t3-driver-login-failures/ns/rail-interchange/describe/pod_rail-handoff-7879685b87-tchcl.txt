@@ -1,0 +1,60 @@
+Name:             rail-handoff-7879685b87-tchcl
+Namespace:        rail-interchange
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sun, 08 Nov 2026 10:30:12 +0530
+Labels:           app=rail-handoff
+                  pod-template-hash=7879685b87
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.105
+IPs:
+  IP:           10.244.0.105
+Controlled By:  ReplicaSet/rail-handoff-7879685b87
+Containers:
+  handoff:
+    Container ID:  containerd://295488d65ebf7c1bfd6508fb49da6b159b1697daf93ee52e4b1bd4151d358f1f
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'rail-handoff up'; exec sleep 2147483647
+    State:          Running
+      Started:      Sun, 08 Nov 2026 10:30:12 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-bbm5v (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-bbm5v:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  100s  default-scheduler  Successfully assigned rail-interchange/rail-handoff-7879685b87-tchcl to incident-lab-control-plane
+  Normal  Pulled     100s  kubelet            spec.containers{handoff}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    100s  kubelet            spec.containers{handoff}: Container created
+  Normal  Started    100s  kubelet            spec.containers{handoff}: Container started

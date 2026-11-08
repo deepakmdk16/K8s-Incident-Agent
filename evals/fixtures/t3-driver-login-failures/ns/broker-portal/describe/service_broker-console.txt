@@ -1,0 +1,16 @@
+Name:                     broker-console
+Namespace:                broker-portal
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=broker-console
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.41.128
+IPs:                      10.96.41.128
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.106:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

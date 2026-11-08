@@ -1,0 +1,35 @@
+Name:           lane-rater-7b4f4958c7
+Namespace:      lane-pricing
+Selector:       app=lane-rater,pod-template-hash=7b4f4958c7
+Labels:         app=lane-rater
+                pod-template-hash=7b4f4958c7
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/lane-rater
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=lane-rater
+           pod-template-hash=7b4f4958c7
+  Containers:
+   rater:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'lane-rater up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  93s   replicaset-controller  Created pod: lane-rater-7b4f4958c7-v4l2s

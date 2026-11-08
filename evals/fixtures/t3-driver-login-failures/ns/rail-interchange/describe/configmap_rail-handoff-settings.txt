@@ -1,0 +1,20 @@
+Name:         rail-handoff-settings
+Namespace:    rail-interchange
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+edi_version:
+----
+004010
+
+handoff_grace_hours:
+----
+4
+
+
+BinaryData
+====
+
+Events:  <none>

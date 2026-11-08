@@ -1,0 +1,47 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "name": "quote-builder",
+        "namespace": "rate-quotes",
+        "resourceVersion": "9899",
+        "uid": "5e65f151-3f7b-47a5-b81b-bd038e433225"
+      },
+      "spec": {
+        "clusterIP": "10.96.121.201",
+        "clusterIPs": [
+          "10.96.121.201"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "quote-builder"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

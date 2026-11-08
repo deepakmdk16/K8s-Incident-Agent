@@ -1,0 +1,113 @@
+Name:               incident-lab-control-plane
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=arm64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=arm64
+                    kubernetes.io/hostname=incident-lab-control-plane
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/control-plane=
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 07 Nov 2026 23:46:24 +0530
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  incident-lab-control-plane
+  AcquireTime:     <unset>
+  RenewTime:       Sun, 08 Nov 2026 10:31:13 +0530
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Sun, 08 Nov 2026 10:27:40 +0530   Sat, 07 Nov 2026 23:46:24 +0530   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Sun, 08 Nov 2026 10:27:40 +0530   Sat, 07 Nov 2026 23:46:24 +0530   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Sun, 08 Nov 2026 10:27:40 +0530   Sat, 07 Nov 2026 23:46:24 +0530   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Sun, 08 Nov 2026 10:27:40 +0530   Sat, 07 Nov 2026 23:46:46 +0530   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.2
+  Hostname:    incident-lab-control-plane
+Capacity:
+  cpu:                10
+  ephemeral-storage:  84357689344
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  hugepages-32Mi:     0
+  hugepages-64Ki:     0
+  memory:             24556548Ki
+  pods:               110
+Allocatable:
+  cpu:                10
+  ephemeral-storage:  84357689344
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  hugepages-32Mi:     0
+  hugepages-64Ki:     0
+  memory:             24556548Ki
+  pods:               110
+System Info:
+  Machine ID:                 f6928a50578f4a73809eb21697b032df
+  System UUID:                68e9a105-0e5e-4f65-86dd-8a3844c137ef
+  Boot ID:                    42fc78ba-716e-4200-8d48-12192f8fd889
+  Kernel Version:             6.8.0-117-generic
+  OS Image:                   Debian GNU/Linux 13 (trixie)
+  Operating System:           linux
+  Architecture:               arm64
+  Container Runtime Version:  containerd://2.3.4
+  Kubelet Version:            v1.37.0
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+ProviderID:                   kind://docker/incident-lab/incident-lab-control-plane
+Non-terminated Pods:          (33 in total)
+  Namespace                   Name                                                  CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                  ------------  ----------  ---------------  -------------  ---
+  broker-portal               broker-console-858748957b-2btb8                       10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         62s
+  cargo-insurance             coverage-checker-7bf5f7f856-cqlx5                     10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         62s
+  carrier-onboarding          carrier-vetting-754446bdfb-k6d92                      10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  claims-desk                 claims-intake-d97598c9-lqlw7                          10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  dock-scheduling             dock-planner-64b6fc489f-wxwrt                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  driver-portal               badge-photo-resizer-849dc658cd-7k6nv                  10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         58s
+  driver-portal               driver-auth-85bf9874bd-88ddp                          10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         58s
+  driver-portal               portal-web-5ffbbf47db-bmfgv                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         58s
+  driver-portal               portal-web-5ffbbf47db-bpq2m                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         58s
+  dvir-reports                dvir-archiver-8687c64cf5-bzgqx                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         63s
+  eld-sync                    eld-harvester-679c4bfc8c-k7nxq                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         63s
+  fleet-cards                 card-authorizer-676fc5678b-xqw7p                      10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         61s
+  geofence-alerts             geofence-evaluator-6988b8d75d-5wqrr                   10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         62s
+  hos-compliance              hos-auditor-875465595-pzxtx                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  kube-system                 coredns-559f6c778d-6txpq                              100m (1%)     0 (0%)      70Mi (0%)        170Mi (0%)     10h
+  kube-system                 coredns-559f6c778d-kghtn                              100m (1%)     0 (0%)      70Mi (0%)        170Mi (0%)     10h
+  kube-system                 etcd-incident-lab-control-plane                       100m (1%)     0 (0%)      100Mi (0%)       0 (0%)         10h
+  kube-system                 kindnet-v8qj7                                         100m (1%)     0 (0%)      50Mi (0%)        0 (0%)         10h
+  kube-system                 kube-apiserver-incident-lab-control-plane             250m (2%)     0 (0%)      0 (0%)           0 (0%)         10h
+  kube-system                 kube-controller-manager-incident-lab-control-plane    200m (2%)     0 (0%)      0 (0%)           0 (0%)         10h
+  kube-system                 kube-proxy-n2gjp                                      0 (0%)        0 (0%)      0 (0%)           0 (0%)         10h
+  kube-system                 kube-scheduler-incident-lab-control-plane             100m (1%)     0 (0%)      0 (0%)           0 (0%)         10h
+  lane-pricing                lane-rater-7b4f4958c7-v4l2s                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         63s
+  load-board                  load-matcher-5478877499-b8zhx                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  local-path-storage          local-path-provisioner-75f7fc7dc5-lfntm               0 (0%)        0 (0%)      0 (0%)           0 (0%)         10h
+  pallet-tracking             pallet-scanner-5b76dc4c-g4w4p                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  port-gate                   gate-appointments-686c95f485-hn76c                    10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         63s
+  rail-interchange            rail-handoff-7879685b87-tchcl                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         62s
+  rate-quotes                 quote-builder-58787dfb76-rwgqz                        10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  route-weather               weather-feed-66566f64bf-r4xb5                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+  shipment-events             event-fanout-bb479966-nj5vv                           10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         62s
+  tire-telemetry              tire-pressure-hub-5544b8666d-vnvh9                    10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         63s
+  weigh-station               scale-ingest-5b9bb78b7c-kts2l                         10m (0%)      0 (0%)      16Mi (0%)        0 (0%)         64s
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                1190m (11%)  0 (0%)
+  memory             674Mi (2%)   340Mi (1%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+  hugepages-32Mi     0 (0%)       0 (0%)
+  hugepages-64Ki     0 (0%)       0 (0%)
+Events:
+  Type    Reason                   Age   From             Message
+  ----    ------                   ----  ----             -------
+  Normal  NodeHasSufficientMemory  10h   kubelet          Node incident-lab-control-plane status is now: NodeHasSufficientMemory
+  Normal  NodeHasNoDiskPressure    10h   kubelet          Node incident-lab-control-plane status is now: NodeHasNoDiskPressure
+  Normal  NodeHasSufficientPID     10h   kubelet          Node incident-lab-control-plane status is now: NodeHasSufficientPID
+  Normal  RegisteredNode           10h   node-controller  Node incident-lab-control-plane event: Registered Node incident-lab-control-plane in Controller
+  Normal  NodeReady                10h   kubelet          Node incident-lab-control-plane status is now: NodeReady

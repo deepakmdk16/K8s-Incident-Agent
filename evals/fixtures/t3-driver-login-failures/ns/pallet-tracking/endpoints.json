@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:11Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "pallet-scanner",
+        "namespace": "pallet-tracking",
+        "resourceVersion": "10211",
+        "uid": "2ace2914-c75a-4ad6-a0e7-f28898c5c1c3"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.97",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "pallet-scanner-5b76dc4c-g4w4p",
+                "namespace": "pallet-tracking",
+                "uid": "f682cce5-4ef2-4c8c-b993-2c95dd65c203"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

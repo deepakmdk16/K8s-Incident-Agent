@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:10Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "load-matcher",
+        "namespace": "load-board",
+        "resourceVersion": "10155",
+        "uid": "e24a4990-e03f-471e-8a9c-829dac1c375c"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.91",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "load-matcher-5478877499-b8zhx",
+                "namespace": "load-board",
+                "uid": "3bfedfc3-7c5d-436f-8dcc-39cff11553f7"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

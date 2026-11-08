@@ -1,0 +1,597 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "broker-portal"
+        },
+        "name": "broker-portal",
+        "resourceVersion": "10071",
+        "uid": "72362056-9fcc-4d9d-ae82-9fd0ce166292"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "cargo-insurance"
+        },
+        "name": "cargo-insurance",
+        "resourceVersion": "10113",
+        "uid": "d88f631a-5c2b-4d64-840e-c47d3ec46415"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "carrier-onboarding"
+        },
+        "name": "carrier-onboarding",
+        "resourceVersion": "9942",
+        "uid": "9f68487e-a0a1-470a-8714-6812e6ce3309"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "claims-desk"
+        },
+        "name": "claims-desk",
+        "resourceVersion": "9954",
+        "uid": "45970ebe-8d46-4538-bbaf-77e3b4e9cda5"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:24Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "default"
+        },
+        "name": "default",
+        "resourceVersion": "21",
+        "uid": "6ffdf6ab-4071-43d1-a30b-7f27288ead40"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "dock-scheduling"
+        },
+        "name": "dock-scheduling",
+        "resourceVersion": "9929",
+        "uid": "d7b62d7b-915f-46ef-8b4c-bc4c5703234a"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "driver-portal"
+        },
+        "name": "driver-portal",
+        "resourceVersion": "10465",
+        "uid": "9159e825-7b6f-4bd5-bf0c-8b1ee36d67f5"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "dvir-reports"
+        },
+        "name": "dvir-reports",
+        "resourceVersion": "10034",
+        "uid": "f065cbd2-3827-473c-b150-d1d33629f75a"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "eld-sync"
+        },
+        "name": "eld-sync",
+        "resourceVersion": "10011",
+        "uid": "8d162db9-a862-48fe-8829-9d7b8e546b9b"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "fleet-cards"
+        },
+        "name": "fleet-cards",
+        "resourceVersion": "10122",
+        "uid": "b9296f00-f0aa-4ecf-bada-131d0bae55d8"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "fuel-tax"
+        },
+        "name": "fuel-tax",
+        "resourceVersion": "10136",
+        "uid": "e0abe502-b63d-4173-a28f-d061c63ecd06"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "geofence-alerts"
+        },
+        "name": "geofence-alerts",
+        "resourceVersion": "10104",
+        "uid": "c5b69242-3431-4cdc-b205-a3050785deb2"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "hos-compliance"
+        },
+        "name": "hos-compliance",
+        "resourceVersion": "9903",
+        "uid": "7e1ea95c-3399-4d03-877c-56ce8c0202e0"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:24Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "kube-node-lease"
+        },
+        "name": "kube-node-lease",
+        "resourceVersion": "27",
+        "uid": "3782cf04-53d4-4b6b-8c2f-aca4bf3c6c16"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:24Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "kube-public"
+        },
+        "name": "kube-public",
+        "resourceVersion": "13",
+        "uid": "7c1610ac-6410-46b9-b640-b7e4492e7aa8"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:24Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "kube-system"
+        },
+        "name": "kube-system",
+        "resourceVersion": "5",
+        "uid": "2f52b2db-d4d2-41ae-89b9-f0b248dce503"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "lane-pricing"
+        },
+        "name": "lane-pricing",
+        "resourceVersion": "10044",
+        "uid": "007652e5-b63d-48d7-8913-67aa0df3bef4"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "load-board"
+        },
+        "name": "load-board",
+        "resourceVersion": "9869",
+        "uid": "661d1c6e-e350-4c48-8ce9-6962435390ce"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:27Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "local-path-storage"
+        },
+        "name": "local-path-storage",
+        "resourceVersion": "272",
+        "uid": "ae376e3e-b8bd-453f-b789-cb615c2fa8d5"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "pallet-tracking"
+        },
+        "name": "pallet-tracking",
+        "resourceVersion": "9963",
+        "uid": "48dfcbfd-b080-48d8-b6cd-721f958b4f7d"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "port-gate"
+        },
+        "name": "port-gate",
+        "resourceVersion": "10053",
+        "uid": "474c3c74-3503-4ffc-8426-eea7ea5f06c4"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "rail-interchange"
+        },
+        "name": "rail-interchange",
+        "resourceVersion": "10062",
+        "uid": "7b0bd2e2-d72b-4024-a779-9be77afb3a19"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "rate-quotes"
+        },
+        "name": "rate-quotes",
+        "resourceVersion": "9887",
+        "uid": "1fd0ef59-f805-4015-9e23-2f39c359028e"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "route-weather"
+        },
+        "name": "route-weather",
+        "resourceVersion": "9972",
+        "uid": "1f09da43-7fcb-49de-901d-1784ee45fb34"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "shipment-events"
+        },
+        "name": "shipment-events",
+        "resourceVersion": "10080",
+        "uid": "fd3dcc82-4fa7-4d0f-9bec-7ea9fa430d7f"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "tire-telemetry"
+        },
+        "name": "tire-telemetry",
+        "resourceVersion": "10025",
+        "uid": "96c0ff83-3361-4a8b-a4e6-f6436f0b5b1a"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "trailer-pool"
+        },
+        "name": "trailer-pool",
+        "resourceVersion": "10131",
+        "uid": "a06a57a8-039a-4368-a100-c5762fa9ee93"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "weigh-station"
+        },
+        "name": "weigh-station",
+        "resourceVersion": "9916",
+        "uid": "a4af5835-d6c1-450d-8db5-89e66e4bfd00"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

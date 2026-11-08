@@ -1,0 +1,10 @@
+Name:         system:controller:token-cleaner
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+Role:
+  Kind:  Role
+  Name:  system:controller:token-cleaner
+Subjects:
+  Kind            Name           Namespace
+  ----            ----           ---------
+  ServiceAccount  token-cleaner  kube-system

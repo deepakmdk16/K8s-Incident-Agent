@@ -1,0 +1,20 @@
+Name:         gate-appointments-settings
+Namespace:    port-gate
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+appointment_window_minutes:
+----
+60
+
+terminals:
+----
+t18,t30,t46
+
+
+BinaryData
+====
+
+Events:  <none>

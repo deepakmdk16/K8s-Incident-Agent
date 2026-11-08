@@ -1,0 +1,20 @@
+Name:         coverage-checker-settings
+Namespace:    cargo-insurance
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+default_coverage_usd:
+----
+100000
+
+hazmat_multiplier:
+----
+2.5
+
+
+BinaryData
+====
+
+Events:  <none>

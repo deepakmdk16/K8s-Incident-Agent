@@ -1,0 +1,22 @@
+2026-11-08T05:00:16.601136168Z driver-auth: starting; serviceaccount=driver-auth; provider config oidc-provider-config
+2026-11-08T05:00:16.646372249Z identity=driver-auth discovery=ok
+2026-11-08T05:00:16.690640919Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:00:16.690658088Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation
+2026-11-08T05:00:26.745405379Z identity=driver-auth discovery=ok
+2026-11-08T05:00:26.794427492Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:00:26.794452457Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation
+2026-11-08T05:00:36.844558384Z identity=driver-auth discovery=ok
+2026-11-08T05:00:36.891634714Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:00:36.891655345Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation
+2026-11-08T05:00:46.948889957Z identity=driver-auth discovery=ok
+2026-11-08T05:00:47.002143929Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:00:47.002196531Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation
+2026-11-08T05:00:57.057967675Z identity=driver-auth discovery=ok
+2026-11-08T05:00:57.105764206Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:00:57.105787548Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation
+2026-11-08T05:01:07.164945561Z identity=driver-auth discovery=ok
+2026-11-08T05:01:07.214892579Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:01:07.214918986Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation
+2026-11-08T05:01:17.259805928Z identity=driver-auth discovery=ok
+2026-11-08T05:01:17.304561525Z provider config fetch error: wget: server returned error: HTTP/1.1 403 Forbidden
+2026-11-08T05:01:17.304583396Z login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation

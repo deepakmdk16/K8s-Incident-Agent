@@ -1,0 +1,19 @@
+Name:         card-authorizer-75ncr
+Namespace:    fleet-cards
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=card-authorizer
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:13Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.110
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/card-authorizer-676fc5678b-xqw7p
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

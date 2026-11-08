@@ -1,0 +1,157 @@
+schema: 3
+id: t3-driver-login-failures
+mode: captured
+captured_at: 2026-11-08T05:02:03Z
+context: kind-incident-lab
+kubectl_client: v1.37.0
+server: v1.37.0
+node: kubelet=v1.37.0 runtime=containerd://2.3.4 os=Debian GNU/Linux 13 (trixie)
+capture_policy:
+  workload_log_tail: 2000
+  system_log_tail: 300
+  system_namespaces: kube-system kube-public kube-node-lease local-path-storage
+log_channels:
+  - pod: broker-portal/broker-console-858748957b-2btb8
+    container: console
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "console" in pod "broker-console-858748957b-2btb8" not found 
+  - pod: cargo-insurance/coverage-checker-7bf5f7f856-cqlx5
+    container: checker
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "checker" in pod "coverage-checker-7bf5f7f856-cqlx5" not found 
+  - pod: carrier-onboarding/carrier-vetting-754446bdfb-k6d92
+    container: vetting
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "vetting" in pod "carrier-vetting-754446bdfb-k6d92" not found 
+  - pod: claims-desk/claims-intake-d97598c9-lqlw7
+    container: intake
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "intake" in pod "claims-intake-d97598c9-lqlw7" not found 
+  - pod: dock-scheduling/dock-planner-64b6fc489f-wxwrt
+    container: planner
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "planner" in pod "dock-planner-64b6fc489f-wxwrt" not found 
+  - pod: driver-portal/badge-photo-resizer-849dc658cd-7k6nv
+    container: resizer
+    current: ok
+    previous: ok
+  - pod: driver-portal/driver-auth-85bf9874bd-88ddp
+    container: auth
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "auth" in pod "driver-auth-85bf9874bd-88ddp" not found 
+  - pod: driver-portal/portal-web-5ffbbf47db-bmfgv
+    container: portal
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "portal" in pod "portal-web-5ffbbf47db-bmfgv" not found 
+  - pod: driver-portal/portal-web-5ffbbf47db-bpq2m
+    container: portal
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "portal" in pod "portal-web-5ffbbf47db-bpq2m" not found 
+  - pod: dvir-reports/dvir-archiver-8687c64cf5-bzgqx
+    container: archiver
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "archiver" in pod "dvir-archiver-8687c64cf5-bzgqx" not found 
+  - pod: eld-sync/eld-harvester-679c4bfc8c-k7nxq
+    container: harvester
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "harvester" in pod "eld-harvester-679c4bfc8c-k7nxq" not found 
+  - pod: fleet-cards/card-authorizer-676fc5678b-xqw7p
+    container: authorizer
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "authorizer" in pod "card-authorizer-676fc5678b-xqw7p" not found 
+  - pod: fuel-tax/ifta-filer-29901901-58grb
+    container: filer
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "filer" in pod "ifta-filer-29901901-58grb" not found 
+  - pod: fuel-tax/ifta-filer-29901901-mczz7
+    container: filer
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "filer" in pod "ifta-filer-29901901-mczz7" not found 
+  - pod: geofence-alerts/geofence-evaluator-6988b8d75d-5wqrr
+    container: evaluator
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "evaluator" in pod "geofence-evaluator-6988b8d75d-5wqrr" not found 
+  - pod: hos-compliance/hos-auditor-875465595-pzxtx
+    container: auditor
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "auditor" in pod "hos-auditor-875465595-pzxtx" not found 
+  - pod: kube-system/coredns-559f6c778d-6txpq
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-6txpq" not found 
+  - pod: kube-system/coredns-559f6c778d-kghtn
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-kghtn" not found 
+  - pod: kube-system/etcd-incident-lab-control-plane
+    container: etcd
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "etcd" in pod "etcd-incident-lab-control-plane" not found 
+  - pod: kube-system/kindnet-v8qj7
+    container: kindnet-cni
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kindnet-cni" in pod "kindnet-v8qj7" not found 
+  - pod: kube-system/kube-apiserver-incident-lab-control-plane
+    container: kube-apiserver
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-apiserver" in pod "kube-apiserver-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-controller-manager-incident-lab-control-plane
+    container: kube-controller-manager
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-controller-manager" in pod "kube-controller-manager-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-proxy-n2gjp
+    container: kube-proxy
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-proxy" in pod "kube-proxy-n2gjp" not found 
+  - pod: kube-system/kube-scheduler-incident-lab-control-plane
+    container: kube-scheduler
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-scheduler" in pod "kube-scheduler-incident-lab-control-plane" not found 
+  - pod: lane-pricing/lane-rater-7b4f4958c7-v4l2s
+    container: rater
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "rater" in pod "lane-rater-7b4f4958c7-v4l2s" not found 
+  - pod: load-board/load-matcher-5478877499-b8zhx
+    container: matcher
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "matcher" in pod "load-matcher-5478877499-b8zhx" not found 
+  - pod: local-path-storage/local-path-provisioner-75f7fc7dc5-lfntm
+    container: local-path-provisioner
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "local-path-provisioner" in pod "local-path-provisioner-75f7fc7dc5-lfntm" not found 
+  - pod: pallet-tracking/pallet-scanner-5b76dc4c-g4w4p
+    container: scanner
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "scanner" in pod "pallet-scanner-5b76dc4c-g4w4p" not found 
+  - pod: port-gate/gate-appointments-686c95f485-hn76c
+    container: appointments
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "appointments" in pod "gate-appointments-686c95f485-hn76c" not found 
+  - pod: rail-interchange/rail-handoff-7879685b87-tchcl
+    container: handoff
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "handoff" in pod "rail-handoff-7879685b87-tchcl" not found 
+  - pod: rate-quotes/quote-builder-58787dfb76-rwgqz
+    container: builder
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "builder" in pod "quote-builder-58787dfb76-rwgqz" not found 
+  - pod: route-weather/weather-feed-66566f64bf-r4xb5
+    container: feed
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "feed" in pod "weather-feed-66566f64bf-r4xb5" not found 
+  - pod: shipment-events/event-fanout-bb479966-nj5vv
+    container: fanout
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "fanout" in pod "event-fanout-bb479966-nj5vv" not found 
+  - pod: tire-telemetry/tire-pressure-hub-5544b8666d-vnvh9
+    container: hub
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "hub" in pod "tire-pressure-hub-5544b8666d-vnvh9" not found 
+  - pod: trailer-pool/pool-balancer-5459d6c885-rphvq
+    container: balancer
+    current: ok
+    previous: ok
+  - pod: weigh-station/scale-ingest-5b9bb78b7c-kts2l
+    container: ingest
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "ingest" in pod "scale-ingest-5b9bb78b7c-kts2l" not found 

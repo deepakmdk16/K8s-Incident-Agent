@@ -1,0 +1,43 @@
+Name:           badge-photo-resizer-849dc658cd
+Namespace:      driver-portal
+Selector:       app=badge-photo-resizer,pod-template-hash=849dc658cd
+Labels:         app=badge-photo-resizer
+                pod-template-hash=849dc658cd
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/badge-photo-resizer
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=badge-photo-resizer
+           pod-template-hash=849dc658cd
+  Containers:
+   resizer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      if [ -z "${PHOTO_STORE_URL:-}" ]; then
+        echo "badge-photo-resizer: PHOTO_STORE_URL is not set; waiting 3s for it to appear"
+        sleep 3
+        echo "badge-photo-resizer: PHOTO_STORE_URL still not set, cannot start"
+        exit 1
+      fi
+      echo "badge-photo-resizer: resizing badge photos from ${PHOTO_STORE_URL}"
+      exec sleep 2147483647
+      
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  69s   replicaset-controller  Created pod: badge-photo-resizer-849dc658cd-7k6nv

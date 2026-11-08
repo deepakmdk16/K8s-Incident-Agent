@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:10Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "dock-planner",
+        "namespace": "dock-scheduling",
+        "resourceVersion": "10179",
+        "uid": "f5287681-8f16-4664-b1c2-7ff9534f689a"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.93",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "dock-planner-64b6fc489f-wxwrt",
+                "namespace": "dock-scheduling",
+                "uid": "c1790998-19a8-482b-97fc-7b0b61a680ec"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

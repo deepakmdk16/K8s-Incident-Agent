@@ -1,0 +1,128 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "batch/v1",
+      "kind": "Job",
+      "metadata": {
+        "annotations": {
+          "batch.kubernetes.io/cronjob-scheduled-timestamp": "2026-11-08T05:01:00Z"
+        },
+        "creationTimestamp": "2026-11-08T05:01:00Z",
+        "generation": 1,
+        "labels": {
+          "batch.kubernetes.io/controller-uid": "6417df0d-e24d-41c1-88fa-20dc741e4d3c",
+          "batch.kubernetes.io/job-name": "ifta-filer-29901901",
+          "controller-uid": "6417df0d-e24d-41c1-88fa-20dc741e4d3c",
+          "job-name": "ifta-filer-29901901"
+        },
+        "name": "ifta-filer-29901901",
+        "namespace": "fuel-tax",
+        "ownerReferences": [
+          {
+            "apiVersion": "batch/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "CronJob",
+            "name": "ifta-filer",
+            "uid": "4e7f197b-c28d-42b0-8236-e2af051e00ba"
+          }
+        ],
+        "resourceVersion": "10725",
+        "uid": "6417df0d-e24d-41c1-88fa-20dc741e4d3c"
+      },
+      "spec": {
+        "backoffLimit": 1,
+        "completionMode": "NonIndexed",
+        "completions": 1,
+        "manualSelector": false,
+        "parallelism": 1,
+        "podReplacementPolicy": "TerminatingOrFailed",
+        "selector": {
+          "matchLabels": {
+            "batch.kubernetes.io/controller-uid": "6417df0d-e24d-41c1-88fa-20dc741e4d3c"
+          }
+        },
+        "suspend": false,
+        "template": {
+          "metadata": {
+            "labels": {
+              "batch.kubernetes.io/controller-uid": "6417df0d-e24d-41c1-88fa-20dc741e4d3c",
+              "batch.kubernetes.io/job-name": "ifta-filer-29901901",
+              "controller-uid": "6417df0d-e24d-41c1-88fa-20dc741e4d3c",
+              "job-name": "ifta-filer-29901901"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "sh",
+                  "-c",
+                  "if [ ! -f /filings/jurisdictions.csv ]; then\n  echo \"ifta-filer: /filings/jurisdictions.csv is missing\"\n  exit 1\nfi\necho \"ifta-filer: filing $(wc -l < /filings/jurisdictions.csv) jurisdictions\"\n"
+                ],
+                "image": "busybox:1.36",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "filer",
+                "resources": {
+                  "requests": {
+                    "cpu": "10m",
+                    "memory": "16Mi"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/filings",
+                    "name": "filings"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Never",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "emptyDir": {},
+                "name": "filings"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": "2026-11-08T05:01:13Z",
+            "lastTransitionTime": "2026-11-08T05:01:13Z",
+            "message": "Job has reached the specified backoff limit",
+            "reason": "BackoffLimitExceeded",
+            "status": "True",
+            "type": "FailureTarget"
+          },
+          {
+            "lastProbeTime": "2026-11-08T05:01:13Z",
+            "lastTransitionTime": "2026-11-08T05:01:13Z",
+            "message": "Job has reached the specified backoff limit",
+            "reason": "BackoffLimitExceeded",
+            "status": "True",
+            "type": "Failed"
+          }
+        ],
+        "failed": 2,
+        "ready": 0,
+        "startTime": "2026-11-08T05:01:00Z",
+        "terminating": 0,
+        "uncountedTerminatedPods": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

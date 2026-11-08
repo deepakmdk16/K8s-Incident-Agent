@@ -1,0 +1,43 @@
+Name:           driver-auth-85bf9874bd
+Namespace:      driver-portal
+Selector:       app=driver-auth,pod-template-hash=85bf9874bd
+Labels:         app=driver-auth
+                pod-template-hash=85bf9874bd
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/driver-auth
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=driver-auth
+                    pod-template-hash=85bf9874bd
+  Service Account:  driver-auth
+  Containers:
+   auth:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      AUTH_SA:           (v1:spec.serviceAccountName)
+      PROVIDER_CONFIG:  oidc-provider-config
+    Mounts:
+      /app from entrypoint (rw)
+  Volumes:
+   entrypoint:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          driver-auth-entrypoint
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  69s   replicaset-controller  Created pod: driver-auth-85bf9874bd-88ddp

@@ -1,0 +1,24 @@
+Name:         weather-feed-settings
+Namespace:    route-weather
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+alert_radius_miles:
+----
+25
+
+provider:
+----
+nws
+
+refresh_minutes:
+----
+15
+
+
+BinaryData
+====
+
+Events:  <none>

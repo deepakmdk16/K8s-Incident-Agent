@@ -1,0 +1,35 @@
+Name:           tire-pressure-hub-5544b8666d
+Namespace:      tire-telemetry
+Selector:       app=tire-pressure-hub,pod-template-hash=5544b8666d
+Labels:         app=tire-pressure-hub
+                pod-template-hash=5544b8666d
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/tire-pressure-hub
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=tire-pressure-hub
+           pod-template-hash=5544b8666d
+  Containers:
+   hub:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'tire-pressure-hub up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  107s  replicaset-controller  Created pod: tire-pressure-hub-5544b8666d-vnvh9

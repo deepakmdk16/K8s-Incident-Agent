@@ -1,0 +1,13 @@
+Name:         claims-intake
+Namespace:    claims-desk
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:11Z
+Subsets:
+  Addresses:          10.244.0.98
+  NotReadyAddresses:  <none>
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

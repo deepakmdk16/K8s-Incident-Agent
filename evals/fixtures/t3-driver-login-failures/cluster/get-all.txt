@@ -1,0 +1,129 @@
+NAMESPACE            NAME                                                     READY   STATUS    RESTARTS      AGE   IP             NODE                         NOMINATED NODE   READINESS GATES
+broker-portal        pod/broker-console-858748957b-2btb8                      1/1     Running   0             62s   10.244.0.106   incident-lab-control-plane   <none>           <none>
+cargo-insurance      pod/coverage-checker-7bf5f7f856-cqlx5                    1/1     Running   0             62s   10.244.0.109   incident-lab-control-plane   <none>           <none>
+carrier-onboarding   pod/carrier-vetting-754446bdfb-k6d92                     1/1     Running   0             64s   10.244.0.96    incident-lab-control-plane   <none>           <none>
+claims-desk          pod/claims-intake-d97598c9-lqlw7                         1/1     Running   0             64s   10.244.0.98    incident-lab-control-plane   <none>           <none>
+dock-scheduling      pod/dock-planner-64b6fc489f-wxwrt                        1/1     Running   0             64s   10.244.0.93    incident-lab-control-plane   <none>           <none>
+driver-portal        pod/badge-photo-resizer-849dc658cd-7k6nv                 0/1     Error     3 (35s ago)   58s   10.244.0.114   incident-lab-control-plane   <none>           <none>
+driver-portal        pod/driver-auth-85bf9874bd-88ddp                         1/1     Running   0             58s   10.244.0.111   incident-lab-control-plane   <none>           <none>
+driver-portal        pod/portal-web-5ffbbf47db-bmfgv                          1/1     Running   0             58s   10.244.0.113   incident-lab-control-plane   <none>           <none>
+driver-portal        pod/portal-web-5ffbbf47db-bpq2m                          1/1     Running   0             58s   10.244.0.112   incident-lab-control-plane   <none>           <none>
+dvir-reports         pod/dvir-archiver-8687c64cf5-bzgqx                       1/1     Running   0             63s   10.244.0.102   incident-lab-control-plane   <none>           <none>
+eld-sync             pod/eld-harvester-679c4bfc8c-k7nxq                       1/1     Running   0             63s   10.244.0.100   incident-lab-control-plane   <none>           <none>
+fleet-cards          pod/card-authorizer-676fc5678b-xqw7p                     1/1     Running   0             61s   10.244.0.110   incident-lab-control-plane   <none>           <none>
+fuel-tax             pod/ifta-filer-29901901-58grb                            0/1     Error     0             4s    10.244.0.116   incident-lab-control-plane   <none>           <none>
+fuel-tax             pod/ifta-filer-29901901-mczz7                            0/1     Error     0             14s   10.244.0.115   incident-lab-control-plane   <none>           <none>
+geofence-alerts      pod/geofence-evaluator-6988b8d75d-5wqrr                  1/1     Running   0             62s   10.244.0.108   incident-lab-control-plane   <none>           <none>
+hos-compliance       pod/hos-auditor-875465595-pzxtx                          1/1     Running   0             64s   10.244.0.94    incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-6txpq                             1/1     Running   0             10h   10.244.0.4     incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-kghtn                             1/1     Running   0             10h   10.244.0.3     incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running   0             10h   172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-v8qj7                                        1/1     Running   0             10h   172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running   0             10h   172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running   0             10h   172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-n2gjp                                     1/1     Running   0             10h   172.18.0.2     incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running   0             10h   172.18.0.2     incident-lab-control-plane   <none>           <none>
+lane-pricing         pod/lane-rater-7b4f4958c7-v4l2s                          1/1     Running   0             63s   10.244.0.103   incident-lab-control-plane   <none>           <none>
+load-board           pod/load-matcher-5478877499-b8zhx                        1/1     Running   0             64s   10.244.0.91    incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-lfntm              1/1     Running   0             10h   10.244.0.2     incident-lab-control-plane   <none>           <none>
+pallet-tracking      pod/pallet-scanner-5b76dc4c-g4w4p                        1/1     Running   0             64s   10.244.0.97    incident-lab-control-plane   <none>           <none>
+port-gate            pod/gate-appointments-686c95f485-hn76c                   1/1     Running   0             63s   10.244.0.104   incident-lab-control-plane   <none>           <none>
+rail-interchange     pod/rail-handoff-7879685b87-tchcl                        1/1     Running   0             62s   10.244.0.105   incident-lab-control-plane   <none>           <none>
+rate-quotes          pod/quote-builder-58787dfb76-rwgqz                       1/1     Running   0             64s   10.244.0.95    incident-lab-control-plane   <none>           <none>
+route-weather        pod/weather-feed-66566f64bf-r4xb5                        1/1     Running   0             64s   10.244.0.99    incident-lab-control-plane   <none>           <none>
+shipment-events      pod/event-fanout-bb479966-nj5vv                          1/1     Running   0             62s   10.244.0.107   incident-lab-control-plane   <none>           <none>
+tire-telemetry       pod/tire-pressure-hub-5544b8666d-vnvh9                   1/1     Running   0             63s   10.244.0.101   incident-lab-control-plane   <none>           <none>
+trailer-pool         pod/pool-balancer-5459d6c885-rphvq                       0/1     Pending   0             61s   <none>         <none>                       <none>           <none>
+weigh-station        pod/scale-ingest-5b9bb78b7c-kts2l                        1/1     Running   0             64s   10.244.0.92    incident-lab-control-plane   <none>           <none>
+
+NAMESPACE            NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+broker-portal        service/broker-console       ClusterIP   10.96.41.128    <none>        8080/TCP                 64s   app=broker-console
+cargo-insurance      service/coverage-checker     ClusterIP   10.96.29.249    <none>        8080/TCP                 64s   app=coverage-checker
+carrier-onboarding   service/carrier-vetting      ClusterIP   10.96.4.192     <none>        8080/TCP                 64s   app=carrier-vetting
+claims-desk          service/claims-intake        ClusterIP   10.96.249.166   <none>        8080/TCP                 64s   app=claims-intake
+default              service/kubernetes           ClusterIP   10.96.0.1       <none>        443/TCP                  10h   <none>
+dock-scheduling      service/dock-planner         ClusterIP   10.96.107.238   <none>        8080/TCP                 64s   app=dock-planner
+driver-portal        service/driver-auth          ClusterIP   10.96.191.111   <none>        8080/TCP                 58s   app=driver-auth
+driver-portal        service/portal-web           ClusterIP   10.96.161.197   <none>        8080/TCP                 58s   app=portal-web
+dvir-reports         service/dvir-archiver        ClusterIP   10.96.61.19     <none>        8080/TCP                 64s   app=dvir-archiver
+eld-sync             service/eld-harvester        ClusterIP   10.96.87.210    <none>        8080/TCP                 64s   app=eld-harvester
+fleet-cards          service/card-authorizer      ClusterIP   10.96.233.89    <none>        8080/TCP                 64s   app=card-authorizer
+geofence-alerts      service/geofence-evaluator   ClusterIP   10.96.234.162   <none>        8080/TCP                 64s   app=geofence-evaluator
+hos-compliance       service/hos-auditor          ClusterIP   10.96.254.162   <none>        8080/TCP                 64s   app=hos-auditor
+kube-system          service/kube-dns             ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP   10h   k8s-app=kube-dns
+lane-pricing         service/lane-rater           ClusterIP   10.96.234.109   <none>        8080/TCP                 64s   app=lane-rater
+load-board           service/load-matcher         ClusterIP   10.96.132.224   <none>        8080/TCP                 64s   app=load-matcher
+pallet-tracking      service/pallet-scanner       ClusterIP   10.96.202.53    <none>        8080/TCP                 64s   app=pallet-scanner
+port-gate            service/gate-appointments    ClusterIP   10.96.126.124   <none>        8080/TCP                 64s   app=gate-appointments
+rail-interchange     service/rail-handoff         ClusterIP   10.96.22.1      <none>        8080/TCP                 64s   app=rail-handoff
+rate-quotes          service/quote-builder        ClusterIP   10.96.121.201   <none>        8080/TCP                 64s   app=quote-builder
+route-weather        service/weather-feed         ClusterIP   10.96.147.187   <none>        8080/TCP                 64s   app=weather-feed
+shipment-events      service/event-fanout         ClusterIP   10.96.180.218   <none>        8080/TCP                 64s   app=event-fanout
+tire-telemetry       service/tire-pressure-hub    ClusterIP   10.96.164.69    <none>        8080/TCP                 64s   app=tire-pressure-hub
+weigh-station        service/scale-ingest         ClusterIP   10.96.74.237    <none>        8080/TCP                 64s   app=scale-ingest
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   10h   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   10h   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+broker-portal        deployment.apps/broker-console           1/1     1            1           64s   console                  busybox:1.36                                                  app=broker-console
+cargo-insurance      deployment.apps/coverage-checker         1/1     1            1           64s   checker                  busybox:1.36                                                  app=coverage-checker
+carrier-onboarding   deployment.apps/carrier-vetting          1/1     1            1           64s   vetting                  busybox:1.36                                                  app=carrier-vetting
+claims-desk          deployment.apps/claims-intake            1/1     1            1           64s   intake                   busybox:1.36                                                  app=claims-intake
+dock-scheduling      deployment.apps/dock-planner             1/1     1            1           64s   planner                  busybox:1.36                                                  app=dock-planner
+driver-portal        deployment.apps/badge-photo-resizer      0/1     1            0           58s   resizer                  busybox:1.36                                                  app=badge-photo-resizer
+driver-portal        deployment.apps/driver-auth              1/1     1            1           58s   auth                     busybox:1.36                                                  app=driver-auth
+driver-portal        deployment.apps/portal-web               2/2     2            2           58s   portal                   busybox:1.36                                                  app=portal-web
+dvir-reports         deployment.apps/dvir-archiver            1/1     1            1           64s   archiver                 busybox:1.36                                                  app=dvir-archiver
+eld-sync             deployment.apps/eld-harvester            1/1     1            1           64s   harvester                busybox:1.36                                                  app=eld-harvester
+fleet-cards          deployment.apps/card-authorizer          1/1     1            1           64s   authorizer               busybox:1.36                                                  app=card-authorizer
+geofence-alerts      deployment.apps/geofence-evaluator       1/1     1            1           64s   evaluator                busybox:1.36                                                  app=geofence-evaluator
+hos-compliance       deployment.apps/hos-auditor              1/1     1            1           64s   auditor                  busybox:1.36                                                  app=hos-auditor
+kube-system          deployment.apps/coredns                  2/2     2            2           10h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+lane-pricing         deployment.apps/lane-rater               1/1     1            1           64s   rater                    busybox:1.36                                                  app=lane-rater
+load-board           deployment.apps/load-matcher             1/1     1            1           64s   matcher                  busybox:1.36                                                  app=load-matcher
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           10h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+pallet-tracking      deployment.apps/pallet-scanner           1/1     1            1           64s   scanner                  busybox:1.36                                                  app=pallet-scanner
+port-gate            deployment.apps/gate-appointments        1/1     1            1           64s   appointments             busybox:1.36                                                  app=gate-appointments
+rail-interchange     deployment.apps/rail-handoff             1/1     1            1           64s   handoff                  busybox:1.36                                                  app=rail-handoff
+rate-quotes          deployment.apps/quote-builder            1/1     1            1           64s   builder                  busybox:1.36                                                  app=quote-builder
+route-weather        deployment.apps/weather-feed             1/1     1            1           64s   feed                     busybox:1.36                                                  app=weather-feed
+shipment-events      deployment.apps/event-fanout             1/1     1            1           64s   fanout                   busybox:1.36                                                  app=event-fanout
+tire-telemetry       deployment.apps/tire-pressure-hub        1/1     1            1           64s   hub                      busybox:1.36                                                  app=tire-pressure-hub
+trailer-pool         deployment.apps/pool-balancer            0/1     1            0           64s   balancer                 busybox:1.36                                                  app=pool-balancer
+weigh-station        deployment.apps/scale-ingest             1/1     1            1           64s   ingest                   busybox:1.36                                                  app=scale-ingest
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+broker-portal        replicaset.apps/broker-console-858748957b           1         1         1       62s   console                  busybox:1.36                                                  app=broker-console,pod-template-hash=858748957b
+cargo-insurance      replicaset.apps/coverage-checker-7bf5f7f856         1         1         1       62s   checker                  busybox:1.36                                                  app=coverage-checker,pod-template-hash=7bf5f7f856
+carrier-onboarding   replicaset.apps/carrier-vetting-754446bdfb          1         1         1       64s   vetting                  busybox:1.36                                                  app=carrier-vetting,pod-template-hash=754446bdfb
+claims-desk          replicaset.apps/claims-intake-d97598c9              1         1         1       64s   intake                   busybox:1.36                                                  app=claims-intake,pod-template-hash=d97598c9
+dock-scheduling      replicaset.apps/dock-planner-64b6fc489f             1         1         1       64s   planner                  busybox:1.36                                                  app=dock-planner,pod-template-hash=64b6fc489f
+driver-portal        replicaset.apps/badge-photo-resizer-849dc658cd      1         1         0       58s   resizer                  busybox:1.36                                                  app=badge-photo-resizer,pod-template-hash=849dc658cd
+driver-portal        replicaset.apps/driver-auth-85bf9874bd              1         1         1       58s   auth                     busybox:1.36                                                  app=driver-auth,pod-template-hash=85bf9874bd
+driver-portal        replicaset.apps/portal-web-5ffbbf47db               2         2         2       58s   portal                   busybox:1.36                                                  app=portal-web,pod-template-hash=5ffbbf47db
+dvir-reports         replicaset.apps/dvir-archiver-8687c64cf5            1         1         1       63s   archiver                 busybox:1.36                                                  app=dvir-archiver,pod-template-hash=8687c64cf5
+eld-sync             replicaset.apps/eld-harvester-679c4bfc8c            1         1         1       63s   harvester                busybox:1.36                                                  app=eld-harvester,pod-template-hash=679c4bfc8c
+fleet-cards          replicaset.apps/card-authorizer-676fc5678b          1         1         1       61s   authorizer               busybox:1.36                                                  app=card-authorizer,pod-template-hash=676fc5678b
+geofence-alerts      replicaset.apps/geofence-evaluator-6988b8d75d       1         1         1       62s   evaluator                busybox:1.36                                                  app=geofence-evaluator,pod-template-hash=6988b8d75d
+hos-compliance       replicaset.apps/hos-auditor-875465595               1         1         1       64s   auditor                  busybox:1.36                                                  app=hos-auditor,pod-template-hash=875465595
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       10h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+lane-pricing         replicaset.apps/lane-rater-7b4f4958c7               1         1         1       63s   rater                    busybox:1.36                                                  app=lane-rater,pod-template-hash=7b4f4958c7
+load-board           replicaset.apps/load-matcher-5478877499             1         1         1       64s   matcher                  busybox:1.36                                                  app=load-matcher,pod-template-hash=5478877499
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       10h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5
+pallet-tracking      replicaset.apps/pallet-scanner-5b76dc4c             1         1         1       64s   scanner                  busybox:1.36                                                  app=pallet-scanner,pod-template-hash=5b76dc4c
+port-gate            replicaset.apps/gate-appointments-686c95f485        1         1         1       63s   appointments             busybox:1.36                                                  app=gate-appointments,pod-template-hash=686c95f485
+rail-interchange     replicaset.apps/rail-handoff-7879685b87             1         1         1       62s   handoff                  busybox:1.36                                                  app=rail-handoff,pod-template-hash=7879685b87
+rate-quotes          replicaset.apps/quote-builder-58787dfb76            1         1         1       64s   builder                  busybox:1.36                                                  app=quote-builder,pod-template-hash=58787dfb76
+route-weather        replicaset.apps/weather-feed-66566f64bf             1         1         1       64s   feed                     busybox:1.36                                                  app=weather-feed,pod-template-hash=66566f64bf
+shipment-events      replicaset.apps/event-fanout-bb479966               1         1         1       62s   fanout                   busybox:1.36                                                  app=event-fanout,pod-template-hash=bb479966
+tire-telemetry       replicaset.apps/tire-pressure-hub-5544b8666d        1         1         1       63s   hub                      busybox:1.36                                                  app=tire-pressure-hub,pod-template-hash=5544b8666d
+trailer-pool         replicaset.apps/pool-balancer-5459d6c885            1         1         0       61s   balancer                 busybox:1.36                                                  app=pool-balancer,pod-template-hash=5459d6c885
+weigh-station        replicaset.apps/scale-ingest-5b9bb78b7c             1         1         1       64s   ingest                   busybox:1.36                                                  app=scale-ingest,pod-template-hash=5b9bb78b7c
+
+NAMESPACE   NAME                       SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE   CONTAINERS   IMAGES         SELECTOR
+fuel-tax    cronjob.batch/ifta-filer   */1 * * * *   <none>     False     0        14s             64s   filer        busybox:1.36   <none>
+
+NAMESPACE   NAME                            STATUS   COMPLETIONS   DURATION   AGE   CONTAINERS   IMAGES         SELECTOR
+fuel-tax    job.batch/ifta-filer-29901901   Failed   0/1           14s        14s   filer        busybox:1.36   batch.kubernetes.io/controller-uid=6417df0d-e24d-41c1-88fa-20dc741e4d3c
