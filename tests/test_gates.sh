@@ -150,6 +150,22 @@ echo '{"items":[]}' > "$TMP/kcrd/evals/fixtures/t0-selftest/cluster/mutatingwebh
 # 18d2. and passes once the CRD roster is present too
 echo '{"items":[]}' > "$TMP/kcrd/evals/fixtures/t0-selftest/cluster/customresourcedefinitions.json"
                                                              check "schema-3 fixture with CRD roster passes" 0 "$TMP/kcrd"
+# 18d2b. capture.sh records a failed `get` IN BAND as {"capture_error": true, ...}
+# — non-empty, so `[ -s ]` accepted it as a roster. A roster must be a real
+# .items list: the CRD roster and the schema-2 webhook rosters alike
+# (review, 2026-11-08)
+fixture "$TMP/kce"; k8sfix "$TMP/kce"
+sed -i.bak 's/^schema: 1$/schema: 3/' "$TMP/kce/evals/fixtures/t0-selftest/scenario.yaml"; rm -f "$TMP/kce/evals/fixtures/t0-selftest/scenario.yaml.bak"
+echo '{"items":[]}' > "$TMP/kce/evals/fixtures/t0-selftest/cluster/validatingwebhookconfigurations.json"
+echo '{"items":[]}' > "$TMP/kce/evals/fixtures/t0-selftest/cluster/mutatingwebhookconfigurations.json"
+echo '{"capture_error":true,"cmd":"get customresourcedefinitions","error":"the server could not find the requested resource"}' \
+  > "$TMP/kce/evals/fixtures/t0-selftest/cluster/customresourcedefinitions.json"
+                                                             check "capture_error CRD roster caught" 1 "$TMP/kce"
+# 18d2c. the same in-band error in a schema-2 webhook roster is caught too
+echo '{"items":[]}' > "$TMP/kce/evals/fixtures/t0-selftest/cluster/customresourcedefinitions.json"
+echo '{"capture_error":true,"cmd":"get mutatingwebhookconfigurations","error":"x"}' \
+  > "$TMP/kce/evals/fixtures/t0-selftest/cluster/mutatingwebhookconfigurations.json"
+                                                             check "capture_error webhook roster caught" 1 "$TMP/kce"
 # 18d3. a fixture whose gold lives in the held-out root is complete: the gate's
 # gold lookup follows evals/run_eval.py SCENARIO_ROOTS (2026-11-07)
 fixture "$TMP/kho"; k8sfix "$TMP/kho"

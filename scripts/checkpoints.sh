@@ -27,6 +27,15 @@ FAIL=0
 ok()   { printf '  \033[32mPASS\033[0m %s\n' "$1"; }
 fail() { printf '  \033[31mFAIL\033[0m %s\n' "$1"; FAIL=$((FAIL+1)); }
 skip() { printf '  \033[90mskip\033[0m %s\n' "$1"; }
+# A captured roster is a real kubectl list: a JSON object whose .items is a
+# list. evals/capture.sh records a failed `get` IN BAND as
+# {"capture_error": true, ...} — non-empty, so `[ -s ]` accepted it as a roster
+# (review, 2026-11-08). Unreadable or malformed counts as not a roster.
+roster_ok() { # file — true iff it holds a JSON object with an .items list
+  [ -s "$1" ] && python3 -I -c 'import json, sys
+d = json.load(open(sys.argv[1], encoding="utf-8"))
+sys.exit(0 if isinstance(d, dict) and isinstance(d.get("items"), list) else 1)' "$1" 2>/dev/null
+}
 
 echo "== checkpoints against: $TARGET"
 
@@ -162,14 +171,15 @@ if [ -d "$TARGET/evals/fixtures" ]; then
     SCHEMA="$(sed -nE 's/^schema: *([0-9]+) *$/\1/p' "$FIX/scenario.yaml" 2>/dev/null | head -n 1)"
     if [ "${SCHEMA:-1}" -ge 2 ]; then
       for req in cluster/validatingwebhookconfigurations.json cluster/mutatingwebhookconfigurations.json; do
-        [ -s "$FIX/$req" ] || MISS="$MISS $req"
+        roster_ok "$FIX/$req" || MISS="$MISS $req(items-list)"
       done
     fi
     # capture schema 3 (2026-11-07) added CustomResourceDefinitions (and their
     # custom resources under ns/*/crs/); a schema-3 fixture without the CRD
     # roster was captured by a script that drifted from the schema it claims.
     if [ "${SCHEMA:-1}" -ge 3 ]; then
-      [ -s "$FIX/cluster/customresourcedefinitions.json" ] || MISS="$MISS cluster/customresourcedefinitions.json"
+      roster_ok "$FIX/cluster/customresourcedefinitions.json" \
+        || MISS="$MISS cluster/customresourcedefinitions.json(items-list)"
     fi
     find "$FIX" -name 'pods.json' -size +1c 2>/dev/null | grep -q . || MISS="$MISS ns/*/pods.json"
     find "$FIX" -path '*/describe/*' -name '*.txt' -size +1c 2>/dev/null | grep -q . || MISS="$MISS describes"
