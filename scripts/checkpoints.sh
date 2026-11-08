@@ -142,7 +142,7 @@ if [ -d "$TARGET/evals/fixtures" ]; then
     # whichever scenario root defines it (the frozen set, or an additive one;
     # evals/run_eval.py SCENARIO_ROOTS is the authority both sides follow).
     FIXID="$(basename "$FIX")"; GOLDFOUND=0
-    for SROOT in "$TARGET"/evals/scenarios "$TARGET"/evals/scenarios-v2; do
+    for SROOT in "$TARGET"/evals/scenarios "$TARGET"/evals/scenarios-v2 "$TARGET"/evals/scenarios-heldout; do
       [ -s "$SROOT/$FIXID/gold.json" ] && GOLDFOUND=1
     done
     [ "$GOLDFOUND" -eq 1 ] || MISS="$MISS scenarios*/$FIXID/gold.json"
@@ -157,6 +157,12 @@ if [ -d "$TARGET/evals/fixtures" ]; then
       for req in cluster/validatingwebhookconfigurations.json cluster/mutatingwebhookconfigurations.json; do
         [ -s "$FIX/$req" ] || MISS="$MISS $req"
       done
+    fi
+    # capture schema 3 (2026-11-07) added CustomResourceDefinitions (and their
+    # custom resources under ns/*/crs/); a schema-3 fixture without the CRD
+    # roster was captured by a script that drifted from the schema it claims.
+    if [ "${SCHEMA:-1}" -ge 3 ]; then
+      [ -s "$FIX/cluster/customresourcedefinitions.json" ] || MISS="$MISS cluster/customresourcedefinitions.json"
     fi
     find "$FIX" -name 'pods.json' -size +1c 2>/dev/null | grep -q . || MISS="$MISS ns/*/pods.json"
     find "$FIX" -path '*/describe/*' -name '*.txt' -size +1c 2>/dev/null | grep -q . || MISS="$MISS describes"

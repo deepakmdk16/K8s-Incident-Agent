@@ -3,7 +3,8 @@
 Discovers cases (a scenario with gold.json + its recorded fixture), invokes the
 arm offline against the fixture, parses and scores every answer with the
 scenario root's scorer — the frozen evals/scoring.py for the frozen set, the
-additive evals/scoring_v2.py for evals/scenarios-v2 — and writes the evidence
+additive evals/scoring_v2.py for every additive root (evals/scenarios-v2,
+evals/scenarios-heldout) — and writes the evidence
 bundle into evals/results/<run>/:
 per-case artifacts (prompt where the arm builds one, report, answer, metrics),
 rows.jsonl (per-case
@@ -137,7 +138,10 @@ class Outcome:
 # would silently change what "the frozen set" means. New cases land in an
 # additive root and are run by pointing --scenarios-root at it.
 FROZEN_ROOT = "evals/scenarios"
-SCENARIO_ROOTS = (FROZEN_ROOT, "evals/scenarios-v2")
+# evals/scenarios-heldout (2026-11-07): the held-out set, renamed vocabulary and
+# a different domain, scored once per arm and never tuned against
+# (docs/experiments/2026-11-07-heldout-set.md).
+SCENARIO_ROOTS = (FROZEN_ROOT, "evals/scenarios-v2", "evals/scenarios-heldout")
 
 
 def load_gold(root: str, path: Path) -> Gold:

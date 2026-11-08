@@ -1,13 +1,14 @@
-"""Additive scorer for the cases under evals/scenarios-v2/.
+"""Additive scorer for the cases under evals/scenarios-v2/ and evals/scenarios-heldout/.
 
 The frozen rubric (evals/scoring.py) is a measurement instrument tied to the
 12-case set at tag case-set-freeze, and it does not change. Cases in the
-additive root need two things it lacks: a class for admission-webhook faults,
-and a rule for naming a failing resource that has no namespace. This module is
-that instrument's superset. It re-keys the frozen signature, dominance and
-alias tables BY VALUE — never retypes them — so every phrasing the frozen scorer
+additive roots need things it lacks: a class for admission-webhook faults, a
+class for Pod Security admission refusals, aliases for a custom kind, and a
+rule for naming a failing resource that has no namespace. This module is that
+instrument's superset. It re-keys the frozen signature, dominance and alias
+tables BY VALUE — never retypes them — so every phrasing the frozen scorer
 classifies scores identically here (tests/test_scoring_v2.py pins the parity),
-and adds exactly one class and one convention on top.
+and adds exactly two classes and one convention on top.
 
 Frozen-root cases are still scored by evals/scoring.py. evals/run_eval.py picks
 the scorer by scenario root and records which one scored a bundle.
@@ -57,6 +58,10 @@ class FaultClass(StrEnum):
     # failurePolicy Fail, refuses the object create it intercepts. The failing
     # resource is the cluster-scoped webhook configuration.
     WEBHOOK_ADMISSION_BLOCK = "webhook-admission-block"
+    # v2 (2026-11-07, held-out set): Pod Security admission refuses a pod for
+    # the enforce level its namespace's labels set. The failing resource is the
+    # Namespace (cluster-scoped).
+    POD_SECURITY_VIOLATION = "pod-security-violation"
 
 
 def _lift(cls: v1.FaultClass) -> FaultClass:
@@ -109,9 +114,37 @@ _WEBHOOK_SIGNATURE: tuple[tuple[str, ...], ...] = (
     ),
 )
 
+# Group 1 is the admission plugin's own name in every spelling an arm writes
+# ("PodSecurity" in the API server's message, "pod-security.kubernetes.io" in
+# the label key, "Pod Security Standards"); no other class's vocabulary
+# contains it, and no frozen phrasing does. Group 2 holds failure words only,
+# the same discipline as the frozen table. "forbidden" is shared with
+# rbac-denial's second group, but that class also needs an rbac noun in the
+# sentence, which a Pod Security sentence has no reason to carry. A refused
+# pod create leaves the ReplicaSet stuck and the rollout blocked, so the
+# rollout bucket is dominated, and a pod refused "before scheduling" co-matches
+# the scheduling bucket, likewise dominated — the two pairs the webhook class
+# already added, for the same reason (docs/experiments/2026-11-07-heldout-set.md).
+_POD_SECURITY_SIGNATURE: tuple[tuple[str, ...], ...] = (
+    (r"pod ?-?security", r"\bpss\b", r"security standards?"),
+    (
+        r"violat",
+        r"\bforbidden\b",
+        r"\breject",
+        r"\bden(y|ied|ies)\b",
+        r"\brefus",
+        r"\bblock",
+        r"not allowed",
+        r"\benforc",
+    ),
+)
+
 _SIGNATURES: dict[FaultClass, tuple[tuple[str, ...], ...]] = {
     _lift(cls): groups for cls, groups in _FROZEN_SIGNATURES.items()
-} | {FaultClass.WEBHOOK_ADMISSION_BLOCK: _WEBHOOK_SIGNATURE}
+} | {
+    FaultClass.WEBHOOK_ADMISSION_BLOCK: _WEBHOOK_SIGNATURE,
+    FaultClass.POD_SECURITY_VIOLATION: _POD_SECURITY_SIGNATURE,
+}
 
 _DOMINATED_BY: dict[FaultClass, frozenset[FaultClass]] = {
     _lift(cls): frozenset(_lift(d) for d in dominators)
@@ -123,8 +156,14 @@ _DOMINATED_BY: dict[FaultClass, frozenset[FaultClass]] = {
 # co-matches the scheduling bucket, whose root the webhook also is. Both pairs
 # are score-monotone: they only ever turn an already-wrong two-class match into
 # the webhook class, and no frozen text contains the stem "webhook".
-_DOMINATED_BY[FaultClass.ROLLOUT_STUCK] |= {FaultClass.WEBHOOK_ADMISSION_BLOCK}
-_DOMINATED_BY[FaultClass.POD_UNSCHEDULABLE] |= {FaultClass.WEBHOOK_ADMISSION_BLOCK}
+_DOMINATED_BY[FaultClass.ROLLOUT_STUCK] |= {
+    FaultClass.WEBHOOK_ADMISSION_BLOCK,
+    FaultClass.POD_SECURITY_VIOLATION,
+}
+_DOMINATED_BY[FaultClass.POD_UNSCHEDULABLE] |= {
+    FaultClass.WEBHOOK_ADMISSION_BLOCK,
+    FaultClass.POD_SECURITY_VIOLATION,
+}
 
 # --- cluster-scoped failing resources -----------------------------------------
 
@@ -172,6 +211,11 @@ _KIND_ALIASES: dict[str, str] = _FROZEN_KIND_ALIASES | {
     "storageclasses": "storageclass",
     "validatingwebhookconfigurations": "validatingwebhookconfiguration",
     "vwc": "validatingwebhookconfiguration",
+    # The custom kind of the held-out set's CRD case (2026-11-07): the plural
+    # and the group-qualified spellings `kubectl` prints all name one object.
+    "routeprofiles": "routeprofile",
+    "routeprofile.fleet.northbound.io": "routeprofile",
+    "routeprofiles.fleet.northbound.io": "routeprofile",
 }
 
 

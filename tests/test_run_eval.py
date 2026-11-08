@@ -166,9 +166,19 @@ def test_each_root_is_scored_by_its_own_scorer() -> None:
     for case in discover_cases():
         assert isinstance(case.gold, scoring.Gold)
         assert case.scorer == "evals.scoring"
-    for case in discover_cases(root="evals/scenarios-v2"):
-        assert isinstance(case.gold, scoring_v2.Gold)
-        assert case.scorer == "evals.scoring_v2"
+    for root in SCENARIO_ROOTS:
+        if root == FROZEN_ROOT or not (ROOT / root).is_dir():
+            continue
+        for case in discover_cases(root=root):
+            assert isinstance(case.gold, scoring_v2.Gold), root
+            assert case.scorer == "evals.scoring_v2"
+
+
+def test_the_held_out_root_is_registered_as_additive() -> None:
+    """STATUS 3.2: the held-out set is an additive root after the frozen one, so it
+    is scored by the v2 scorer and never joins the frozen count."""
+    assert SCENARIO_ROOTS[0] == FROZEN_ROOT
+    assert "evals/scenarios-heldout" in SCENARIO_ROOTS[1:]
 
 
 def test_aggregate_matches_the_frozen_aggregate_on_frozen_rows() -> None:

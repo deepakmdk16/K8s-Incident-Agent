@@ -139,6 +139,23 @@ sed -i.bak 's/^schema: 1$/schema: 2/' "$TMP/kw/evals/fixtures/t0-selftest/scenar
 echo '{"items":[]}' > "$TMP/kw/evals/fixtures/t0-selftest/cluster/validatingwebhookconfigurations.json"
 echo '{"items":[]}' > "$TMP/kw/evals/fixtures/t0-selftest/cluster/mutatingwebhookconfigurations.json"
                                                              check "schema-2 fixture with webhook rosters passes" 0 "$TMP/kw"
+# 18c2. capture schema 3 (2026-11-07) adds the CustomResourceDefinition roster:
+# a schema-3 fixture without it was captured by a script that drifted from the
+# schema it claims
+fixture "$TMP/kcrd"; k8sfix "$TMP/kcrd"
+sed -i.bak 's/^schema: 1$/schema: 3/' "$TMP/kcrd/evals/fixtures/t0-selftest/scenario.yaml"; rm -f "$TMP/kcrd/evals/fixtures/t0-selftest/scenario.yaml.bak"
+echo '{"items":[]}' > "$TMP/kcrd/evals/fixtures/t0-selftest/cluster/validatingwebhookconfigurations.json"
+echo '{"items":[]}' > "$TMP/kcrd/evals/fixtures/t0-selftest/cluster/mutatingwebhookconfigurations.json"
+                                                             check "schema-3 fixture without CRD roster caught" 1 "$TMP/kcrd"
+# 18d2. and passes once the CRD roster is present too
+echo '{"items":[]}' > "$TMP/kcrd/evals/fixtures/t0-selftest/cluster/customresourcedefinitions.json"
+                                                             check "schema-3 fixture with CRD roster passes" 0 "$TMP/kcrd"
+# 18d3. a fixture whose gold lives in the held-out root is complete: the gate's
+# gold lookup follows evals/run_eval.py SCENARIO_ROOTS (2026-11-07)
+fixture "$TMP/kho"; k8sfix "$TMP/kho"
+mkdir -p "$TMP/kho/evals/scenarios-heldout/t0-selftest"
+mv "$TMP/kho/evals/scenarios/t0-selftest/gold.json" "$TMP/kho/evals/scenarios-heldout/t0-selftest/gold.json"
+                                                             check "gold in the held-out root is found" 0 "$TMP/kho"
 # --- inject.sh refusals (2026-09-04): every check below runs BEFORE the
 # cluster is contacted, so a bogus --context proves which branch fired. A
 # scenario that passes the checks dies later on "unreachable" instead.
@@ -174,6 +191,18 @@ inj "inject: webhook on namespace DELETE refused" "must be exactly operations" "
 { printf "$WH" t9-f; printf 'webhooks:\n  - rules:\n      - operations: ["CREATE"]\n        resources: ["pods"]\n---\nkind: Deployment\nspec:\n  template:\n    spec:\n      containers:\n        - name: api\n          resources:\n            requests:\n              cpu: 10m\n'; } \
   | scen "$TMP/inj-f/evals/scenarios-v2" t9-f
 inj "inject: container resources block is not a webhook rule" "unreachable" "$TMP/inj-f" evals/scenarios-v2 t9-f
+# --- CustomResourceDefinitions (2026-11-07): owned like webhook configurations —
+# additive root only, every document labelled, deleted by label on reset
+CRD='apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: x.example.io\n  labels:\n    incident-lab.dev/scenario: %s\n'
+# 18k. a CRD is refused in the frozen root even when labelled
+printf "$CRD" t9-g | scen "$TMP/inj-g/evals/scenarios" t9-g
+inj "inject: CRD refused in frozen root"          "frozen root stays namespaced" "$TMP/inj-g" evals/scenarios t9-g
+# 18l. an UNLABELLED CRD is refused in an additive root
+printf 'kind: CustomResourceDefinition\nmetadata:\n  name: x.example.io\n' | scen "$TMP/inj-h/evals/scenarios-heldout" t9-h
+inj "inject: unlabelled CRD refused"              "carry the label" "$TMP/inj-h" evals/scenarios-heldout t9-h
+# 18m. a labelled CRD in an additive root passes the checks
+printf "$CRD" t9-i | scen "$TMP/inj-i/evals/scenarios-heldout" t9-i
+inj "inject: labelled CRD in held-out root passes" "unreachable" "$TMP/inj-i" evals/scenarios-heldout t9-i
 # 19. STATUS.md with completed [x] items fails (open-items-only; history is git log)
 fixture "$TMP/sx"; printf '# STATUS\n- [x] something already done\n- [ ] open item\n' > "$TMP/sx/STATUS.md"
                                                              check "stale [x] in STATUS.md caught"   1 "$TMP/sx"

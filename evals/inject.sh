@@ -12,10 +12,13 @@
 # capture. Frozen-root scenarios create only Namespaces and namespaced
 # objects, so the namespace wipe fully resets between them (authoring contract
 # rule 4). An additive root may also create admission webhook configurations
-# (the only way to author an admission fault); those are cluster-scoped, so
-# they carry the SCENARIO_LABEL and the reset deletes them by that label
-# BEFORE anything tries to create a pod — a lingering failurePolicy=Fail
-# webhook whose backend is gone would refuse every pod the next scenario needs.
+# (the only way to author an admission fault) and CustomResourceDefinitions
+# (the only way to author a custom-resource fault, 2026-11-07); those are
+# cluster-scoped, so they carry the SCENARIO_LABEL and the reset deletes them
+# by that label BEFORE anything tries to create a pod — a lingering
+# failurePolicy=Fail webhook whose backend is gone would refuse every pod the
+# next scenario needs, and a lingering CRD would enter every later fixture's
+# api-resources and custom-resource roster as unowned noise.
 #
 # Usage: inject.sh --id <id> [--root <dir>] [--context <ctx>] [--force] [--no-capture]
 #
@@ -35,6 +38,10 @@ NOISE_TIMEOUT=180
 FROZEN_ROOT="evals/scenarios"
 SCENARIO_LABEL="incident-lab.dev/scenario"
 WEBHOOK_KINDS="validatingwebhookconfigurations mutatingwebhookconfigurations"
+# Every cluster-scoped kind an additive-root scenario may create; all of them
+# are owned through SCENARIO_LABEL and deleted by it on reset.
+OWNED_CLUSTER_KINDS="$WEBHOOK_KINDS customresourcedefinitions"
+OWNED_KIND_RE='(MutatingWebhookConfiguration|ValidatingWebhookConfiguration|CustomResourceDefinition)'
 
 die() { echo "inject: $*" >&2; exit 1; }
 
@@ -67,23 +74,25 @@ SCEN="$ROOT/$SCEN_ROOT/$ID"
 [ -s "$SCEN/page.txt" ] || die "$ID: page.txt missing or empty (symptom-first: no page, no scenario)"
 [ -x "$SCEN/wait.sh" ] || die "$ID: wait.sh missing or not executable"
 # Cluster-scoped objects: refused outright for every kind the reset cannot
-# undo. Admission webhook configurations are the one exception, and only in an
-# additive root — the frozen root's contract (README rule 4) is namespaced
-# objects only — and only when every such document carries the label the
-# reset deletes by; an unlabelled one would outlive the scenario and refuse
-# every later pod create. The checks run before the cluster is contacted.
+# undo. Admission webhook configurations and CustomResourceDefinitions are
+# the exceptions, and only in an additive root — the frozen root's contract
+# (README rule 4) is namespaced objects only — and only when every such
+# document carries the label the reset deletes by; an unlabelled one would
+# outlive the scenario (a webhook refusing every later pod create, a CRD
+# surfacing in every later fixture). The checks run before the cluster is
+# contacted.
 for MANIFEST in "$SCEN/fault.yaml" "$SCEN/setup.yaml"; do
   [ -s "$MANIFEST" ] || continue
   if grep -qE '^kind: (ClusterRole|ClusterRoleBinding|PersistentVolume|StorageClass)\b' "$MANIFEST"; then
     die "$ID: $(basename "$MANIFEST") creates cluster-scoped objects — scenarios must stay namespaced (README rule 4)"
   fi
-  N_WEBHOOKS="$(grep -cE '^kind: (MutatingWebhookConfiguration|ValidatingWebhookConfiguration)\b' "$MANIFEST")"
-  [ "$N_WEBHOOKS" -gt 0 ] || continue
+  N_OWNED="$(grep -cE "^kind: $OWNED_KIND_RE\b" "$MANIFEST")"
+  [ "$N_OWNED" -gt 0 ] || continue
   [ "$SCEN_ROOT" != "$FROZEN_ROOT" ] \
-    || die "$ID: webhook configurations are cluster-scoped — the frozen root stays namespaced (README rule 4); author admission cases in an additive root"
+    || die "$ID: webhook configurations and CRDs are cluster-scoped — the frozen root stays namespaced (README rule 4); author such cases in an additive root"
   N_LABELED="$(grep -cE "^ {2,}$SCENARIO_LABEL: $ID\$" "$MANIFEST")"
-  [ "$N_LABELED" -eq "$N_WEBHOOKS" ] \
-    || die "$ID: $(basename "$MANIFEST") has $N_WEBHOOKS webhook configuration(s) but $N_LABELED carry the label '$SCENARIO_LABEL: $ID' the reset deletes by"
+  [ "$N_LABELED" -eq "$N_OWNED" ] \
+    || die "$ID: $(basename "$MANIFEST") has $N_OWNED cluster-scoped document(s) (webhook configuration / CRD) but $N_LABELED carry the label '$SCENARIO_LABEL: $ID' the reset deletes by"
   # A scenario webhook may intercept pod CREATE and nothing else: one that
   # matched namespace or webhook-configuration DELETE with failurePolicy Fail
   # would refuse the reset itself, and the cluster would need hand surgery.
@@ -109,10 +118,12 @@ STRAY="$(K get pods,deployments,replicasets,statefulsets,daemonsets,jobs,configm
 
 # --- reset, cluster-scoped half: a previous scenario's admission webhook
 # configurations go first, because with failurePolicy=Fail and no backend
-# they would refuse every pod the noise pack or setup.yaml creates below.
-# Only scenario-labelled configurations are this pipeline's to delete; any
-# other is a stray from outside it and is refused, like a non-empty default.
-for KIND in $WEBHOOK_KINDS; do
+# they would refuse every pod the noise pack or setup.yaml creates below; its
+# CRDs go with them (deleting a CRD deletes its custom resources, so this
+# precedes the namespace wipe by design). Only scenario-labelled objects are
+# this pipeline's to delete; any other is a stray from outside it and is
+# refused, like a non-empty default.
+for KIND in $OWNED_CLUSTER_KINDS; do
   STRAY="$(K get "$KIND" -l "!$SCENARIO_LABEL" -o name 2>/dev/null || true)"
   [ -z "$STRAY" ] || die "unlabelled $KIND present — not created by inject.sh, refusing to touch it:$(printf '\n  %s' $STRAY)"
   OWNED="$(K get "$KIND" -l "$SCENARIO_LABEL" -o name 2>/dev/null || true)"
