@@ -1,0 +1,8 @@
+[PAGE] SEV2 RoutePlanningDegraded — dispatch
+Dispatchers report that tomorrow's weekday route plans are not being
+generated: the planning screen spins, then falls back to yesterday's routes,
+and 140 stops are still unassigned for the 04:30 departures. Deployment
+dispatch/route-optimizer has had 0 of 2 pods ready since 05:10 and no pod
+has stayed up for longer than a minute. The solver tier reports healthy.
+Alert source: Opsgenie, dispatch-platform availability check. Identify the
+root cause and the remediation.

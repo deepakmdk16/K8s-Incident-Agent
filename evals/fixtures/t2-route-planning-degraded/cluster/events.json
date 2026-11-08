@@ -1,0 +1,2220 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:26Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:26Z",
+      "message": "Starting kubelet.",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:26Z",
+        "name": "incident-lab-control-plane.18e5d60f01219420",
+        "namespace": "default",
+        "resourceVersion": "238",
+        "uid": "6c5150a1-a72d-4719-8da2-4039f7d08b4f"
+      },
+      "reason": "Starting",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:26Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:26Z",
+      "message": "Updated Node Allocatable limit across pods",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:26Z",
+        "name": "incident-lab-control-plane.18e5d60f026d198a",
+        "namespace": "default",
+        "resourceVersion": "241",
+        "uid": "dfea0e7f-85ed-4c11-b7f0-e16b22092246"
+      },
+      "reason": "NodeAllocatableEnforced",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:26Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane",
+        "uid": "eba65dad-02fb-4a17-ac67-da7e13e34fbb"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:26Z",
+      "message": "Node incident-lab-control-plane status is now: NodeHasSufficientMemory",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:26Z",
+        "name": "incident-lab-control-plane.18e5d60f087142ff",
+        "namespace": "default",
+        "resourceVersion": "244",
+        "uid": "680ad104-722f-4c6f-a905-8a0e382cdd1e"
+      },
+      "reason": "NodeHasSufficientMemory",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:26Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane",
+        "uid": "eba65dad-02fb-4a17-ac67-da7e13e34fbb"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:26Z",
+      "message": "Node incident-lab-control-plane status is now: NodeHasNoDiskPressure",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:26Z",
+        "name": "incident-lab-control-plane.18e5d60f087185be",
+        "namespace": "default",
+        "resourceVersion": "245",
+        "uid": "50f0dd36-d35a-44ed-aa1d-eeb85c7ff1e0"
+      },
+      "reason": "NodeHasNoDiskPressure",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:26Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane",
+        "uid": "eba65dad-02fb-4a17-ac67-da7e13e34fbb"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:26Z",
+      "message": "Node incident-lab-control-plane status is now: NodeHasSufficientPID",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:26Z",
+        "name": "incident-lab-control-plane.18e5d60f0871955e",
+        "namespace": "default",
+        "resourceVersion": "246",
+        "uid": "03126c7a-7701-443c-9183-b05c624e19f4"
+      },
+      "reason": "NodeHasSufficientPID",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:34Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane",
+        "uid": "eba65dad-02fb-4a17-ac67-da7e13e34fbb"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:34Z",
+      "message": "Node incident-lab-control-plane event: Registered Node incident-lab-control-plane in Controller",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:34Z",
+        "name": "incident-lab-control-plane.18e5d610d0bfe43a",
+        "namespace": "default",
+        "resourceVersion": "339",
+        "uid": "e116ded4-3d1b-4520-91a1-0b4efa5d2a5e"
+      },
+      "reason": "RegisteredNode",
+      "reportingComponent": "node-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "node-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "action": "StartKubeProxy",
+      "apiVersion": "v1",
+      "eventTime": "2026-11-07T18:16:36.142641Z",
+      "firstTimestamp": null,
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane"
+      },
+      "kind": "Event",
+      "lastTimestamp": null,
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:36Z",
+        "name": "incident-lab-control-plane.18e5d6113f59b3cf",
+        "namespace": "default",
+        "resourceVersion": "423",
+        "uid": "fcc69ee2-6081-444c-904b-a6a919d8ab00"
+      },
+      "reason": "Starting",
+      "reportingComponent": "kube-proxy",
+      "reportingInstance": "kube-proxy-incident-lab-control-plane",
+      "source": {},
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "name": "incident-lab-control-plane",
+        "uid": "eba65dad-02fb-4a17-ac67-da7e13e34fbb"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Node incident-lab-control-plane status is now: NodeReady",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "incident-lab-control-plane.18e5d6138d676829",
+        "namespace": "default",
+        "resourceVersion": "446",
+        "uid": "4b7aa5c6-f6ee-464b-b6b2-aaf8058573b6"
+      },
+      "reason": "NodeReady",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:33:50Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Endpoints",
+        "name": "route-optimizer"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:33:50Z",
+      "message": "Failed to create endpoint for service dispatch/route-optimizer: endpoints \"route-optimizer\" already exists",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:33:50Z",
+        "name": "route-optimizer.18e5f7c00aeaac87",
+        "namespace": "default",
+        "resourceVersion": "3040",
+        "uid": "53bd9532-6d24-42aa-a22a-d19af5d4207a"
+      },
+      "reason": "FailedToCreateEndpoint",
+      "reportingComponent": "endpoint-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "endpoint-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:33:48Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Endpoints",
+        "name": "route-solver"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:33:48Z",
+      "message": "Failed to create endpoint for service dispatch/route-solver: Unauthorized",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:33:48Z",
+        "name": "route-solver.18e5f7bf6b344488",
+        "namespace": "default",
+        "resourceVersion": "2979",
+        "uid": "c434ae0b-268c-4da9-941c-3b7de99f5542"
+      },
+      "reason": "FailedToCreateEndpoint",
+      "reportingComponent": "endpoint-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "endpoint-controller"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "eta-publisher-777b6d887b-2r6np",
+        "namespace": "dispatch",
+        "resourceVersion": "3459",
+        "uid": "8420658c-001e-47c6-8591-65bdb1ed4d0a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Successfully assigned dispatch/eta-publisher-777b6d887b-2r6np to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher-777b6d887b-2r6np.18e5f7e1415cac0e",
+        "namespace": "dispatch",
+        "resourceVersion": "3465",
+        "uid": "9a0b7681-4c7a-45b3-864c-5d4bc31726b9"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{publisher}",
+        "kind": "Pod",
+        "name": "eta-publisher-777b6d887b-2r6np",
+        "namespace": "dispatch",
+        "resourceVersion": "3463",
+        "uid": "8420658c-001e-47c6-8591-65bdb1ed4d0a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher-777b6d887b-2r6np.18e5f7e155bc15c0",
+        "namespace": "dispatch",
+        "resourceVersion": "3471",
+        "uid": "835ff0d6-f4a7-4978-8e34-656907add20b"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{publisher}",
+        "kind": "Pod",
+        "name": "eta-publisher-777b6d887b-2r6np",
+        "namespace": "dispatch",
+        "resourceVersion": "3463",
+        "uid": "8420658c-001e-47c6-8591-65bdb1ed4d0a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher-777b6d887b-2r6np.18e5f7e1561e601e",
+        "namespace": "dispatch",
+        "resourceVersion": "3474",
+        "uid": "b9103ba6-4bf6-4823-b8ff-8cc08a0752bd"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{publisher}",
+        "kind": "Pod",
+        "name": "eta-publisher-777b6d887b-2r6np",
+        "namespace": "dispatch",
+        "resourceVersion": "3463",
+        "uid": "8420658c-001e-47c6-8591-65bdb1ed4d0a"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher-777b6d887b-2r6np.18e5f7e15816e7f2",
+        "namespace": "dispatch",
+        "resourceVersion": "3477",
+        "uid": "f1931560-39f4-421d-a230-a6b251995545"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "eta-publisher-777b6d887b",
+        "namespace": "dispatch",
+        "resourceVersion": "3457",
+        "uid": "91ae27e3-b5f0-4d0a-bbc2-b6e38f180361"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Created pod: eta-publisher-777b6d887b-2r6np",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher-777b6d887b.18e5f7e1413a5edb",
+        "namespace": "dispatch",
+        "resourceVersion": "3461",
+        "uid": "961f29c8-19c8-48f4-af5e-221cbbaa567e"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "eta-publisher",
+        "namespace": "dispatch",
+        "resourceVersion": "3456",
+        "uid": "f5ec0d66-24c3-4827-a242-4fbad840be06"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Scaled up replica set eta-publisher-777b6d887b from 0 to 1",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "eta-publisher.18e5f7e1412595b8",
+        "namespace": "dispatch",
+        "resourceVersion": "3458",
+        "uid": "7393dad9-8b58-421e-b085-c5c4a7d4bf91"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-22sfp",
+        "namespace": "dispatch",
+        "resourceVersion": "3497",
+        "uid": "7aadcdce-afe1-4aea-89d0-11a264935639"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:16Z",
+      "message": "Successfully assigned dispatch/route-optimizer-78fc6747d7-22sfp to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-22sfp.18e5f7e1dd5bc863",
+        "namespace": "dispatch",
+        "resourceVersion": "3509",
+        "uid": "5ae38ffb-6c1f-49e9-8cad-c7aff1e0862b"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 4,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-22sfp",
+        "namespace": "dispatch",
+        "resourceVersion": "3503",
+        "uid": "7aadcdce-afe1-4aea-89d0-11a264935639"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:52Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-22sfp.18e5f7e1f3aa7a2e",
+        "namespace": "dispatch",
+        "resourceVersion": "3614",
+        "uid": "b5f1fe74-23b3-4db0-abc8-dcac96eefb9a"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 4,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-22sfp",
+        "namespace": "dispatch",
+        "resourceVersion": "3503",
+        "uid": "7aadcdce-afe1-4aea-89d0-11a264935639"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:52Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-22sfp.18e5f7e1f4585332",
+        "namespace": "dispatch",
+        "resourceVersion": "3615",
+        "uid": "6aef6e5d-e596-437b-9167-73cd29f274c2"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 4,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-22sfp",
+        "namespace": "dispatch",
+        "resourceVersion": "3503",
+        "uid": "7aadcdce-afe1-4aea-89d0-11a264935639"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:52Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-22sfp.18e5f7e1f6587316",
+        "namespace": "dispatch",
+        "resourceVersion": "3616",
+        "uid": "2ec6ef62-9a30-469a-b4dc-8bf989966392"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 6,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:18Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-22sfp",
+        "namespace": "dispatch",
+        "resourceVersion": "3503",
+        "uid": "7aadcdce-afe1-4aea-89d0-11a264935639"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:53Z",
+      "message": "Back-off restarting failed container optimizer in pod route-optimizer-78fc6747d7-22sfp_dispatch(7aadcdce-afe1-4aea-89d0-11a264935639)",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:18Z",
+        "name": "route-optimizer-78fc6747d7-22sfp.18e5f7e2539753ca",
+        "namespace": "dispatch",
+        "resourceVersion": "3622",
+        "uid": "f184eb26-131b-41e2-b912-3352e8e518cd"
+      },
+      "reason": "BackOff",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-mqwkc",
+        "namespace": "dispatch",
+        "resourceVersion": "3501",
+        "uid": "3941fdf7-9b5e-44ef-9da0-5b5b2249cfff"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:16Z",
+      "message": "Successfully assigned dispatch/route-optimizer-78fc6747d7-mqwkc to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-mqwkc.18e5f7e1dd767711",
+        "namespace": "dispatch",
+        "resourceVersion": "3511",
+        "uid": "b9406841-0598-4ec5-9eea-93637fe1b0d2"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 4,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-mqwkc",
+        "namespace": "dispatch",
+        "resourceVersion": "3505",
+        "uid": "3941fdf7-9b5e-44ef-9da0-5b5b2249cfff"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:58Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-mqwkc.18e5f7e1f3a0ac4a",
+        "namespace": "dispatch",
+        "resourceVersion": "3630",
+        "uid": "a9847756-5071-4e12-8c30-95b2f50726e0"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 4,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-mqwkc",
+        "namespace": "dispatch",
+        "resourceVersion": "3505",
+        "uid": "3941fdf7-9b5e-44ef-9da0-5b5b2249cfff"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:58Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-mqwkc.18e5f7e1f40b6780",
+        "namespace": "dispatch",
+        "resourceVersion": "3631",
+        "uid": "8f4c46d3-c139-48b8-b9e5-07c2c0405dbb"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 4,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-mqwkc",
+        "namespace": "dispatch",
+        "resourceVersion": "3505",
+        "uid": "3941fdf7-9b5e-44ef-9da0-5b5b2249cfff"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:58Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7-mqwkc.18e5f7e1f6111702",
+        "namespace": "dispatch",
+        "resourceVersion": "3632",
+        "uid": "a31fa063-88d7-44b2-abb4-99623f39f877"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 6,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:18Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{optimizer}",
+        "kind": "Pod",
+        "name": "route-optimizer-78fc6747d7-mqwkc",
+        "namespace": "dispatch",
+        "resourceVersion": "3505",
+        "uid": "3941fdf7-9b5e-44ef-9da0-5b5b2249cfff"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:59Z",
+      "message": "Back-off restarting failed container optimizer in pod route-optimizer-78fc6747d7-mqwkc_dispatch(3941fdf7-9b5e-44ef-9da0-5b5b2249cfff)",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:18Z",
+        "name": "route-optimizer-78fc6747d7-mqwkc.18e5f7e25380a062",
+        "namespace": "dispatch",
+        "resourceVersion": "3640",
+        "uid": "2097dfcb-82c7-4928-9f77-e99ac64cc89a"
+      },
+      "reason": "BackOff",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "route-optimizer-78fc6747d7",
+        "namespace": "dispatch",
+        "resourceVersion": "3495",
+        "uid": "70860072-1a2c-4052-9ef1-96035644bed1"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:16Z",
+      "message": "Created pod: route-optimizer-78fc6747d7-22sfp",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7.18e5f7e1dd2ddedd",
+        "namespace": "dispatch",
+        "resourceVersion": "3500",
+        "uid": "516cc4d7-2694-4e49-8bc9-984df11d2609"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "route-optimizer-78fc6747d7",
+        "namespace": "dispatch",
+        "resourceVersion": "3495",
+        "uid": "70860072-1a2c-4052-9ef1-96035644bed1"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:16Z",
+      "message": "Created pod: route-optimizer-78fc6747d7-mqwkc",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer-78fc6747d7.18e5f7e1dd4b6763",
+        "namespace": "dispatch",
+        "resourceVersion": "3504",
+        "uid": "d28006c2-5fae-4aa7-928e-dfc597402fbf"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:16Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "route-optimizer",
+        "namespace": "dispatch",
+        "resourceVersion": "3494",
+        "uid": "44f0e37a-9a6b-453b-9ea8-de56a2924aa4"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:16Z",
+      "message": "Scaled up replica set route-optimizer-78fc6747d7 from 0 to 2",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:16Z",
+        "name": "route-optimizer.18e5f7e1dd099299",
+        "namespace": "dispatch",
+        "resourceVersion": "3496",
+        "uid": "adc8376a-c66e-4b52-8a3a-ce9ced7542fc"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "route-solver-858546fc7b-5gpmh",
+        "namespace": "dispatch",
+        "resourceVersion": "3443",
+        "uid": "c338ffe4-819f-427f-b428-6c8511181144"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Successfully assigned dispatch/route-solver-858546fc7b-5gpmh to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver-858546fc7b-5gpmh.18e5f7e14087d21a",
+        "namespace": "dispatch",
+        "resourceVersion": "3451",
+        "uid": "79a3aa3f-a9c8-4daf-9219-b413158e3b03"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{solver}",
+        "kind": "Pod",
+        "name": "route-solver-858546fc7b-5gpmh",
+        "namespace": "dispatch",
+        "resourceVersion": "3448",
+        "uid": "c338ffe4-819f-427f-b428-6c8511181144"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Container image \"busybox:1.36\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver-858546fc7b-5gpmh.18e5f7e155850189",
+        "namespace": "dispatch",
+        "resourceVersion": "3469",
+        "uid": "6ae066be-f521-4f06-b782-d0e14157cb74"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{solver}",
+        "kind": "Pod",
+        "name": "route-solver-858546fc7b-5gpmh",
+        "namespace": "dispatch",
+        "resourceVersion": "3448",
+        "uid": "c338ffe4-819f-427f-b428-6c8511181144"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver-858546fc7b-5gpmh.18e5f7e155f2670c",
+        "namespace": "dispatch",
+        "resourceVersion": "3473",
+        "uid": "5daf9e83-642d-424c-9ec5-de08994c0d0d"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{solver}",
+        "kind": "Pod",
+        "name": "route-solver-858546fc7b-5gpmh",
+        "namespace": "dispatch",
+        "resourceVersion": "3448",
+        "uid": "c338ffe4-819f-427f-b428-6c8511181144"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver-858546fc7b-5gpmh.18e5f7e157cac019",
+        "namespace": "dispatch",
+        "resourceVersion": "3475",
+        "uid": "fbf49394-6848-4014-843f-d54cc12fa2ec"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "route-solver-858546fc7b",
+        "namespace": "dispatch",
+        "resourceVersion": "3439",
+        "uid": "ec3f5b7c-7607-4b6c-b471-78b42ec51b84"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Created pod: route-solver-858546fc7b-5gpmh",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver-858546fc7b.18e5f7e14061d29a",
+        "namespace": "dispatch",
+        "resourceVersion": "3445",
+        "uid": "e7761f9b-ece5-4621-96db-2dbc06a75624"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-08T04:36:13Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "route-solver",
+        "namespace": "dispatch",
+        "resourceVersion": "3438",
+        "uid": "6aa6efe9-2f0b-434f-8466-0ce27e433755"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-08T04:36:13Z",
+      "message": "Scaled up replica set route-solver-858546fc7b from 0 to 1",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:13Z",
+        "name": "route-solver.18e5f7e14030f177",
+        "namespace": "dispatch",
+        "resourceVersion": "3441",
+        "uid": "5df739aa-9598-4f97-af39-2418e53acb84"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-6txpq",
+        "namespace": "kube-system",
+        "resourceVersion": "396",
+        "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "0/1 nodes are available: 1 node(s) had untolerated taint(s). preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "coredns-559f6c778d-6txpq.18e5d6111e9afde8",
+        "namespace": "kube-system",
+        "resourceVersion": "404",
+        "uid": "462291b9-db47-4368-a533-303c48488130"
+      },
+      "reason": "FailedScheduling",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-6txpq",
+        "namespace": "kube-system",
+        "resourceVersion": "405",
+        "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Successfully assigned kube-system/coredns-559f6c778d-6txpq to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-6txpq.18e5d6138e841519",
+        "namespace": "kube-system",
+        "resourceVersion": "452",
+        "uid": "91df9907-07af-440d-8e7b-2910d1dcab3e"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-6txpq",
+        "namespace": "kube-system",
+        "resourceVersion": "451",
+        "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container image \"registry.k8s.io/coredns/coredns:v1.14.6\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-6txpq.18e5d613a78afbff",
+        "namespace": "kube-system",
+        "resourceVersion": "460",
+        "uid": "31d6aa75-9eb5-4015-a083-3ff06606759f"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-6txpq",
+        "namespace": "kube-system",
+        "resourceVersion": "451",
+        "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-6txpq.18e5d613b7696848",
+        "namespace": "kube-system",
+        "resourceVersion": "468",
+        "uid": "6b1d43b0-29cc-4aa3-8e33-6169a5d5f39b"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-6txpq",
+        "namespace": "kube-system",
+        "resourceVersion": "451",
+        "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-6txpq.18e5d613b9e04c2d",
+        "namespace": "kube-system",
+        "resourceVersion": "478",
+        "uid": "34a1cc02-81fe-442a-86ae-bd242e34ade3"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-6txpq",
+        "namespace": "kube-system",
+        "resourceVersion": "451",
+        "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Readiness probe failed: Get \"http://10.244.0.4:8181/ready\": dial tcp 10.244.0.4:8181: connect: connection refused",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-6txpq.18e5d613b9fa9aa5",
+        "namespace": "kube-system",
+        "resourceVersion": "479",
+        "uid": "406fb58b-d8dd-44ee-aaef-d9475591f38f"
+      },
+      "reason": "Unhealthy",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-kghtn",
+        "namespace": "kube-system",
+        "resourceVersion": "393",
+        "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "0/1 nodes are available: 1 node(s) had untolerated taint(s). preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "coredns-559f6c778d-kghtn.18e5d6111e5ab0a4",
+        "namespace": "kube-system",
+        "resourceVersion": "397",
+        "uid": "bdd192fe-fcfc-4d2e-b3c6-9f726543bceb"
+      },
+      "reason": "FailedScheduling",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-kghtn",
+        "namespace": "kube-system",
+        "resourceVersion": "400",
+        "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Successfully assigned kube-system/coredns-559f6c778d-kghtn to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-kghtn.18e5d6138e843b84",
+        "namespace": "kube-system",
+        "resourceVersion": "453",
+        "uid": "57ede331-25a8-41ab-8950-ad4f782ad930"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-kghtn",
+        "namespace": "kube-system",
+        "resourceVersion": "449",
+        "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container image \"registry.k8s.io/coredns/coredns:v1.14.6\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-kghtn.18e5d613a7ecedeb",
+        "namespace": "kube-system",
+        "resourceVersion": "462",
+        "uid": "62ef0d00-645f-4d4e-a940-4e387cb07413"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-kghtn",
+        "namespace": "kube-system",
+        "resourceVersion": "449",
+        "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-kghtn.18e5d613b6a157e1",
+        "namespace": "kube-system",
+        "resourceVersion": "467",
+        "uid": "3bd72ca2-e689-4ca4-b4a0-9098ce069f6b"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-kghtn",
+        "namespace": "kube-system",
+        "resourceVersion": "449",
+        "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-kghtn.18e5d613b9609706",
+        "namespace": "kube-system",
+        "resourceVersion": "473",
+        "uid": "52eb4a92-15cc-4db0-98fd-dabf1e27913c"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{coredns}",
+        "kind": "Pod",
+        "name": "coredns-559f6c778d-kghtn",
+        "namespace": "kube-system",
+        "resourceVersion": "449",
+        "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Readiness probe failed: Get \"http://10.244.0.3:8181/ready\": dial tcp 10.244.0.3:8181: connect: connection refused",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "coredns-559f6c778d-kghtn.18e5d613b978c8b3",
+        "namespace": "kube-system",
+        "resourceVersion": "474",
+        "uid": "e4bf233c-cbef-46c9-b9f0-c3f9fda4f433"
+      },
+      "reason": "Unhealthy",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "coredns-559f6c778d",
+        "namespace": "kube-system",
+        "resourceVersion": "385",
+        "uid": "9593160f-1613-4be5-8d8d-2646019565b2"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Created pod: coredns-559f6c778d-kghtn",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "coredns-559f6c778d.18e5d6111e549877",
+        "namespace": "kube-system",
+        "resourceVersion": "395",
+        "uid": "db7b8216-f6b6-429a-86c5-6de3803bed3d"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "coredns-559f6c778d",
+        "namespace": "kube-system",
+        "resourceVersion": "385",
+        "uid": "9593160f-1613-4be5-8d8d-2646019565b2"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Created pod: coredns-559f6c778d-6txpq",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "coredns-559f6c778d.18e5d6111e7abf04",
+        "namespace": "kube-system",
+        "resourceVersion": "402",
+        "uid": "e2fb0e48-a60b-46d4-bb64-507318f67d72"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "coredns",
+        "namespace": "kube-system",
+        "resourceVersion": "250",
+        "uid": "23c8867a-8911-4efc-aee9-928c4167155c"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Scaled up replica set coredns-559f6c778d from 0 to 2",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "coredns.18e5d61118885f7b",
+        "namespace": "kube-system",
+        "resourceVersion": "390",
+        "uid": "19a29e02-336f-4362-b15d-dfd8a64acc32"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "kindnet-v8qj7",
+        "namespace": "kube-system",
+        "resourceVersion": "370",
+        "uid": "9c235d43-7866-4ad9-b5ae-7c4506b26dad"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Successfully assigned kube-system/kindnet-v8qj7 to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kindnet-v8qj7.18e5d6111301e592",
+        "namespace": "kube-system",
+        "resourceVersion": "379",
+        "uid": "496a4a43-1ef0-4f8e-b070-884946b7dff2"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kindnet-cni}",
+        "kind": "Pod",
+        "name": "kindnet-v8qj7",
+        "namespace": "kube-system",
+        "resourceVersion": "375",
+        "uid": "9c235d43-7866-4ad9-b5ae-7c4506b26dad"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Container image \"docker.io/kindest/kindnetd:v20260820-69b56db7\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kindnet-v8qj7.18e5d611294f1053",
+        "namespace": "kube-system",
+        "resourceVersion": "413",
+        "uid": "d00095a2-e0b1-4238-a415-d7059d2c8045"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kindnet-cni}",
+        "kind": "Pod",
+        "name": "kindnet-v8qj7",
+        "namespace": "kube-system",
+        "resourceVersion": "375",
+        "uid": "9c235d43-7866-4ad9-b5ae-7c4506b26dad"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kindnet-v8qj7.18e5d6113415922b",
+        "namespace": "kube-system",
+        "resourceVersion": "416",
+        "uid": "b41d7c84-40c7-4bcc-b7ef-7252b4130a75"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kindnet-cni}",
+        "kind": "Pod",
+        "name": "kindnet-v8qj7",
+        "namespace": "kube-system",
+        "resourceVersion": "375",
+        "uid": "9c235d43-7866-4ad9-b5ae-7c4506b26dad"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kindnet-v8qj7.18e5d611361af19d",
+        "namespace": "kube-system",
+        "resourceVersion": "420",
+        "uid": "8d2acb45-5ccf-471b-99ae-666b0fffc7d9"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "DaemonSet",
+        "name": "kindnet",
+        "namespace": "kube-system",
+        "resourceVersion": "271",
+        "uid": "e039df3d-516d-4239-973d-1567884b0b14"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Created pod: kindnet-v8qj7",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kindnet.18e5d61112dad6b8",
+        "namespace": "kube-system",
+        "resourceVersion": "374",
+        "uid": "f81d28d0-b6a9-419e-ae34-93329bd2cb71"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "daemonset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "daemonset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:28Z",
+      "involvedObject": {
+        "apiVersion": "coordination.k8s.io/v1",
+        "kind": "Lease",
+        "name": "kube-controller-manager",
+        "namespace": "kube-system",
+        "resourceVersion": "287",
+        "uid": "2e985305-409c-4eb4-80d2-73679d5f07d7"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:28Z",
+      "message": "incident-lab-control-plane_4609f604-4f52-4df1-9f35-8458a092539c became leader",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:28Z",
+        "name": "kube-controller-manager.18e5d60f82b387fb",
+        "namespace": "kube-system",
+        "resourceVersion": "289",
+        "uid": "75e5e28b-9577-4293-bc52-54af82a34dc4"
+      },
+      "reason": "LeaderElection",
+      "reportingComponent": "kube-controller-manager",
+      "reportingInstance": "",
+      "source": {
+        "component": "kube-controller-manager"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "kube-proxy-n2gjp",
+        "namespace": "kube-system",
+        "resourceVersion": "369",
+        "uid": "3bc6628d-f6d6-4706-997c-bd4453bfdabe"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Successfully assigned kube-system/kube-proxy-n2gjp to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kube-proxy-n2gjp.18e5d61112f9c8de",
+        "namespace": "kube-system",
+        "resourceVersion": "377",
+        "uid": "fdfbe16e-9248-41cd-a8d7-9edd79bb5eaf"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kube-proxy}",
+        "kind": "Pod",
+        "name": "kube-proxy-n2gjp",
+        "namespace": "kube-system",
+        "resourceVersion": "373",
+        "uid": "3bc6628d-f6d6-4706-997c-bd4453bfdabe"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Container image \"registry.k8s.io/kube-proxy:v1.37.0\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kube-proxy-n2gjp.18e5d61128be2cc0",
+        "namespace": "kube-system",
+        "resourceVersion": "411",
+        "uid": "e3307450-ab6c-435c-9041-2dc3605344c7"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kube-proxy}",
+        "kind": "Pod",
+        "name": "kube-proxy-n2gjp",
+        "namespace": "kube-system",
+        "resourceVersion": "373",
+        "uid": "3bc6628d-f6d6-4706-997c-bd4453bfdabe"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kube-proxy-n2gjp.18e5d61130b2afc8",
+        "namespace": "kube-system",
+        "resourceVersion": "415",
+        "uid": "d9fe9e20-c400-467d-ae52-d33a24c19dc6"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kube-proxy}",
+        "kind": "Pod",
+        "name": "kube-proxy-n2gjp",
+        "namespace": "kube-system",
+        "resourceVersion": "373",
+        "uid": "3bc6628d-f6d6-4706-997c-bd4453bfdabe"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kube-proxy-n2gjp.18e5d6113464cf33",
+        "namespace": "kube-system",
+        "resourceVersion": "417",
+        "uid": "7c5f954e-8a98-421e-b571-d397faca8ec7"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "DaemonSet",
+        "name": "kube-proxy",
+        "namespace": "kube-system",
+        "resourceVersion": "254",
+        "uid": "1d21f96d-3e39-4cae-adf9-201ee090ac91"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Created pod: kube-proxy-n2gjp",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "kube-proxy.18e5d61112bfe9b9",
+        "namespace": "kube-system",
+        "resourceVersion": "371",
+        "uid": "ee9fa01c-b59b-4851-9c95-f389097d195b"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "daemonset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "daemonset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 2,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:27Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kube-scheduler}",
+        "kind": "Pod",
+        "name": "kube-scheduler-incident-lab-control-plane",
+        "namespace": "kube-system",
+        "uid": "4eec83872dfd28bf86d8bcb3441cd15e"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:27Z",
+      "message": "Readiness probe failed: HTTP probe failed with statuscode: 500",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:27Z",
+        "name": "kube-scheduler-incident-lab-control-plane.18e5d60f2e362465",
+        "namespace": "kube-system",
+        "resourceVersion": "261",
+        "uid": "d4ffde90-85ca-4035-8766-071de4ea23f4"
+      },
+      "reason": "Unhealthy",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:28Z",
+      "involvedObject": {
+        "apiVersion": "coordination.k8s.io/v1",
+        "kind": "Lease",
+        "name": "kube-scheduler",
+        "namespace": "kube-system",
+        "resourceVersion": "283",
+        "uid": "9e947806-d2da-4735-b429-dbd01f25f9ed"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:28Z",
+      "message": "incident-lab-control-plane_02f6be65-a52e-4714-8e37-1459492ae4ad became leader",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:28Z",
+        "name": "kube-scheduler.18e5d60f69c699a2",
+        "namespace": "kube-system",
+        "resourceVersion": "285",
+        "uid": "c24de9a4-7a3f-448a-957d-552d80e5eb1b"
+      },
+      "reason": "LeaderElection",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm",
+        "namespace": "local-path-storage",
+        "resourceVersion": "394",
+        "uid": "f136465a-b90c-46fe-9d84-c06986d46caa"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "0/1 nodes are available: 1 node(s) had untolerated taint(s). preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm.18e5d6111ec67ed2",
+        "namespace": "local-path-storage",
+        "resourceVersion": "408",
+        "uid": "0b40be99-30a7-490d-9cda-2a18e0af0091"
+      },
+      "reason": "FailedScheduling",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Warning"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm",
+        "namespace": "local-path-storage",
+        "resourceVersion": "409",
+        "uid": "f136465a-b90c-46fe-9d84-c06986d46caa"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Successfully assigned local-path-storage/local-path-provisioner-75f7fc7dc5-lfntm to incident-lab-control-plane",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm.18e5d6138e852425",
+        "namespace": "local-path-storage",
+        "resourceVersion": "454",
+        "uid": "56e6ac83-7c23-43dc-8954-ad34157cc1e6"
+      },
+      "reason": "Scheduled",
+      "reportingComponent": "default-scheduler",
+      "reportingInstance": "",
+      "source": {
+        "component": "default-scheduler"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{local-path-provisioner}",
+        "kind": "Pod",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm",
+        "namespace": "local-path-storage",
+        "resourceVersion": "450",
+        "uid": "f136465a-b90c-46fe-9d84-c06986d46caa"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container image \"docker.io/kindest/local-path-provisioner:v20260820-69b56db7\" already present on machine and can be accessed by the pod",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm.18e5d613a7699477",
+        "namespace": "local-path-storage",
+        "resourceVersion": "459",
+        "uid": "6c76f482-8b9c-4d0d-88b0-bb178a70bfef"
+      },
+      "reason": "Pulled",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{local-path-provisioner}",
+        "kind": "Pod",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm",
+        "namespace": "local-path-storage",
+        "resourceVersion": "450",
+        "uid": "f136465a-b90c-46fe-9d84-c06986d46caa"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container created",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm.18e5d613b455f92e",
+        "namespace": "local-path-storage",
+        "resourceVersion": "465",
+        "uid": "c6f286e2-cf00-48e6-8ff3-d465f68fd1b1"
+      },
+      "reason": "Created",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:46Z",
+      "involvedObject": {
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{local-path-provisioner}",
+        "kind": "Pod",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm",
+        "namespace": "local-path-storage",
+        "resourceVersion": "450",
+        "uid": "f136465a-b90c-46fe-9d84-c06986d46caa"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:46Z",
+      "message": "Container started",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:46Z",
+        "name": "local-path-provisioner-75f7fc7dc5-lfntm.18e5d613b782d160",
+        "namespace": "local-path-storage",
+        "resourceVersion": "469",
+        "uid": "864fc884-2045-4d6a-93dc-2e391e1fb0ba"
+      },
+      "reason": "Started",
+      "reportingComponent": "kubelet",
+      "reportingInstance": "incident-lab-control-plane",
+      "source": {
+        "component": "kubelet",
+        "host": "incident-lab-control-plane"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "local-path-provisioner-75f7fc7dc5",
+        "namespace": "local-path-storage",
+        "resourceVersion": "384",
+        "uid": "27d82712-8ae6-4ab2-b34d-770744754862"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Created pod: local-path-provisioner-75f7fc7dc5-lfntm",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "local-path-provisioner-75f7fc7dc5.18e5d6111e6b2812",
+        "namespace": "local-path-storage",
+        "resourceVersion": "398",
+        "uid": "1d549ef9-de7f-4fac-b9be-bab440395edb"
+      },
+      "reason": "SuccessfulCreate",
+      "reportingComponent": "replicaset-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "replicaset-controller"
+      },
+      "type": "Normal"
+    },
+    {
+      "apiVersion": "v1",
+      "count": 1,
+      "eventTime": null,
+      "firstTimestamp": "2026-11-07T18:16:35Z",
+      "involvedObject": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "local-path-provisioner",
+        "namespace": "local-path-storage",
+        "resourceVersion": "278",
+        "uid": "acaacc10-996a-4fcc-9862-372ca948dc75"
+      },
+      "kind": "Event",
+      "lastTimestamp": "2026-11-07T18:16:35Z",
+      "message": "Scaled up replica set local-path-provisioner-75f7fc7dc5 from 0 to 1",
+      "metadata": {
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "name": "local-path-provisioner.18e5d611187e446f",
+        "namespace": "local-path-storage",
+        "resourceVersion": "386",
+        "uid": "d794e933-b97d-4c28-9f5f-eeaf21cabb49"
+      },
+      "reason": "ScalingReplicaSet",
+      "reportingComponent": "deployment-controller",
+      "reportingInstance": "",
+      "source": {
+        "component": "deployment-controller"
+      },
+      "type": "Normal"
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

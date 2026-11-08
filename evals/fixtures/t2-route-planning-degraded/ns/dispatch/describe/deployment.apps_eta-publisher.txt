@@ -1,0 +1,46 @@
+Name:                   eta-publisher
+Namespace:              dispatch
+CreationTimestamp:      Sun, 08 Nov 2026 10:06:13 +0530
+Labels:                 app=eta-publisher
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=eta-publisher
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=eta-publisher
+  Containers:
+   publisher:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      /app/run.sh
+    Requests:
+      cpu:     10m
+      memory:  16Mi
+    Environment:
+      SOLVER_HOST:  route-solver.dispatch.svc
+      SOLVER_PORT:  7000
+    Mounts:
+      /app from entrypoint (rw)
+  Volumes:
+   entrypoint:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          eta-publisher-entrypoint
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   eta-publisher-777b6d887b (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  51s   deployment-controller  Scaled up replica set eta-publisher-777b6d887b from 0 to 1

@@ -1,0 +1,73 @@
+Name:             route-optimizer-78fc6747d7-22sfp
+Namespace:        dispatch
+Priority:         0
+Service Account:  route-optimizer
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sun, 08 Nov 2026 10:06:16 +0530
+Labels:           app=route-optimizer
+                  pod-template-hash=78fc6747d7
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.14
+IPs:
+  IP:           10.244.0.14
+Controlled By:  ReplicaSet/route-optimizer-78fc6747d7
+Containers:
+  optimizer:
+    Container ID:  containerd://c8be1fc09b6d3aff01f2983140f65c82b5c0210192f4f24727d3bcb716b72f4f
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          8080/TCP (http)
+    Host Port:     0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sun, 08 Nov 2026 10:06:52 +0530
+      Finished:     Sun, 08 Nov 2026 10:06:52 +0530
+    Ready:          False
+    Restart Count:  3
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      ROUTE_PROFILE:  weekday-routing
+      POD_NAMESPACE:  dispatch (v1:metadata.namespace)
+    Mounts:
+      /app from entrypoint (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-clnwm (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  entrypoint:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      route-optimizer-entrypoint
+    Optional:  false
+  kube-api-access-clnwm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  48s                default-scheduler  Successfully assigned dispatch/route-optimizer-78fc6747d7-22sfp to incident-lab-control-plane
+  Normal   Pulled     12s (x4 over 48s)  kubelet            spec.containers{optimizer}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal   Created    12s (x4 over 48s)  kubelet            spec.containers{optimizer}: Container created
+  Normal   Started    12s (x4 over 48s)  kubelet            spec.containers{optimizer}: Container started
+  Warning  BackOff    11s (x6 over 46s)  kubelet            spec.containers{optimizer}: Back-off restarting failed container optimizer in pod route-optimizer-78fc6747d7-22sfp_dispatch(7aadcdce-afe1-4aea-89d0-11a264935639)

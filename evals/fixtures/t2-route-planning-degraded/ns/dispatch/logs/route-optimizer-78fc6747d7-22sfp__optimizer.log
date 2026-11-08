@@ -1,0 +1,3 @@
+2026-11-08T04:36:52.173202461Z route-optimizer: loading RouteProfile dispatch/weekday-routing
+2026-11-08T04:36:52.218209942Z route-optimizer: profile weekday-routing: solverEndpoint=route-solvr.dispatch.svc:7000
+2026-11-08T04:36:52.221305003Z route-optimizer: solver route-solvr.dispatch.svc:7000 unreachable (RouteProfile weekday-routing spec.solverEndpoint); cannot plan routes, exiting

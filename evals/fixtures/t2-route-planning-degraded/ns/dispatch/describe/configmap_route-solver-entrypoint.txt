@@ -1,0 +1,20 @@
+Name:         route-solver-entrypoint
+Namespace:    dispatch
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+echo "route-solver: accepting plan requests on :7000"
+while true; do echo ready | nc -l -p 7000; done
+
+
+
+BinaryData
+====
+
+Events:  <none>

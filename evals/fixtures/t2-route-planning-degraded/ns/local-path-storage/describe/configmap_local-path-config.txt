@@ -1,0 +1,53 @@
+Name:         local-path-config
+Namespace:    local-path-storage
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+config.json:
+----
+{
+        "nodePathMap":[
+        {
+                "node":"DEFAULT_PATH_FOR_NON_LISTED_NODES",
+                "paths":["/var/local-path-provisioner"]
+        }
+        ]
+}
+
+helperPod.yaml:
+----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: helper-pod
+spec:
+  priorityClassName: system-node-critical
+  tolerations:
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
+  containers:
+  - name: helper-pod
+    image: docker.io/kindest/local-path-helper:v20260131-7181c60a
+    imagePullPolicy: IfNotPresent
+
+setup:
+----
+#!/bin/sh
+set -eu
+mkdir -m 0777 -p "$VOL_DIR"
+
+teardown:
+----
+#!/bin/sh
+set -eu
+rm -rf "$VOL_DIR"
+
+
+BinaryData
+====
+
+Events:  <none>

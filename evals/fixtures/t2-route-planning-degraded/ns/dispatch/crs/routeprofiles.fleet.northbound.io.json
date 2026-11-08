@@ -1,0 +1,27 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "fleet.northbound.io/v1",
+      "kind": "RouteProfile",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T04:36:15Z",
+        "generation": 1,
+        "name": "weekday-routing",
+        "namespace": "dispatch",
+        "resourceVersion": "3489",
+        "uid": "69cab132-69ad-48c0-be83-746757242549"
+      },
+      "spec": {
+        "departureWindow": "04:30-06:00",
+        "maxStops": 40,
+        "region": "pacific-northwest",
+        "solverEndpoint": "route-solvr.dispatch.svc:7000"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

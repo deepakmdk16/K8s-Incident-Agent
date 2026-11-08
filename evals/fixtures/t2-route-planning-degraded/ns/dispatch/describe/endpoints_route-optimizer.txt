@@ -1,0 +1,13 @@
+Name:         route-optimizer
+Namespace:    dispatch
+Labels:       endpoints.kubernetes.io/managed-by=endpoint-controller
+Annotations:  <none>
+Subsets:
+  Addresses:          <none>
+  NotReadyAddresses:  10.244.0.14,10.244.0.15
+  Ports:
+    Name  Port  Protocol
+    ----  ----  --------
+    http  8080  TCP
+
+Events:  <none>

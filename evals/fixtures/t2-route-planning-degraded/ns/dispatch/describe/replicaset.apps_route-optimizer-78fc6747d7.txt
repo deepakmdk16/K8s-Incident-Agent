@@ -1,0 +1,44 @@
+Name:           route-optimizer-78fc6747d7
+Namespace:      dispatch
+Selector:       app=route-optimizer,pod-template-hash=78fc6747d7
+Labels:         app=route-optimizer
+                pod-template-hash=78fc6747d7
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/route-optimizer
+Replicas:       2 current / 2 desired
+Pods Status:    2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=route-optimizer
+                    pod-template-hash=78fc6747d7
+  Service Account:  route-optimizer
+  Containers:
+   optimizer:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      ROUTE_PROFILE:  weekday-routing
+      POD_NAMESPACE:   (v1:metadata.namespace)
+    Mounts:
+      /app from entrypoint (rw)
+  Volumes:
+   entrypoint:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          route-optimizer-entrypoint
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  48s   replicaset-controller  Created pod: route-optimizer-78fc6747d7-22sfp
+  Normal  SuccessfulCreate  48s   replicaset-controller  Created pod: route-optimizer-78fc6747d7-mqwkc

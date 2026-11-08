@@ -1,0 +1,7 @@
+Name:         routeprofile-reader
+Labels:       <none>
+Annotations:  <none>
+PolicyRule:
+  Resources                          Non-Resource URLs  Resource Names  Verbs
+  ---------                          -----------------  --------------  -----
+  routeprofiles.fleet.northbound.io  []                 []              [get]

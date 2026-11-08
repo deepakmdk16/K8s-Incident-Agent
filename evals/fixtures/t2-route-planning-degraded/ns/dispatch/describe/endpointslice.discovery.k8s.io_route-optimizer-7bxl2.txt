@@ -1,0 +1,26 @@
+Name:         route-optimizer-7bxl2
+Namespace:    dispatch
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=route-optimizer
+Annotations:  <none>
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.15
+    Conditions:
+      Ready:    false
+    Hostname:   <unset>
+    TargetRef:  Pod/route-optimizer-78fc6747d7-mqwkc
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+  - Addresses:  10.244.0.14
+    Conditions:
+      Ready:    false
+    Hostname:   <unset>
+    TargetRef:  Pod/route-optimizer-78fc6747d7-22sfp
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>
