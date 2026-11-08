@@ -1,0 +1,43 @@
+Name:                   reefer-monitor
+Namespace:              cold-chain
+CreationTimestamp:      Sun, 08 Nov 2026 10:02:19 +0530
+Labels:                 app=reefer-monitor
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=reefer-monitor
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=reefer-monitor
+  Containers:
+   monitor:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "reefer-monitor: polling reefer units every ${POLL_INTERVAL_SECONDS}s"
+      exec sleep 2147483647
+      
+    Requests:
+      cpu:     512
+      memory:  64Mi
+    Environment:
+      POLL_INTERVAL_SECONDS:  <set to the key 'poll_interval_seconds' of config map 'reefer-monitor-settings'>  Optional: false
+    Mounts:                   <none>
+  Volumes:                    <none>
+  Node-Selectors:             <none>
+  Tolerations:                <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   reefer-monitor-849469b48c (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  1s    deployment-controller  Scaled up replica set reefer-monitor-849469b48c from 0 to 2

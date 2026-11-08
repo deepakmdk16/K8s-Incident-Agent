@@ -1,0 +1,96 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.3"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "coredns-559f6c778d-kghtn",
+            "namespace": "kube-system",
+            "uid": "90ed8426-582a-4507-9a7c-7257755bf96b"
+          }
+        },
+        {
+          "addresses": [
+            "10.244.0.4"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "coredns-559f6c778d-6txpq",
+            "namespace": "kube-system",
+            "uid": "53ea429b-4453-4ec2-b096-26dffa15644b"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-07T18:16:47Z"
+        },
+        "creationTimestamp": "2026-11-07T18:16:35Z",
+        "generateName": "kube-dns-",
+        "generation": 5,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "k8s-app": "kube-dns",
+          "kubernetes.io/cluster-service": "true",
+          "kubernetes.io/name": "CoreDNS",
+          "kubernetes.io/service-name": "kube-dns"
+        },
+        "name": "kube-dns-v72f6",
+        "namespace": "kube-system",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "kube-dns",
+            "uid": "f01c44e0-d12e-483e-8e8e-3085932f6446"
+          }
+        ],
+        "resourceVersion": "492",
+        "uid": "06b68877-db63-4b7c-b2e7-943c3fd015f7"
+      },
+      "ports": [
+        {
+          "name": "dns",
+          "port": 53,
+          "protocol": "UDP"
+        },
+        {
+          "name": "dns-tcp",
+          "port": 53,
+          "protocol": "TCP"
+        },
+        {
+          "name": "metrics",
+          "port": 9153,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

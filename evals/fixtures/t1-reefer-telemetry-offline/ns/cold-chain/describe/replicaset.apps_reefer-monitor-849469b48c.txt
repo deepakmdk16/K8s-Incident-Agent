@@ -1,0 +1,39 @@
+Name:           reefer-monitor-849469b48c
+Namespace:      cold-chain
+Selector:       app=reefer-monitor,pod-template-hash=849469b48c
+Labels:         app=reefer-monitor
+                pod-template-hash=849469b48c
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/reefer-monitor
+Replicas:       2 current / 2 desired
+Pods Status:    0 Running / 2 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=reefer-monitor
+           pod-template-hash=849469b48c
+  Containers:
+   monitor:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo "reefer-monitor: polling reefer units every ${POLL_INTERVAL_SECONDS}s"
+      exec sleep 2147483647
+      
+    Requests:
+      cpu:     512
+      memory:  64Mi
+    Environment:
+      POLL_INTERVAL_SECONDS:  <set to the key 'poll_interval_seconds' of config map 'reefer-monitor-settings'>  Optional: false
+    Mounts:                   <none>
+  Volumes:                    <none>
+  Node-Selectors:             <none>
+  Tolerations:                <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  1s    replicaset-controller  Created pod: reefer-monitor-849469b48c-b6mnr
+  Normal  SuccessfulCreate  1s    replicaset-controller  Created pod: reefer-monitor-849469b48c-jjvkg
