@@ -1,0 +1,22 @@
+Name:         manifest-renderer-site
+Namespace:    customs-docs
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+health:
+----
+ok
+
+
+index.html:
+----
+manifest-renderer: ACE eManifest renderer
+
+
+
+BinaryData
+====
+
+Events:  <none>

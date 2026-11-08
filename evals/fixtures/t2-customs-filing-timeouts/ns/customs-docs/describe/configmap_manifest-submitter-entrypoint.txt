@@ -1,0 +1,29 @@
+Name:         manifest-submitter-entrypoint
+Namespace:    customs-docs
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+run.sh:
+----
+#!/bin/sh
+set -u
+mkdir -p /www && echo ok > /www/health
+httpd -p 8080 -h /www
+echo "manifest-submitter: accepting filing requests on :8080; renderer ${RENDERER_URL}"
+while true; do
+  if wget -T 3 -q -O /dev/null "$RENDERER_URL" 2>/dev/null; then
+    echo "manifest-submitter: rendered and filed batch; renderer OK"
+  else
+    echo "manifest-submitter: renderer ${RENDERER_URL} UNREACHABLE after 3s; filing request failed, load held at border"
+  fi
+  sleep 10
+done
+
+
+
+BinaryData
+====
+
+Events:  <none>

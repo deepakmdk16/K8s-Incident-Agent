@@ -1,0 +1,19 @@
+Name:         manifest-submitter-28jxh
+Namespace:    customs-docs
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=manifest-submitter
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T04:41:40Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.20
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/manifest-submitter-59dcd8d5dd-kgl8c
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

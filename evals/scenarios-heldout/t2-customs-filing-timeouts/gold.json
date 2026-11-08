@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-customs-filing-timeouts",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "service",
+    "namespace": "customs-docs",
+    "name": "manifest-renderer"
+  },
+  "fault_class": "service-selector-mismatch",
+  "mechanism_summary": "Service customs-docs/manifest-renderer selects app=manifest-render while the manifest-renderer pods carry the label app=manifest-renderer, so the selector matches no pod and the Service's Endpoints object is empty; the manifest submitter's rendering calls to the Service have nowhere to go although both renderer pods are Running and Ready.",
+  "decisive_evidence": "Endpoints customs-docs/manifest-renderer with no addresses; service manifest-renderer spec.selector {app: manifest-render} against pod labels app=manifest-renderer on two Ready pods (the Deployment's own selector is app=manifest-renderer and matches); manifest-submitter log lines 'renderer http://manifest-renderer.customs-docs.svc:8080/health UNREACHABLE after 3s; filing request failed, load held at border' with no Warning events anywhere in the namespace.",
+  "remediation_summary": "Set spec.selector.app on service customs-docs/manifest-renderer to manifest-renderer (kubectl patch service manifest-renderer -n customs-docs -p '{\"spec\":{\"selector\":{\"app\":\"manifest-renderer\"}}}'); Endpoints fill with the two renderer pods within seconds and the submitter's next attempt logs 'renderer OK', with no change to either Deployment."
+}

@@ -1,0 +1,49 @@
+Name:                   manifest-renderer
+Namespace:              customs-docs
+CreationTimestamp:      Sun, 08 Nov 2026 10:11:34 +0530
+Labels:                 app=manifest-renderer
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=manifest-renderer
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=manifest-renderer
+  Containers:
+   renderer:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      httpd
+      -f
+      -p
+      8080
+      -h
+      /www
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Readiness:    http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:  <none>
+    Mounts:
+      /www from site (rw)
+  Volumes:
+   site:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          manifest-renderer-site
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   manifest-renderer-5f6f5fbf7 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  11s   deployment-controller  Scaled up replica set manifest-renderer-5f6f5fbf7 from 0 to 2

@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T04:41:34Z"
+        },
+        "creationTimestamp": "2026-11-08T04:41:34Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "manifest-renderer",
+        "namespace": "customs-docs",
+        "resourceVersion": "4305",
+        "uid": "784ed6dc-f594-43c8-82ce-c227d064be39"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T04:41:40Z"
+        },
+        "creationTimestamp": "2026-11-08T04:41:34Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "manifest-submitter",
+        "namespace": "customs-docs",
+        "resourceVersion": "4370",
+        "uid": "13c7ae49-3582-406a-8ace-e5758b9be610"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.20",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "manifest-submitter-59dcd8d5dd-kgl8c",
+                "namespace": "customs-docs",
+                "uid": "d171b0e9-b8a6-4e7d-b632-142d9298283d"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

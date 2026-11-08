@@ -1,0 +1,16 @@
+Name:                     manifest-submitter
+Namespace:                customs-docs
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=manifest-submitter
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.44.66
+IPs:                      10.96.44.66
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.20:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

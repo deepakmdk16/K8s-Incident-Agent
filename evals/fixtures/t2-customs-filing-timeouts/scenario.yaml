@@ -1,0 +1,61 @@
+schema: 3
+id: t2-customs-filing-timeouts
+mode: captured
+captured_at: 2026-11-08T04:41:58Z
+context: kind-incident-lab
+kubectl_client: v1.37.0
+server: v1.37.0
+node: kubelet=v1.37.0 runtime=containerd://2.3.4 os=Debian GNU/Linux 13 (trixie)
+capture_policy:
+  workload_log_tail: 2000
+  system_log_tail: 300
+  system_namespaces: kube-system kube-public kube-node-lease local-path-storage
+log_channels:
+  - pod: customs-docs/manifest-renderer-5f6f5fbf7-dp2xz
+    container: renderer
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "renderer" in pod "manifest-renderer-5f6f5fbf7-dp2xz" not found 
+  - pod: customs-docs/manifest-renderer-5f6f5fbf7-fb7qv
+    container: renderer
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "renderer" in pod "manifest-renderer-5f6f5fbf7-fb7qv" not found 
+  - pod: customs-docs/manifest-submitter-59dcd8d5dd-kgl8c
+    container: submitter
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "submitter" in pod "manifest-submitter-59dcd8d5dd-kgl8c" not found 
+  - pod: kube-system/coredns-559f6c778d-6txpq
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-6txpq" not found 
+  - pod: kube-system/coredns-559f6c778d-kghtn
+    container: coredns
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "coredns" in pod "coredns-559f6c778d-kghtn" not found 
+  - pod: kube-system/etcd-incident-lab-control-plane
+    container: etcd
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "etcd" in pod "etcd-incident-lab-control-plane" not found 
+  - pod: kube-system/kindnet-v8qj7
+    container: kindnet-cni
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kindnet-cni" in pod "kindnet-v8qj7" not found 
+  - pod: kube-system/kube-apiserver-incident-lab-control-plane
+    container: kube-apiserver
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-apiserver" in pod "kube-apiserver-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-controller-manager-incident-lab-control-plane
+    container: kube-controller-manager
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-controller-manager" in pod "kube-controller-manager-incident-lab-control-plane" not found 
+  - pod: kube-system/kube-proxy-n2gjp
+    container: kube-proxy
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-proxy" in pod "kube-proxy-n2gjp" not found 
+  - pod: kube-system/kube-scheduler-incident-lab-control-plane
+    container: kube-scheduler
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "kube-scheduler" in pod "kube-scheduler-incident-lab-control-plane" not found 
+  - pod: local-path-storage/local-path-provisioner-75f7fc7dc5-lfntm
+    container: local-path-provisioner
+    current: ok
+    previous: unavailable  # Error from server (BadRequest): previous terminated container "local-path-provisioner" in pod "local-path-provisioner-75f7fc7dc5-lfntm" not found 

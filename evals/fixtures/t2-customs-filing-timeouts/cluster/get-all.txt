@@ -1,0 +1,35 @@
+NAMESPACE            NAME                                                     READY   STATUS    RESTARTS   AGE   IP            NODE                         NOMINATED NODE   READINESS GATES
+customs-docs         pod/manifest-renderer-5f6f5fbf7-dp2xz                    1/1     Running   0          11s   10.244.0.21   incident-lab-control-plane   <none>           <none>
+customs-docs         pod/manifest-renderer-5f6f5fbf7-fb7qv                    1/1     Running   0          11s   10.244.0.19   incident-lab-control-plane   <none>           <none>
+customs-docs         pod/manifest-submitter-59dcd8d5dd-kgl8c                  1/1     Running   0          11s   10.244.0.20   incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-6txpq                             1/1     Running   0          10h   10.244.0.4    incident-lab-control-plane   <none>           <none>
+kube-system          pod/coredns-559f6c778d-kghtn                             1/1     Running   0          10h   10.244.0.3    incident-lab-control-plane   <none>           <none>
+kube-system          pod/etcd-incident-lab-control-plane                      1/1     Running   0          10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kindnet-v8qj7                                        1/1     Running   0          10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-apiserver-incident-lab-control-plane            1/1     Running   0          10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-controller-manager-incident-lab-control-plane   1/1     Running   0          10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-proxy-n2gjp                                     1/1     Running   0          10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+kube-system          pod/kube-scheduler-incident-lab-control-plane            1/1     Running   0          10h   172.18.0.2    incident-lab-control-plane   <none>           <none>
+local-path-storage   pod/local-path-provisioner-75f7fc7dc5-lfntm              1/1     Running   0          10h   10.244.0.2    incident-lab-control-plane   <none>           <none>
+
+NAMESPACE      NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+customs-docs   service/manifest-renderer    ClusterIP   10.96.215.89   <none>        8080/TCP                 11s   app=manifest-render
+customs-docs   service/manifest-submitter   ClusterIP   10.96.44.66    <none>        8080/TCP                 11s   app=manifest-submitter
+default        service/kubernetes           ClusterIP   10.96.0.1      <none>        443/TCP                  10h   <none>
+kube-system    service/kube-dns             ClusterIP   10.96.0.10     <none>        53/UDP,53/TCP,9153/TCP   10h   k8s-app=kube-dns
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE   CONTAINERS    IMAGES                                          SELECTOR
+kube-system   daemonset.apps/kindnet      1         1         1       1            1           kubernetes.io/os=linux   10h   kindnet-cni   docker.io/kindest/kindnetd:v20260820-69b56db7   app=kindnet
+kube-system   daemonset.apps/kube-proxy   1         1         1       1            1           kubernetes.io/os=linux   10h   kube-proxy    registry.k8s.io/kube-proxy:v1.37.0              k8s-app=kube-proxy
+
+NAMESPACE            NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+customs-docs         deployment.apps/manifest-renderer        2/2     2            2           11s   renderer                 busybox:1.36                                                  app=manifest-renderer
+customs-docs         deployment.apps/manifest-submitter       1/1     1            1           11s   submitter                busybox:1.36                                                  app=manifest-submitter
+kube-system          deployment.apps/coredns                  2/2     2            2           10h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns
+local-path-storage   deployment.apps/local-path-provisioner   1/1     1            1           10h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner
+
+NAMESPACE            NAME                                                DESIRED   CURRENT   READY   AGE   CONTAINERS               IMAGES                                                        SELECTOR
+customs-docs         replicaset.apps/manifest-renderer-5f6f5fbf7         2         2         2       11s   renderer                 busybox:1.36                                                  app=manifest-renderer,pod-template-hash=5f6f5fbf7
+customs-docs         replicaset.apps/manifest-submitter-59dcd8d5dd       1         1         1       11s   submitter                busybox:1.36                                                  app=manifest-submitter,pod-template-hash=59dcd8d5dd
+kube-system          replicaset.apps/coredns-559f6c778d                  2         2         2       10h   coredns                  registry.k8s.io/coredns/coredns:v1.14.6                       k8s-app=kube-dns,pod-template-hash=559f6c778d
+local-path-storage   replicaset.apps/local-path-provisioner-75f7fc7dc5   1         1         1       10h   local-path-provisioner   docker.io/kindest/local-path-provisioner:v20260820-69b56db7   app=local-path-provisioner,pod-template-hash=75f7fc7dc5

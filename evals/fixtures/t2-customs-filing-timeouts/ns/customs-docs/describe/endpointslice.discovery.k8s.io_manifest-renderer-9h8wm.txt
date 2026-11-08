@@ -1,0 +1,9 @@
+Name:         manifest-renderer-9h8wm
+Namespace:    customs-docs
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=manifest-renderer
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T04:41:34Z
+AddressType:  IPv4
+Ports: <unset>
+Endpoints: <none>
+Events:  <none>

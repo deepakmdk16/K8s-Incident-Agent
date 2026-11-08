@@ -1,0 +1,174 @@
+# t2-customs-filing-timeouts — T2, symptom far from cause, held-out vocabulary.
+#
+# Atom: service-selector-mismatch (frozen roster). Service
+#   customs-docs/manifest-renderer selects app=manifest-render while the
+#   renderer pods carry app=manifest-renderer (the Deployment's own selector
+#   is right), so the Service's Endpoints object is empty although both
+#   renderer pods are Running and Ready and nothing in the namespace emits a
+#   Warning event (QUIET).
+#
+# Mechanism: manifest-submitter — the component that renders e-manifests and
+#   files them with the border agency — calls the renderer through that
+#   Service, gets nothing, and logs each failed filing. It stays Ready
+#   itself: the page is a filing-success-rate alert, not a pod alert, and the
+#   only pods in the namespace are all green.
+#
+# Wait condition (wait.sh): Endpoints customs-docs/manifest-renderer has no
+#   addresses AND both renderer pods are Ready AND the submitter has logged
+#   the UNREACHABLE line.
+#
+# Gold failing resource: service/customs-docs/manifest-renderer. Remediation:
+#   set spec.selector.app to manifest-renderer; Endpoints fill, the next
+#   submitter attempt succeeds (counterfactual entrypoint, rule 1).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: customs-docs
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: manifest-renderer-site
+  namespace: customs-docs
+data:
+  health: |
+    ok
+  index.html: |
+    manifest-renderer: ACE eManifest renderer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manifest-renderer
+  namespace: customs-docs
+  labels:
+    app: manifest-renderer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: manifest-renderer
+  template:
+    metadata:
+      labels:
+        app: manifest-renderer
+    spec:
+      containers:
+        - name: renderer
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["httpd", "-f", "-p", "8080", "-h", "/www"]
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: site
+              mountPath: /www
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: site
+          configMap:
+            name: manifest-renderer-site
+---
+# The defect: the selector names a label value no pod carries.
+apiVersion: v1
+kind: Service
+metadata:
+  name: manifest-renderer
+  namespace: customs-docs
+spec:
+  selector:
+    app: manifest-render
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: manifest-submitter-entrypoint
+  namespace: customs-docs
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    mkdir -p /www && echo ok > /www/health
+    httpd -p 8080 -h /www
+    echo "manifest-submitter: accepting filing requests on :8080; renderer ${RENDERER_URL}"
+    while true; do
+      if wget -T 3 -q -O /dev/null "$RENDERER_URL" 2>/dev/null; then
+        echo "manifest-submitter: rendered and filed batch; renderer OK"
+      else
+        echo "manifest-submitter: renderer ${RENDERER_URL} UNREACHABLE after 3s; filing request failed, load held at border"
+      fi
+      sleep 10
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manifest-submitter
+  namespace: customs-docs
+  labels:
+    app: manifest-submitter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: manifest-submitter
+  template:
+    metadata:
+      labels:
+        app: manifest-submitter
+    spec:
+      containers:
+        - name: submitter
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "/app/run.sh"]
+          env:
+            - name: RENDERER_URL
+              value: http://manifest-renderer.customs-docs.svc:8080/health
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: entrypoint
+              mountPath: /app
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: entrypoint
+          configMap:
+            name: manifest-submitter-entrypoint
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: manifest-submitter
+  namespace: customs-docs
+spec:
+  selector:
+    app: manifest-submitter
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
