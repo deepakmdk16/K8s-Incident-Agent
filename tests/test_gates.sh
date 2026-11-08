@@ -156,6 +156,13 @@ fixture "$TMP/kho"; k8sfix "$TMP/kho"
 mkdir -p "$TMP/kho/evals/scenarios-heldout/t0-selftest"
 mv "$TMP/kho/evals/scenarios/t0-selftest/gold.json" "$TMP/kho/evals/scenarios-heldout/t0-selftest/gold.json"
                                                              check "gold in the held-out root is found" 0 "$TMP/kho"
+# 18d4. a gold in a directory that is NOT a registered scenario root is not found:
+# the gate reads evals/run_eval.py SCENARIO_ROOTS at run time, never a wildcard
+# over evals/scenarios*/ nor a hand-copied list (review, 2026-11-08)
+fixture "$TMP/kbr"; k8sfix "$TMP/kbr"
+mkdir -p "$TMP/kbr/evals/scenarios-bogus/t0-selftest"
+mv "$TMP/kbr/evals/scenarios/t0-selftest/gold.json" "$TMP/kbr/evals/scenarios-bogus/t0-selftest/gold.json"
+                                                             check "gold in an unregistered root is not found" 1 "$TMP/kbr"
 # --- inject.sh refusals (2026-09-04): every check below runs BEFORE the
 # cluster is contacted, so a bogus --context proves which branch fired. A
 # scenario that passes the checks dies later on "unreachable" instead.

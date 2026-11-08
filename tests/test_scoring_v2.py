@@ -17,13 +17,18 @@ import pytest
 
 from evals import scoring as v1
 from evals import scoring_v2 as v2
+from evals.run_eval import FROZEN_ROOT, SCENARIO_ROOTS
 
 REPO = Path(__file__).resolve().parents[1]
-FROZEN_GOLD = sorted((REPO / "evals" / "scenarios").glob("*/gold.json"))
-V2_GOLD = sorted((REPO / "evals" / "scenarios-v2").glob("*/gold.json"))
-HELDOUT_GOLD = sorted((REPO / "evals" / "scenarios-heldout").glob("*/gold.json"))
-# Every additive root the v2 scorer scores (evals/run_eval.py SCENARIO_ROOTS).
-ADDITIVE_GOLD = V2_GOLD + HELDOUT_GOLD
+FROZEN_GOLD = sorted((REPO / FROZEN_ROOT).glob("*/gold.json"))
+# Every additive root the v2 scorer scores, as evals/run_eval.py lists them —
+# never a hand-copied list here (review, 2026-11-08).
+ADDITIVE_GOLD = [
+    path
+    for root in SCENARIO_ROOTS
+    if root != FROZEN_ROOT
+    for path in sorted((REPO / root).glob("*/gold.json"))
+]
 
 # Phrasings the frozen test suite pins, plus the undercall and shotgun shapes:
 # v2 must return exactly what v1 returns on every one of them.

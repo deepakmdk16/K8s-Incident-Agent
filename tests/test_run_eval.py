@@ -167,8 +167,10 @@ def test_each_root_is_scored_by_its_own_scorer() -> None:
         assert isinstance(case.gold, scoring.Gold)
         assert case.scorer == "evals.scoring"
     for root in SCENARIO_ROOTS:
-        if root == FROZEN_ROOT or not (ROOT / root).is_dir():
+        if root == FROZEN_ROOT:
             continue
+        # No guard on the directory: every registered root exists, and a missing
+        # one raises inside discover_cases — this must never pass vacuously.
         for case in discover_cases(root=root):
             assert isinstance(case.gold, scoring_v2.Gold), root
             assert case.scorer == "evals.scoring_v2"
