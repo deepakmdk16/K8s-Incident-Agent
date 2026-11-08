@@ -19,10 +19,16 @@
 #   scenario.yaml                 metadata + capture policy + log-channel ledger
 #   page.txt                      the symptom-first page the agent starts from
 #   cluster/                      cluster-scoped state (nodes, events, PV, RBAC,
-#                                 admission webhook configurations since schema 2)
+#                                 admission webhook configurations since schema 2,
+#                                 CustomResourceDefinitions since schema 3)
 #   cluster/describe/             per-object describe of the webhook configurations
+#                                 and the CRDs
 #   ns/<namespace>/<kind>.json    scrubbed `kubectl get -o json` per kind
-#   ns/<namespace>/describe/      per-object `kubectl describe`
+#   ns/<namespace>/crs/<plural>.<group>.json
+#                                 custom resources of every namespaced CRD (schema 3);
+#                                 a subdirectory so the per-kind roster above stays
+#                                 exactly what solution/fixture.py expects
+#   ns/<namespace>/describe/      per-object `kubectl describe` (custom resources too)
 #   ns/<namespace>/logs/          <pod>__<container>.log / .previous.log
 #
 # Usage: capture.sh --id <scenario-id> --page-file <file>
@@ -156,6 +162,23 @@ for KIND in $WEBHOOK_KINDS; do
     K describe "$NAME" >"$TMPD/cluster/describe/$SAFE.txt" 2>/dev/null
   done
 done
+# Schema 3 (2026-11-07): CustomResourceDefinitions, and below, per namespace,
+# the custom resources of every namespaced CRD. A fixture whose cause is a
+# custom resource has to carry the object for the case to be scorable; the
+# readers (solution/fixture.py) do not serve these kinds — the capture is
+# ahead of the tools, as schema 2 was before the webhook kinds were served.
+CRD_KIND="customresourcedefinitions"
+cap_json "$TMPD/cluster/$CRD_KIND.json" "$CRD_KIND"
+K get "$CRD_KIND" -o name 2>/dev/null | while read -r NAME; do
+  [ -n "$NAME" ] || continue
+  SAFE="$(printf '%s' "$NAME" | tr '/' '_')"
+  K describe "$NAME" >"$TMPD/cluster/describe/$SAFE.txt" 2>/dev/null
+done
+# <plural>.<group> is the fully qualified form `kubectl get` accepts, and the
+# file stem, so a custom kind can never shadow a core kind's file.
+CUSTOM_NS_KINDS="$(K get "$CRD_KIND" \
+  -o jsonpath='{range .items[?(@.spec.scope=="Namespaced")]}{.spec.names.plural}.{.spec.group}{"\n"}{end}' \
+  2>/dev/null | tr '\n' ' ')"
 
 # --- namespaced state: per-kind JSON, per-object describe, per-container logs
 NAMESPACES="$(K get namespaces -o jsonpath='{.items[*].metadata.name}')"
@@ -165,6 +188,15 @@ for NS in $NAMESPACES; do
   mkdir -p "$TMPD/ns/$NS/describe" "$TMPD/ns/$NS/logs"
   for KIND in $NS_KINDS; do
     cap_json "$TMPD/ns/$NS/$KIND.json" "$KIND" -n "$NS"
+    K get "$KIND" -n "$NS" -o name 2>/dev/null | while read -r NAME; do
+      [ -n "$NAME" ] || continue
+      SAFE="$(printf '%s' "$NAME" | tr '/' '_')"
+      K describe "$NAME" -n "$NS" >"$TMPD/ns/$NS/describe/$SAFE.txt" 2>/dev/null
+    done
+  done
+  for KIND in $CUSTOM_NS_KINDS; do
+    mkdir -p "$TMPD/ns/$NS/crs"
+    cap_json "$TMPD/ns/$NS/crs/$KIND.json" "$KIND" -n "$NS"
     K get "$KIND" -n "$NS" -o name 2>/dev/null | while read -r NAME; do
       [ -n "$NAME" ] || continue
       SAFE="$(printf '%s' "$NAME" | tr '/' '_')"
@@ -211,7 +243,9 @@ NODEINFO="$(jq -r '.items[0].status.nodeInfo
 # schema 2 = the cluster roster includes the admission webhook configurations.
 # A schema-1 fixture (the frozen set) never has them; readers treat the kind
 # as "not captured in this snapshot" there rather than as an empty list.
-{ echo "schema: 2"
+# schema 3 = the roster also includes CustomResourceDefinitions and, per
+# namespace, their custom resources under crs/.
+{ echo "schema: 3"
   echo "id: $ID"
   echo "mode: captured"
   echo "captured_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -248,7 +282,8 @@ BAD=0
 for req in scenario.yaml page.txt cluster/get-all.txt cluster/events.json \
            cluster/nodes.json cluster/version.json \
            cluster/validatingwebhookconfigurations.json \
-           cluster/mutatingwebhookconfigurations.json; do
+           cluster/mutatingwebhookconfigurations.json \
+           cluster/customresourcedefinitions.json; do
   [ -s "$TMPD/$req" ] || { echo "capture: SELF-CHECK missing $req" >&2; BAD=1; }
 done
 ls "$TMPD"/ns/*/pods.json >/dev/null 2>&1 \

@@ -113,7 +113,7 @@ def _meta_name(item: dict[str, object]) -> str:
 
 @functools.cache
 def _gold(fixture: Path) -> va.ResourceRef:
-    for folder in ("scenarios", "scenarios-v2"):
+    for folder in ("scenarios", "scenarios-v2", "scenarios-heldout"):
         path = ROOT / "evals" / folder / fixture.name / "gold.json"
         if path.is_file():
             ref = cast(

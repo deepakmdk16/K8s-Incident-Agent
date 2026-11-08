@@ -21,6 +21,9 @@ from evals import scoring_v2 as v2
 REPO = Path(__file__).resolve().parents[1]
 FROZEN_GOLD = sorted((REPO / "evals" / "scenarios").glob("*/gold.json"))
 V2_GOLD = sorted((REPO / "evals" / "scenarios-v2").glob("*/gold.json"))
+HELDOUT_GOLD = sorted((REPO / "evals" / "scenarios-heldout").glob("*/gold.json"))
+# Every additive root the v2 scorer scores (evals/run_eval.py SCENARIO_ROOTS).
+ADDITIVE_GOLD = V2_GOLD + HELDOUT_GOLD
 
 # Phrasings the frozen test suite pins, plus the undercall and shotgun shapes:
 # v2 must return exactly what v1 returns on every one of them.
@@ -55,7 +58,8 @@ def _values(classes: frozenset[v1.FaultClass] | frozenset[v2.FaultClass]) -> set
 def test_v2_enum_is_a_superset_of_the_frozen_enum_by_value() -> None:
     assert {cls.value for cls in v1.FaultClass} < {cls.value for cls in v2.FaultClass}
     assert {cls.value for cls in v2.FaultClass} - {cls.value for cls in v1.FaultClass} == {
-        "webhook-admission-block"
+        "webhook-admission-block",
+        "pod-security-violation",
     }
 
 
@@ -73,7 +77,7 @@ def test_frozen_gold_summaries_classify_identically_under_v2(path: Path) -> None
     assert v2.normalized_resource(v2_gold.failing_resource) == gold.failing_resource.normalized()
 
 
-@pytest.mark.parametrize("path", V2_GOLD, ids=lambda p: p.parent.name)
+@pytest.mark.parametrize("path", ADDITIVE_GOLD, ids=lambda p: p.parent.name)
 def test_v2_gold_validates_and_self_classifies(path: Path) -> None:
     gold = v2.load_gold(path)
     assert gold.case_id == path.parent.name
@@ -187,6 +191,67 @@ def test_disclosed_collisions_behave_as_documented(mechanism: str, expected: set
     assert _values(v2.classify_mechanism(mechanism)) == expected
 
 
+# --- the second new class: Pod Security admission (held-out set, 2026-11-07) ----
+
+POD_SECURITY = v2.FaultClass.POD_SECURITY_VIOLATION
+
+
+@pytest.mark.parametrize(
+    "mechanism",
+    [
+        # gold form: the namespace label, the API server's message, what fails
+        "Namespace yard-ops carries the label pod-security.kubernetes.io/enforce=restricted "
+        "while its warn and audit labels are baseline, so the Pod Security admission "
+        "controller rejects every new gate-checkin pod as 'violates PodSecurity "
+        '"restricted:latest"\' and the release ReplicaSet cannot create a single pod.',
+        # the API server's own words only
+        'pods are forbidden: violates PodSecurity "restricted:latest": runAsNonRoot != true.',
+        # terse SRE, names the rollout symptom: dominance must collapse rollout-stuck
+        "PSS enforce level is restricted on the namespace, so pod creation is refused and "
+        "the rollout is stuck at 0 updated replicas.",
+        # 'before scheduling' wording: the scheduling bucket is dominated too
+        "Pod Security Standards block the new pods before scheduling because the namespace "
+        "enforces restricted and the template requests no seccomp profile.",
+    ],
+    ids=["gold-form", "api-server-words", "with-rollout-symptom", "scheduling-bucket"],
+)
+def test_pod_security_phrasings_classify_exactly(mechanism: str) -> None:
+    assert v2.classify_mechanism(mechanism) == frozenset({POD_SECURITY})
+
+
+@pytest.mark.parametrize(
+    ("mechanism", "expected"),
+    [
+        (
+            # rbac keeps "forbidden" when an rbac noun is present and no pod-security stem
+            "The RoleBinding's subject names a ServiceAccount that does not exist, so every "
+            "namespaced read is forbidden with 403.",
+            "rbac-denial",
+        ),
+        (
+            # the webhook class gains no pod-security match from 'admission'
+            "The validating webhook's service is not found, so admission fails every pod create.",
+            "webhook-admission-block",
+        ),
+        (
+            # the scheduling bucket keeps a plain scheduling sentence
+            "The pod cannot be scheduled because no node has sufficient allocatable CPU "
+            "for its requests.",
+            "pod-unschedulable",
+        ),
+    ],
+    ids=["rbac-forbidden", "webhook-admission", "plain-scheduling"],
+)
+def test_other_classes_do_not_co_match_pod_security(mechanism: str, expected: str) -> None:
+    assert _values(v2.classify_mechanism(mechanism)) == {expected}
+
+
+@pytest.mark.parametrize("phrasing", FROZEN_PHRASINGS)
+def test_no_frozen_phrasing_carries_the_pod_security_stem(phrasing: str) -> None:
+    assert POD_SECURITY not in v2.classify_mechanism(phrasing)
+    assert "pod-security-violation" not in _group_one_hits(phrasing)
+
+
 # --- what the arms are shown must carry no class vocabulary ------------------------
 
 # Pre-existing v2 ids that encode their mechanism, kept as they are (renaming a
@@ -203,7 +268,7 @@ def _group_one_hits(text: str) -> set[str]:
     }
 
 
-@pytest.mark.parametrize("path", V2_GOLD, ids=lambda p: p.parent.name)
+@pytest.mark.parametrize("path", ADDITIVE_GOLD, ids=lambda p: p.parent.name)
 def test_v2_page_and_id_name_no_class(path: Path) -> None:
     """The page is the only scenario text an arm sees (README rule 5), and the case id
     is echoed to both arms: neither may hand over a class's object noun."""
@@ -229,6 +294,28 @@ def test_every_no_namespace_spelling_normalizes_for_a_cluster_scoped_kind(spelli
 @pytest.mark.parametrize("kind", ["validatingwebhookconfigurations", "vwc", "mwc", "pv", "sc"])
 def test_cluster_scoped_kind_aliases_resolve(kind: str) -> None:
     assert v2.canonical_kind(kind) in v2.CLUSTER_SCOPED_KINDS
+
+
+@pytest.mark.parametrize(
+    "kind",
+    [
+        "RouteProfile",
+        "routeprofiles",
+        "routeprofile.fleet.northbound.io",
+        "RouteProfiles.fleet.northbound.io",
+    ],
+)
+def test_the_held_out_custom_kind_spellings_name_one_object(kind: str) -> None:
+    """The CRD case's failing object is scored as one identity however the kind is
+    spelled; a namespaced custom kind keeps its namespace like any other."""
+    assert v2.canonical_kind(kind) == "routeprofile"
+    answered = v1.FailingResource(kind, "dispatch", "weekday-routing")
+    assert v2.normalized_resource(answered) == ("routeprofile", "dispatch", "weekday-routing")
+    assert v2.normalized_resource(v1.FailingResource(kind, "", "weekday-routing")) == (
+        "routeprofile",
+        "",
+        "weekday-routing",
+    )
 
 
 def test_a_namespaced_kind_keeps_its_namespace_as_identity() -> None:
