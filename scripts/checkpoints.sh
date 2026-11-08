@@ -123,6 +123,12 @@ done
 # cluster state files, >=1 pods.json, >=1 describe. Written by evals/capture.sh;
 # hand-authored fixtures must meet the same schema (mode: authored).
 if [ -d "$TARGET/evals/fixtures" ]; then
+  # The scenario roots come from the harness's own list (evals/run_eval.py
+  # SCENARIO_ROOTS), read from the REPO's module — the package under test may
+  # be a bare release tree. An empty result is a failure of this gate, never
+  # "no roots to look in" (error-as-green, docs/failure-modes.md 2026-08-29).
+  SCENARIO_ROOTS="$(cd "$ROOT" && uv run -q python -c 'from evals.run_eval import SCENARIO_ROOTS; print(*SCENARIO_ROOTS)' 2>/dev/null)"
+  [ -n "$SCENARIO_ROOTS" ] || fail "could not read SCENARIO_ROOTS from evals/run_eval.py (uv run python -c ...) — gold lookup cannot run"
   BADFIX=""; NFIX=0
   for FIX in "$TARGET"/evals/fixtures/*/; do
     [ -d "$FIX" ] || continue
@@ -139,11 +145,12 @@ if [ -d "$TARGET/evals/fixtures" ]; then
     [ -s "$FIX/page.txt" ] || MISS="$MISS page.txt"
     # scoring spec (evals/scoring.md): a fixture without ground truth cannot
     # be scored — every fixture needs its agent-invisible gold.json, in
-    # whichever scenario root defines it (the frozen set, or an additive one;
-    # evals/run_eval.py SCENARIO_ROOTS is the authority both sides follow).
+    # whichever scenario root defines it (the frozen set, or an additive one).
+    # The roots are READ from evals/run_eval.py SCENARIO_ROOTS above, never
+    # listed here: a hand-copied list drifted from it once (review, 2026-11-08).
     FIXID="$(basename "$FIX")"; GOLDFOUND=0
-    for SROOT in "$TARGET"/evals/scenarios "$TARGET"/evals/scenarios-v2 "$TARGET"/evals/scenarios-heldout; do
-      [ -s "$SROOT/$FIXID/gold.json" ] && GOLDFOUND=1
+    for SROOT in $SCENARIO_ROOTS; do
+      [ -s "$TARGET/$SROOT/$FIXID/gold.json" ] && GOLDFOUND=1
     done
     [ "$GOLDFOUND" -eq 1 ] || MISS="$MISS scenarios*/$FIXID/gold.json"
     for req in cluster/get-all.txt cluster/events.json cluster/nodes.json cluster/version.json; do

@@ -18,6 +18,15 @@ earn `confirmed` using only:
       carrying the target's name, whether or not such a sibling exists;
   (e) the validator's own rejection text, fed back as quotes and as mechanism.
 
+Where the gold target's kind is one no reader knows (the held-out CRD case,
+t2-route-planning-degraded), V4 EXISTS refuses the name itself before any
+anchoring rule runs, so the attack families would assert nothing about
+anchoring there: that target gets exactly one attempt — the honest control,
+which must earn the V4 refusal and nothing else — while its `wrong` target (a
+served kind) keeps the full families. Coverage, stated plainly: the anchoring
+families run on every fixture's wrong target and on every known-kind gold (19
+of the 20 fixtures at the time of writing), the V4 control on the CRD gold.
+
 Every attempt stands on a real ledger: the page and overview the agent is
 seeded with, plus the attack's calls executed through `tools.dispatch`, so
 re-execution works exactly as in production. Two controls prove the scaffold
@@ -42,6 +51,7 @@ from typing import cast
 
 import pytest
 
+from evals.run_eval import SCENARIO_ROOTS, discover_cases, find_gold
 from solution import agent, render
 from solution import fixture as fx
 from solution import tools as tl
@@ -113,14 +123,11 @@ def _meta_name(item: dict[str, object]) -> str:
 
 @functools.cache
 def _gold(fixture: Path) -> va.ResourceRef:
-    for folder in ("scenarios", "scenarios-v2", "scenarios-heldout"):
-        path = ROOT / "evals" / folder / fixture.name / "gold.json"
-        if path.is_file():
-            ref = cast(
-                dict[str, str], json.loads(path.read_text(encoding="utf-8"))["failing_resource"]
-            )
-            return va.ResourceRef(ref["kind"], ref["namespace"] or CLUSTER_SCOPED, ref["name"])
-    raise AssertionError(f"{fixture.name}: no gold.json")
+    """The gold object, from whichever scenario root evals/run_eval.py knows."""
+    path = find_gold(fixture.name)
+    assert path is not None, f"{fixture.name}: no gold.json in any scenario root"
+    ref = cast(dict[str, str], json.loads(path.read_text(encoding="utf-8"))["failing_resource"])
+    return va.ResourceRef(ref["kind"], ref["namespace"] or CLUSTER_SCOPED, ref["name"])
 
 
 @functools.cache
@@ -299,16 +306,9 @@ def _known_kind(kind: str) -> bool:
 
 # What V4 says about a failing resource of a kind no reader knows. It is emitted
 # before any anchoring rule runs, so for such a target it is the only refusal
-# an attack can earn (the held-out CRD case; see test_the_scaffold_is_satisfiable).
+# the sweep can earn — and the only attempt it makes (_v4_control).
 V4_UNRESOLVED = "V4 EXISTS: failing_resource does not resolve"
-
-
-def _unknown_target_kind(arguments: dict[str, object]) -> bool:
-    reference = arguments.get("failing_resource")
-    if not isinstance(reference, dict):
-        return False
-    kind = cast(dict[str, object], reference).get("kind")
-    return isinstance(kind, str) and not _known_kind(kind)
+V4_CONTROL = "v4-control-unknown-kind"
 
 
 def _attempt(
@@ -319,9 +319,18 @@ def _attempt(
     refusal: tuple[str, ...],
     absent_checks: bool = False,
 ) -> Attempt:
-    if _unknown_target_kind(arguments):
-        refusal, absent_checks = (V4_UNRESOLVED,), False
     return Attempt(label, arguments, ledger, _run(seed, arguments, ledger), refusal, absent_checks)
+
+
+def _v4_control(seed: Seed, target: va.ResourceRef) -> Attempt:
+    """The honest scaffold — no defect, legitimate checks, `probable` — for a target
+    of a kind no reader knows (the held-out CRD case's gold). V4 EXISTS refuses the
+    name before any anchoring rule runs, so this is the only refusal such a target
+    can earn and the one attempt the sweep makes on it; the attack families would
+    assert nothing about anchoring there. The direction is stated in the design
+    doc's amendment (docs/experiments/2026-11-07-heldout-set.md)."""
+    arguments = _arguments(seed, target, None, _legit_checks(seed)) | {"verdict": "probable"}
+    return _attempt(seed, V4_CONTROL, arguments, _ledger(seed, []), (V4_UNRESOLVED,))
 
 
 # --- attack generators ----------------------------------------------------------
@@ -533,12 +542,10 @@ def _sibling_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
     """describe/get_object of another kind under the target's name — an error when
     no such sibling exists, a REAL read of the sibling when one does."""
     ns, name = _call_namespace(seed, target), target.name
-    # A target of a kind no reader knows has no own kind to skip: every served
-    # sibling is a different kind, and each is a real attack on it.
-    own = fx.normalize_kind(target.kind) if _known_kind(target.kind) else None
+    own = fx.normalize_kind(target.kind)
     attempts: list[Attempt] = []
     for kind in SIBLING_KINDS:
-        if own is not None and fx.normalize_kind(kind) == own:
+        if fx.normalize_kind(kind) == own:
             continue
         for tool in ("describe", "get_object"):
             call = Call(tool, {"namespace": ns, "kind": kind, "name": name})
@@ -622,6 +629,8 @@ def _cross_kind_pod_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]
 @functools.cache
 def _attempts(fixture: Path, which: str) -> tuple[Attempt, ...]:
     seed, target = _seed(fixture), _target(fixture, which)
+    if not _known_kind(target.kind):
+        return (_v4_control(seed, target),)
     return (
         *_error_string_attacks(seed, target),
         *_empty_result_attacks(seed, target),
@@ -701,10 +710,22 @@ PAIRS = [(fixture, which) for fixture in CASES for which in TARGETS]
 PAIR_IDS = [f"{fixture.name}-{which}" for fixture, which in PAIRS]
 
 
+def _scored_cases() -> int:
+    """Every case the harness would score — a gold.json with its fixture captured, in
+    any scenario root (evals/run_eval.py SCENARIO_ROOTS). The sweep covers exactly
+    these: a fixture directory that is not a scored case, or a scored case the sweep
+    skipped, fails here."""
+    return sum(len(discover_cases(root=root)) for root in SCENARIO_ROOTS)
+
+
 def test_the_suite_covers_every_fixture_and_channel() -> None:
-    assert len(CASES) == 20, [p.name for p in CASES]  # 12 frozen + 3 v2 + 5 held-out
+    assert len(CASES) == _scored_cases(), [p.name for p in CASES]
     for fixture, which in PAIRS:
         labels = [attempt.label for attempt in _attempts(fixture, which)]
+        if not _known_kind(_target(fixture, which).kind):
+            # the CRD gold: V4 refuses the name itself, so only the control runs
+            assert labels == [V4_CONTROL], (fixture.name, which, labels)
+            continue
         for channel in CHANNELS:
             assert any(label.startswith(channel) for label in labels), (
                 fixture.name,
