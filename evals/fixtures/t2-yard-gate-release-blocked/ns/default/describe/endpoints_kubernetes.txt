@@ -1,0 +1,13 @@
+Name:         kubernetes
+Namespace:    default
+Labels:       endpointslice.kubernetes.io/skip-mirror=true
+Annotations:  <none>
+Subsets:
+  Addresses:          172.18.0.2
+  NotReadyAddresses:  <none>
+  Ports:
+    Name   Port  Protocol
+    ----   ----  --------
+    https  6443  TCP
+
+Events:  <none>

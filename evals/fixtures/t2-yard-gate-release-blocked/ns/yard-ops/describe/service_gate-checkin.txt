@@ -1,0 +1,16 @@
+Name:                     gate-checkin
+Namespace:                yard-ops
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=gate-checkin
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.120.95
+IPs:                      10.96.120.95
+Port:                     http  8080/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.30:8080,10.244.0.29:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>

@@ -702,7 +702,7 @@ PAIR_IDS = [f"{fixture.name}-{which}" for fixture, which in PAIRS]
 
 
 def test_the_suite_covers_every_fixture_and_channel() -> None:
-    assert len(CASES) == 18, [p.name for p in CASES]  # 12 frozen + 3 v2 + held-out so far
+    assert len(CASES) == 19, [p.name for p in CASES]  # 12 frozen + 3 v2 + held-out so far
     for fixture, which in PAIRS:
         labels = [attempt.label for attempt in _attempts(fixture, which)]
         for channel in CHANNELS:

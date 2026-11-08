@@ -1,0 +1,53 @@
+Name:                   gate-checkin
+Namespace:              yard-ops
+CreationTimestamp:      Sun, 08 Nov 2026 10:18:24 +0530
+Labels:                 app=gate-checkin
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=gate-checkin
+Replicas:               3 desired | 0 updated | 2 total | 2 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  1 max unavailable, 0 max surge
+Pod Template:
+  Labels:  app=gate-checkin
+  Containers:
+   kiosk:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      httpd
+      -f
+      -p
+      8080
+      -h
+      /www
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      RELEASE_ID:  2026.11.07
+    Mounts:
+      /www from site (rw)
+  Volumes:
+   site:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          gate-checkin-site
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type             Status  Reason
+  ----             ------  ------
+  Available        True    MinimumReplicasAvailable
+  ReplicaFailure   True    FailedCreate
+  Progressing      False   ProgressDeadlineExceeded
+OldReplicaSets:    gate-checkin-687f4f859f (2/2 replicas created)
+NewReplicaSet:     gate-checkin-6cd6665ff9 (0/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m20s  deployment-controller  Scaled up replica set gate-checkin-687f4f859f from 0 to 3
+  Normal  ScalingReplicaSet  2m14s  deployment-controller  Scaled down replica set gate-checkin-687f4f859f from 3 to 2
+  Normal  ScalingReplicaSet  2m14s  deployment-controller  Scaled up replica set gate-checkin-6cd6665ff9 from 0 to 1

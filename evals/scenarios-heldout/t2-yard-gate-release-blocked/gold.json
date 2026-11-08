@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t2-yard-gate-release-blocked",
+  "tier": "T2",
+  "failing_resource": {
+    "kind": "namespace",
+    "namespace": "",
+    "name": "yard-ops"
+  },
+  "fault_class": "pod-security-violation",
+  "mechanism_summary": "Namespace yard-ops carries the label pod-security.kubernetes.io/enforce=restricted while its warn and audit labels and its approved-level annotation say baseline, so the Pod Security admission plugin rejects every new gate-checkin pod as 'violates PodSecurity \"restricted:latest\"' (allowPrivilegeEscalation, capabilities, runAsNonRoot, seccompProfile) and the release ReplicaSet cannot create a single pod while the two old pods of the same template keep serving.",
+  "decisive_evidence": "ReplicaSet FailedCreate events in namespace yard-ops with message 'Error creating: pods \"gate-checkin-<hash>-<id>\" is forbidden: violates PodSecurity \"restricted:latest\": allowPrivilegeEscalation != false (container \"kiosk\" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container \"kiosk\" must set securityContext.capabilities.drop=[\"ALL\"]), runAsNonRoot != true (pod or container \"kiosk\" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container \"kiosk\" must set securityContext.seccompProfile.type to \"RuntimeDefault\" or \"Localhost\")' (also carried on the Deployment's ReplicaFailure condition); namespace yard-ops labels pod-security.kubernetes.io/enforce=restricted, warn=baseline, audit=baseline and annotation security.northbound.example/approved-level=baseline; deployment yard-ops/gate-checkin at 2/3 ready, 0 updated, Progressing=False ProgressDeadlineExceeded, with the old ReplicaSet's pods of the identical template Running and Ready.",
+  "remediation_summary": "Set the namespace's enforce level back to the approved one - kubectl label namespace yard-ops pod-security.kubernetes.io/enforce=baseline --overwrite - after which the new ReplicaSet creates its pods and the release completes to 3 of 3 updated with no change to deployment yard-ops/gate-checkin; removing the enforce label entirely is the interim mitigation if the platform team wants to re-run its rollout."
+}

@@ -1,0 +1,8 @@
+[PAGE] SEV2 YardGateReleaseBlocked — yard-ops
+The gate check-in release that started at 07:20 is still not live: the new
+build has reached 0 of 3 pods, and deployment yard-ops/gate-checkin is
+serving on 2 pods instead of 3, so inbound trucks are queueing at the yard
+gates and dwell time at the Kent and Tacoma yards is climbing. Only the
+build version changed in this release. Alert source: Argo CD sync-health
+notification to #yard-ops-oncall. Identify the root cause and the
+remediation.
