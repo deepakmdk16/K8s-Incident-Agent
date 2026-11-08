@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "case_id": "t1-reefer-telemetry-offline",
+  "tier": "T1",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "cold-chain",
+    "name": "reefer-monitor"
+  },
+  "fault_class": "pod-unschedulable",
+  "mechanism_summary": "The reefer-monitor pod template requests cpu \"512\" (512 whole cores, where 512m was intended), more than any node's allocatable CPU, so the scheduler reports FailedScheduling with Insufficient cpu and both pods stay Pending and never start.",
+  "decisive_evidence": "Both cold-chain/reefer-monitor pods Pending with condition PodScheduled=False reason Unschedulable; FailedScheduling events with message '0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.'; the pod spec's resources.requests.cpu of 512 against the node's allocatable CPU in describe nodes.",
+  "remediation_summary": "Set spec.template.spec.containers[0].resources.requests.cpu on deployment cold-chain/reefer-monitor to 512m (the intended value; any request the node can satisfy works), e.g. kubectl set resources deployment/reefer-monitor -n cold-chain --requests=cpu=512m; the rollout replaces both pods, they schedule, and the monitor starts polling."
+}

@@ -1,0 +1,7 @@
+[PAGE] SEV2 ReeferTelemetryOffline — cold-chain
+Refrigerated-trailer temperature readings stopped arriving at 06:40: the
+cold-chain board shows every reefer unit as "no data" and the in-transit
+compliance log has a growing gap for 31 loads. Deployment
+cold-chain/reefer-monitor shows 0 of 2 pods running since this morning's
+deploy of the monitor. Alert source: Grafana OnCall, telemetry-freshness rule
+(no reading for 10 min). Identify the root cause and the remediation.
