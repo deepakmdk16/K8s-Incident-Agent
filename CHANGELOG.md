@@ -15,6 +15,61 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [25] Held-out set: five cases nobody tuned on, two causes outside the served universe, the control arm scored — 2026-11-08, 05:05 UTC
+
+**Change:** `evals/scenarios-heldout/`, an additive root under the v2 contract
+in a company the arms have never seen (freight logistics / fleet telematics;
+no namespace, workload, container, Service, ConfigMap, Secret or env name
+shared with the frozen 12, the v2 cases or either noise pack — 133 names
+checked against 152). Five cases, each captured on the pinned v1.37.0 kind
+cluster after the rule-6 rehearsal recorded in its `notes.md`:
+`t1-reefer-telemetry-offline` (T1, pod-unschedulable),
+`t2-route-planning-degraded` (T2, app-crashloop, gold a **RouteProfile custom
+resource** no tool knows), `t2-customs-filing-timeouts` (T2,
+service-selector-mismatch, zero not-ready rows), `t2-yard-gate-release-blocked`
+(T2 two-phase, **pod-security-violation**, gold the paged **Namespace**, served
+by no tool) and `t3-driver-login-failures` (T3 under a renamed noise pack with
+two decoys, rbac-denial, a loud crash-looping decoy in the paged namespace).
+Pipeline: capture schema 3 (`cluster/customresourcedefinitions.json`, custom
+resources under `ns/<ns>/crs/`), CRDs owned by `inject.sh` like webhook
+configurations, one new v2 class with signature tests, custom-kind aliases,
+`run_eval`, `checkpoints.sh` and the adversarial sweep know the root. Design,
+roster and per-arm predictions were committed before any capture:
+[docs/experiments/2026-11-07-heldout-set.md](docs/experiments/2026-11-07-heldout-set.md).
+
+**Why:** STATUS 3.2 — the frozen set is saturated and every later case was
+built in the same world by the same hands; a score that only holds on the
+names it was tuned on is a score about the names. [22] answered the offline
+half (the gate accepts all 36 rows under a rename); this set is the live
+half, scored once per arm and never tuned against.
+
+**Evidence after:** rules arm, one run, free
+([evals/results/20261108T050338Z-rules/summary.md](evals/results/20261108T050338Z-rules/summary.md)): pooled **2/5** (T1 1/1, T2 1/3,
+T3 0/1), `resource_correct` **2/5**, `class_correct` **3/5** — all exactly as
+pre-registered; verdicts confirmed ×2 / probable ×2 / inconclusive ×1 and
+confirmed-wrong **1** against a predicted confirmed ×5 / 3. Per row, before the
+pooled number: the two-replica cases (1, 2) came back `probable` because the
+ablation counts one finding per pod and never deduplicates by object, and the
+T3 decoy — captured as `terminated/Error`, the only state this kubelet ever
+showed for a short-lived container — left the `CrashLoopBackOff`-keyed analyzer
+silent, so case 5 is `inconclusive` rather than a confident wrong name (both
+disclosed in the design doc before the run). The LLM arms are not run (STATUS
+scoring policy); their predictions stand. Found before any arm ran and
+disclosed as an amendment: `solution/validate.py` V4 reads a kind no reader
+knows as "does not exist", so the solution arm cannot submit the CRD case's
+gold object at any verdict — that row's prediction is revised to 0/3 by
+construction, confirmed-wrong 0, and the behaviour is pinned in the
+adversarial sweep. Gate at the last commit: `698 passed`,
+`== checkpoints: 0 failure(s)`.
+
+**Next decision it drove:** the first paid read of this set waits on two
+things, in order — V4 learning to tell "no read tool serves this kind" from
+"absent", without which case 2 cannot be answered by the solution arm at all,
+and the operator's scoring-policy call. Two control-arm properties are logged
+for a disclosed method update, not made: findings deduplicated by object
+before the verdict rule, and a crash-loop signature that reads restart
+evidence rather than one kubelet's status string.
+
 ## [24] scoring_v3 → v3.1: the bare-bracket reading rule, decided for the instrument and disclosed — 2026-11-07, 18:11 UTC
 
 **Change:** `evals/scoring_v3.py` gains `path_readings`: after normalization, a

@@ -1,0 +1,30 @@
+{
+  "case_id": "t2-route-planning-degraded",
+  "arm": "rules",
+  "run_id": "4c59a5162380",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0017,
+  "paged_namespace": "dispatch",
+  "findings": [
+    {
+      "analyzer": "crashloop",
+      "kind": "deployment",
+      "namespace": "dispatch",
+      "name": "route-optimizer",
+      "mechanism": "The application container exits with a fatal error immediately at startup, so the pod enters a restart back-off.",
+      "evidence": "pod route-optimizer-78fc6747d7-22sfp container optimizer is waiting with reason CrashLoopBackOff"
+    },
+    {
+      "analyzer": "crashloop",
+      "kind": "deployment",
+      "namespace": "dispatch",
+      "name": "route-optimizer",
+      "mechanism": "The application container exits with a fatal error immediately at startup, so the pod enters a restart back-off.",
+      "evidence": "pod route-optimizer-78fc6747d7-mqwkc container optimizer is waiting with reason CrashLoopBackOff"
+    }
+  ],
+  "analyzers_fired": 2
+}

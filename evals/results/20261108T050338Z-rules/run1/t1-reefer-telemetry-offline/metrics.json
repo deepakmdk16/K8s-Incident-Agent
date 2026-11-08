@@ -1,0 +1,30 @@
+{
+  "case_id": "t1-reefer-telemetry-offline",
+  "arm": "rules",
+  "run_id": "9ad2cd6799eb",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0011,
+  "paged_namespace": "cold-chain",
+  "findings": [
+    {
+      "analyzer": "unschedulable",
+      "kind": "deployment",
+      "namespace": "cold-chain",
+      "name": "reefer-monitor",
+      "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+      "evidence": "pod reefer-monitor-849469b48c-b6mnr is Pending with condition reason Unschedulable: 0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling."
+    },
+    {
+      "analyzer": "unschedulable",
+      "kind": "deployment",
+      "namespace": "cold-chain",
+      "name": "reefer-monitor",
+      "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+      "evidence": "pod reefer-monitor-849469b48c-jjvkg is Pending with condition reason Unschedulable: 0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling."
+    }
+  ],
+  "analyzers_fired": 2
+}

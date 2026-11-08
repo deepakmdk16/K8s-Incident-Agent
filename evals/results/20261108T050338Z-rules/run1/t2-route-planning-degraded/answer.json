@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-route-planning-degraded",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "dispatch",
+    "name": "route-optimizer"
+  },
+  "mechanism": "The application container exits with a fatal error immediately at startup, so the pod enters a restart back-off.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}
