@@ -1,0 +1,19 @@
+Name:         load-matcher-tgstk
+Namespace:    load-board
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=load-matcher
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:10Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.91
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/load-matcher-5478877499-b8zhx
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

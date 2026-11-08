@@ -1,0 +1,35 @@
+Name:           scale-ingest-5b9bb78b7c
+Namespace:      weigh-station
+Selector:       app=scale-ingest,pod-template-hash=5b9bb78b7c
+Labels:         app=scale-ingest
+                pod-template-hash=5b9bb78b7c
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/scale-ingest
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=scale-ingest
+           pod-template-hash=5b9bb78b7c
+  Containers:
+   ingest:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'scale-ingest up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  111s  replicaset-controller  Created pod: scale-ingest-5b9bb78b7c-kts2l

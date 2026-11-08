@@ -1,0 +1,48 @@
+Name:                   driver-auth
+Namespace:              driver-portal
+CreationTimestamp:      Sun, 08 Nov 2026 10:30:16 +0530
+Labels:                 app=driver-auth
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=driver-auth
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=driver-auth
+  Service Account:  driver-auth
+  Containers:
+   auth:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      sh
+      /app/run.sh
+    Requests:
+      cpu:      10m
+      memory:   16Mi
+    Readiness:  http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:
+      AUTH_SA:           (v1:spec.serviceAccountName)
+      PROVIDER_CONFIG:  oidc-provider-config
+    Mounts:
+      /app from entrypoint (rw)
+  Volumes:
+   entrypoint:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          driver-auth-entrypoint
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   driver-auth-85bf9874bd (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  69s   deployment-controller  Scaled up replica set driver-auth-85bf9874bd from 0 to 1

@@ -1,0 +1,20 @@
+Name:         dvir-archiver-settings
+Namespace:    dvir-reports
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+archive_bucket:
+----
+dvir-archive
+
+retention_months:
+----
+36
+
+
+BinaryData
+====
+
+Events:  <none>

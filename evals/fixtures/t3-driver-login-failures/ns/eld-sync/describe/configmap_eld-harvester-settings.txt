@@ -1,0 +1,20 @@
+Name:         eld-harvester-settings
+Namespace:    eld-sync
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+batch_size:
+----
+200
+
+vendor_feeds:
+----
+omnitracs,samsara,motive
+
+
+BinaryData
+====
+
+Events:  <none>

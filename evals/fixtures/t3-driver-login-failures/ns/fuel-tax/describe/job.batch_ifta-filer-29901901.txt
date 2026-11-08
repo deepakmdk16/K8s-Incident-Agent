@@ -1,0 +1,54 @@
+Name:             ifta-filer-29901901
+Namespace:        fuel-tax
+Selector:         batch.kubernetes.io/controller-uid=6417df0d-e24d-41c1-88fa-20dc741e4d3c
+Labels:           batch.kubernetes.io/controller-uid=6417df0d-e24d-41c1-88fa-20dc741e4d3c
+                  batch.kubernetes.io/job-name=ifta-filer-29901901
+                  controller-uid=6417df0d-e24d-41c1-88fa-20dc741e4d3c
+                  job-name=ifta-filer-29901901
+Annotations:      batch.kubernetes.io/cronjob-scheduled-timestamp: 2026-11-08T05:01:00Z
+Controlled By:    CronJob/ifta-filer
+Parallelism:      1
+Completions:      1
+Completion Mode:  NonIndexed
+Suspend:          false
+Backoff Limit:    1
+Start Time:       Sun, 08 Nov 2026 10:31:00 +0530
+Pods Statuses:    0 Active (0 Ready) / 0 Succeeded / 2 Failed
+Pod Template:
+  Labels:  batch.kubernetes.io/controller-uid=6417df0d-e24d-41c1-88fa-20dc741e4d3c
+           batch.kubernetes.io/job-name=ifta-filer-29901901
+           controller-uid=6417df0d-e24d-41c1-88fa-20dc741e4d3c
+           job-name=ifta-filer-29901901
+  Containers:
+   filer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      if [ ! -f /filings/jurisdictions.csv ]; then
+        echo "ifta-filer: /filings/jurisdictions.csv is missing"
+        exit 1
+      fi
+      echo "ifta-filer: filing $(wc -l < /filings/jurisdictions.csv) jurisdictions"
+      
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /filings from filings (rw)
+  Volumes:
+   filings:
+    Type:          EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:        
+    SizeLimit:     <unset>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type     Reason                Age   From            Message
+  ----     ------                ----  ----            -------
+  Normal   SuccessfulCreate      32s   job-controller  Created pod: ifta-filer-29901901-mczz7
+  Normal   SuccessfulCreate      22s   job-controller  Created pod: ifta-filer-29901901-58grb
+  Warning  BackoffLimitExceeded  19s   job-controller  Job has reached the specified backoff limit

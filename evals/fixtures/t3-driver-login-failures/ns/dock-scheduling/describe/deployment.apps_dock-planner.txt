@@ -1,0 +1,40 @@
+Name:                   dock-planner
+Namespace:              dock-scheduling
+CreationTimestamp:      Sun, 08 Nov 2026 10:30:10 +0530
+Labels:                 app=dock-planner
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=dock-planner
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=dock-planner
+  Containers:
+   planner:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'dock-planner up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   dock-planner-64b6fc489f (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  73s   deployment-controller  Scaled up replica set dock-planner-64b6fc489f from 0 to 1

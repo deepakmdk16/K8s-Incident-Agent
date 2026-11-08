@@ -1,0 +1,286 @@
+# t3-driver-login-failures — T3 (the held-out set's hard case), under the
+# held-out noise pack (evals/scenarios-heldout/_noise/, applied by inject.sh
+# before this file: 20 healthy namespaces + 2 broken, irrelevant decoys).
+#
+# Atom (gold): rbac-denial, QUIET. RoleBinding driver-auth-oidc-reader's
+#   subject names ServiceAccount 'driver-auth-svc' — a typo; no such account
+#   exists — so the real driver-auth account is never bound to the
+#   oidc-config-reader Role and its API reads of the provider configuration
+#   return 403. The pod does NOT crash: it logs the denial every 10s and keeps
+#   serving with stale signing keys, rejecting the sessions it cannot
+#   validate. Zero workload events; the pod is Running and Ready.
+#   The typo'd subject being NONEXISTENT makes the binding the only
+#   defensible fix (if it named a real account, changing the pod's
+#   serviceAccountName would be equally valid).
+#   The discovery probe (GET /api, granted to every authenticated subject)
+#   proves in-log that the token header is really sent: an anonymous or
+#   mis-built request would fail discovery too, and fixing the binding would
+#   not recover.
+#
+# Decoy (LOUD, same namespace): badge-photo-resizer crash-loops on an unset
+#   PHOTO_STORE_URL — a genuine, conditional fault (rule 1 applies to decoys)
+#   in a workload verifiably unrelated to sign-in (it resizes badge photos
+#   for the ID-card printer). In the paged namespace on purpose: a
+#   precedence-ordered analyzer picks it; a diagnoser has to rule it out.
+#   It waits 3s before giving up: a container that exits within milliseconds
+#   is reported by this kubelet as terminated/Error through every back-off
+#   and never as CrashLoopBackOff (first injection, 2026-11-08), which would
+#   make the decoy's loudness a matter of capture timing.
+#
+# Healthy filler in the namespace: portal-web (the driver app's web front).
+#
+# Wait condition (wait.sh): driver-auth log contains BOTH 'discovery=ok' and
+#   '403 Forbidden'; badge-photo-resizer restarts >= 3 with CrashLoopBackOff;
+#   the noise pack's two decoys have broken (pool-balancer Unschedulable,
+#   fuel-tax with a failed job).
+#
+# Gold failing resource: rolebinding/driver-portal/driver-auth-oidc-reader.
+#   Remediation: set subjects[0].name to driver-auth; the next read succeeds
+#   and the log flips to 'provider config refreshed' (counterfactual, rule 1).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: driver-portal
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: driver-auth
+  namespace: driver-portal
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oidc-provider-config
+  namespace: driver-portal
+data:
+  issuer_url: "https://login.northbound.example/realms/drivers"
+  client_id: "driver-mobile"
+  jwks_refresh_seconds: "300"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: oidc-config-reader
+  namespace: driver-portal
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+---
+# The defect: the subject names an account that does not exist.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: driver-auth-oidc-reader
+  namespace: driver-portal
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: oidc-config-reader
+subjects:
+  - kind: ServiceAccount
+    name: driver-auth-svc
+    namespace: driver-portal
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: driver-auth-entrypoint
+  namespace: driver-portal
+data:
+  run.sh: |
+    #!/bin/sh
+    set -u
+    TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+    API="https://kubernetes.default.svc"
+    mkdir -p /www && echo ok > /www/health
+    httpd -p 8080 -h /www
+    echo "driver-auth: starting; serviceaccount=${AUTH_SA}; provider config ${PROVIDER_CONFIG}"
+    while true; do
+      if wget -T 5 -q -O /dev/null --no-check-certificate \
+          --header "Authorization: Bearer $TOKEN" "$API/api" 2>/dev/null; then
+        echo "identity=${AUTH_SA} discovery=ok"
+      else
+        echo "identity=${AUTH_SA} discovery=FAILED (token or apiserver unreachable)"
+      fi
+      if MSG="$(wget -T 5 -O /dev/null --no-check-certificate \
+          --header "Authorization: Bearer $TOKEN" \
+          "$API/api/v1/namespaces/driver-portal/configmaps/${PROVIDER_CONFIG}" 2>&1)"; then
+        echo "provider config refreshed from ${PROVIDER_CONFIG}; validating sessions against current signing keys"
+      else
+        echo "provider config fetch error: $(echo "$MSG" | grep -i 'error\|forbidden' | head -n 1)"
+        echo "login validation degraded: signing keys stale, rejecting sessions issued after the last key rotation"
+      fi
+      sleep 10
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: driver-auth
+  namespace: driver-portal
+  labels:
+    app: driver-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: driver-auth
+  template:
+    metadata:
+      labels:
+        app: driver-auth
+    spec:
+      serviceAccountName: driver-auth
+      containers:
+        - name: auth
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "/app/run.sh"]
+          env:
+            - name: AUTH_SA
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+            - name: PROVIDER_CONFIG
+              value: oidc-provider-config
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: entrypoint
+              mountPath: /app
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: entrypoint
+          configMap:
+            name: driver-auth-entrypoint
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: driver-auth
+  namespace: driver-portal
+spec:
+  selector:
+    app: driver-auth
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-web-site
+  namespace: driver-portal
+data:
+  health: |
+    ok
+  index.html: |
+    portal-web: driver app web front
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-web
+  namespace: driver-portal
+  labels:
+    app: portal-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: portal-web
+  template:
+    metadata:
+      labels:
+        app: portal-web
+    spec:
+      containers:
+        - name: portal
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["httpd", "-f", "-p", "8080", "-h", "/www"]
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: site
+              mountPath: /www
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: site
+          configMap:
+            name: portal-web-site
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-web
+  namespace: driver-portal
+spec:
+  selector:
+    app: portal-web
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+# The decoy: loud, conditional, unrelated to sign-in.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: badge-photo-resizer
+  namespace: driver-portal
+  labels:
+    app: badge-photo-resizer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: badge-photo-resizer
+  template:
+    metadata:
+      labels:
+        app: badge-photo-resizer
+    spec:
+      containers:
+        - name: resizer
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              if [ -z "${PHOTO_STORE_URL:-}" ]; then
+                echo "badge-photo-resizer: PHOTO_STORE_URL is not set; waiting 3s for it to appear"
+                sleep 3
+                echo "badge-photo-resizer: PHOTO_STORE_URL still not set, cannot start"
+                exit 1
+              fi
+              echo "badge-photo-resizer: resizing badge photos from ${PHOTO_STORE_URL}"
+              exec sleep 2147483647
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi

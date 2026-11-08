@@ -1,0 +1,26 @@
+Name:         portal-web-7hsgh
+Namespace:    driver-portal
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=portal-web
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:22Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.112
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/portal-web-5ffbbf47db-bpq2m
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+  - Addresses:  10.244.0.113
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/portal-web-5ffbbf47db-bmfgv
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

@@ -1,0 +1,140 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.111"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "driver-auth-85bf9874bd-88ddp",
+            "namespace": "driver-portal",
+            "uid": "5321788e-eb81-4608-a6a3-d1a47393385c"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:22Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "generateName": "driver-auth-",
+        "generation": 3,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "driver-auth"
+        },
+        "name": "driver-auth-wdjwm",
+        "namespace": "driver-portal",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "driver-auth",
+            "uid": "f33a2442-8a74-4f3b-b1e6-f82f4b00dea9"
+          }
+        ],
+        "resourceVersion": "10582",
+        "uid": "84605f96-fc85-4497-b973-4b97a3d5d045"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    },
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.112"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "portal-web-5ffbbf47db-bpq2m",
+            "namespace": "driver-portal",
+            "uid": "816472ca-a67a-4a61-ad00-afa852635613"
+          }
+        },
+        {
+          "addresses": [
+            "10.244.0.113"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "portal-web-5ffbbf47db-bmfgv",
+            "namespace": "driver-portal",
+            "uid": "e0a3adeb-d11d-4898-a27c-bcfb6fe079a9"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:22Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "generateName": "portal-web-",
+        "generation": 5,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "portal-web"
+        },
+        "name": "portal-web-7hsgh",
+        "namespace": "driver-portal",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "portal-web",
+            "uid": "19c5e1ed-65f2-4a14-8dfb-25d61106321f"
+          }
+        ],
+        "resourceVersion": "10585",
+        "uid": "2494f13d-d91c-490f-8860-b02b848346fa"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

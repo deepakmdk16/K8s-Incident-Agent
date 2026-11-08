@@ -1,0 +1,50 @@
+Name:                          ifta-filer
+Namespace:                     fuel-tax
+Labels:                        <none>
+Annotations:                   <none>
+Schedule:                      */1 * * * *
+Concurrency Policy:            Forbid
+Suspend:                       False
+Time Zone:                     <unset>
+Successful Job History Limit:  0
+Failed Job History Limit:      1
+Starting Deadline Seconds:     30s
+Selector:                      <unset>
+Parallelism:                   <unset>
+Completions:                   <unset>
+Pod Template:
+  Labels:  <none>
+  Containers:
+   filer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      if [ ! -f /filings/jurisdictions.csv ]; then
+        echo "ifta-filer: /filings/jurisdictions.csv is missing"
+        exit 1
+      fi
+      echo "ifta-filer: filing $(wc -l < /filings/jurisdictions.csv) jurisdictions"
+      
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /filings from filings (rw)
+  Volumes:
+   filings:
+    Type:            EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:          
+    SizeLimit:       <unset>
+  Node-Selectors:    <none>
+  Tolerations:       <none>
+Last Schedule Time:  Sun, 08 Nov 2026 10:31:00 +0530
+Active Jobs:         <none>
+Events:
+  Type    Reason            Age   From                Message
+  ----    ------            ----  ----                -------
+  Normal  SuccessfulCreate  32s   cronjob-controller  Created job ifta-filer-29901901
+  Normal  SawCompletedJob   19s   cronjob-controller  Saw completed job: ifta-filer-29901901, condition: Failed

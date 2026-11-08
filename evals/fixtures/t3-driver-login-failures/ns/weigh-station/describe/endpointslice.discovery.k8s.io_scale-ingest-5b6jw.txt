@@ -1,0 +1,19 @@
+Name:         scale-ingest-5b6jw
+Namespace:    weigh-station
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=scale-ingest
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:11Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.92
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/scale-ingest-5b9bb78b7c-kts2l
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

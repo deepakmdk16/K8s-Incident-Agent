@@ -1,0 +1,19 @@
+Name:         rail-handoff-669zq
+Namespace:    rail-interchange
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=rail-handoff
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:12Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.105
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/rail-handoff-7879685b87-tchcl
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

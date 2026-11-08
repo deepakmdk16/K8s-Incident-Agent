@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "addressType": "IPv4",
+      "apiVersion": "discovery.k8s.io/v1",
+      "endpoints": [
+        {
+          "addresses": [
+            "10.244.0.109"
+          ],
+          "conditions": {
+            "ready": true,
+            "serving": true,
+            "terminating": false
+          },
+          "nodeName": "incident-lab-control-plane",
+          "targetRef": {
+            "kind": "Pod",
+            "name": "coverage-checker-7bf5f7f856-cqlx5",
+            "namespace": "cargo-insurance",
+            "uid": "3ba271d4-943a-42b6-a239-32e893b6e581"
+          }
+        }
+      ],
+      "kind": "EndpointSlice",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:13Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "generateName": "coverage-checker-",
+        "generation": 2,
+        "labels": {
+          "endpointslice.kubernetes.io/managed-by": "endpointslice-controller.k8s.io",
+          "kubernetes.io/service-name": "coverage-checker"
+        },
+        "name": "coverage-checker-wghmf",
+        "namespace": "cargo-insurance",
+        "ownerReferences": [
+          {
+            "apiVersion": "v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "Service",
+            "name": "coverage-checker",
+            "uid": "b902ec2e-c0f9-4a9d-a9d8-119a920958f7"
+          }
+        ],
+        "resourceVersion": "10400",
+        "uid": "17f5991d-f055-4f04-a336-96491faaa3db"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "port": 8080,
+          "protocol": "TCP"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

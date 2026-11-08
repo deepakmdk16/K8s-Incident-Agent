@@ -1,0 +1,22 @@
+Name:         portal-web-site
+Namespace:    driver-portal
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+health:
+----
+ok
+
+
+index.html:
+----
+portal-web: driver app web front
+
+
+
+BinaryData
+====
+
+Events:  <none>

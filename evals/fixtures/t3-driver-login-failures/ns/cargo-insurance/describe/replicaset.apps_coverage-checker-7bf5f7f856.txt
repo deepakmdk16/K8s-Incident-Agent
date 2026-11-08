@@ -1,0 +1,35 @@
+Name:           coverage-checker-7bf5f7f856
+Namespace:      cargo-insurance
+Selector:       app=coverage-checker,pod-template-hash=7bf5f7f856
+Labels:         app=coverage-checker
+                pod-template-hash=7bf5f7f856
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/coverage-checker
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=coverage-checker
+           pod-template-hash=7bf5f7f856
+  Containers:
+   checker:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'coverage-checker up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  65s   replicaset-controller  Created pod: coverage-checker-7bf5f7f856-cqlx5

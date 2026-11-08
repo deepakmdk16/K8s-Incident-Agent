@@ -1,0 +1,24 @@
+Name:         oidc-provider-config
+Namespace:    driver-portal
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+client_id:
+----
+driver-mobile
+
+issuer_url:
+----
+https://login.northbound.example/realms/drivers
+
+jwks_refresh_seconds:
+----
+300
+
+
+BinaryData
+====
+
+Events:  <none>

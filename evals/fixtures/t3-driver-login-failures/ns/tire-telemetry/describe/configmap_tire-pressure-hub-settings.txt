@@ -1,0 +1,20 @@
+Name:         tire-pressure-hub-settings
+Namespace:    tire-telemetry
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+low_pressure_psi:
+----
+85
+
+sample_seconds:
+----
+60
+
+
+BinaryData
+====
+
+Events:  <none>

@@ -1,0 +1,20 @@
+Name:         claims-intake-settings
+Namespace:    claims-desk
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+auto_approve_under_usd:
+----
+250
+
+sla_hours:
+----
+72
+
+
+BinaryData
+====
+
+Events:  <none>

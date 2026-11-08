@@ -1,0 +1,40 @@
+Name:                   pallet-scanner
+Namespace:              pallet-tracking
+CreationTimestamp:      Sun, 08 Nov 2026 10:30:10 +0530
+Labels:                 app=pallet-scanner
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=pallet-scanner
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=pallet-scanner
+  Containers:
+   scanner:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'pallet-scanner up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   pallet-scanner-5b76dc4c (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  99s   deployment-controller  Scaled up replica set pallet-scanner-5b76dc4c from 0 to 1

@@ -1,0 +1,35 @@
+Name:           pool-balancer-5459d6c885
+Namespace:      trailer-pool
+Selector:       app=pool-balancer,pod-template-hash=5459d6c885
+Labels:         app=pool-balancer
+                pod-template-hash=5459d6c885
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/pool-balancer
+Replicas:       1 current / 1 desired
+Pods Status:    0 Running / 1 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=pool-balancer
+           pod-template-hash=5459d6c885
+  Containers:
+   balancer:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'pool-balancer up'; exec sleep 2147483647
+    Requests:
+      cpu:         512
+      memory:      64Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  107s  replicaset-controller  Created pod: pool-balancer-5459d6c885-rphvq

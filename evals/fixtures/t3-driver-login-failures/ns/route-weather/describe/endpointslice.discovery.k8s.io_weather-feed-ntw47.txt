@@ -1,0 +1,19 @@
+Name:         weather-feed-ntw47
+Namespace:    route-weather
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=weather-feed
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:11Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.99
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/weather-feed-66566f64bf-r4xb5
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

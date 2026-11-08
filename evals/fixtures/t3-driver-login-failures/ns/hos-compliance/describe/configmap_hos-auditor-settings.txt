@@ -1,0 +1,24 @@
+Name:         hos-auditor-settings
+Namespace:    hos-compliance
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+cycle_days:
+----
+8
+
+drive_limit_hours:
+----
+11
+
+warn_minutes_before:
+----
+30
+
+
+BinaryData
+====
+
+Events:  <none>

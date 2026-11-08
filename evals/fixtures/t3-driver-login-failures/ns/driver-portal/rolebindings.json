@@ -1,0 +1,32 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "name": "driver-auth-oidc-reader",
+        "namespace": "driver-portal",
+        "resourceVersion": "10471",
+        "uid": "a0058fe8-38e4-4d4c-aa26-ad0542e3cf01"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "oidc-config-reader"
+      },
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "driver-auth-svc",
+          "namespace": "driver-portal"
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

@@ -1,0 +1,20 @@
+Name:         scale-ingest-settings
+Namespace:    weigh-station
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+gross_limit_lbs:
+----
+80000
+
+scale_poll_ms:
+----
+500
+
+
+BinaryData
+====
+
+Events:  <none>

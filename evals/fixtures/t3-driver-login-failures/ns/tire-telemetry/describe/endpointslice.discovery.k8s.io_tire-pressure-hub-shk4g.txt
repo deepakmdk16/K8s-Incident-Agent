@@ -1,0 +1,19 @@
+Name:         tire-pressure-hub-shk4g
+Namespace:    tire-telemetry
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=tire-pressure-hub
+Annotations:  <none>
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.101
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/tire-pressure-hub-5544b8666d-vnvh9
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

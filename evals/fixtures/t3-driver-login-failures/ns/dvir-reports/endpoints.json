@@ -1,0 +1,49 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:12Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:10Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "dvir-archiver",
+        "namespace": "dvir-reports",
+        "resourceVersion": "10294",
+        "uid": "c27fcad0-c147-4fb5-974d-c6b8c6168284"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.102",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "dvir-archiver-8687c64cf5-bzgqx",
+                "namespace": "dvir-reports",
+                "uid": "ee071158-8f87-4fa0-860e-311f8120f54d"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

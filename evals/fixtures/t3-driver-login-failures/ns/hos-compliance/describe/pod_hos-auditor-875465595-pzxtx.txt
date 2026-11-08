@@ -1,0 +1,60 @@
+Name:             hos-auditor-875465595-pzxtx
+Namespace:        hos-compliance
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sun, 08 Nov 2026 10:30:10 +0530
+Labels:           app=hos-auditor
+                  pod-template-hash=875465595
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.94
+IPs:
+  IP:           10.244.0.94
+Controlled By:  ReplicaSet/hos-auditor-875465595
+Containers:
+  auditor:
+    Container ID:  containerd://552263a535920328fba04207f1c236b4cd75d1478e3b5d481c83bdcbdb15fd22
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'hos-auditor up'; exec sleep 2147483647
+    State:          Running
+      Started:      Sun, 08 Nov 2026 10:30:11 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pzf7r (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-pzf7r:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  85s   default-scheduler  Successfully assigned hos-compliance/hos-auditor-875465595-pzxtx to incident-lab-control-plane
+  Normal  Pulled     85s   kubelet            spec.containers{auditor}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    85s   kubelet            spec.containers{auditor}: Container created
+  Normal  Started    84s   kubelet            spec.containers{auditor}: Container started

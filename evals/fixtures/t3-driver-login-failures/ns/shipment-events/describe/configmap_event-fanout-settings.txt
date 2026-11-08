@@ -1,0 +1,20 @@
+Name:         event-fanout-settings
+Namespace:    shipment-events
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+fanout_workers:
+----
+4
+
+topic:
+----
+shipment.status
+
+
+BinaryData
+====
+
+Events:  <none>

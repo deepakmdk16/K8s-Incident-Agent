@@ -1,0 +1,20 @@
+Name:         broker-console-settings
+Namespace:    broker-portal
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+session_minutes:
+----
+45
+
+tender_expiry_hours:
+----
+2
+
+
+BinaryData
+====
+
+Events:  <none>

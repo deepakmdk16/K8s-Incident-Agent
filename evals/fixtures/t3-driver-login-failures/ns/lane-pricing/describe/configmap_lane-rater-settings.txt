@@ -1,0 +1,20 @@
+Name:         lane-rater-settings
+Namespace:    lane-pricing
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+base_rate_per_mile:
+----
+2.15
+
+deadhead_factor:
+----
+0.6
+
+
+BinaryData
+====
+
+Events:  <none>

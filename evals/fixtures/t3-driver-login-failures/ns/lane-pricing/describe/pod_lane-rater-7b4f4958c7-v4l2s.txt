@@ -1,0 +1,60 @@
+Name:             lane-rater-7b4f4958c7-v4l2s
+Namespace:        lane-pricing
+Priority:         0
+Service Account:  default
+Node:             incident-lab-control-plane/172.18.0.2
+Start Time:       Sun, 08 Nov 2026 10:30:11 +0530
+Labels:           app=lane-rater
+                  pod-template-hash=7b4f4958c7
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.103
+IPs:
+  IP:           10.244.0.103
+Controlled By:  ReplicaSet/lane-rater-7b4f4958c7
+Containers:
+  rater:
+    Container ID:  containerd://d60146d4af25c5f7d175a78ae5ccd14ea0d782f1a0a242883097be0fe8f466d3
+    Image:         busybox:1.36
+    Image ID:      sha256:b7c873bd97bdc9046fc894e0b216c8aef31e0db4c5b761fb53022e40577ab6c0
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      echo 'lane-rater up'; exec sleep 2147483647
+    State:          Running
+      Started:      Sun, 08 Nov 2026 10:30:12 +0530
+    Ready:          True
+    Restart Count:  0
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-xx57f (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-xx57f:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  93s   default-scheduler  Successfully assigned lane-pricing/lane-rater-7b4f4958c7-v4l2s to incident-lab-control-plane
+  Normal  Pulled     92s   kubelet            spec.containers{rater}: Container image "busybox:1.36" already present on machine and can be accessed by the pod
+  Normal  Created    92s   kubelet            spec.containers{rater}: Container created
+  Normal  Started    92s   kubelet            spec.containers{rater}: Container started

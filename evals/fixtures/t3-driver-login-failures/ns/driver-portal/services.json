@@ -1,0 +1,85 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "name": "driver-auth",
+        "namespace": "driver-portal",
+        "resourceVersion": "10479",
+        "uid": "f33a2442-8a74-4f3b-b1e6-f82f4b00dea9"
+      },
+      "spec": {
+        "clusterIP": "10.96.191.111",
+        "clusterIPs": [
+          "10.96.191.111"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "driver-auth"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "name": "portal-web",
+        "namespace": "driver-portal",
+        "resourceVersion": "10499",
+        "uid": "19c5e1ed-65f2-4a14-8dfb-25d61106321f"
+      },
+      "spec": {
+        "clusterIP": "10.96.161.197",
+        "clusterIPs": [
+          "10.96.161.197"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "protocol": "TCP",
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "app": "portal-web"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

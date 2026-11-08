@@ -1,0 +1,20 @@
+Name:         carrier-vetting-settings
+Namespace:    carrier-onboarding
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+insurance_minimum_usd:
+----
+1000000
+
+mc_lookup_url:
+----
+http://authority-lookup.internal:8080
+
+
+BinaryData
+====
+
+Events:  <none>

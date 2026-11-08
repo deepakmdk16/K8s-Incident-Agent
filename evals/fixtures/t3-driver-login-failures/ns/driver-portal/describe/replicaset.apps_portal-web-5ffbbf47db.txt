@@ -1,0 +1,45 @@
+Name:           portal-web-5ffbbf47db
+Namespace:      driver-portal
+Selector:       app=portal-web,pod-template-hash=5ffbbf47db
+Labels:         app=portal-web
+                pod-template-hash=5ffbbf47db
+Annotations:    deployment.kubernetes.io/desired-replicas: 2
+                deployment.kubernetes.io/max-replicas: 3
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/portal-web
+Replicas:       2 current / 2 desired
+Pods Status:    2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=portal-web
+           pod-template-hash=5ffbbf47db
+  Containers:
+   portal:
+    Image:      busybox:1.36
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Command:
+      httpd
+      -f
+      -p
+      8080
+      -h
+      /www
+    Requests:
+      cpu:        10m
+      memory:     16Mi
+    Readiness:    http-get http://:8080/health delay=2s timeout=1s period=5s successThreshold=1 failureThreshold=3
+    Environment:  <none>
+    Mounts:
+      /www from site (rw)
+  Volumes:
+   site:
+    Type:          ConfigMap (a volume populated by a ConfigMap)
+    Name:          portal-web-site
+    Optional:      false
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  69s   replicaset-controller  Created pod: portal-web-5ffbbf47db-bpq2m
+  Normal  SuccessfulCreate  69s   replicaset-controller  Created pod: portal-web-5ffbbf47db-bmfgv

@@ -1,0 +1,19 @@
+Name:         dvir-archiver-xzhh7
+Namespace:    dvir-reports
+Labels:       endpointslice.kubernetes.io/managed-by=endpointslice-controller.k8s.io
+              kubernetes.io/service-name=dvir-archiver
+Annotations:  endpoints.kubernetes.io/last-change-trigger-time: 2026-11-08T05:00:12Z
+AddressType:  IPv4
+Ports:
+  Name  Port  Protocol
+  ----  ----  --------
+  http  8080  TCP
+Endpoints:
+  - Addresses:  10.244.0.102
+    Conditions:
+      Ready:    true
+    Hostname:   <unset>
+    TargetRef:  Pod/dvir-archiver-8687c64cf5-bzgqx
+    NodeName:   incident-lab-control-plane
+    Zone:       <unset>
+Events:         <none>

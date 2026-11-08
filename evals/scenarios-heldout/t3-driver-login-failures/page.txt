@@ -1,0 +1,7 @@
+[PAGE] SEV2 DriverLoginFailures — driver-portal
+Drivers cannot sign in to the mobile app since about 06:00: roughly 60% of
+sign-in attempts come back "session could not be validated", and the help
+desk queue is filling with locked-out drivers at start of shift. The
+driver-auth service in namespace driver-portal is running and has not been
+redeployed. Alert source: Datadog monitor, driver sign-in success rate
+below 50% for 15 min. Identify the root cause and the remediation.

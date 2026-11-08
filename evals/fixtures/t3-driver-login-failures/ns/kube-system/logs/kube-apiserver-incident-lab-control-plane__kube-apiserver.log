@@ -1,0 +1,271 @@
+2026-11-07T18:16:23.583551662Z I1107 18:16:23.583394       1 options.go:261] external host was not specified, using 172.18.0.2
+2026-11-07T18:16:23.585025416Z I1107 18:16:23.584963       1 server.go:151] Version: v1.37.0
+2026-11-07T18:16:23.585031792Z I1107 18:16:23.585008       1 server.go:153] "Golang settings" GOGC="" GOMAXPROCS="" GOTRACEBACK=""
+2026-11-07T18:16:23.689332011Z E1107 18:16:23.689283       1 options.go:205] The manifest file is empty, ignoring.
+2026-11-07T18:16:23.689637022Z I1107 18:16:23.689548       1 shared_informer.go:503] "Waiting for caches to sync" controller="node_authorizer"
+2026-11-07T18:16:23.906507177Z I1107 18:16:23.906424       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-11-07T18:16:23.908093367Z I1107 18:16:23.908032       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-11-07T18:16:23.909609629Z I1107 18:16:23.909546       1 plugins.go:157] Loaded 15 mutating admission controller(s) successfully in the following order: NamespaceLifecycle,LimitRanger,ServiceAccount,NodeRestriction,TaintNodesByCondition,Priority,DefaultTolerationSeconds,DefaultStorageClass,StorageObjectInUseProtection,PodGroupProtection,RuntimeClass,DefaultIngressClass,PodTopologyLabels,MutatingAdmissionPolicy,MutatingAdmissionWebhook.
+2026-11-07T18:16:23.909617130Z I1107 18:16:23.909565       1 plugins.go:160] Loaded 15 validating admission controller(s) successfully in the following order: LimitRanger,ServiceAccount,PodSecurity,Priority,PersistentVolumeClaimResize,RuntimeClass,CertificateApproval,CertificateSigning,ClusterTrustBundleAttest,CertificateSubjectRestriction,NodeDeclaredFeatureValidator,PodResizeValidator,ValidatingAdmissionPolicy,ValidatingAdmissionWebhook,ResourceQuota.
+2026-11-07T18:16:23.909695560Z I1107 18:16:23.909650       1 instance.go:244] Using reconciler: lease
+2026-11-07T18:16:23.918947862Z I1107 18:16:23.918820       1 handler.go:309] Adding GroupVersion apiextensions.k8s.io v1 to ResourceManager
+2026-11-07T18:16:23.918958198Z W1107 18:16:23.918835       1 genericapiserver.go:798] Skipping API apiextensions.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:23.920357689Z I1107 18:16:23.920300       1 cidrallocator.go:198] starting ServiceCIDR Allocator Controller
+2026-11-07T18:16:23.978284210Z I1107 18:16:23.978197       1 handler.go:309] Adding GroupVersion  v1 to ResourceManager
+2026-11-07T18:16:23.978417108Z I1107 18:16:23.978302       1 apis.go:112] API group "internal.apiserver.k8s.io" is not enabled, skipping.
+2026-11-07T18:16:24.001917116Z I1107 18:16:24.001840       1 apis.go:112] API group "lifecycle.k8s.io" is not enabled, skipping.
+2026-11-07T18:16:24.131607406Z I1107 18:16:24.131517       1 handler.go:309] Adding GroupVersion authentication.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.131623992Z W1107 18:16:24.131529       1 genericapiserver.go:798] Skipping API authentication.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.131624992Z W1107 18:16:24.131532       1 genericapiserver.go:798] Skipping API authentication.k8s.io/v1alpha1 because it has no resources.
+2026-11-07T18:16:24.131739304Z I1107 18:16:24.131688       1 handler.go:309] Adding GroupVersion authorization.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.131742888Z W1107 18:16:24.131693       1 genericapiserver.go:798] Skipping API authorization.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.132042689Z I1107 18:16:24.131994       1 handler.go:309] Adding GroupVersion autoscaling v2 to ResourceManager
+2026-11-07T18:16:24.132287565Z I1107 18:16:24.132245       1 handler.go:309] Adding GroupVersion autoscaling v1 to ResourceManager
+2026-11-07T18:16:24.132743227Z I1107 18:16:24.132696       1 handler.go:309] Adding GroupVersion batch v1 to ResourceManager
+2026-11-07T18:16:24.132745019Z W1107 18:16:24.132702       1 genericapiserver.go:798] Skipping API batch/v1beta1 because it has no resources.
+2026-11-07T18:16:24.133381629Z I1107 18:16:24.133333       1 handler.go:309] Adding GroupVersion certificates.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.133384963Z W1107 18:16:24.133338       1 genericapiserver.go:798] Skipping API certificates.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.133385547Z W1107 18:16:24.133339       1 genericapiserver.go:798] Skipping API certificates.k8s.io/v1alpha1 because it has no resources.
+2026-11-07T18:16:24.133579163Z I1107 18:16:24.133532       1 handler.go:309] Adding GroupVersion coordination.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.133581205Z W1107 18:16:24.133536       1 genericapiserver.go:798] Skipping API coordination.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.133581664Z W1107 18:16:24.133542       1 genericapiserver.go:798] Skipping API coordination.k8s.io/v1alpha2 because it has no resources.
+2026-11-07T18:16:24.133787491Z I1107 18:16:24.133742       1 handler.go:309] Adding GroupVersion discovery.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.133789283Z W1107 18:16:24.133747       1 genericapiserver.go:798] Skipping API discovery.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.134575044Z I1107 18:16:24.134526       1 handler.go:309] Adding GroupVersion networking.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.134577794Z W1107 18:16:24.134531       1 genericapiserver.go:798] Skipping API networking.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.134747157Z I1107 18:16:24.134703       1 handler.go:309] Adding GroupVersion node.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.134748907Z W1107 18:16:24.134707       1 genericapiserver.go:798] Skipping API node.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.134749491Z W1107 18:16:24.134708       1 genericapiserver.go:798] Skipping API node.k8s.io/v1alpha1 because it has no resources.
+2026-11-07T18:16:24.135018912Z I1107 18:16:24.134971       1 handler.go:309] Adding GroupVersion policy v1 to ResourceManager
+2026-11-07T18:16:24.135020746Z W1107 18:16:24.134979       1 genericapiserver.go:798] Skipping API policy/v1beta1 because it has no resources.
+2026-11-07T18:16:24.137309725Z I1107 18:16:24.136145       1 handler.go:309] Adding GroupVersion rbac.authorization.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.137319018Z W1107 18:16:24.136153       1 genericapiserver.go:798] Skipping API rbac.authorization.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.137319893Z W1107 18:16:24.136154       1 genericapiserver.go:798] Skipping API rbac.authorization.k8s.io/v1alpha1 because it has no resources.
+2026-11-07T18:16:24.137320727Z I1107 18:16:24.136453       1 handler.go:309] Adding GroupVersion scheduling.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.137321268Z W1107 18:16:24.136455       1 genericapiserver.go:798] Skipping API scheduling.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.137321894Z W1107 18:16:24.136458       1 genericapiserver.go:798] Skipping API scheduling.k8s.io/v1alpha3 because it has no resources.
+2026-11-07T18:16:24.138200670Z I1107 18:16:24.138107       1 handler.go:309] Adding GroupVersion storage.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.138207547Z W1107 18:16:24.138126       1 genericapiserver.go:798] Skipping API storage.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.138208380Z W1107 18:16:24.138129       1 genericapiserver.go:798] Skipping API storage.k8s.io/v1alpha1 because it has no resources.
+2026-11-07T18:16:24.138869578Z I1107 18:16:24.138786       1 handler.go:309] Adding GroupVersion storagemigration.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.138876329Z W1107 18:16:24.138795       1 genericapiserver.go:798] Skipping API storagemigration.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.139231474Z I1107 18:16:24.139179       1 handler.go:309] Adding GroupVersion flowcontrol.apiserver.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.139243726Z W1107 18:16:24.139186       1 genericapiserver.go:798] Skipping API flowcontrol.apiserver.k8s.io/v1beta3 because it has no resources.
+2026-11-07T18:16:24.139249268Z W1107 18:16:24.139188       1 genericapiserver.go:798] Skipping API flowcontrol.apiserver.k8s.io/v1beta2 because it has no resources.
+2026-11-07T18:16:24.139249977Z W1107 18:16:24.139189       1 genericapiserver.go:798] Skipping API flowcontrol.apiserver.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.140244024Z I1107 18:16:24.140183       1 handler.go:309] Adding GroupVersion apps v1 to ResourceManager
+2026-11-07T18:16:24.140248191Z W1107 18:16:24.140190       1 genericapiserver.go:798] Skipping API apps/v1beta2 because it has no resources.
+2026-11-07T18:16:24.140248858Z W1107 18:16:24.140191       1 genericapiserver.go:798] Skipping API apps/v1beta1 because it has no resources.
+2026-11-07T18:16:24.140893594Z I1107 18:16:24.140843       1 handler.go:309] Adding GroupVersion admissionregistration.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.140895928Z W1107 18:16:24.140849       1 genericapiserver.go:798] Skipping API admissionregistration.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.140896553Z W1107 18:16:24.140851       1 genericapiserver.go:798] Skipping API admissionregistration.k8s.io/v1alpha1 because it has no resources.
+2026-11-07T18:16:24.141063540Z I1107 18:16:24.141018       1 handler.go:309] Adding GroupVersion events.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.141065582Z W1107 18:16:24.141022       1 genericapiserver.go:798] Skipping API events.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.141679188Z I1107 18:16:24.141630       1 handler.go:309] Adding GroupVersion resource.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.141681939Z W1107 18:16:24.141635       1 genericapiserver.go:798] Skipping API resource.k8s.io/v1beta2 because it has no resources.
+2026-11-07T18:16:24.141682480Z W1107 18:16:24.141636       1 genericapiserver.go:798] Skipping API resource.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.141682981Z W1107 18:16:24.141637       1 genericapiserver.go:798] Skipping API resource.k8s.io/v1alpha3 because it has no resources.
+2026-11-07T18:16:24.145577654Z I1107 18:16:24.145508       1 handler.go:309] Adding GroupVersion apiregistration.k8s.io v1 to ResourceManager
+2026-11-07T18:16:24.145585072Z W1107 18:16:24.145529       1 genericapiserver.go:798] Skipping API apiregistration.k8s.io/v1beta1 because it has no resources.
+2026-11-07T18:16:24.282153759Z I1107 18:16:24.282056       1 dynamic_cafile_content.go:161] "Starting controller" name="request-header::/etc/kubernetes/pki/front-proxy-ca.crt"
+2026-11-07T18:16:24.282173345Z I1107 18:16:24.282065       1 dynamic_cafile_content.go:161] "Starting controller" name="client-ca-bundle::/etc/kubernetes/pki/ca.crt"
+2026-11-07T18:16:24.282400134Z I1107 18:16:24.282335       1 dynamic_serving_content.go:135] "Starting controller" name="serving-cert::/etc/kubernetes/pki/apiserver.crt::/etc/kubernetes/pki/apiserver.key"
+2026-11-07T18:16:24.282648094Z I1107 18:16:24.282581       1 secure_serving.go:214] Serving securely on [::]:6443
+2026-11-07T18:16:24.282770573Z I1107 18:16:24.282658       1 controller.go:87] "Starting OpenAPI AggregationController"
+2026-11-07T18:16:24.282772490Z I1107 18:16:24.282675       1 customresource_discovery_controller.go:294] Starting DiscoveryController
+2026-11-07T18:16:24.282773157Z I1107 18:16:24.282681       1 tlsconfig.go:243] "Starting DynamicServingCertificateController"
+2026-11-07T18:16:24.282773907Z I1107 18:16:24.282713       1 dynamic_serving_content.go:135] "Starting controller" name="aggregator-proxy-cert::/etc/kubernetes/pki/front-proxy-client.crt::/etc/kubernetes/pki/front-proxy-client.key"
+2026-11-07T18:16:24.282781950Z I1107 18:16:24.282720       1 system_namespaces_controller.go:66] Starting system namespaces controller
+2026-11-07T18:16:24.282782534Z I1107 18:16:24.282736       1 remote_available_controller.go:434] Starting RemoteAvailability controller
+2026-11-07T18:16:24.282782951Z I1107 18:16:24.282740       1 cache.go:32] Waiting for caches to sync for RemoteAvailability controller
+2026-11-07T18:16:24.283018908Z I1107 18:16:24.282766       1 gc_controller.go:85] "Starting apiserver lease garbage collector"
+2026-11-07T18:16:24.283020533Z I1107 18:16:24.282777       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-11-07T18:16:24.283021367Z I1107 18:16:24.282783       1 controller.go:142] Starting OpenAPI controller
+2026-11-07T18:16:24.283021992Z I1107 18:16:24.282793       1 controller.go:90] Starting OpenAPI V3 controller
+2026-11-07T18:16:24.283022450Z I1107 18:16:24.282800       1 naming_controller.go:305] Starting NamingConditionController
+2026-11-07T18:16:24.283023117Z I1107 18:16:24.282728       1 apiservice_controller.go:100] Starting APIServiceRegistrationController
+2026-11-07T18:16:24.283024076Z I1107 18:16:24.282817       1 nonstructuralschema_controller.go:202] Starting NonStructuralSchemaConditionController
+2026-11-07T18:16:24.283024492Z I1107 18:16:24.282819       1 cache.go:32] Waiting for caches to sync for APIServiceRegistrationController controller
+2026-11-07T18:16:24.283024951Z I1107 18:16:24.282823       1 apiapproval_controller.go:196] Starting KubernetesAPIApprovalPolicyConformantConditionController
+2026-11-07T18:16:24.283025409Z I1107 18:16:24.282834       1 crd_finalizer.go:276] "Starting CRDFinalizer"
+2026-11-07T18:16:24.283025826Z I1107 18:16:24.282838       1 controller.go:127] "Starting legacy_token_tracking_controller"
+2026-11-07T18:16:24.283026243Z I1107 18:16:24.282843       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-11-07T18:16:24.283026701Z I1107 18:16:24.282855       1 default_servicecidr_controller.go:110] "Starting" controller="kubernetes-service-cidr-controller"
+2026-11-07T18:16:24.283027118Z I1107 18:16:24.282865       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-11-07T18:16:24.283027743Z I1107 18:16:24.282914       1 controller.go:116] "Deleting old lease on startup" lease="kube-system/apiserver-alnnk7buasvrc2nyuhlblkuxme"
+2026-11-07T18:16:24.283028160Z I1107 18:16:24.282956       1 controller.go:89] "Starting OpenAPI V3 AggregationController"
+2026-11-07T18:16:24.283028576Z I1107 18:16:24.282837       1 cluster_authentication_trust_controller.go:459] Starting cluster_authentication_trust_controller controller
+2026-11-07T18:16:24.283028993Z I1107 18:16:24.282978       1 shared_informer.go:524] "Waiting for caches to sync"
+2026-11-07T18:16:24.283168017Z I1107 18:16:24.282730       1 apf_controller.go:377] Starting API Priority and Fairness config controller
+2026-11-07T18:16:24.283170643Z I1107 18:16:24.283084       1 aggregator.go:185] waiting for initial CRD sync...
+2026-11-07T18:16:24.283171851Z I1107 18:16:24.283101       1 dynamic_cafile_content.go:161] "Starting controller" name="client-ca-bundle::/etc/kubernetes/pki/ca.crt"
+2026-11-07T18:16:24.283172351Z I1107 18:16:24.283133       1 dynamic_cafile_content.go:161] "Starting controller" name="request-header::/etc/kubernetes/pki/front-proxy-ca.crt"
+2026-11-07T18:16:24.283405392Z I1107 18:16:24.283186       1 crdregistration_controller.go:114] Starting crd-autoregister controller
+2026-11-07T18:16:24.283411018Z I1107 18:16:24.283194       1 shared_informer.go:503] "Waiting for caches to sync" controller="crd-autoregister"
+2026-11-07T18:16:24.283412184Z I1107 18:16:24.283205       1 local_available_controller.go:156] Starting LocalAvailability controller
+2026-11-07T18:16:24.283416477Z I1107 18:16:24.283209       1 cache.go:32] Waiting for caches to sync for LocalAvailability controller
+2026-11-07T18:16:24.283417102Z I1107 18:16:24.283347       1 repairip.go:210] Starting ipallocator-repair-controller
+2026-11-07T18:16:24.283417810Z I1107 18:16:24.283351       1 shared_informer.go:503] "Waiting for caches to sync" controller="ipallocator-repair-controller"
+2026-11-07T18:16:24.283418310Z I1107 18:16:24.282907       1 storage_readiness_hook.go:70] Storage is ready for all registered resources
+2026-11-07T18:16:24.290176812Z I1107 18:16:24.290107       1 shared_informer.go:510] "Caches are synced" controller="node_authorizer"
+2026-11-07T18:16:24.307369867Z I1107 18:16:24.307307       1 shared_informer.go:531] "Caches are synced"
+2026-11-07T18:16:24.307373409Z I1107 18:16:24.307319       1 policy_source.go:253] refreshing policies
+2026-11-07T18:16:24.308515981Z I1107 18:16:24.308477       1 shared_informer.go:531] "Caches are synced"
+2026-11-07T18:16:24.308519982Z I1107 18:16:24.308485       1 policy_source.go:253] refreshing policies
+2026-11-07T18:16:24.343752655Z E1107 18:16:24.343691       1 controller.go:208] "Failed to ensure lease exists, will retry" err="namespaces \"kube-system\" not found" interval="200ms"
+2026-11-07T18:16:24.382892628Z I1107 18:16:24.382798       1 cache.go:39] Caches are synced for RemoteAvailability controller
+2026-11-07T18:16:24.382902046Z I1107 18:16:24.382804       1 shared_informer.go:531] "Caches are synced"
+2026-11-07T18:16:24.382903380Z I1107 18:16:24.382833       1 cache.go:39] Caches are synced for APIServiceRegistrationController controller
+2026-11-07T18:16:24.382904172Z I1107 18:16:24.382849       1 handler_discovery.go:450] Starting ResourceDiscoveryManager
+2026-11-07T18:16:24.382915215Z I1107 18:16:24.382861       1 shared_informer.go:531] "Caches are synced"
+2026-11-07T18:16:24.382960306Z I1107 18:16:24.382899       1 shared_informer.go:531] "Caches are synced"
+2026-11-07T18:16:24.382963265Z I1107 18:16:24.382936       1 default_servicecidr_controller.go:170] "Creating default ServiceCIDR" CIDRs=["10.96.0.0/16"]
+2026-11-07T18:16:24.383260066Z I1107 18:16:24.383149       1 apf_controller.go:382] Running API Priority and Fairness config worker
+2026-11-07T18:16:24.383266401Z I1107 18:16:24.383157       1 apf_controller.go:385] Running API Priority and Fairness periodic rebalancing process
+2026-11-07T18:16:24.383267276Z I1107 18:16:24.383182       1 shared_informer.go:531] "Caches are synced"
+2026-11-07T18:16:24.383476104Z I1107 18:16:24.383294       1 cache.go:39] Caches are synced for LocalAvailability controller
+2026-11-07T18:16:24.383480396Z I1107 18:16:24.383314       1 shared_informer.go:510] "Caches are synced" controller="crd-autoregister"
+2026-11-07T18:16:24.383481730Z I1107 18:16:24.383339       1 aggregator.go:187] initial CRD sync complete...
+2026-11-07T18:16:24.383482438Z I1107 18:16:24.383344       1 autoregister_controller.go:144] Starting autoregister controller
+2026-11-07T18:16:24.383482980Z I1107 18:16:24.383346       1 cache.go:32] Waiting for caches to sync for autoregister controller
+2026-11-07T18:16:24.383483605Z I1107 18:16:24.383348       1 cache.go:39] Caches are synced for autoregister controller
+2026-11-07T18:16:24.383484647Z I1107 18:16:24.383430       1 shared_informer.go:510] "Caches are synced" controller="ipallocator-repair-controller"
+2026-11-07T18:16:24.384268282Z I1107 18:16:24.384139       1 cidrallocator.go:302] created ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-07T18:16:24.384295162Z I1107 18:16:24.384261       1 default_servicecidr_controller.go:234] "Setting default ServiceCIDR condition Ready to True"
+2026-11-07T18:16:24.385733702Z I1107 18:16:24.385674       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-07T18:16:24.546451771Z I1107 18:16:24.546337       1 controller.go:667] quota admission added evaluator for: leases.coordination.k8s.io
+2026-11-07T18:16:25.290381917Z I1107 18:16:25.290128       1 storage_scheduling.go:189] created PriorityClass system-node-critical with value 2000001000
+2026-11-07T18:16:25.294077225Z I1107 18:16:25.293890       1 storage_scheduling.go:189] created PriorityClass system-cluster-critical with value 2000000000
+2026-11-07T18:16:25.294087310Z I1107 18:16:25.293910       1 storage_scheduling.go:205] all system priority classes are created successfully or already exist.
+2026-11-07T18:16:25.433179216Z I1107 18:16:25.433088       1 controller.go:667] quota admission added evaluator for: roles.rbac.authorization.k8s.io
+2026-11-07T18:16:25.442127851Z I1107 18:16:25.442075       1 controller.go:667] quota admission added evaluator for: rolebindings.rbac.authorization.k8s.io
+2026-11-07T18:16:25.486886194Z I1107 18:16:25.486731       1 alloc.go:329] "allocated clusterIPs" service="default/kubernetes" clusterIPs={"IPv4":"10.96.0.1"}
+2026-11-07T18:16:25.488642290Z W1107 18:16:25.488592       1 lease.go:270] Resetting endpoints for master service "kubernetes" to [172.18.0.2]
+2026-11-07T18:16:25.488977015Z I1107 18:16:25.488933       1 controller.go:667] quota admission added evaluator for: endpoints
+2026-11-07T18:16:25.490071288Z I1107 18:16:25.490025       1 controller.go:667] quota admission added evaluator for: endpointslices.discovery.k8s.io
+2026-11-07T18:16:26.715299086Z I1107 18:16:26.715177       1 controller.go:667] quota admission added evaluator for: serviceaccounts
+2026-11-07T18:16:26.718040563Z I1107 18:16:26.717971       1 controller.go:667] quota admission added evaluator for: deployments.apps
+2026-11-07T18:16:26.722612442Z I1107 18:16:26.722551       1 alloc.go:329] "allocated clusterIPs" service="kube-system/kube-dns" clusterIPs={"IPv4":"10.96.0.10"}
+2026-11-07T18:16:26.725787785Z I1107 18:16:26.725714       1 controller.go:667] quota admission added evaluator for: daemonsets.apps
+2026-11-07T18:16:34.939413534Z I1107 18:16:34.939316       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-07T18:16:34.941461148Z I1107 18:16:34.941306       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-07T18:16:35.391086463Z I1107 18:16:35.390931       1 controller.go:667] quota admission added evaluator for: controllerrevisions.apps
+2026-11-07T18:16:35.489930089Z I1107 18:16:35.489834       1 controller.go:667] quota admission added evaluator for: replicasets.apps
+2026-11-07T18:18:26.199442284Z I1107 18:18:26.199370       1 handler.go:309] Adding GroupVersion fleet.northbound.io v1 to ResourceManager
+2026-11-07T18:18:28.408972374Z I1107 18:18:28.408857       1 controller.go:667] quota admission added evaluator for: routeprofiles.fleet.northbound.io
+2026-11-07T19:39:52.047311671Z E1107 19:39:52.047034       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-07T19:39:52.047404146Z E1107 19:39:52.047034       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-07T22:11:14.440436534Z E1107 22:11:14.440187       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-07T22:11:14.440536312Z E1107 22:11:14.440187       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-07T22:41:54.375324974Z E1107 22:41:54.375074       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T01:02:42.909319580Z E1108 01:02:42.909113       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T01:02:42.909368478Z E1108 01:02:42.909139       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:14:21.154757612Z E1108 03:14:21.154522       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:30:52.493187305Z E1108 03:30:52.492909       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:30:52.493251364Z E1108 03:30:52.492909       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:35:08.096613394Z I1108 03:35:08.096501       1 handler.go:309] Adding GroupVersion fleet.northbound.io v1 to ResourceManager
+2026-11-08T03:35:09.103926428Z W1108 03:35:09.103058       1 cacher.go:185] Terminating all watchers from cacher routeprofiles.fleet.northbound.io
+2026-11-08T03:35:13.047454789Z E1108 03:35:13.047255       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:35:13.047492488Z E1108 03:35:13.047281       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:35:13.094848132Z E1108 03:35:13.094713       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T03:35:13.314593121Z I1108 03:35:13.314485       1 controller.go:667] quota admission added evaluator for: namespaces
+2026-11-08T03:36:10.375073350Z E1108 03:36:10.374725       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:00:05.447585727Z I1108 04:00:05.447440       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-08T04:26:23.836859975Z E1108 04:26:23.836761       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:27:20.494613119Z I1108 04:27:20.494403       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-08T04:27:36.698152511Z E1108 04:27:36.698049       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:27:36.706326311Z E1108 04:27:36.706228       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:33:48.074665254Z I1108 04:33:48.074523       1 handler.go:309] Adding GroupVersion fleet.northbound.io v1 to ResourceManager
+2026-11-08T04:33:48.085623750Z I1108 04:33:48.085484       1 alloc.go:329] "allocated clusterIPs" service="dispatch/route-solver" clusterIPs={"IPv4":"10.96.155.180"}
+2026-11-08T04:33:48.086201012Z E1108 04:33:48.086030       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:33:48.086560065Z E1108 04:33:48.086225       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:33:50.759607831Z I1108 04:33:50.759477       1 alloc.go:329] "allocated clusterIPs" service="dispatch/route-optimizer" clusterIPs={"IPv4":"10.96.49.249"}
+2026-11-08T04:35:30.396477538Z I1108 04:35:30.396331       1 handler.go:309] Adding GroupVersion fleet.northbound.io v1 to ResourceManager
+2026-11-08T04:35:31.403852049Z W1108 04:35:31.403286       1 cacher.go:185] Terminating all watchers from cacher routeprofiles.fleet.northbound.io
+2026-11-08T04:36:13.388411947Z I1108 04:36:13.388253       1 handler.go:309] Adding GroupVersion fleet.northbound.io v1 to ResourceManager
+2026-11-08T04:36:13.397954195Z I1108 04:36:13.397784       1 alloc.go:329] "allocated clusterIPs" service="dispatch/route-solver" clusterIPs={"IPv4":"10.96.51.66"}
+2026-11-08T04:36:16.030178043Z I1108 04:36:16.029962       1 alloc.go:329] "allocated clusterIPs" service="dispatch/route-optimizer" clusterIPs={"IPv4":"10.96.49.174"}
+2026-11-08T04:36:28.365215005Z E1108 04:36:28.364868       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:36:28.365316126Z E1108 04:36:28.364922       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:37:17.799225262Z I1108 04:37:17.799113       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-08T04:38:16.959266156Z I1108 04:38:16.959116       1 handler.go:309] Adding GroupVersion fleet.northbound.io v1 to ResourceManager
+2026-11-08T04:38:17.965513565Z W1108 04:38:17.965370       1 cacher.go:185] Terminating all watchers from cacher routeprofiles.fleet.northbound.io
+2026-11-08T04:38:22.119685151Z E1108 04:38:22.119581       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:38:59.113934742Z E1108 04:38:59.113837       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:38:59.936136727Z I1108 04:38:59.936007       1 alloc.go:329] "allocated clusterIPs" service="customs-docs/manifest-renderer" clusterIPs={"IPv4":"10.96.200.195"}
+2026-11-08T04:38:59.952016472Z I1108 04:38:59.951912       1 alloc.go:329] "allocated clusterIPs" service="customs-docs/manifest-submitter" clusterIPs={"IPv4":"10.96.107.36"}
+2026-11-08T04:41:34.820648213Z I1108 04:41:34.820530       1 alloc.go:329] "allocated clusterIPs" service="customs-docs/manifest-renderer" clusterIPs={"IPv4":"10.96.215.89"}
+2026-11-08T04:41:34.836940570Z I1108 04:41:34.836746       1 alloc.go:329] "allocated clusterIPs" service="customs-docs/manifest-submitter" clusterIPs={"IPv4":"10.96.44.66"}
+2026-11-08T04:43:10.325770352Z I1108 04:43:10.325647       1 alloc.go:329] "allocated clusterIPs" service="yard-ops/gate-checkin" clusterIPs={"IPv4":"10.96.233.240"}
+2026-11-08T04:45:02.606202210Z E1108 04:45:02.605894       1 authentication.go:76] "Unable to authenticate the request" err="[invalid bearer token, service account token has expired]"
+2026-11-08T04:47:17.186494898Z I1108 04:47:17.186328       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-08T04:48:24.668775096Z I1108 04:48:24.668569       1 alloc.go:329] "allocated clusterIPs" service="yard-ops/gate-checkin" clusterIPs={"IPv4":"10.96.120.95"}
+2026-11-08T04:52:32.273045824Z I1108 04:52:32.272942       1 alloc.go:329] "allocated clusterIPs" service="load-board/load-matcher" clusterIPs={"IPv4":"10.96.94.8"}
+2026-11-08T04:52:32.287066378Z I1108 04:52:32.286972       1 alloc.go:329] "allocated clusterIPs" service="rate-quotes/quote-builder" clusterIPs={"IPv4":"10.96.43.100"}
+2026-11-08T04:52:32.300503313Z I1108 04:52:32.300417       1 alloc.go:329] "allocated clusterIPs" service="hos-compliance/hos-auditor" clusterIPs={"IPv4":"10.96.250.38"}
+2026-11-08T04:52:32.312622701Z I1108 04:52:32.312530       1 alloc.go:329] "allocated clusterIPs" service="weigh-station/scale-ingest" clusterIPs={"IPv4":"10.96.207.70"}
+2026-11-08T04:52:32.332026350Z I1108 04:52:32.331923       1 alloc.go:329] "allocated clusterIPs" service="dock-scheduling/dock-planner" clusterIPs={"IPv4":"10.96.193.125"}
+2026-11-08T04:52:32.344836643Z I1108 04:52:32.344497       1 alloc.go:329] "allocated clusterIPs" service="carrier-onboarding/carrier-vetting" clusterIPs={"IPv4":"10.96.212.85"}
+2026-11-08T04:52:32.357170937Z I1108 04:52:32.357067       1 alloc.go:329] "allocated clusterIPs" service="claims-desk/claims-intake" clusterIPs={"IPv4":"10.96.93.22"}
+2026-11-08T04:52:32.368787671Z I1108 04:52:32.368681       1 alloc.go:329] "allocated clusterIPs" service="pallet-tracking/pallet-scanner" clusterIPs={"IPv4":"10.96.160.25"}
+2026-11-08T04:52:32.389760132Z I1108 04:52:32.389655       1 alloc.go:329] "allocated clusterIPs" service="route-weather/weather-feed" clusterIPs={"IPv4":"10.96.95.133"}
+2026-11-08T04:52:32.404072432Z I1108 04:52:32.403974       1 alloc.go:329] "allocated clusterIPs" service="eld-sync/eld-harvester" clusterIPs={"IPv4":"10.96.49.143"}
+2026-11-08T04:52:32.417236154Z I1108 04:52:32.417145       1 alloc.go:329] "allocated clusterIPs" service="tire-telemetry/tire-pressure-hub" clusterIPs={"IPv4":"10.96.182.47"}
+2026-11-08T04:52:32.429068085Z I1108 04:52:32.428978       1 alloc.go:329] "allocated clusterIPs" service="dvir-reports/dvir-archiver" clusterIPs={"IPv4":"10.96.123.134"}
+2026-11-08T04:52:32.440412480Z I1108 04:52:32.440253       1 alloc.go:329] "allocated clusterIPs" service="lane-pricing/lane-rater" clusterIPs={"IPv4":"10.96.12.200"}
+2026-11-08T04:52:32.452165779Z I1108 04:52:32.452062       1 alloc.go:329] "allocated clusterIPs" service="port-gate/gate-appointments" clusterIPs={"IPv4":"10.96.167.37"}
+2026-11-08T04:52:32.463267739Z I1108 04:52:32.463168       1 alloc.go:329] "allocated clusterIPs" service="rail-interchange/rail-handoff" clusterIPs={"IPv4":"10.96.74.103"}
+2026-11-08T04:52:32.476894424Z I1108 04:52:32.476689       1 alloc.go:329] "allocated clusterIPs" service="broker-portal/broker-console" clusterIPs={"IPv4":"10.96.109.181"}
+2026-11-08T04:52:32.490282547Z I1108 04:52:32.490184       1 alloc.go:329] "allocated clusterIPs" service="shipment-events/event-fanout" clusterIPs={"IPv4":"10.96.251.62"}
+2026-11-08T04:52:32.501996405Z I1108 04:52:32.501901       1 alloc.go:329] "allocated clusterIPs" service="geofence-alerts/geofence-evaluator" clusterIPs={"IPv4":"10.96.104.11"}
+2026-11-08T04:52:32.514678129Z I1108 04:52:32.514530       1 alloc.go:329] "allocated clusterIPs" service="cargo-insurance/coverage-checker" clusterIPs={"IPv4":"10.96.11.222"}
+2026-11-08T04:52:32.527270518Z I1108 04:52:32.527148       1 alloc.go:329] "allocated clusterIPs" service="fleet-cards/card-authorizer" clusterIPs={"IPv4":"10.96.172.22"}
+2026-11-08T04:52:32.537990563Z I1108 04:52:32.537896       1 controller.go:667] quota admission added evaluator for: cronjobs.batch
+2026-11-08T04:52:37.974752903Z I1108 04:52:37.974645       1 alloc.go:329] "allocated clusterIPs" service="driver-portal/driver-auth" clusterIPs={"IPv4":"10.96.126.108"}
+2026-11-08T04:52:37.990905634Z I1108 04:52:37.990685       1 alloc.go:329] "allocated clusterIPs" service="driver-portal/portal-web" clusterIPs={"IPv4":"10.96.251.73"}
+2026-11-08T04:53:00.006752916Z I1108 04:53:00.006629       1 controller.go:667] quota admission added evaluator for: jobs.batch
+2026-11-08T04:56:13.448039902Z I1108 04:56:13.447774       1 alloc.go:329] "allocated clusterIPs" service="load-board/load-matcher" clusterIPs={"IPv4":"10.96.140.183"}
+2026-11-08T04:56:13.463036696Z I1108 04:56:13.462780       1 alloc.go:329] "allocated clusterIPs" service="rate-quotes/quote-builder" clusterIPs={"IPv4":"10.96.66.146"}
+2026-11-08T04:56:13.476026417Z I1108 04:56:13.475913       1 alloc.go:329] "allocated clusterIPs" service="hos-compliance/hos-auditor" clusterIPs={"IPv4":"10.96.192.17"}
+2026-11-08T04:56:13.490555504Z I1108 04:56:13.490439       1 alloc.go:329] "allocated clusterIPs" service="weigh-station/scale-ingest" clusterIPs={"IPv4":"10.96.161.55"}
+2026-11-08T04:56:13.502560091Z I1108 04:56:13.502430       1 alloc.go:329] "allocated clusterIPs" service="dock-scheduling/dock-planner" clusterIPs={"IPv4":"10.96.107.197"}
+2026-11-08T04:56:13.515044929Z I1108 04:56:13.514931       1 alloc.go:329] "allocated clusterIPs" service="carrier-onboarding/carrier-vetting" clusterIPs={"IPv4":"10.96.78.135"}
+2026-11-08T04:56:13.526228799Z I1108 04:56:13.526135       1 alloc.go:329] "allocated clusterIPs" service="claims-desk/claims-intake" clusterIPs={"IPv4":"10.96.82.232"}
+2026-11-08T04:56:13.537728461Z I1108 04:56:13.537579       1 alloc.go:329] "allocated clusterIPs" service="pallet-tracking/pallet-scanner" clusterIPs={"IPv4":"10.96.6.84"}
+2026-11-08T04:56:13.550417436Z I1108 04:56:13.550337       1 alloc.go:329] "allocated clusterIPs" service="route-weather/weather-feed" clusterIPs={"IPv4":"10.96.64.105"}
+2026-11-08T04:56:13.568845886Z I1108 04:56:13.568748       1 alloc.go:329] "allocated clusterIPs" service="eld-sync/eld-harvester" clusterIPs={"IPv4":"10.96.174.140"}
+2026-11-08T04:56:13.581128171Z I1108 04:56:13.580999       1 alloc.go:329] "allocated clusterIPs" service="tire-telemetry/tire-pressure-hub" clusterIPs={"IPv4":"10.96.2.119"}
+2026-11-08T04:56:13.593467388Z I1108 04:56:13.593380       1 alloc.go:329] "allocated clusterIPs" service="dvir-reports/dvir-archiver" clusterIPs={"IPv4":"10.96.68.54"}
+2026-11-08T04:56:13.605413709Z I1108 04:56:13.605317       1 alloc.go:329] "allocated clusterIPs" service="lane-pricing/lane-rater" clusterIPs={"IPv4":"10.96.146.188"}
+2026-11-08T04:56:13.624770821Z I1108 04:56:13.624666       1 alloc.go:329] "allocated clusterIPs" service="port-gate/gate-appointments" clusterIPs={"IPv4":"10.96.5.24"}
+2026-11-08T04:56:13.636383429Z I1108 04:56:13.636271       1 alloc.go:329] "allocated clusterIPs" service="rail-interchange/rail-handoff" clusterIPs={"IPv4":"10.96.160.237"}
+2026-11-08T04:56:13.649693819Z I1108 04:56:13.649643       1 alloc.go:329] "allocated clusterIPs" service="broker-portal/broker-console" clusterIPs={"IPv4":"10.96.90.28"}
+2026-11-08T04:56:13.663451952Z I1108 04:56:13.663358       1 alloc.go:329] "allocated clusterIPs" service="shipment-events/event-fanout" clusterIPs={"IPv4":"10.96.9.251"}
+2026-11-08T04:56:13.675345426Z I1108 04:56:13.675241       1 alloc.go:329] "allocated clusterIPs" service="geofence-alerts/geofence-evaluator" clusterIPs={"IPv4":"10.96.224.101"}
+2026-11-08T04:56:13.692638867Z I1108 04:56:13.692424       1 alloc.go:329] "allocated clusterIPs" service="cargo-insurance/coverage-checker" clusterIPs={"IPv4":"10.96.251.10"}
+2026-11-08T04:56:13.704972957Z I1108 04:56:13.704859       1 alloc.go:329] "allocated clusterIPs" service="fleet-cards/card-authorizer" clusterIPs={"IPv4":"10.96.58.37"}
+2026-11-08T04:56:19.106844832Z I1108 04:56:19.106737       1 alloc.go:329] "allocated clusterIPs" service="driver-portal/driver-auth" clusterIPs={"IPv4":"10.96.146.161"}
+2026-11-08T04:56:19.122634344Z I1108 04:56:19.122536       1 alloc.go:329] "allocated clusterIPs" service="driver-portal/portal-web" clusterIPs={"IPv4":"10.96.175.189"}
+2026-11-08T04:57:16.886113660Z I1108 04:57:16.885988       1 cidrallocator.go:278] updated ClusterIP allocator for Service CIDR 10.96.0.0/16
+2026-11-08T05:00:10.478060042Z I1108 05:00:10.477931       1 alloc.go:329] "allocated clusterIPs" service="load-board/load-matcher" clusterIPs={"IPv4":"10.96.132.224"}
+2026-11-08T05:00:10.493506159Z I1108 05:00:10.493409       1 alloc.go:329] "allocated clusterIPs" service="rate-quotes/quote-builder" clusterIPs={"IPv4":"10.96.121.201"}
+2026-11-08T05:00:10.506216103Z I1108 05:00:10.506115       1 alloc.go:329] "allocated clusterIPs" service="hos-compliance/hos-auditor" clusterIPs={"IPv4":"10.96.254.162"}
+2026-11-08T05:00:10.518489422Z I1108 05:00:10.518410       1 alloc.go:329] "allocated clusterIPs" service="weigh-station/scale-ingest" clusterIPs={"IPv4":"10.96.74.237"}
+2026-11-08T05:00:10.531141241Z I1108 05:00:10.531038       1 alloc.go:329] "allocated clusterIPs" service="dock-scheduling/dock-planner" clusterIPs={"IPv4":"10.96.107.238"}
+2026-11-08T05:00:10.543501018Z I1108 05:00:10.543402       1 alloc.go:329] "allocated clusterIPs" service="carrier-onboarding/carrier-vetting" clusterIPs={"IPv4":"10.96.4.192"}
+2026-11-08T05:00:10.555438002Z I1108 05:00:10.555342       1 alloc.go:329] "allocated clusterIPs" service="claims-desk/claims-intake" clusterIPs={"IPv4":"10.96.249.166"}
+2026-11-08T05:00:10.566957319Z I1108 05:00:10.566862       1 alloc.go:329] "allocated clusterIPs" service="pallet-tracking/pallet-scanner" clusterIPs={"IPv4":"10.96.202.53"}
+2026-11-08T05:00:10.583225021Z I1108 05:00:10.582941       1 alloc.go:329] "allocated clusterIPs" service="route-weather/weather-feed" clusterIPs={"IPv4":"10.96.147.187"}
+2026-11-08T05:00:10.601005726Z I1108 05:00:10.600903       1 alloc.go:329] "allocated clusterIPs" service="eld-sync/eld-harvester" clusterIPs={"IPv4":"10.96.87.210"}
+2026-11-08T05:00:10.613141128Z I1108 05:00:10.613039       1 alloc.go:329] "allocated clusterIPs" service="tire-telemetry/tire-pressure-hub" clusterIPs={"IPv4":"10.96.164.69"}
+2026-11-08T05:00:10.624304819Z I1108 05:00:10.624204       1 alloc.go:329] "allocated clusterIPs" service="dvir-reports/dvir-archiver" clusterIPs={"IPv4":"10.96.61.19"}
+2026-11-08T05:00:10.636078428Z I1108 05:00:10.635989       1 alloc.go:329] "allocated clusterIPs" service="lane-pricing/lane-rater" clusterIPs={"IPv4":"10.96.234.109"}
+2026-11-08T05:00:10.647380411Z I1108 05:00:10.647284       1 alloc.go:329] "allocated clusterIPs" service="port-gate/gate-appointments" clusterIPs={"IPv4":"10.96.126.124"}
+2026-11-08T05:00:10.658952352Z I1108 05:00:10.658751       1 alloc.go:329] "allocated clusterIPs" service="rail-interchange/rail-handoff" clusterIPs={"IPv4":"10.96.22.1"}
+2026-11-08T05:00:10.669872460Z I1108 05:00:10.669789       1 alloc.go:329] "allocated clusterIPs" service="broker-portal/broker-console" clusterIPs={"IPv4":"10.96.41.128"}
+2026-11-08T05:00:10.684244116Z I1108 05:00:10.684122       1 alloc.go:329] "allocated clusterIPs" service="shipment-events/event-fanout" clusterIPs={"IPv4":"10.96.180.218"}
+2026-11-08T05:00:10.698000354Z I1108 05:00:10.697882       1 alloc.go:329] "allocated clusterIPs" service="geofence-alerts/geofence-evaluator" clusterIPs={"IPv4":"10.96.234.162"}
+2026-11-08T05:00:10.709869547Z I1108 05:00:10.709785       1 alloc.go:329] "allocated clusterIPs" service="cargo-insurance/coverage-checker" clusterIPs={"IPv4":"10.96.29.249"}
+2026-11-08T05:00:10.721083321Z I1108 05:00:10.720986       1 alloc.go:329] "allocated clusterIPs" service="fleet-cards/card-authorizer" clusterIPs={"IPv4":"10.96.233.89"}
+2026-11-08T05:00:16.198781861Z I1108 05:00:16.198490       1 alloc.go:329] "allocated clusterIPs" service="driver-portal/driver-auth" clusterIPs={"IPv4":"10.96.191.111"}
+2026-11-08T05:00:16.215853149Z I1108 05:00:16.215732       1 alloc.go:329] "allocated clusterIPs" service="driver-portal/portal-web" clusterIPs={"IPv4":"10.96.161.197"}

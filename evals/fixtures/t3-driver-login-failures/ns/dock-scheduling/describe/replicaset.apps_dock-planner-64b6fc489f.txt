@@ -1,0 +1,35 @@
+Name:           dock-planner-64b6fc489f
+Namespace:      dock-scheduling
+Selector:       app=dock-planner,pod-template-hash=64b6fc489f
+Labels:         app=dock-planner
+                pod-template-hash=64b6fc489f
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/dock-planner
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=dock-planner
+           pod-template-hash=64b6fc489f
+  Containers:
+   planner:
+    Image:      busybox:1.36
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo 'dock-planner up'; exec sleep 2147483647
+    Requests:
+      cpu:         10m
+      memory:      16Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  73s   replicaset-controller  Created pod: dock-planner-64b6fc489f-wxwrt

@@ -1,0 +1,20 @@
+Name:         quote-builder-settings
+Namespace:    rate-quotes
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+fuel_surcharge_percent:
+----
+18.5
+
+quote_ttl_minutes:
+----
+30
+
+
+BinaryData
+====
+
+Events:  <none>

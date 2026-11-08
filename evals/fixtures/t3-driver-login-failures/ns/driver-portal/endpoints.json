@@ -1,0 +1,99 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:22Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "driver-auth",
+        "namespace": "driver-portal",
+        "resourceVersion": "10580",
+        "uid": "8cbec502-5cde-4490-b5af-091ea295579e"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.111",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "driver-auth-85bf9874bd-88ddp",
+                "namespace": "driver-portal",
+                "uid": "5321788e-eb81-4608-a6a3-d1a47393385c"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Endpoints",
+      "metadata": {
+        "annotations": {
+          "endpoints.kubernetes.io/last-change-trigger-time": "2026-11-08T05:00:22Z"
+        },
+        "creationTimestamp": "2026-11-08T05:00:16Z",
+        "labels": {
+          "endpoints.kubernetes.io/managed-by": "endpoint-controller"
+        },
+        "name": "portal-web",
+        "namespace": "driver-portal",
+        "resourceVersion": "10586",
+        "uid": "8c5551ca-c3fe-4ea7-958b-366f871d56a7"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "10.244.0.112",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "portal-web-5ffbbf47db-bpq2m",
+                "namespace": "driver-portal",
+                "uid": "816472ca-a67a-4a61-ad00-afa852635613"
+              }
+            },
+            {
+              "ip": "10.244.0.113",
+              "nodeName": "incident-lab-control-plane",
+              "targetRef": {
+                "kind": "Pod",
+                "name": "portal-web-5ffbbf47db-bmfgv",
+                "namespace": "driver-portal",
+                "uid": "e0a3adeb-d11d-4898-a27c-bcfb6fe079a9"
+              }
+            }
+          ],
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}
