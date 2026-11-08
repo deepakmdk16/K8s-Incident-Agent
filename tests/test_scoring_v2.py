@@ -1,10 +1,10 @@
 """Tests for the additive v2 scorer (evals/scoring_v2.py).
 
 Three guarantees: parity — every phrasing the frozen rubric classifies scores
-identically under v2; the one new class classifies its natural phrasings
-uniquely and never co-matches a frozen class's phrasing; and the cluster-scoped
-namespace convention accepts every "no namespace" spelling for a cluster-scoped
-kind while a namespaced kind keeps its namespace as part of its identity.
+identically under v2; each new class classifies its natural phrasings uniquely
+and never co-matches a frozen class's phrasing; and the cluster-scoped identity
+convention ignores the namespace field for a cluster-scoped kind (kind + name
+decide) while a namespaced kind keeps its namespace as part of its identity.
 """
 
 from __future__ import annotations
@@ -246,6 +246,23 @@ def test_other_classes_do_not_co_match_pod_security(mechanism: str, expected: st
     assert _values(v2.classify_mechanism(mechanism)) == {expected}
 
 
+YARD_GOLD = REPO / "evals" / "scenarios-heldout" / "t2-yard-gate-release-blocked" / "gold.json"
+
+
+def test_a_webhook_enforcing_security_standards_is_only_the_webhook_class() -> None:
+    """Review of PR #9 (2026-11-08): `security standards?` (group 1) and `enforc`
+    (group 2) were not specific to the Pod Security plugin, so this sentence
+    co-matched pod-security-violation and scored class-wrong. The yard gold still
+    self-classifies to exactly its own class."""
+    sentence = (
+        "The validating webhook enforces the company's security standards and rejects "
+        "every pod create"
+    )
+    assert v2.classify_mechanism(sentence) == frozenset({WEBHOOK})
+    gold = v2.load_gold(YARD_GOLD)
+    assert v2.classify_mechanism(gold.mechanism_summary) == frozenset({POD_SECURITY})
+
+
 @pytest.mark.parametrize("phrasing", FROZEN_PHRASINGS)
 def test_no_frozen_phrasing_carries_the_pod_security_stem(phrasing: str) -> None:
     assert POD_SECURITY not in v2.classify_mechanism(phrasing)
@@ -283,12 +300,43 @@ def test_v2_page_and_id_name_no_class(path: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "spelling", [*sorted(v2.NO_NAMESPACE_SPELLINGS), "Cluster-Scoped", "  none  "]
+    "spelling",
+    [
+        "",
+        "-",
+        "*",
+        "none",
+        "<none>",
+        "n/a",
+        "cluster-scoped",
+        "Cluster-Scoped",
+        "  none  ",
+        "platform-policy",
+        "kube-system",
+    ],
 )
-def test_every_no_namespace_spelling_normalizes_for_a_cluster_scoped_kind(spelling: str) -> None:
+def test_the_namespace_field_is_ignored_for_a_cluster_scoped_kind(spelling: str) -> None:
+    """Kind + name decide for a cluster-scoped kind, whatever the namespace field says
+    — a "no namespace" spelling or a real namespace's name alike (2026-11-08)."""
     answered = v1.FailingResource("ValidatingWebhookConfiguration", spelling, "Policy-Guard")
     expected = ("validatingwebhookconfiguration", "", "policy-guard")
     assert v2.normalized_resource(answered) == expected
+
+
+def test_the_paged_namespace_in_the_field_scores_the_yard_gold_resource_correct() -> None:
+    """Review of PR #9 (2026-11-08): an arm that names Namespace yard-ops writes the
+    paged namespace — yard-ops — in the namespace field; only the "no namespace"
+    spellings used to normalize, so the right object scored resource-wrong on the
+    one pod-security case (a rubric-vocabulary trap, CLAUDE.md invariant)."""
+    gold = v2.load_gold(YARD_GOLD)
+    answer = v1.Answer(
+        case_id=gold.case_id,
+        failing_resource=v1.FailingResource("Namespace", "yard-ops", "yard-ops"),
+        mechanism=gold.mechanism_summary,
+        verdict="confirmed",
+    )
+    score = v2.score_case(answer, gold)
+    assert score.resource_correct and score.class_correct and score.root_cause_correct
 
 
 @pytest.mark.parametrize("kind", ["validatingwebhookconfigurations", "vwc", "mwc", "pv", "sc"])
@@ -302,12 +350,14 @@ def test_cluster_scoped_kind_aliases_resolve(kind: str) -> None:
         "RouteProfile",
         "routeprofiles",
         "routeprofile.fleet.northbound.io",
-        "RouteProfiles.fleet.northbound.io",
+        "routeprofiles.fleet.northbound.io",
+        "RouteProfile.v1.fleet.northbound.io",
     ],
 )
 def test_the_held_out_custom_kind_spellings_name_one_object(kind: str) -> None:
     """The CRD case's failing object is scored as one identity however the kind is
-    spelled; a namespaced custom kind keeps its namespace like any other."""
+    spelled — by the custom-kind rule, not a per-kind alias (2026-11-08); a
+    namespaced custom kind keeps its namespace like any other."""
     assert v2.canonical_kind(kind) == "routeprofile"
     answered = v1.FailingResource(kind, "dispatch", "weekday-routing")
     assert v2.normalized_resource(answered) == ("routeprofile", "dispatch", "weekday-routing")
@@ -316,6 +366,18 @@ def test_the_held_out_custom_kind_spellings_name_one_object(kind: str) -> None:
         "",
         "weekday-routing",
     )
+
+
+@pytest.mark.parametrize(("alias", "canonical"), sorted(v2.kind_alias_table().items()))
+def test_the_custom_kind_rule_leaves_every_alias_table_entry_alone(
+    alias: str, canonical: str
+) -> None:
+    """The rule applies only to kinds the table does not know: every alias still
+    resolves, every canonical value passes through unchanged (`endpoints` keeps its
+    trailing s), and no per-kind alias for the held-out custom kind remains."""
+    assert v2.canonical_kind(alias) == canonical
+    assert v2.canonical_kind(canonical) == canonical
+    assert "routeprofile" not in {alias, canonical}
 
 
 def test_a_namespaced_kind_keeps_its_namespace_as_identity() -> None:

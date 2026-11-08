@@ -344,3 +344,43 @@ a disclosed method update there, re-scored on the frozen set first. The LLM
 arms are not run by this slice (STATUS scoring policy); their predictions
 stand with the two amendments above. Nothing is added to
 `evals/reported.json`.
+
+## Amendment after review (2026-11-08) — three instrument changes, before any LLM-arm run
+
+A code review of the slice (PR #9) found three places where the v2 scorer's
+own vocabulary, not an arm's behaviour, would decide a row on this set. All
+three are changed in `evals/scoring_v2.py` before any LLM arm reads the set,
+and the rules-arm bundle `evals/results/20261108T050338Z-rules/` was re-scored
+offline through the changed scorer — the committed `run1/<case>/answer.json`
+files against the committed gold, no arm re-run: **0 of 5 rows moved**
+(`resource_correct` 2/5, `class_correct` 3/5, `matched_classes` identical on
+every row), so the result table above stands as recorded. Each change ships
+its regression test in `tests/test_scoring_v2.py`.
+
+1. **Cluster-scoped identity ignores the namespace field.** The convention
+   above ("cluster-scoped gold writes `"namespace": ""`") accepted only a
+   fixed set of "no namespace" spellings from an answer. An arm that names
+   the Namespace `yard-ops` on case 4 is told the paged namespace is
+   `yard-ops` and has every reason to write it in the field, and that answer
+   scored resource-wrong — a trap set by the rubric, not a wrong object. Now,
+   for a kind the scorer knows as cluster-scoped, kind + name decide and the
+   field is ignored; a namespaced kind keeps its namespace as identity.
+2. **`pod-security-violation` signature tightened.** Group 1 had
+   `security standards?` and group 2 had `enforc`, neither specific to the
+   Pod Security plugin: "the validating webhook enforces the company's
+   security standards and rejects every pod create" co-matched this class and
+   scored class-wrong for the webhook case's own phrasing. Group 1 is now the
+   plugin's own stems only (`pod[ -]?security` — covering "PodSecurity" in the
+   API server's message, the `pod-security.kubernetes.io` label key, "Pod
+   Security admission/Standards" — and `pss`); `enforc` is dropped from
+   group 2. The gold self-classifies unchanged; every phrasing test passes.
+3. **A spelling rule for custom kinds replaces the `routeprofile` aliases.**
+   The three hard-coded aliases for case 2's kind were a per-case patch. For
+   a kind the alias table does not know, the scorer now collapses `kubectl`'s
+   spellings by rule — lowercase, drop the `.group` qualifier (everything
+   from the first dot), drop a trailing plural `s` — so `RouteProfile`,
+   `routeprofiles`, `routeprofiles.fleet.northbound.io` and
+   `RouteProfile.v1.fleet.northbound.io` are one identity; every alias and
+   every canonical value in the table is untouched (parametrized over the
+   table). Known limit, stated: an `-es` plural (`ingressclasses`) is not
+   collapsed and takes an alias when a case needs one.
