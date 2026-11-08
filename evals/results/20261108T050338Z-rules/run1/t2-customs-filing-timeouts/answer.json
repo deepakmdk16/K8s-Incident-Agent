@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-customs-filing-timeouts",
+  "failing_resource": {
+    "kind": "service",
+    "namespace": "customs-docs",
+    "name": "manifest-renderer"
+  },
+  "mechanism": "The Service selector does not match the pod labels, so its Endpoints object has no addresses.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "t1-reefer-telemetry-offline",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "cold-chain",
+    "name": "reefer-monitor"
+  },
+  "mechanism": "The pod cannot be scheduled because no node has sufficient allocatable CPU for its requests.",
+  "verdict": "probable",
+  "missing_evidence": ""
+}

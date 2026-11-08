@@ -1,0 +1,111 @@
+{
+  "arm": "rules",
+  "runs": 1,
+  "started_utc": "20261108T050338Z",
+  "scorer": "evals.scoring_v2",
+  "model_pinned": null,
+  "sampling": "deterministic: no model is called",
+  "pooled": {
+    "overall": {
+      "correct": 2,
+      "cases": 5
+    },
+    "by_tier": {
+      "T1": {
+        "correct": 1,
+        "cases": 1
+      },
+      "T2": {
+        "correct": 1,
+        "cases": 3
+      },
+      "T3": {
+        "correct": 0,
+        "cases": 1
+      }
+    },
+    "by_verdict": {
+      "probable": {
+        "correct": 1,
+        "cases": 2
+      },
+      "confirmed": {
+        "correct": 1,
+        "cases": 2
+      },
+      "inconclusive": {
+        "correct": 0,
+        "cases": 1
+      }
+    },
+    "confirmed_wrong": 1
+  },
+  "per_run": {
+    "1": {
+      "overall": {
+        "correct": 2,
+        "cases": 5
+      },
+      "by_tier": {
+        "T1": {
+          "correct": 1,
+          "cases": 1
+        },
+        "T2": {
+          "correct": 1,
+          "cases": 3
+        },
+        "T3": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "by_verdict": {
+        "probable": {
+          "correct": 1,
+          "cases": 2
+        },
+        "confirmed": {
+          "correct": 1,
+          "cases": 2
+        },
+        "inconclusive": {
+          "correct": 0,
+          "cases": 1
+        }
+      },
+      "confirmed_wrong": 1
+    }
+  },
+  "totals": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0.0,
+    "cases_without_measured_cost": 0
+  },
+  "hedging": {
+    "by_verdict": {
+      "confirmed": {
+        "rows": 2,
+        "correct": 1,
+        "coverage": 0.4,
+        "accuracy": 0.5
+      },
+      "probable": {
+        "rows": 2,
+        "correct": 1,
+        "coverage": 0.4,
+        "accuracy": 0.5
+      },
+      "inconclusive": {
+        "rows": 1,
+        "correct": 0,
+        "coverage": 0.2,
+        "accuracy": 0.0
+      }
+    },
+    "inconclusive_on_readable_kind": 1,
+    "inconclusive_on_unreadable_kind": 0,
+    "readability": "readable = solution.tools.serves_kind(gold failing-resource kind): the solution's tool layer, applied to every arm's rows"
+  }
+}

@@ -288,6 +288,59 @@ Scored by `evals/scoring_v2.py` (the frozen rubric re-keyed by value, plus
 `webhook-admission-block` and `pod-security-violation`). The rules bundle
 is committed under `evals/results/`.
 
-## Result — rules arm
+## Result — rules arm (2026-11-08)
 
-*Not yet run — appended after the set is committed.*
+Bundle: [evals/results/20261108T050338Z-rules/summary.md](../../evals/results/20261108T050338Z-rules/summary.md); one run, free,
+scored by `evals.scoring_v2`; every number below re-derives from its
+`rows.jsonl` and `run1/<case>/metrics.json`. Rows first:
+
+| case | named | analyzers that fired | `resource_correct` | `class_correct` | `matched_classes` | verdict | predicted |
+|---|---|---|---|---|---|---|---|
+| 1 `t1-reefer-telemetry-offline` | `deployment/cold-chain/reefer-monitor` | unschedulable ×2 (one per pod) | **True** | **True** | pod-unschedulable | probable | correct, confirmed |
+| 2 `t2-route-planning-degraded` | `deployment/dispatch/route-optimizer` | crashloop ×2 (one per pod) | False | True | app-crashloop | probable | wrong (that name), class correct, confirmed |
+| 3 `t2-customs-filing-timeouts` | `service/customs-docs/manifest-renderer` | endpoints | **True** | **True** | service-selector-mismatch | confirmed | correct, confirmed |
+| 4 `t2-yard-gate-release-blocked` | `deployment/yard-ops/gate-checkin` | rollout | False | False | rollout-stuck | confirmed | wrong (that name), rollout-stuck, confirmed |
+| 5 `t3-driver-login-failures` | `unknown/driver-portal/unknown` | none | False | False | — | inconclusive | wrong (decoy), confirmed — or, per the second amendment's `Error` reading, inconclusive |
+
+Pooled **2/5** (T1 1/1, T2 1/3, T3 0/1); `resource_correct` **2/5**;
+`class_correct` **3/5** — all three exactly as pre-registered. Verdicts
+`confirmed` ×2, `probable` ×2, `inconclusive` ×1 against the predicted
+`confirmed` ×5; **confirmed-wrong 1** (case 4) against the predicted 3 (2
+under the second amendment's reading).
+
+What the per-row reading says about the two deviations, neither of which is
+about a name or a class:
+
+- **Cases 1 and 2 say `probable`, not `confirmed`.** Both Deployments run two
+  replicas, so the analyzer fired once per pod, and the arm's verdict rule —
+  one finding is `confirmed`, several are `probable` because it "detected
+  competing explanations" — counted two findings of the same analyzer on the
+  same workload as competition. The frozen analogs (`fraud-scoring`,
+  `checkout-worker`) are single-replica, which is why their rows were
+  `confirmed`. A property of the control arm's verdict rule (findings are not
+  deduplicated by object), exposed by this set's replica counts; the object
+  it named and the class are unchanged. One consequence for the pooled cell:
+  case 2's wrong name arrives as `probable`, so it is not confirmed-wrong.
+- **Case 5 is the second amendment's `Error` reading.** The fixture's
+  `ns/driver-portal/pods.json` holds the decoy in `terminated/Error` with 3
+  restarts; the crashloop analyzer keys on the `CrashLoopBackOff` waiting
+  reason and was silent; the rbac analyzer found no binding naming the real
+  account; zero findings → `inconclusive`, `unknown/unknown`. Wrong, not
+  confirmed-wrong — the same row the frozen rbac analog produced three times.
+- **Case 4 is exactly the prediction**, and is the set's one confirmed-wrong:
+  the rollout analyzer named the Deployment with a confident verdict for a
+  cause that lives on the Namespace.
+- **Case 3 is exactly the prediction.**
+
+Decision, per the rule fixed above: the control arm behaves as pre-registered
+on every named object and every class, so the floor for the LLM arms stands as
+written — the set has three rows (2, 4, 5) a decision tree cannot do. The two
+verdict deviations are recorded as properties of the ablation (no
+deduplication of findings by object; a signature that depends on a kubelet's
+status vocabulary rather than on restart evidence) and are **not** fixed here:
+the ablation is frozen with its own pre-registration
+(`docs/experiments/2026-08-29-rules-ablation.md`), and either change would be
+a disclosed method update there, re-scored on the frozen set first. The LLM
+arms are not run by this slice (STATUS scoring policy); their predictions
+stand with the two amendments above. Nothing is added to
+`evals/reported.json`.

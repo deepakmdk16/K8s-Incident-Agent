@@ -1,0 +1,11 @@
+{
+  "case_id": "t2-yard-gate-release-blocked",
+  "failing_resource": {
+    "kind": "deployment",
+    "namespace": "yard-ops",
+    "name": "gate-checkin"
+  },
+  "mechanism": "The Deployment rollout is not progressing; the new ReplicaSet cannot reach its desired replica count.",
+  "verdict": "confirmed",
+  "missing_evidence": ""
+}

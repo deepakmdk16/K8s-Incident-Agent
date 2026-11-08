@@ -1,0 +1,22 @@
+{
+  "case_id": "t2-yard-gate-release-blocked",
+  "arm": "rules",
+  "run_id": "a70993068d45",
+  "model": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cost_usd": 0.0,
+  "duration_s": 0.0011,
+  "paged_namespace": "yard-ops",
+  "findings": [
+    {
+      "analyzer": "rollout",
+      "kind": "deployment",
+      "namespace": "yard-ops",
+      "name": "gate-checkin",
+      "mechanism": "The Deployment rollout is not progressing; the new ReplicaSet cannot reach its desired replica count.",
+      "evidence": "deployment gate-checkin has Progressing=False, reason ProgressDeadlineExceeded"
+    }
+  ],
+  "analyzers_fired": 1
+}
