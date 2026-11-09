@@ -234,6 +234,16 @@ def test_serves_kind_is_the_namespaced_roster_plus_the_two_webhook_kinds() -> No
     assert tl.serves_kind("routeprofile") is False
 
 
+def test_custom_kinds_are_every_spelling_the_crd_roster_declares() -> None:
+    """The validator accepts an unserved kind only when the snapshot's CRDs define
+    it, so a misspelled built-in kind stays refused. Schema 3 carries the roster;
+    older snapshots define no custom kind."""
+    assert fx.custom_kinds(FIXTURES / "t2-route-planning-degraded") == frozenset(
+        {"routeprofile", "routeprofiles", "rp", "routeprofiles.fleet.northbound.io"}
+    )
+    assert fx.custom_kinds(RBAC) == frozenset()
+
+
 def test_configmap_values_are_never_served_only_keys() -> None:
     out = tl.dispatch(
         OVERLAP, "get_object", {"namespace": "orders", "kind": "configmap", "name": "orders-config"}

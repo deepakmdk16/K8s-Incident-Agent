@@ -206,6 +206,28 @@ def expected_cluster_kinds(fixture: Path) -> frozenset[str]:
     return kinds
 
 
+def custom_kinds(fixture: Path) -> frozenset[str]:
+    """Every spelling of the kinds this snapshot's CRDs define — plural, singular,
+    Kind, short names and `<plural>.<group>` — lowercased. Empty before capture
+    schema 3, the first to carry the CRD roster (evals/capture.sh); a schema-3
+    snapshot without the roster is a broken fixture and raises.
+    """
+    if capture_schema(fixture) < 3:
+        return frozenset()
+    names: set[str] = set()
+    roster = fixture / "cluster" / "customresourcedefinitions.json"
+    for crd in _read_items(roster, "cluster customresourcedefinitions"):
+        spec = cast(dict[str, Any], crd.get("spec", {}))
+        declared = cast(dict[str, Any], spec.get("names", {}))
+        spellings = [declared.get(key) for key in ("plural", "singular", "kind")]
+        spellings += cast(list[object], declared.get("shortNames", []))
+        group = spec.get("group")
+        if isinstance(declared.get("plural"), str) and isinstance(group, str) and group:
+            spellings.append(f"{declared['plural']}.{group}")
+        names |= {value.lower() for value in spellings if isinstance(value, str) and value}
+    return frozenset(names)
+
+
 def get_all(fixture: Path) -> str:
     """`kubectl get all -A -o wide`, exactly as captured."""
     return (fixture / "cluster" / "get-all.txt").read_text(encoding="utf-8")
