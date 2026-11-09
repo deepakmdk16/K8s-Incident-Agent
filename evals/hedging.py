@@ -24,7 +24,6 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 from evals import scoring
-from solution import fixture as fx
 from solution import tools
 
 # Bucket label for a row that carries no verdict at all.
@@ -47,16 +46,10 @@ class Row:
 
 
 def readable_kind(kind: str) -> bool:
-    """Whether the solution's read tools serve this kind.
-
-    A kind the tool layer does not know raises `NotServedError` inside
-    `serves_kind`; no tool reads such a kind, so the answer is False — a
-    report-only summary must not abort a finished run over it.
-    """
-    try:
-        return tools.serves_kind(kind)
-    except fx.NotServedError:
-        return False
+    """Whether the solution's read tools serve this kind — False for a kind the
+    tool layer does not know, which no tool reads (`serves_kind` answers rather
+    than raises for it, so a report-only summary never aborts a finished run)."""
+    return tools.serves_kind(kind)
 
 
 def verdict_order(values: Iterable[str]) -> list[str]:

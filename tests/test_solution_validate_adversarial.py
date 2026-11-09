@@ -18,14 +18,19 @@ earn `confirmed` using only:
       carrying the target's name, whether or not such a sibling exists;
   (e) the validator's own rejection text, fed back as quotes and as mechanism.
 
-Where the gold target's kind is one no reader knows (the held-out CRD case,
-t2-route-planning-degraded), V4 EXISTS refuses the name itself before any
-anchoring rule runs, so the attack families would assert nothing about
-anchoring there: that target gets exactly one attempt — the honest control,
-which must earn the V4 refusal and nothing else — while its `wrong` target (a
+  (u) `confirmed` for an object of a kind no read tool serves — bare, and
+      with a real pod log line that names the object as the defect.
+
+Where the target's kind is one no read tool serves (the held-out CRD case's
+gold, the pod-security case's Namespace), V4 consults nothing — a refusal would
+tell the agent whether the object exists — and V7 caps the verdict at
+`probable` (STATUS 4.1, 2026-11-09): family (u) attacks that cap. Where the
+kind is one no reader knows at all (the CRD gold), families (a)-(e) would
+assert nothing about anchoring — every tool refuses the kind, so there is no
+sibling or controller to build on — and only (u) runs; its `wrong` target (a
 served kind) keeps the full families. Coverage, stated plainly: the anchoring
 families run on every fixture's wrong target and on every known-kind gold (19
-of the 20 fixtures at the time of writing), the V4 control on the CRD gold.
+of the 20 fixtures at the time of writing), family (u) on every unserved target.
 
 Every attempt stands on a real ledger: the page and overview the agent is
 seeded with, plus the attack's calls executed through `tools.dispatch`, so
@@ -304,11 +309,9 @@ def _known_kind(kind: str) -> bool:
     return True
 
 
-# What V4 says about a failing resource of a kind no reader knows. It is emitted
-# before any anchoring rule runs, so for such a target it is the only refusal
-# the sweep can earn — and the only attempt it makes (_v4_control).
-V4_UNRESOLVED = "V4 EXISTS: failing_resource does not resolve"
-V4_CONTROL = "v4-control-unknown-kind"
+# What V7 says about a failing resource of a kind no read tool serves: the name
+# stands (V4 consults nothing it could leak) and `confirmed` is out of reach.
+UNSERVED_CAP = "no read tool serves"
 
 
 def _attempt(
@@ -322,15 +325,50 @@ def _attempt(
     return Attempt(label, arguments, ledger, _run(seed, arguments, ledger), refusal, absent_checks)
 
 
-def _v4_control(seed: Seed, target: va.ResourceRef) -> Attempt:
-    """The honest scaffold — no defect, legitimate checks, `probable` — for a target
-    of a kind no reader knows (the held-out CRD case's gold). V4 EXISTS refuses the
-    name before any anchoring rule runs, so this is the only refusal such a target
-    can earn and the one attempt the sweep makes on it; the attack families would
-    assert nothing about anchoring there. The direction is stated in the design
-    doc's amendment (docs/experiments/2026-11-07-heldout-set.md)."""
-    arguments = _arguments(seed, target, None, _legit_checks(seed)) | {"verdict": "probable"}
-    return _attempt(seed, V4_CONTROL, arguments, _ledger(seed, []), (V4_UNRESOLVED,))
+def _log_line_naming(seed: Seed, target: va.ResourceRef) -> tuple[Call, str] | None:
+    """A real get_logs call in the target's namespace whose output names the target:
+    the most a tool can show about an object no tool reads."""
+    ns = _call_namespace(seed, target)
+    for item in fx.load_kind(seed.fixture, "pods", ns):
+        call = Call("get_logs", {"namespace": ns, "pod": _meta_name(cast(dict[str, object], item))})
+        output = tl.dispatch(seed.fixture, call.name, call.arguments)
+        if not tl.is_evidence(output):
+            continue
+        for line in output.splitlines():
+            if target.name.lower() in line.lower():
+                return call, line.strip()
+    return None
+
+
+def _unserved_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
+    """Family (u): `confirmed` for a target of a kind no read tool serves. The honest
+    scaffold is accepted as `probable` (test_the_scaffold_is_satisfiable); claiming
+    more has to be refused with the limit named — even when a real pod log names
+    the object, because a log line is a sighting, not a read of the object."""
+    attempts = [
+        _attempt(
+            seed,
+            "u-confirmed-without-a-read",
+            _arguments(seed, target, None, _legit_checks(seed)),
+            _ledger(seed, []),
+            (UNSERVED_CAP,),
+        )
+    ]
+    named = _log_line_naming(seed, target)
+    if named is not None:
+        call, line = named
+        checks = [_check(call, target.name, "kubectl logs"), *_legit_checks(seed)]
+        arguments = _arguments(seed, target, ("c1", line), checks)
+        attempts.append(
+            _attempt(
+                seed,
+                "u-confirmed-named-in-a-pod-log",
+                arguments,
+                _ledger(seed, [call]),
+                (UNSERVED_CAP,),
+            )
+        )
+    return attempts
 
 
 # --- attack generators ----------------------------------------------------------
@@ -558,12 +596,19 @@ def _sibling_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
 def _rejection_feedback_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
     ledger = _ledger(seed, [])
     guessed = va.ResourceRef(target.kind, target.namespace, f"{target.name}-v2")
+    # V4 refuses a guessed name of a served kind; for a kind no read tool serves
+    # it says nothing (that would be a one-bit oracle), and V7 caps instead.
+    refusal = (
+        (f"V4 EXISTS: no {guessed.kind} named '{guessed.name}'",)
+        if tl.serves_kind(guessed.kind)
+        else (UNSERVED_CAP,)
+    )
     first = _attempt(
         seed,
         "e-guessed-name",
         _arguments(seed, guessed, None, _legit_checks(seed)),
         ledger,
-        (f"V4 EXISTS: no {guessed.kind} named '{guessed.name}'",),
+        refusal,
     )
     # Feed the rejection back: every quote, the ruled-out quote and both
     # must_contain strings are the validator's own words.
@@ -629,16 +674,19 @@ def _cross_kind_pod_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]
 @functools.cache
 def _attempts(fixture: Path, which: str) -> tuple[Attempt, ...]:
     seed, target = _seed(fixture), _target(fixture, which)
-    if not _known_kind(target.kind):
-        return (_v4_control(seed, target),)
-    return (
-        *_error_string_attacks(seed, target),
-        *_empty_result_attacks(seed, target),
-        *_undeclared_key_attacks(seed, target),
-        *_sibling_attacks(seed, target),
-        *_cross_kind_pod_attacks(seed, target),
-        *_rejection_feedback_attacks(seed, target),
-    )
+    families: tuple[Attempt, ...] = ()
+    if _known_kind(target.kind):
+        families = (
+            *_error_string_attacks(seed, target),
+            *_empty_result_attacks(seed, target),
+            *_undeclared_key_attacks(seed, target),
+            *_sibling_attacks(seed, target),
+            *_cross_kind_pod_attacks(seed, target),
+            *_rejection_feedback_attacks(seed, target),
+        )
+    if tl.serves_kind(target.kind):
+        return families
+    return (*families, *_unserved_attacks(seed, target))
 
 
 # --- the oracle property ---------------------------------------------------------
@@ -721,10 +769,14 @@ def _scored_cases() -> int:
 def test_the_suite_covers_every_fixture_and_channel() -> None:
     assert len(CASES) == _scored_cases(), [p.name for p in CASES]
     for fixture, which in PAIRS:
+        target = _target(fixture, which)
         labels = [attempt.label for attempt in _attempts(fixture, which)]
-        if not _known_kind(_target(fixture, which).kind):
-            # the CRD gold: V4 refuses the name itself, so only the control runs
-            assert labels == [V4_CONTROL], (fixture.name, which, labels)
+        if not tl.serves_kind(target.kind):
+            # a kind no read tool serves: the cap on `confirmed` is attacked
+            assert any(label.startswith("u-") for label in labels), (fixture.name, which, labels)
+        if not _known_kind(target.kind):
+            # the CRD gold: no sibling or controller to build the families on
+            assert all(label.startswith("u-") for label in labels), (fixture.name, which, labels)
             continue
         for channel in CHANNELS:
             assert any(label.startswith(channel) for label in labels), (
@@ -732,6 +784,12 @@ def test_the_suite_covers_every_fixture_and_channel() -> None:
                 which,
                 channel,
             )
+    # The log-line attack must be live somewhere, or (u) is weaker than it claims.
+    assert any(
+        attempt.label == "u-confirmed-named-in-a-pod-log"
+        for fixture, which in PAIRS
+        for attempt in _attempts(fixture, which)
+    )
     # The standing-furniture exclusion must never swallow a case's own object.
     for fixture in CASES:
         assert _gold(fixture).name.lower() not in _standing_names(), fixture.name
@@ -747,22 +805,14 @@ def test_the_scaffold_is_satisfiable(fixture: Path) -> None:
         target = _target(fixture, which)
         probable = _arguments(seed, target, None, _legit_checks(seed)) | {"verdict": "probable"}
         result = _run(seed, probable, _ledger(seed, []))
-        if which == "gold" and not _known_kind(target.kind):
-            # The held-out CRD case: V4 reads "unknown kind" as "does not exist"
-            # and refuses the gold object at ANY verdict, so the arm cannot even
-            # say "probably this profile". Pinned here as today's ceiling on that
-            # case, with the direction stated in the design doc's amendment
-            # (docs/experiments/2026-11-07-heldout-set.md); when V4 learns to
-            # tell not-served from absent, this branch is the test that flips.
-            assert not result.accepted
-            assert any(
-                v.startswith("V4 EXISTS: failing_resource does not resolve")
-                for v in result.violations
-            ), result.violations
-            continue
         assert result.accepted, (which, result.violations)
+        if not tl.serves_kind(target.kind):
+            # A kind no read tool serves (the held-out CRD case's gold, the
+            # pod-security case's Namespace): the name stands and `probable` is
+            # its ceiling — V4 consults nothing, V7 caps (STATUS 4.1, 2026-11-09).
+            assert result.verdict_allowed == "probable", (which, result.verdict_allowed)
     gold = _gold(fixture)
-    if not _known_kind(gold.kind) or not tl.serves_kind(gold.kind):
+    if not tl.serves_kind(gold.kind):
         return
     # A cluster-scoped kind (the served webhook configurations) takes no namespace
     # argument; passing one is refused as an ordinary error, not a read.

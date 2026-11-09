@@ -776,19 +776,49 @@ def _validate_webhook(
     )
 
 
-def test_v4_does_not_list_names_for_a_kind_no_tool_serves() -> None:
-    """The unchanged arm learned the object's name from this very message, 3 runs of 3.
-    The webhook kinds are served since 2026-11-07, so the guard is held on clusterroles."""
+def test_v4_does_not_consult_the_snapshot_for_a_kind_no_tool_serves() -> None:
+    """The unchanged arm learned the object's name from V4's message, 3 runs of 3
+    (docs/failure-modes.md 2026-09-05). Refusing the name without listing kept a
+    one-bit oracle — "that object does not exist" — for a kind the agent cannot
+    list, so since 2026-11-09 (STATUS 4.1) V4 says nothing at all about a kind no
+    read tool serves; V7 caps the verdict instead. The webhook kinds are served
+    since 2026-11-07, so the guard is held on clusterroles."""
     ref = {"kind": "ClusterRole", "namespace": "cluster-scoped", "name": "imagined"}
     guessed = _webhook_submission(
         failing_resource=ref,
         remediation=ref | {"field_path": ".rules[0]", "current_value": "a", "required_value": "b"},
     )
-    v4 = [v for v in _validate_webhook(guessed).violations if v.startswith("V4 EXISTS")]
-    assert v4, "a wrong name must still be rejected"
-    assert "Present:" not in v4[0]
-    real_names = {str(item["metadata"]["name"]) for item in fx.load_kind(WEBHOOK, "clusterroles")}
-    assert real_names and not any(name in v4[0] for name in real_names)
+    violations = _validate_webhook(guessed).violations
+    assert not any(v.startswith("V4 EXISTS") for v in violations), violations
+    assert not any("Present:" in v for v in violations), violations
+
+
+def test_a_kind_no_tool_serves_is_capped_at_probable_and_told_why() -> None:
+    """A custom resource (the held-out CRD case's gold kind) can be named — the
+    snapshot is not consulted — but nothing here can verify it, so `confirmed` is
+    refused with the limit named, and `probable` is accepted as proposed."""
+    ref = {"kind": "routeprofile", "namespace": "inventory", "name": "weekday-routing"}
+    overrides: dict[str, object] = {
+        "failing_resource": ref,
+        "remediation": ref
+        | {
+            "field_path": ".spec.solverEndpoint",
+            "current_value": "route-solvr.dispatch.svc:7000",
+            "required_value": "route-solver.dispatch.svc:7000",
+        },
+        "mechanism": (
+            "The RouteProfile weekday-routing sets .spec.solverEndpoint to a host that does "
+            "not exist, so the optimizer's startup check fails and its pods crash."
+        ),
+    }
+    confirmed = _validate(_submission(**overrides))
+    assert not any(v.startswith("V4 EXISTS") for v in confirmed.violations), confirmed.violations
+    assert confirmed.verdict_allowed == "probable"
+    assert len(confirmed.violations) == 1 and confirmed.violations[0].startswith("VERDICT")
+    assert "no read tool serves routeprofile" in confirmed.violations[0]
+    probable = _validate(_submission(**overrides, verdict="probable"))
+    assert probable.accepted, probable.violations
+    assert probable.verdict_allowed == "probable"
 
 
 def test_v4_lists_names_for_the_webhook_kind_only_once_a_read_has_returned_them() -> None:

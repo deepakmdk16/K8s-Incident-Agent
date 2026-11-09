@@ -628,24 +628,27 @@ def validate(
         if not value.strip():
             violations.append(f"V3 SPEC-OWNER: remediation.{field} must say what changes")
 
-    # V4 EXISTS
+    # V4 EXISTS — for a kind a read tool serves. For any other kind the snapshot
+    # is not consulted at all: it may hold the object (a custom resource, a
+    # Namespace) while no tool serves it, so a refusal here would tell the agent
+    # whether the object exists — the same oracle as listing its names, one bit
+    # at a time — and a silent pass would let `confirmed` rest on an object
+    # nobody read. The name stands; V7 caps the verdict and says why
+    # (docs/failure-modes.md 2026-09-05; STATUS 4.1, 2026-11-09).
     reference = submission.failing_resource
-    try:
-        present = fx.load_kind(fixture, reference.kind, reference.namespace)
-        names = {
-            str(cast(dict[str, object], item.get("metadata", {})).get("name", "")).lower()
-            for item in present
-        }
-        if reference.name.lower() not in names:
-            # The names present are listed only for a kind the agent could have
-            # listed itself, and only those a read of its own has already
-            # returned. For any other kind the list would be an oracle: the
-            # snapshot holds the object, no tool serves it, and this message was
-            # how the agent learned its name (docs/failure-modes.md 2026-09-05).
-            # Listing unread names of a served kind was the same oracle one step
-            # shorter — a guessed rolebinding name came back corrected
-            # (docs/failure-modes.md 2026-11-07).
-            if tl.serves_kind(reference.kind):
+    served = tl.serves_kind(reference.kind)
+    if served:
+        try:
+            present = fx.load_kind(fixture, reference.kind, reference.namespace)
+            names = {
+                str(cast(dict[str, object], item.get("metadata", {})).get("name", "")).lower()
+                for item in present
+            }
+            if reference.name.lower() not in names:
+                # Only names a read of the agent's own has already returned are
+                # listed: listing unread names was the oracle one step shorter —
+                # a guessed rolebinding name came back corrected
+                # (docs/failure-modes.md 2026-11-07).
                 returned = _names_returned(ledger)
                 listed = ", ".join(sorted(n for n in names if n and n in returned))
                 detail = (
@@ -656,17 +659,12 @@ def validate(
                         "get_object first"
                     )
                 )
-            else:
-                detail = (
-                    f"No read tool serves {reference.kind}, so its names cannot be listed "
-                    "here; name only an object you have read"
+                violations.append(
+                    f"V4 EXISTS: no {reference.kind} named '{reference.name}' in namespace "
+                    f"'{reference.namespace}'. {detail}"
                 )
-            violations.append(
-                f"V4 EXISTS: no {reference.kind} named '{reference.name}' in namespace "
-                f"'{reference.namespace}'. {detail}"
-            )
-    except fx.FixtureError as exc:
-        violations.append(f"V4 EXISTS: failing_resource does not resolve — {exc}")
+        except fx.FixtureError as exc:
+            violations.append(f"V4 EXISTS: failing_resource does not resolve — {exc}")
 
     # V5 MECHANISM AUDIT
     violations.extend(_check_mechanism(submission, report_preview))
@@ -759,6 +757,15 @@ def validate(
             f"one verified read of the {reference.kind} {reference.name} itself — get_object or "
             "describe of that kind and name, cited as evidence or run as a PRESENT check; a "
             "pod's describe or logs show what the controller produced, not its spec"
+        )
+    # A kind no read tool serves can be named but never read, so nothing here
+    # can verify a claim about it: `probable` is its ceiling, and the agent is
+    # told the limit rather than refused the name (V4 above).
+    if not served:
+        unmet.append(
+            f"a verified read of the {reference.kind} {reference.name} itself — no read tool "
+            f"serves {reference.kind}, so nothing here can verify it and 'confirmed' is out of "
+            "reach; submit 'probable', or 'inconclusive' naming that read in missing_evidence"
         )
 
     verdict_allowed = "confirmed" if not violations and not unmet else "probable"

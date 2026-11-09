@@ -15,6 +15,61 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [27] V4 tells "not served" from "absent": an unserved kind can be named, never confirmed — 2026-11-09, 12:40 UTC
+
+**Change:** `solution/validate.py` V4 EXISTS consults the snapshot only for a
+kind a read tool serves. For any other kind — a custom resource, a Namespace,
+every cluster kind `get_object` does not serve — V4 says nothing, and V7 adds
+an unmet condition naming the limit ("no read tool serves <kind> …
+'confirmed' is out of reach"), so the submission is accepted at `probable` or
+`inconclusive` as proposed and refused at `confirmed`. `solution.tools.serves_kind`
+answers False for a kind no reader knows instead of raising, so the validator
+and the hedging report ask it of whatever kind the agent submits
+(`evals/hedging.py` loses its try/except for the same reason). **Gate change,
+stated:** the 2026-11-07 rule "refuse an absent name of an unserved kind,
+without listing" is gone — it was the one-bit form of the 2026-09-05 oracle,
+telling the agent whether an object exists for a kind it cannot list.
+`tests/test_solution_validate.py::test_v4_does_not_consult_the_snapshot_for_a_kind_no_tool_serves`
+replaces the test that pinned it; the adversarial sweep's V4 control on the
+CRD gold becomes family (u) on every unserved target.
+
+**Why:** STATUS 4.1, from the held-out set (CHANGELOG [25], design doc
+amendment 2026-11-08): V4 resolved the submitted kind through
+`fixture.load_kind`, which raises for a kind no tool knows, so the solution arm
+could not submit the CRD case's gold object at any verdict — its prediction for
+that case was 0/3 by construction, and opening the object universe (roadmap
+2.7) could not move the row because the gate refused the answer before any
+tool was consulted. The decision rule fixed on 2026-11-08 asked for exactly
+this distinction, the same not-served discipline [16] gave V1, V6 and V7.
+
+**Evidence after:** 8 tests written first and failing (the three touched test
+files: `8 failed, 213 passed`), then `744 passed in 5.78s` on the whole suite;
+ruff clean, pyright strict 0 errors. Frozen replay
+[tests/test_frozen_replay.py](tests/test_frozen_replay.py) and perturbed replay
+[tests/test_perturb_replay.py](tests/test_perturb_replay.py) both still 36/36
+`confirmed` (no frozen row names an unserved kind: the hedging table's
+"confirmed: coverage 36/36" readable). Family (u) in
+[tests/test_solution_validate_adversarial.py](tests/test_solution_validate_adversarial.py):
+3 attempts on the 2 unserved targets — bare `confirmed` on the CRD gold and on
+the pod-security Namespace, and `confirmed` with a real optimizer log line
+naming `weekday-routing` cited as the defect — all three refused with the cap,
+`verdict_allowed` `probable`; the one-bit oracle is gone from the sweep's
+`e-guessed-name` attempt on the Namespace, which is now refused by the cap
+instead of by V4. Unit test
+`test_a_kind_no_tool_serves_is_capped_at_probable_and_told_why`: the same
+honest submission naming `routeprofile/weekday-routing` is refused at
+`confirmed` with one violation (VERDICT, naming the limit) and accepted at
+`probable`.
+
+**Next decision it drove:** the held-out design doc's solution prediction for
+case 2 is restored to the original (`resource_correct` 2/3, verdicts
+`probable`/`inconclusive`, confirmed-wrong 0) with the mechanism now
+mechanical; case 4 unchanged and mechanical for the same reason
+([docs/experiments/2026-11-07-heldout-set.md](docs/experiments/2026-11-07-heldout-set.md),
+amendment 2026-11-09). STATUS 3.2 is now ready to score once 4.2 (gold-v3
+for the five cases) is decided; CRD discovery (roadmap 2.7) is what would
+turn case 2's `probable` into `confirmed`.
+
 ## [26] Review round on the held-out slice: three scorer-instrument amendments, two gate changes, an honest sweep — 2026-11-08, 05:37 UTC
 
 **Change:** nine review findings on PR #9, applied before any LLM arm reads

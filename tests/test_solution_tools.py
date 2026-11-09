@@ -229,6 +229,9 @@ def test_serves_kind_is_the_namespaced_roster_plus_the_two_webhook_kinds() -> No
     assert tl.serves_kind("MutatingWebhookConfiguration")
     for kind in fx.CLUSTER_KINDS:
         assert tl.serves_kind(kind) == (kind in tl.SERVED_CLUSTER_KINDS), kind
+    # A kind no reader knows (a custom resource) is not served — an answer, not
+    # an error: the validator asks this of whatever kind the agent submits.
+    assert tl.serves_kind("routeprofile") is False
 
 
 def test_configmap_values_are_never_served_only_keys() -> None:
