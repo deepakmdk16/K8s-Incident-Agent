@@ -288,11 +288,18 @@ def _project(kind: str, item: dict[str, Any]) -> dict[str, Any]:
 def serves_kind(kind: str) -> bool:
     """True iff get_object can list and read objects of this kind.
 
-    The validator lists the names present for a kind only when this is true:
-    for a kind no read tool serves, "Present: <names>" would hand the agent a
-    fact it cannot otherwise reach (docs/failure-modes.md 2026-09-05).
+    False, not an error, for a kind no reader knows (a custom resource): the
+    question is whether the tools serve it, and for an unknown kind the answer
+    is no. The validator consults the snapshot about a submitted failing
+    resource only when this is true: for a kind no read tool serves, listing
+    the names present — or even refusing an absent name — would hand the agent
+    a fact it cannot otherwise reach (docs/failure-modes.md 2026-09-05;
+    STATUS 4.1, 2026-11-09).
     """
-    resolved = fx.normalize_kind(kind)
+    try:
+        resolved = fx.normalize_kind(kind)
+    except fx.NotServedError:
+        return False
     return resolved in fx.NAMESPACED_KINDS or resolved in SERVED_CLUSTER_KINDS
 
 

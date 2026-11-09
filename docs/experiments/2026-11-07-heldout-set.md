@@ -390,3 +390,36 @@ its own arguments, so a custom resource embedding credentials would be captured
 under the general scrub; the `fixtures free of k8s credential material` gate in
 `scripts/checkpoints.sh` is the control (`evals/scenarios-heldout/README.md`,
 "Capture — known limitation and its control").
+
+## Amendment before any scored run (2026-11-09) — V4 tells "not served" from "absent"; case 2's prediction is restored
+
+The decision rule of 2026-11-08 executed (STATUS 4.1), in the validator only,
+no arm code: `solution/validate.py` V4 EXISTS consults the snapshot only for a
+kind a read tool serves (`solution.tools.serves_kind`, which now answers False
+rather than raising for a kind no reader knows). For any other kind — the
+CRD-defined `routeprofile` of case 2, the `Namespace` of case 4, every cluster
+kind `get_object` does not serve — V4 says nothing: a refusal would tell the
+agent whether the object exists, which no tool can (the one-bit form of the
+2026-09-05 oracle), and a silent pass would let `confirmed` rest on an object
+nobody read. Instead V7 adds an unmet condition naming the limit ("no read
+tool serves <kind> … 'confirmed' is out of reach"), so such a submission is
+accepted at `probable` or `inconclusive` as proposed and refused at
+`confirmed`. **Gate change, stated:** the 2026-11-07 behaviour "refuse an
+absent name of an unserved kind, without listing" is gone;
+`tests/test_solution_validate.py::test_v4_does_not_consult_the_snapshot_for_a_kind_no_tool_serves`
+replaces the test that pinned it. The frozen and perturbed replays stay 36/36
+(`tests/test_frozen_replay.py`, `tests/test_perturb_replay.py`); the
+adversarial sweep gains family (u) on every unserved target — bare `confirmed`,
+and `confirmed` with a real optimizer log line naming `weekday-routing` cited as
+the defect — both refused with the cap (CHANGELOG [27]).
+
+**Prediction, solution, case 2 — restored to the original:** `resource_correct`
+2/3; `class_correct` 3/3; verdicts `probable` or `inconclusive`;
+**confirmed-wrong 0**. The mechanism is now mechanical rather than incidental:
+the arm can name the profile from the Deployment's env, the mounted script and
+the log line, and the gate caps the verdict at `probable` because no tool reads
+the kind. The 2026-11-08 revision (0/3 by construction) is withdrawn. **Case 4**
+is unchanged in number and mechanical for the same reason — "a run that names
+the Namespace cannot confirm" was already the prediction's reasoning; the cap
+now enforces it. Baseline and rules predictions are unchanged: neither passes
+through the validator. Fixed before any LLM arm reads the set.
