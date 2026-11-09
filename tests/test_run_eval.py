@@ -146,8 +146,8 @@ def test_an_additive_root_is_discovered_separately() -> None:
     for root in SCENARIO_ROOTS:
         if root == FROZEN_ROOT:
             continue
-        if not (ROOT / root).is_dir():
-            continue
+        # No guard on the directory: a registered root that is missing raises
+        # inside discover_cases, so the test fails instead of passing vacuously.
         extra = discover_cases(root=root)
         assert extra, f"{root} exists but discovers no case"
         assert not {c.case_id for c in extra} & {c.case_id for c in discover_cases()}
