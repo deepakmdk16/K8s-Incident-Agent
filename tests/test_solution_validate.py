@@ -780,7 +780,7 @@ def test_v4_does_not_consult_the_snapshot_for_a_kind_no_tool_serves() -> None:
     """The unchanged arm learned the object's name from V4's message, 3 runs of 3
     (docs/failure-modes.md 2026-09-05). Refusing the name without listing kept a
     one-bit oracle — "that object does not exist" — for a kind the agent cannot
-    list, so since 2026-11-09 (STATUS 4.1) V4 says nothing at all about a kind no
+    list, so since 2026-11-09 (CHANGELOG [27]) V4 says nothing at all about a kind no
     read tool serves; V7 caps the verdict instead. The webhook kinds are served
     since 2026-11-07, so the guard is held on clusterroles."""
     ref = {"kind": "ClusterRole", "namespace": "cluster-scoped", "name": "imagined"}
@@ -793,32 +793,220 @@ def test_v4_does_not_consult_the_snapshot_for_a_kind_no_tool_serves() -> None:
     assert not any("Present:" in v for v in violations), violations
 
 
-def test_a_kind_no_tool_serves_is_capped_at_probable_and_told_why() -> None:
-    """A custom resource (the held-out CRD case's gold kind) can be named — the
-    snapshot is not consulted — but nothing here can verify it, so `confirmed` is
-    refused with the limit named, and `probable` is accepted as proposed."""
-    ref = {"kind": "routeprofile", "namespace": "inventory", "name": "weekday-routing"}
-    overrides: dict[str, object] = {
+ROUTES = ROOT / "evals" / "fixtures" / "t2-route-planning-degraded"
+YARD = ROOT / "evals" / "fixtures" / "t2-yard-gate-release-blocked"
+
+
+def _seeded_ledger(
+    fixture: Path, namespace: str, reads: list[tuple[str, str, dict[str, object]]]
+) -> tl.ToolLedger:
+    """The page and overview as the agent is seeded on `fixture`, plus real reads."""
+    ledger = tl.ToolLedger()
+    ledger.record(tl.ToolInvocation("page", "page", {}, fx.page(fixture), frozenset({""})))
+    ledger.record(
+        tl.ToolInvocation(
+            "overview",
+            "overview",
+            {},
+            tl.render_namespace_overview(fixture, namespace),
+            frozenset({namespace}),
+        )
+    )
+    for call_id, name, arguments in reads:
+        ledger.record(
+            tl.ToolInvocation(
+                call_id,
+                name,
+                arguments,
+                tl.dispatch(fixture, name, arguments),
+                tl.namespaces_touched(name, arguments),
+            )
+        )
+    return ledger
+
+
+def _submission_on(
+    fixture: Path,
+    namespace: str,
+    ref: dict[str, str],
+    fix: dict[str, str],
+    mechanism: str,
+    defect_quote: str,
+    checks: list[dict[str, object]],
+    verdict: str,
+) -> va.Submission:
+    """A complete, honest submission on `fixture`: the page and overview cited as
+    symptom and link, `c1` as the defect, the overview as the ruled-out quote."""
+    page_line = fx.page(fixture).strip().splitlines()[0]
+    overview_line = tl.render_namespace_overview(fixture, namespace).splitlines()[0]
+    no_names: list[str] = []
+    arguments: dict[str, object] = {
         "failing_resource": ref,
-        "remediation": ref
-        | {
-            "field_path": ".spec.solverEndpoint",
-            "current_value": "route-solvr.dispatch.svc:7000",
-            "required_value": "route-solver.dispatch.svc:7000",
-        },
-        "mechanism": (
-            "The RouteProfile weekday-routing sets .spec.solverEndpoint to a host that does "
-            "not exist, so the optimizer's startup check fails and its pods crash."
-        ),
+        "remediation": ref | fix,
+        "root_cause_statement": f"{ref['kind']} {ref['name']} carries the wrong value.",
+        "mechanism": mechanism,
+        "evidence": [
+            {
+                "role": "symptom",
+                "claim": "The page reports the symptom.",
+                "tool_call_id": "page",
+                "quote": page_line,
+            },
+            {
+                "role": "link",
+                "claim": "The overview shows the namespace.",
+                "tool_call_id": "overview",
+                "quote": overview_line,
+            },
+            {
+                "role": "defect",
+                "claim": "The object carries the wrong value.",
+                "tool_call_id": "c1",
+                "quote": defect_quote,
+            },
+        ],
+        "ruled_out": [
+            {
+                "alternative": "Something else in the namespace is at fault.",
+                "entity_names": no_names,
+                "ruling_claim": "The overview shows nothing else.",
+                "tool_call_id": "overview",
+                "quote": overview_line,
+            }
+        ],
+        "verification": checks,
+        "verdict": verdict,
+        "missing_evidence": "",
     }
-    confirmed = _validate(_submission(**overrides))
+    return va.parse_submission(arguments)
+
+
+def test_a_kind_no_tool_serves_is_capped_at_probable_and_told_why() -> None:
+    """The held-out CRD case's gold kind, on its own fixture: the custom resource can
+    be named — V4 consults nothing about the object — but no tool reads it, so
+    `confirmed` is refused with the limit named and `probable` is accepted."""
+    ns, pod = "dispatch", "route-optimizer-78fc6747d7-22sfp"
+    logs: dict[str, object] = {"namespace": ns, "pod": pod}
+    ledger = _seeded_ledger(ROUTES, ns, [("c1", "get_logs", logs)])
+    ref = {"kind": "routeprofile", "namespace": ns, "name": "weekday-routing"}
+
+    def submission(verdict: str) -> va.Submission:
+        return _submission_on(
+            ROUTES,
+            ns,
+            ref,
+            {
+                "field_path": ".spec.solverEndpoint",
+                "current_value": "route-solvr.dispatch.svc:7000",
+                "required_value": "route-solver.dispatch.svc:7000",
+            },
+            "The RouteProfile weekday-routing sets .spec.solverEndpoint to "
+            "route-solvr.dispatch.svc:7000, a host that does not exist, so the optimizer's "
+            "startup check fails and its pods crash.",
+            "route-optimizer: profile weekday-routing: "
+            "solverEndpoint=route-solvr.dispatch.svc:7000",
+            [
+                {
+                    "command": f"kubectl -n {ns} logs {pod}",
+                    "tool": "get_logs",
+                    "arguments": logs,
+                    "must_contain": "weekday-routing",
+                },
+                {
+                    "command": f"kubectl -n {ns} get all",
+                    "tool": "namespace_overview",
+                    "arguments": {"namespace": ns},
+                    "must_contain": f"namespace {ns}",
+                },
+            ],
+            verdict,
+        )
+
+    def run(sub: va.Submission) -> va.ValidationResult:
+        return va.validate(sub, ledger, ROUTES, ROUTES.name, ns, fx.page(ROUTES), sub.mechanism)
+
+    confirmed = run(submission("confirmed"))
     assert not any(v.startswith("V4 EXISTS") for v in confirmed.violations), confirmed.violations
     assert confirmed.verdict_allowed == "probable"
     assert len(confirmed.violations) == 1 and confirmed.violations[0].startswith("VERDICT")
     assert "no read tool serves routeprofile" in confirmed.violations[0]
-    probable = _validate(_submission(**overrides, verdict="probable"))
+    probable = run(submission("probable"))
     assert probable.accepted, probable.violations
     assert probable.verdict_allowed == "probable"
+
+
+def test_a_kind_nobody_knows_is_still_refused_with_the_built_in_roster() -> None:
+    """A misspelled kind is not a custom resource: outside the readers and the
+    snapshot's CRD roster, V4 refuses it as before and lists the fixed built-in
+    kinds — the same list for every case, so nothing leaks — and an agent that
+    typed `deploymnet` can fix the typo instead of losing the row at `probable`
+    (review of PR #10)."""
+    ref = {"kind": "deploymnet", "namespace": "inventory", "name": "inventory-sync"}
+    typo = _submission(
+        failing_resource=ref,
+        remediation=ref
+        | {"field_path": ".spec.template", "current_value": "a", "required_value": "b"},
+        mechanism="The deploymnet inventory-sync sets .spec.template wrong, so its pods fail.",
+        verdict="probable",
+    )
+    v4 = [v for v in _validate(typo).violations if v.startswith("V4 EXISTS")]
+    assert v4 and "does not resolve" in v4[0] and "captured kinds are" in v4[0], v4
+
+
+def test_the_cap_alone_turns_confirmed_into_probable_for_an_unserved_known_kind() -> None:
+    """A Namespace is a kind the readers know and `list_namespaces` names, but no
+    tool shows the object. With a `get_events` line naming it as the defect and two
+    PRESENT checks, every other V7 condition is met — the cap is the only unmet
+    item, so without it this would have been `confirmed` for a label nobody read."""
+    ns = "yard-ops"
+    events: dict[str, object] = {"namespace": ns, "warnings_only": True}
+    ledger = _seeded_ledger(YARD, ns, [("c1", "get_events", events)])
+    ref = {"kind": "namespace", "namespace": "cluster-scoped", "name": ns}
+    sub = _submission_on(
+        YARD,
+        ns,
+        ref,
+        {
+            "field_path": ".metadata.labels[pod-security.kubernetes.io/enforce]",
+            "current_value": "restricted",
+            "required_value": "baseline",
+        },
+        "The Namespace yard-ops sets .metadata.labels[pod-security.kubernetes.io/enforce] to "
+        "restricted, so admission rejects every gate-checkin pod create as forbidden.",
+        "yard-ops Warning FailedCreate replicaset/gate-checkin-6cd6665ff9 x1 Error creating",
+        [
+            {
+                "command": f"kubectl -n {ns} get events --field-selector type=Warning",
+                "tool": "get_events",
+                "arguments": events,
+                "must_contain": ns,
+            },
+            {
+                "command": "kubectl get ns",
+                "tool": "list_namespaces",
+                "arguments": {},
+                "must_contain": ns,
+            },
+        ],
+        "confirmed",
+    )
+    result = va.validate(sub, ledger, YARD, YARD.name, ns, fx.page(YARD), sub.mechanism)
+    assert len(result.violations) == 1 and result.violations[0].startswith("VERDICT"), (
+        result.violations
+    )
+    message = result.violations[0]
+    assert "still missing a verified read of the namespace yard-ops itself" in message
+    for other in (
+        "at least 3 verified",
+        "role 'symptom'",
+        "whose citation is about",
+        "ruled-out alternative",
+        "checks that are all PRESENT",
+        "PRESENT verification check that names",
+        "one verified read of the",
+    ):
+        assert other not in message, message
+    assert result.verdict_allowed == "probable"
 
 
 def test_v4_lists_names_for_the_webhook_kind_only_once_a_read_has_returned_them() -> None:

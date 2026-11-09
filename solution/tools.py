@@ -294,7 +294,7 @@ def serves_kind(kind: str) -> bool:
     resource only when this is true: for a kind no read tool serves, listing
     the names present — or even refusing an absent name — would hand the agent
     a fact it cannot otherwise reach (docs/failure-modes.md 2026-09-05;
-    STATUS 4.1, 2026-11-09).
+    CHANGELOG [27]).
     """
     try:
         resolved = fx.normalize_kind(kind)

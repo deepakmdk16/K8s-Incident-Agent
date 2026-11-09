@@ -393,7 +393,7 @@ under the general scrub; the `fixtures free of k8s credential material` gate in
 
 ## Amendment before any scored run (2026-11-09) — V4 tells "not served" from "absent"; case 2's prediction is restored
 
-The decision rule of 2026-11-08 executed (STATUS 4.1), in the validator only,
+The decision rule of 2026-11-08 executed (the item added above), in the validator only,
 no arm code: `solution/validate.py` V4 EXISTS consults the snapshot only for a
 kind a read tool serves (`solution.tools.serves_kind`, which now answers False
 rather than raising for a kind no reader knows). For any other kind — the
@@ -411,7 +411,12 @@ replaces the test that pinned it. The frozen and perturbed replays stay 36/36
 (`tests/test_frozen_replay.py`, `tests/test_perturb_replay.py`); the
 adversarial sweep gains family (u) on every unserved target — bare `confirmed`,
 and `confirmed` with a real optimizer log line naming `weekday-routing` cited as
-the defect — both refused with the cap (CHANGELOG [27]).
+the defect — both refused with the cap (CHANGELOG [27]). A kind neither the
+readers nor the snapshot's CRD roster (`cluster/customresourcedefinitions.json`,
+schema 3) knows is still refused with the fixed built-in roster, as before: a
+misspelling is not a custom resource. **Disclosed:** accepting a kind name
+therefore tells the agent that the cluster defines such a kind — a kind-level
+fact `kubectl api-resources` shows any operator, never an object or its spec.
 
 **Prediction, solution, case 2 — restored to the original:** `resource_correct`
 2/3; `class_correct` 3/3; verdicts `probable` or `inconclusive`;

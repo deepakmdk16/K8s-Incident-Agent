@@ -31,9 +31,13 @@ without listing" is gone — it was the one-bit form of the 2026-09-05 oracle,
 telling the agent whether an object exists for a kind it cannot list.
 `tests/test_solution_validate.py::test_v4_does_not_consult_the_snapshot_for_a_kind_no_tool_serves`
 replaces the test that pinned it; the adversarial sweep's V4 control on the
-CRD gold becomes family (u) on every unserved target.
+CRD gold becomes family (u) on every unserved target. A kind neither the
+readers nor the snapshot's CRD roster knows (`fixture.custom_kinds`, capture
+schema 3) is still refused as before, with the fixed built-in roster: that is
+a misspelling, not a custom resource (review of PR #10).
 
-**Why:** STATUS 4.1, from the held-out set (CHANGELOG [25], design doc
+**Why:** the held-out set's decision rule (CHANGELOG [25];
+[docs/experiments/2026-11-07-heldout-set.md](docs/experiments/2026-11-07-heldout-set.md),
 amendment 2026-11-08): V4 resolved the submitted kind through
 `fixture.load_kind`, which raises for a kind no tool knows, so the solution arm
 could not submit the CRD case's gold object at any verdict — its prediction for
@@ -42,9 +46,10 @@ that case was 0/3 by construction, and opening the object universe (roadmap
 tool was consulted. The decision rule fixed on 2026-11-08 asked for exactly
 this distinction, the same not-served discipline [16] gave V1, V6 and V7.
 
-**Evidence after:** 8 tests written first and failing (the three touched test
-files: `8 failed, 213 passed`), then `744 passed in 5.78s` on the whole suite;
-ruff clean, pyright strict 0 errors. Frozen replay
+**Evidence after:** tests written first; they failed in the session before
+the change (tests and fix landed in one commit, so only the after-state
+reproduces from the tree): `747 passed` on the whole suite; ruff clean,
+pyright strict 0 errors. Frozen replay
 [tests/test_frozen_replay.py](tests/test_frozen_replay.py) and perturbed replay
 [tests/test_perturb_replay.py](tests/test_perturb_replay.py) both still 36/36
 `confirmed` (no frozen row names an unserved kind: the hedging table's
@@ -53,13 +58,19 @@ ruff clean, pyright strict 0 errors. Frozen replay
 3 attempts on the 2 unserved targets — bare `confirmed` on the CRD gold and on
 the pod-security Namespace, and `confirmed` with a real optimizer log line
 naming `weekday-routing` cited as the defect — all three refused with the cap,
-`verdict_allowed` `probable`; the one-bit oracle is gone from the sweep's
-`e-guessed-name` attempt on the Namespace, which is now refused by the cap
-instead of by V4. Unit test
-`test_a_kind_no_tool_serves_is_capped_at_probable_and_told_why`: the same
-honest submission naming `routeprofile/weekday-routing` is refused at
-`confirmed` with one violation (VERDICT, naming the limit) and accepted at
-`probable`.
+`verdict_allowed` `probable`; the sweep's `e-guessed-name` attempt on the
+Namespace is now refused by the cap instead of by V4 (its names were listable
+through `list_namespaces`, so nothing was leaked there before either). Unit
+tests in [tests/test_solution_validate.py](tests/test_solution_validate.py):
+an honest submission naming `routeprofile/dispatch/weekday-routing` on its own
+fixture is refused at `confirmed` with one violation (VERDICT, naming the
+limit) and accepted at `probable`; a misspelled kind (`deploymnet`) is refused
+by V4 with the built-in roster; and the cap-alone case — on the pod-security
+fixture, a submission naming the Namespace with a `get_events` line naming it
+as the defect and two PRESENT checks meets every other V7 condition, so the
+cap is the only unmet item and without it the verdict would have been
+`confirmed`. Review round on PR #10 (5 findings) folded in before merge: the
+roster guard, the cap-alone test, the citation and wording fixes.
 
 **Next decision it drove:** the held-out design doc's solution prediction for
 case 2 is restored to the original (`resource_correct` 2/3, verdicts

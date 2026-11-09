@@ -24,7 +24,7 @@ earn `confirmed` using only:
 Where the target's kind is one no read tool serves (the held-out CRD case's
 gold, the pod-security case's Namespace), V4 consults nothing — a refusal would
 tell the agent whether the object exists — and V7 caps the verdict at
-`probable` (STATUS 4.1, 2026-11-09): family (u) attacks that cap. Where the
+`probable` (CHANGELOG [27]): family (u) attacks that cap. Where the
 kind is one no reader knows at all (the CRD gold), families (a)-(e) would
 assert nothing about anchoring — every tool refuses the kind, so there is no
 sibling or controller to build on — and only (u) runs; its `wrong` target (a
@@ -343,8 +343,10 @@ def _log_line_naming(seed: Seed, target: va.ResourceRef) -> tuple[Call, str] | N
 def _unserved_attacks(seed: Seed, target: va.ResourceRef) -> list[Attempt]:
     """Family (u): `confirmed` for a target of a kind no read tool serves. The honest
     scaffold is accepted as `probable` (test_the_scaffold_is_satisfiable); claiming
-    more has to be refused with the limit named — even when a real pod log names
-    the object, because a log line is a sighting, not a read of the object."""
+    more has to be refused with the limit named — also when a real pod log names
+    the object. That second attempt is refused by the anchoring rule as well (a
+    log line is a sighting, not a read), so it shows the cap is *named*, not that
+    it bites alone; tests/test_solution_validate.py holds the cap-alone case."""
     attempts = [
         _attempt(
             seed,
@@ -809,7 +811,7 @@ def test_the_scaffold_is_satisfiable(fixture: Path) -> None:
         if not tl.serves_kind(target.kind):
             # A kind no read tool serves (the held-out CRD case's gold, the
             # pod-security case's Namespace): the name stands and `probable` is
-            # its ceiling — V4 consults nothing, V7 caps (STATUS 4.1, 2026-11-09).
+            # its ceiling — V4 consults nothing, V7 caps (CHANGELOG [27]).
             assert result.verdict_allowed == "probable", (which, result.verdict_allowed)
     gold = _gold(fixture)
     if not tl.serves_kind(gold.kind):

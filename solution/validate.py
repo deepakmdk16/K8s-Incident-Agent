@@ -629,15 +629,25 @@ def validate(
             violations.append(f"V3 SPEC-OWNER: remediation.{field} must say what changes")
 
     # V4 EXISTS — for a kind a read tool serves. For any other kind the snapshot
-    # is not consulted at all: it may hold the object (a custom resource, a
+    # is not consulted about the OBJECT: it may hold it (a custom resource, a
     # Namespace) while no tool serves it, so a refusal here would tell the agent
     # whether the object exists — the same oracle as listing its names, one bit
     # at a time — and a silent pass would let `confirmed` rest on an object
     # nobody read. The name stands; V7 caps the verdict and says why
-    # (docs/failure-modes.md 2026-09-05; STATUS 4.1, 2026-11-09).
+    # (docs/failure-modes.md 2026-09-05; CHANGELOG [27]).
     reference = submission.failing_resource
     served = tl.serves_kind(reference.kind)
-    if served:
+    if not served:
+        # The KIND must still be one somebody knows: the readers, or the
+        # snapshot's CRD roster. Anything else is a misspelling, refused with the
+        # fixed built-in roster as before — the same list for every case, so it
+        # leaks nothing (review of PR #10).
+        try:
+            fx.normalize_kind(reference.kind)
+        except fx.NotServedError as exc:
+            if reference.kind.strip().lower() not in fx.custom_kinds(fixture):
+                violations.append(f"V4 EXISTS: failing_resource does not resolve — {exc}")
+    else:
         try:
             present = fx.load_kind(fixture, reference.kind, reference.namespace)
             names = {
@@ -764,7 +774,8 @@ def validate(
     if not served:
         unmet.append(
             f"a verified read of the {reference.kind} {reference.name} itself — no read tool "
-            f"serves {reference.kind}, so nothing here can verify it and 'confirmed' is out of "
+            f"serves {reference.kind} objects (another tool may list the name; none shows the "
+            "object), so nothing here can verify a claim about it and 'confirmed' is out of "
             "reach; submit 'probable', or 'inconclusive' naming that read in missing_evidence"
         )
 
