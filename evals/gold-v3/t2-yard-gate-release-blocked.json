@@ -1,0 +1,18 @@
+{
+  "case_id": "t2-yard-gate-release-blocked",
+  "field_path": "metadata.labels[pod-security.kubernetes.io/enforce]",
+  "accepted_field_paths": [
+    "metadata.labels.pod-security.kubernetes.io/enforce",
+    "metadata.labels"
+  ],
+  "required_value": "baseline",
+  "accepted_required_values": [
+    "pod-security.kubernetes.io/enforce=baseline",
+    "{\"pod-security.kubernetes.io/enforce\":\"baseline\"}",
+    "removed",
+    "deleted",
+    "delete",
+    "absent"
+  ],
+  "source": "fault.yaml L1-9, L33-36 (gold failing resource namespace/yard-ops, cluster-scoped; remediation: kubectl label namespace yard-ops pod-security.kubernetes.io/enforce=baseline --overwrite, no change to the Deployment), L40-49: the Namespace sets enforce restricted while its warn and audit labels and its approved-level annotation say baseline. gold.json remediation_summary: 'Set the namespace's enforce level back to the approved one ... enforce=baseline ...; removing the enforce label entirely is the interim mitigation'. notes.md L14-18, L54-63 (the Deployment is the designed distractor), L65-67 (baseline canonical, removal the interim mitigation, both on the same object). Value PINNED: the approved level, a policy enum; removal is accepted under the webhook case's removal spellings, because notes.md names it as a fix on the same object (not an object deletion, so no <object> path). Paths: the bracket key form is canonical; quoted-bracket spellings normalize to it and every bracket spelling also reads as the dotted form (v3.1), which is accepted; the whole-labels form follows the selector precedent (one key of a small map) with the key=value value spellings. Known limitations: a JSON-pointer spelling with the ~1 escape (labels/pod-security.kubernetes.io~1enforce) is not decoded by the normalizer and will miss; the pooled sets accept 'metadata.labels' paired with the bare value 'baseline'."
+}

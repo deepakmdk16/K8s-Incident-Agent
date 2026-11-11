@@ -1,0 +1,14 @@
+{
+  "case_id": "t3-driver-login-failures",
+  "field_path": "subjects[0].name",
+  "accepted_field_paths": [
+    "subjects[name=driver-auth-svc].name",
+    "subjects[kind=ServiceAccount].name"
+  ],
+  "required_value": "driver-auth",
+  "accepted_required_values": [
+    "driver-auth",
+    "system:serviceaccount:driver-portal:driver-auth"
+  ],
+  "source": "fault.yaml L37-38 (gold failing resource rolebinding/driver-portal/driver-auth-oidc-reader; remediation: set subjects[0].name to driver-auth), L73-83: the RoleBinding's single subject (index 0) names ServiceAccount driver-auth-svc, which does not exist; the workload's ServiceAccount is driver-auth (L46-48, serviceAccountName L135). gold.json remediation_summary: JSON patch path /subjects/0/name, value driver-auth. notes.md L54-59 (the binding is the only defensible fix; changing serviceAccountName is not), L65, L117. Value PINNED: the one existing non-default ServiceAccount; its RBAC subject spelling is accepted, as for the frozen analog t2-rbac-sync-forbidden."
+}

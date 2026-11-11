@@ -2,7 +2,7 @@
 
 Four guarantees: the normalization and matching rules do what the gold-v3
 README says; arms whose contract lacks the fix fields score n/a, never 0;
-every case in both scenario roots has exactly one gold-v3 file and it
+every case in every scenario root has exactly one gold-v3 file and it
 parses; and a replay over the committed bundles reproduces the numbers
 recorded in docs/experiments/2026-11-07-scoring-v3.md, including the
 decomposition of every frozen-bundle miss into one spelling.
@@ -17,6 +17,7 @@ from pathlib import Path
 import pytest
 
 from evals import scoring_v3 as v3
+from evals.run_eval import SCENARIO_ROOTS
 
 REPO = Path(__file__).resolve().parents[1]
 RESULTS = REPO / "evals" / "results"
@@ -26,7 +27,6 @@ LATER_BUNDLES = (
     RESULTS / "20260904T124832Z-solution",
     RESULTS / "20260905T044853Z-solution",
 )
-SCENARIO_ROOTS = (REPO / "evals" / "scenarios", REPO / "evals" / "scenarios-v2")
 
 CANON = "spec.template.spec.containers[0].readinessprobe.httpget.port"
 
@@ -280,10 +280,13 @@ def test_arms_without_fix_fields_report_na_never_zero(bundle: str) -> None:
 
 
 def _case_dirs() -> set[str]:
+    """Every case directory in every root evals/run_eval.py scores — one authority,
+    so a new root cannot be scored without its fix gold (2026-11-11: the held-out
+    root had none until CHANGELOG [28])."""
     return {
         p.name
         for root in SCENARIO_ROOTS
-        for p in root.iterdir()
+        for p in (REPO / root).iterdir()
         if p.is_dir() and not p.name.startswith("_")
     }
 
@@ -291,7 +294,7 @@ def _case_dirs() -> set[str]:
 def test_every_case_has_exactly_one_gold_v3_file_and_it_parses() -> None:
     golds = v3.load_gold_dir()
     assert set(golds) == _case_dirs()
-    assert len(list(v3.GOLD_DIR.glob("*.json"))) == len(golds) == 15
+    assert len(list(v3.GOLD_DIR.glob("*.json"))) == len(golds) == 20
 
 
 def test_gold_v3_pins_a_value_except_the_documented_open_cases() -> None:
@@ -301,6 +304,7 @@ def test_gold_v3_pins_a_value_except_the_documented_open_cases() -> None:
         "t1-crashloop-missing-env",
         "t1-imagepull-bogus-tag",
         "t1-oom-cache-warmup",
+        "t1-reefer-telemetry-offline",
         "t1-unschedulable-cpu-requests",
         "t2-quota-blocks-scale",
     }

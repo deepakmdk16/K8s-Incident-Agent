@@ -15,6 +15,50 @@ trace). Numbers over adjectives.
 **Next decision it drove:** what this told us to do next.
 -->
 
+## [28] The fix column reaches the held-out set: five gold-v3 files, authored before any arm reads it — 2026-11-11, 09:30 UTC
+
+**Change:** `evals/gold-v3/` gains one file per held-out case
+(`t1-reefer-telemetry-offline`, `t2-route-planning-degraded`,
+`t2-customs-filing-timeouts`, `t2-yard-gate-release-blocked`,
+`t3-driver-login-failures`), each authored from the case's `fault.yaml`,
+`notes.md` and `remediation_summary` under the tree's authoring rule, with
+source lines cited. One value is open (case 1, as its frozen analog); four are
+pinned, following the frozen precedents for a typo'd Service name, a selector
+label and an RBAC subject, plus a policy enum for the Namespace's enforce
+label with its documented removal mitigation. The instrument (v3.1) is
+unchanged. `tests/test_scoring_v3.py` now takes its scenario roots from
+`evals/run_eval.py` instead of a local two-root tuple, so the "one gold file
+per case" test covers every root the harness scores; count 15 → 20, open set
+gains case 1.
+
+**Why:** STATUS 4.2. CHANGELOG [24] named v3.1 the instrument for the held-out
+set, but the gold tree was pinned to the 15 older cases, so the fix column
+could not be read there; the files had to exist before any LLM arm reads the
+set, or they would be authored with its output in view. The test that should
+have caught the gap had its own copy of the root list — the same drift PR #9's
+review fixed in the other tests.
+
+**Evidence after:** with the five files moved out, the gold-tree test fails
+(`1 failed`); with them, `tests/test_scoring_v3.py` `53 passed`. Every
+committed bundle's `scoring_v3.json` still matches a fresh run (no earlier gold
+file changed). The matcher was checked on the new files: on case 4 the
+quoted-bracket, dotted and whole-labels spellings match and an annotation or
+container path does not; on case 2 the short and long DNS forms with port 7000
+match, the typo'd host and a host without the port do not. Two limitations are
+disclosed in case 4's file rather than fixed: a JSON-pointer `~1` spelling
+misses, and the pooled sets accept `metadata.labels` with a bare `baseline`.
+A third fact was found while writing the prediction and is pre-registered,
+not fixed: case 4's pinned value `baseline` appears in no output any tool
+serves (only in `cluster/namespaces.json`), so a value hit there is a guess or
+the removal mitigation, never a read; cases 2, 3 and 5's values are each
+visible in a served read.
+
+**Next decision it drove:** the held-out design doc pre-registers the
+solution arm's fix column, about 12/15 `fix_path_correct`
+([docs/experiments/2026-11-07-heldout-set.md](docs/experiments/2026-11-07-heldout-set.md),
+amendment 2026-11-11). STATUS 3.2 is now ready to score with every instrument
+in place; the run itself stays deferred under the scoring policy.
+
 ## [27] V4 tells "not served" from "absent": an unserved kind can be named, never confirmed — 2026-11-09, 12:40 UTC
 
 **Change:** `solution/validate.py` V4 EXISTS consults the snapshot only for a
