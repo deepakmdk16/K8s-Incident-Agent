@@ -439,15 +439,19 @@ CHANGELOG [24]). Case 1's value is open (any schedulable request, as for its
 frozen analog). Cases 2-5 pin a value: the Service DNS name and port 7000 for
 case 2 (the frozen init-wait precedent), the pod label for case 3, the approved
 enforce level `baseline` for case 4 (label removal, the documented mitigation,
-accepted under the webhook case's removal spellings), and the existing
-ServiceAccount for case 5. Two limitations are disclosed in case 4's file, not
-fixed: a JSON-pointer `~1` spelling of the label key is not decoded and will
-miss, and the pooled sets accept `metadata.labels` with a bare `baseline`.
+accepted under the webhook case's removal spellings plus `null` and kubectl's
+`enforce-`; `privileged` unblocks too but loosens past the approved level, so
+it is a value miss), and the existing ServiceAccount for case 5. Disclosed in
+case 4's file, not fixed: a JSON-pointer `~1` spelling of the label key is not
+decoded and will miss.
 
 **Prediction, solution arm, fix column (3 runs, 15 rows), fixed now:** the
-column scores the path and value against the case's own gold, so a row that
-names a different object misses the path by construction and the column
-tracks `resource_correct` on cases 2 and 4. Expected `fix_path_correct`
+scorer compares the submitted path string with the case's gold and never looks
+at the object. On cases 2 and 4 every accepted path is a field only the gold
+object has (`spec.solverEndpoint`; the enforce label key — no whole-labels
+form, review of PR #11), so a row that names another object is predicted to
+miss the path, and the column to track `resource_correct` there; that is a
+prediction about the arm, not a property of the scorer. Expected `fix_path_correct`
 **about 12/15** — 3/3 on cases 1, 3 and 5 (frozen analogs 36/36 on v3.1), 2/3 on
 case 2, 1/3 on case 4, per the resource predictions above. On value-pinned rows
 whose path is correct, `fix_value_correct` on cases 2, 3 and 5 all of them:

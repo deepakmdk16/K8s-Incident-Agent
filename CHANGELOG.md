@@ -42,16 +42,22 @@ review fixed in the other tests.
 (`1 failed`); with them, `tests/test_scoring_v3.py` `53 passed`. Every
 committed bundle's `scoring_v3.json` still matches a fresh run (no earlier gold
 file changed). The matcher was checked on the new files: on case 4 the
-quoted-bracket, dotted and whole-labels spellings match and an annotation or
-container path does not; on case 2 the short and long DNS forms with port 7000
-match, the typo'd host and a host without the port do not. Two limitations are
-disclosed in case 4's file rather than fixed: a JSON-pointer `~1` spelling
-misses, and the pooled sets accept `metadata.labels` with a bare `baseline`.
-A third fact was found while writing the prediction and is pre-registered,
+quoted-bracket, dotted and kubectl escaped-dot spellings match, the
+whole-labels path and an annotation or container path do not, and the
+removal spellings (`null`, `enforce-`) match while `privileged` misses; on case 2 the short and long DNS forms with port 7000
+match, the typo'd host and a host without the port do not. Disclosed in case
+4's file rather than fixed: a JSON-pointer `~1` spelling misses.
+A second fact was found while writing the prediction and is pre-registered,
 not fixed: case 4's pinned value `baseline` appears in no output any tool
 serves (only in `cluster/namespaces.json`), so a value hit there is a guess or
 the removal mitigation, never a read; cases 2, 3 and 5's values are each
-visible in a served read.
+visible in a served read. Review round on PR #11 (medium, 7 findings) folded
+in before merge: the whole-labels alias dropped (it matched a row on any
+object and accepted wiping every label), two removal spellings and the
+escaped-dot path added, `privileged` stated as a miss, and the gold-tree test
+now requires every listed spelling to score correct through the matcher
+itself (it had checked membership, true by construction) and discovers cases
+with the harness's own `discover_cases` — all 20 files pass it.
 
 **Next decision it drove:** the held-out design doc pre-registers the
 solution arm's fix column, about 12/15 `fix_path_correct`
