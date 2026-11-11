@@ -1,0 +1,10 @@
+{
+  "case_id": "t1-reefer-telemetry-offline",
+  "field_path": "spec.template.spec.containers[0].resources.requests.cpu",
+  "accepted_field_paths": [
+    "spec.template.spec.containers[name=monitor].resources.requests.cpu"
+  ],
+  "required_value": null,
+  "accepted_required_values": [],
+  "source": "fault.yaml L17-20 (gold failing resource and remediation), L53-71: the single container 'monitor' (index 0) requests cpu \"512\" (L71), 512 whole cores where 512m was intended. gold.json remediation_summary: 'Set spec.template.spec.containers[0].resources.requests.cpu ... to 512m (the intended value; any request the node can satisfy works)'. notes.md L13, L30-33, L50-51 (the verbatim remediation recovered both pods). Value is OPEN, as for the frozen analog t1-unschedulable-cpu-requests: gold says 'any request the node can satisfy works', so 512m is one choice among many and the value is n/a."
+}

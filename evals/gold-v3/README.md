@@ -1,8 +1,11 @@
 # gold-v3 — the fix, not the sentence
 
 An **additive** gold tree for `evals/scoring_v3.py`. One file per case,
-`<case_id>.json`, for the 12 frozen cases (`evals/scenarios/`) and the 3
-additive cases (`evals/scenarios-v2/`). The frozen `gold.json` files are
+`<case_id>.json`, for the 12 frozen cases (`evals/scenarios/`), the 3
+additive cases (`evals/scenarios-v2/`) and the 5 held-out cases
+(`evals/scenarios-heldout/`, authored 2026-11-11 before any LLM arm read that
+set; `tests/test_scoring_v3.py` requires one file for every case in every root
+`evals/run_eval.py` scores). The frozen `gold.json` files are
 untouched; this tree adds the one thing they lack — the field the fix changes
 and the value it changes it to — so the solution arm's submitted
 `remediation.field_path` / `required_value` can be scored mechanically.
@@ -98,8 +101,8 @@ carries the raw strings so a reader can see it.
 
 `required_value: null` in: `t1-crashloop-missing-env` (any non-empty
 AMQP_URL), `t1-imagepull-bogus-tag` (any existing image reference),
-`t1-oom-cache-warmup` (any limit with headroom), `t1-unschedulable-cpu-requests`
-(any schedulable request), `t2-quota-blocks-scale` (any cap ≥ 6, or
-deletion). For these rows the scorer reports `fix_value_correct` and
+`t1-oom-cache-warmup` (any limit with headroom), `t1-reefer-telemetry-offline`
+and `t1-unschedulable-cpu-requests` (any schedulable request),
+`t2-quota-blocks-scale` (any cap ≥ 6, or deletion). For these rows the scorer reports `fix_value_correct` and
 `both_correct` as not scorable (they are excluded from those denominators and
 counted under "value open in gold"); the path still scores.

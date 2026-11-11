@@ -1,0 +1,12 @@
+{
+  "case_id": "t2-route-planning-degraded",
+  "field_path": "spec.solverEndpoint",
+  "accepted_field_paths": [],
+  "required_value": "route-solver.dispatch.svc:7000",
+  "accepted_required_values": [
+    "route-solver:7000",
+    "route-solver.dispatch:7000",
+    "route-solver.dispatch.svc.cluster.local:7000"
+  ],
+  "source": "fault.yaml L1-8, L22-26 (gold failing resource routeprofile/dispatch/weekday-routing; remediation: set spec.solverEndpoint to route-solver.dispatch.svc:7000; nothing in the Deployment, Service or solver changes), L33-39: the RouteProfile's spec.solverEndpoint is route-solvr.dispatch.svc:7000, a typo'd host; L97-99: the optimizer splits the value at the last ':' and runs nc -z on host and port, so the port must be the number 7000 (setup.yaml L120-127: Service route-solver, port 7000). gold.json remediation_summary: merge patch {\"spec\":{\"solverEndpoint\":\"route-solver.dispatch.svc:7000\"}}. notes.md L57-74 (the Deployment, the Service, the entrypoint ConfigMap and the RBAC triple are each indefensible), L100. Value PINNED: a typo'd Service name, the one host eta-publisher reaches; following the frozen t2-init-wait-for-migrations precedent its in-cluster DNS forms, each with port 7000, resolve from the dispatch namespace to the same Service and are accepted. No whole-map path: spec has four keys."
+}

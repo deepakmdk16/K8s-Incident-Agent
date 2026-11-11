@@ -1,0 +1,15 @@
+{
+  "case_id": "t2-customs-filing-timeouts",
+  "field_path": "spec.selector.app",
+  "accepted_field_paths": [
+    "spec.selector",
+    "spec.selector[app]"
+  ],
+  "required_value": "manifest-renderer",
+  "accepted_required_values": [
+    "manifest-renderer",
+    "app=manifest-renderer",
+    "{\"app\":\"manifest-renderer\"}"
+  ],
+  "source": "fault.yaml L20-22 (gold failing resource and remediation), L82-90: Service customs-docs/manifest-renderer selects app=manifest-render while the renderer pods carry app=manifest-renderer (matchLabels L50, template labels L54). gold.json remediation_summary: patch {\"spec\":{\"selector\":{\"app\":\"manifest-renderer\"}}}. notes.md L34-43 (the Service is the object whose spec must change; the Deployment's selector is right and immutable), L66. Value PINNED: the pod label value, as for the frozen selector analogs; the whole-selector spellings normalize to the same form (see README)."
+}

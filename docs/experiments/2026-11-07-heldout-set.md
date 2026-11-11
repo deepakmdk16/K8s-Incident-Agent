@@ -428,3 +428,43 @@ is unchanged in number and mechanical for the same reason — "a run that names
 the Namespace cannot confirm" was already the prediction's reasoning; the cap
 now enforces it. Baseline and rules predictions are unchanged: neither passes
 through the validator. Fixed before any LLM arm reads the set.
+
+## Amendment before any scored run (2026-11-11) — the fix column is read on this set
+
+`evals/gold-v3/` gains one file per held-out case, authored from each case's
+`fault.yaml`, `notes.md` and `remediation_summary` under the tree's authoring
+rule (`evals/gold-v3/README.md`), with source lines cited per file, before any
+LLM arm has read the set; the instrument is v3.1 unchanged (`evals/scoring_v3.py`,
+CHANGELOG [24]). Case 1's value is open (any schedulable request, as for its
+frozen analog). Cases 2-5 pin a value: the Service DNS name and port 7000 for
+case 2 (the frozen init-wait precedent), the pod label for case 3, the approved
+enforce level `baseline` for case 4 (label removal, the documented mitigation,
+accepted under the webhook case's removal spellings plus `null` and kubectl's
+`enforce-`; `privileged` unblocks too but loosens past the approved level, so
+it is a value miss), and the existing ServiceAccount for case 5. Disclosed in
+case 4's file, not fixed: a JSON-pointer `~1` spelling of the label key is not
+decoded and will miss.
+
+**Prediction, solution arm, fix column (3 runs, 15 rows), fixed now:** the
+scorer compares the submitted path string with the case's gold and never looks
+at the object. On cases 2 and 4 every accepted path is a field only the gold
+object has (`spec.solverEndpoint`; the enforce label key — no whole-labels
+form, review of PR #11), so a row that names another object is predicted to
+miss the path, and the column to track `resource_correct` there; that is a
+prediction about the arm, not a property of the scorer. Expected `fix_path_correct`
+**about 12/15** — 3/3 on cases 1, 3 and 5 (frozen analogs 36/36 on v3.1), 2/3 on
+case 2, 1/3 on case 4, per the resource predictions above. On value-pinned rows
+whose path is correct, `fix_value_correct` on cases 2, 3 and 5 all of them:
+each value appears verbatim in output the arm can read (checked 2026-11-11:
+the eta-publisher log carries `route-solver.dispatch.svc:7000`, the overview
+carries `app=manifest-renderer`, the ServiceAccount list carries
+`driver-auth`). **Case 4 is the exception, stated before the run:** `baseline`
+appears only in `cluster/namespaces.json`, which no tool serves (checked
+against the overview, `list_namespaces`, both event scopes, `cluster_capacity`,
+the page and the Deployment's read and describe), so a row naming the
+Namespace has to choose the value unseen — removing the label (accepted) or a
+guessed level. Predicted value 0-1 of the case's correct-path rows; a hit
+there is a guess or the removal mitigation, never a read, and is reported as
+such. Baseline and rules: `n/a` (their contract carries no fix fields). The first
+paid run is read against this, never tuned against it; a v3.1 miss here is a
+real miss.
